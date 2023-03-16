@@ -28,72 +28,74 @@ export class AuthService {
   }
 
   // Sign up
-    async signup(signUpUserDto: SignUpUserDto) {
-    const username = await this.usersService.findUserByUsername(signUpUserDto.username);
-    if (username) {
+      async signup(signUpUserDto: SignUpUserDto) {
+      const username = await this.usersService.findUserByUsername(signUpUserDto.username);
+      if (username)
+      {
       throw new BadRequestException('Username already exists');
-    }
-    const email = await this.usersService.findUserByEmail(signUpUserDto.email);
-    if (email) {
+      }
+      const email = await this.usersService.findUserByEmail(signUpUserDto.email);
+      if (email)
+      {
       throw new BadRequestException('Email already exists');
-    }
-    const { password } = signUpUserDto;
-    const user = await this.usersService.createUser({
+      }
+      const { password } = signUpUserDto;
+      const user = await this.usersService.createUser({
       ...signUpUserDto,
       password: await AuthService.hashPassword(password),
-    });
-    // Send welcome email to new user
-    await this.sendWelcomeEmail(user.email);
-    return user;
+      });
+      // Send welcome email to new user
+      await this.sendWelcomeEmail(user.email);
+      return user;
   }
 
     //login
-    async login(user: User) {
-    const payload =
+      async login(user: User) {
+      const payload =
       {
         username: user.username, email: user.email
       };
-     const accessTokenRedis = this.jwtService.sign(payload);
-     const accessTokenTTL = 900;
-      await Promise.all([
-      this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
-    ]);
-    return {
-      access_token: accessTokenRedis
-    };
+       const accessTokenRedis = this.jwtService.sign(payload);
+       const accessTokenTTL = 900;
+       await Promise.all([
+       this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
+      ]);
+      return {
+       access_token: accessTokenRedis
+      };
   }
 
     // forget passwordOtp
-      async forgotPasswordOtp(email: string): Promise<{ message: string }>
-    {
-       const user: any = await this.usersService.findUserByEmail(email);
-       if (!user)
-     {
-      throw new BadRequestException('Invalid email');
-     }
-      const otp = generateRandom(6, true);
-      const expiresAt = new Date();
-      expiresAt.setMinutes(expiresAt.getMinutes() + 15);
+       async forgotPasswordOtp(email: string): Promise<{ message: string }>
+       {
+        const user: any = await this.usersService.findUserByEmail(email);
+        if (!user)
+       {
+        throw new BadRequestException('Invalid email');
+       }
+        const otp = generateRandom(6, true);
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + 15);
 
-      const otpKey = `forgot-password-otp:${user.email}`;
-      const otpValue = JSON.stringify({ otp, expiresAt });
-      await this.cacheManager.set(otpKey, otpValue, { ttl: 900 });
-      // send the OTP to the user's email
-      await this.sendOtp(user.email, otp, expiresAt);
-      return{
-      message: 'OTP sent successfully'
+        const otpKey = `forgot-password-otp:${user.email}`;
+        const otpValue = JSON.stringify({ otp, expiresAt });
+        await this.cacheManager.set(otpKey, otpValue, { ttl: 900 });
+        // send the OTP to the user's email
+        await this.sendOtp(user.email, otp, expiresAt);
+        return{
+        message: 'OTP sent successfully'
     };
   }
 
     //forgot password
       async forgotPassword(reqBody: ForgotPasswordDto)
-     {
+      {
        const user = await this.usersService.findUserByEmail(reqBody.email);
        if (!user)
-      {
-      throw new BadRequestException('Invalid email');
-      }
-      const otpKey = `forgot-password-otp:${user.email}`;
+       {
+       throw new BadRequestException('Invalid email');
+       }
+       const otpKey = `forgot-password-otp:${user.email}`;
        const cachedOtpValue = await this.cacheManager.get(otpKey);
        const cachedOtp = JSON.parse(<string>cachedOtpValue);
        const { otp } = cachedOtp;
@@ -101,65 +103,68 @@ export class AuthService {
       {
       throw new UnauthorizedException('OTP has expired');
       }
-     if (otp !== reqBody.otp)
-     {
-      throw new BadRequestException('OTP not matched');
-    }
-    try {
-      await this.cacheManager.del(`forget#${reqBody.email}`);
-      return this.login(user);
-    }
-    catch (e: any) {
-      throw new UnauthorizedException('OTP has been expired');
-    }
+       if (otp !== reqBody.otp)
+      {
+        throw new BadRequestException('OTP not matched');
+      }
+      try
+      {
+         await this.cacheManager.del(`forget#${reqBody.email}`);
+         return this.login(user);
+      }
+      catch (e: any)
+      {
+        throw new UnauthorizedException('OTP has been expired');
+      }
+
   }
 
     //profile get
-    async getProfile(accessToken: string) {
-    const cachedToken = await this.cacheManager.get(accessToken);
-    if (!cachedToken)
-    {
+      async getProfile(accessToken: string) {
+      const cachedToken = await this.cacheManager.get(accessToken);
+      if (!cachedToken)
+      {
       throw new UnauthorizedException('Token expired');
-    }
-    return cachedToken
+      }
+      return cachedToken
   }
 
     //change password
-    async changePassword(@Body() reqBody: ChangeUserPasswordDto, accessToken: string) {
-    const cachedToken = await this.cacheManager.get(accessToken);
-    if (!cachedToken)
-    {
-      throw new UnauthorizedException('Token expired');
-    }
-    const user = await this.usersService.findUserByEmail(reqBody.email);
-    if (!user)
-    {
-      throw new NotFoundException('Invalid User');
-    }
-    else
-    {
-      if (reqBody.newPassword !== reqBody.confirmPassword) {
-        throw new NotAcceptableException('Password not matched');
-      }
-      if (reqBody.newPassword === reqBody.confirmPassword)
+      async changePassword(@Body() reqBody: ChangeUserPasswordDto, accessToken: string) {
+      const cachedToken = await this.cacheManager.get(accessToken);
+      if (!cachedToken)
       {
+      throw new UnauthorizedException('Token expired');
+      }
+      const user = await this.usersService.findUserByEmail(reqBody.email);
+      if (!user)
+      {
+      throw new NotFoundException('Invalid User');
+      }
+      else
+     {
+         if (reqBody.newPassword !== reqBody.confirmPassword)
+         {
+        throw new NotAcceptableException('Password not matched');
+         }
+         if (reqBody.newPassword === reqBody.confirmPassword)
+        {
         const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
         await this.usersService.updatePassword( reqBody.email, hashedPassword);
-      }
+        }
       return { message: "Password successfully updated." };
     }
   }
 
-
-  //logout
-    async logout(accessToken: string) {
-    const cachedToken = await this.cacheManager.get(accessToken);
-    if (!cachedToken)
-    {
+   //logout
+     async logout(accessToken: string) {
+     const cachedToken = await this.cacheManager.get(accessToken);
+     if (!cachedToken)
+     {
       throw new NotFoundException('Token expired');
-    }
-    await this.cacheManager.del(accessToken);
-    return { message: 'Successfully logout' };
+     }
+     await this.cacheManager.del(accessToken);
+     return { message: 'Successfully logout' };
   }
 
 
@@ -170,22 +175,22 @@ export class AuthService {
     return bcrypt.hash(password, salt);
     }
 
-  //used for validation purpose
-    async validateUser(username: string, password: string): Promise<User> {
-    const user = await this.usersService.findUserByUsername(username);
-    if (!user)
-    {
+     //used for validation purpose
+     async validateUser(username: string, password: string): Promise<User> {
+     const user = await this.usersService.findUserByUsername(username);
+     if (!user)
+     {
       throw new UnauthorizedException('Invalid username');
-    }
-    const passwordValid = await bcrypt.compare(password, user.password);
-    if (!passwordValid)
-    {
+     }
+     const passwordValid = await bcrypt.compare(password, user.password);
+     if (!passwordValid)
+     {
       throw new UnauthorizedException('Invalid password');
-    }
-    return user;
+     }
+     return user;
   }
 
-  // sending email
+     // sending email
      async sendWelcomeEmail(email: string) {
      await this.mailerService.sendMail({
       to: email,

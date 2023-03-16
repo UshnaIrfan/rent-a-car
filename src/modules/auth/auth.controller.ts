@@ -25,29 +25,29 @@ export class AuthController {
   ) {}
 
   // Sign up
-    @Post('signup')
-     async signup(@Body() signUpUserDto: SignUpUserDto) {
-    return this.authService.signup(signUpUserDto);
+      @Post('signup')
+      async signup(@Body() signUpUserDto: SignUpUserDto) {
+      return this.authService.signup(signUpUserDto);
     }
 
   // login
-    @ApiBody({ type: LoginUserDto })
-    @UseGuards(LocalAuthGuard)
-    @Post('login')
-    async login(@Request() req) {
-    return this.authService.login(req.user);
+      @ApiBody({ type: LoginUserDto })
+      @UseGuards(LocalAuthGuard)
+      @Post('login')
+      async login(@Request() req) {
+      return this.authService.login(req.user);
   }
 
   //forget password otp
-      @Post('forgotPassword/otp')
-      async forgotPasswordOtp(@Body() reqBody: ForgotPasswordOtpDto): Promise<any> {
-      return this.authService.forgotPasswordOtp(reqBody.email);
+       @Post('forgotPassword/otp')
+       async forgotPasswordOtp(@Body() reqBody: ForgotPasswordOtpDto): Promise<any> {
+       return this.authService.forgotPasswordOtp(reqBody.email);
      }
 
   //forget password
-     @Put('forgotPassword')
-     async forgotPassword(@Body() reqBody: ForgotPasswordDto): Promise<any> {
-     return this.authService.forgotPassword(reqBody);
+      @Put('forgotPassword')
+      async forgotPassword(@Body() reqBody: ForgotPasswordDto): Promise<any> {
+      return this.authService.forgotPassword(reqBody);
   }
 
   //change password
@@ -73,11 +73,11 @@ export class AuthController {
       }
 
   //logout
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @Delete('/logout')
-    async logout(@Request() req) {
-    const accessToken = req.headers.authorization.split(' ')[1];
-    return this.authService.logout(accessToken);
+     @ApiBearerAuth()
+     @UseGuards(JwtAuthGuard)
+     @Delete('/logout')
+     async logout(@Request() req) {
+     const accessToken = req.headers.authorization.split(' ')[1];
+     return this.authService.logout(accessToken);
   }
 }
