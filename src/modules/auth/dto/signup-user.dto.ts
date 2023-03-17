@@ -4,24 +4,33 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
-  MinLength
+  MinLength,
+  IsPhoneNumber
 } from "class-validator";
 
 export class SignUpUserDto {
-  @ApiProperty()
+
+  @ApiProperty({ type: String, required: true })
+  @IsString()
   @IsString()
   @IsNotEmpty()
   username: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, required: true  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, required: true })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(64)
   password: string;
+
+  @ApiProperty({ type: String, required: false })
+  @IsPhoneNumber()
+  mobile_no: string;
+
+
 }
