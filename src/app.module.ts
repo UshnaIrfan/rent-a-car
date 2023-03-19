@@ -31,21 +31,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
 
     // Database connection
-    //  ConfigModule.forRoot(
-    //   {
-    //     cache: true,
-    //     isGlobal: true,
-    //     expandVariables: true,
-    //     envFilePath: ['.env'],
-    //     validationSchema: envSchema,
-    //   }),
-    //   MongooseModule.forRootAsync({
-    //      imports: [ConfigModule],
-    //     useFactory: (configService: ConfigService) => ({
-    //     uri: configService.get('MONGO_URI'),
-    //   }),
-    //   inject: [ConfigService],
-    // }),
+     ConfigModule.forRoot(
+      {
+        cache: true,
+        isGlobal: true,
+        expandVariables: true,
+        envFilePath: ['.env'],
+        validationSchema: envSchema,
+      }),
+      MongooseModule.forRootAsync({
+         imports: [ConfigModule],
+        useFactory: (configService: ConfigService) => ({
+        uri: configService.get('MONGO_URI'),
+      }),
+      inject: [ConfigService],
+    }),
 
     // TypeOrmModule.forRootAsync({
     //        imports: [ConfigModule],
@@ -62,16 +62,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     //     inject: [ConfigService],
     //   }),
 
-     TypeOrmModule.forRoot({
-       type: 'mysql',
-       host: 'localhost',
-       port: 3306,
-       username: 'root',
-       password: '123456789',
-       database: 'nest-boilerplate',
-       entities: [],
-      synchronize: true,
-    }),
+    //  TypeOrmModule.forRoot({
+    //    type: 'mysql',
+    //    host: 'localhost',
+    //    port: 3306,
+    //    username: 'root',
+    //    password: '123456789',
+    //    database: 'nest-boilerplate',
+    //    entities: [],
+    //   synchronize: true,
+    // }),
 
   ],
 

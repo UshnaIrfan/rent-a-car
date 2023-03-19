@@ -2,10 +2,9 @@ import {
   BadRequestException, Body,
   CACHE_MANAGER,
   Inject,
-  Injectable, InternalServerErrorException,
+  Injectable,
   NotAcceptableException, NotFoundException, UnauthorizedException
 } from "@nestjs/common";
-import { SignUpUserDto } from "./dto/signup-user.dto";
 import {UsersService} from "../users/users.service";
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -13,8 +12,11 @@ import { User } from "../users/schemas/user.schema";
 import { Cache } from 'cache-manager';
 import {MailerService} from "@nestjs-modules/mailer";
 import { generateRandom } from "../../helpers/string.helper";
-import ForgotPasswordDto from "./dto/forgot-password.dto";
-import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
+import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
+import { SignupUserInterface } from "./interfaces/signup-user.interface";
+import { ForgotPasswordInterface } from "./interfaces/forgot-password.interface";
+import {ChangeUserPasswordInterface} from "./interfaces/change-user-password.interface";
+import {ForgotPasswordOtpInterface} from "./interfaces/forgot-password-otp.interface";
 
 
 @Injectable()
@@ -28,143 +30,174 @@ export class AuthService {
   }
 
   // Sign up
-      async signup(signUpUserDto: SignUpUserDto) {
-      const username = await this.usersService.findUserByUsername(signUpUserDto.username);
+      async signup(Signup:SignupUserInterface):Promise<User>
+      {
+      const username = await this.usersService.findUserByUsername(Signup.username);
       if (username)
       {
       throw new BadRequestException('Username already exists');
       }
-      const email = await this.usersService.findUserByEmail(signUpUserDto.email);
+
+      const email = await this.usersService.findUserByEmail(Signup.email);
       if (email)
       {
       throw new BadRequestException('Email already exists');
       }
-      const { password } = signUpUserDto;
+
+      const { password } = Signup;
       const user = await this.usersService.createUser({
-      ...signUpUserDto,
+      ...Signup,
       password: await AuthService.hashPassword(password),
       });
+
       // Send welcome email to new user
       await this.sendWelcomeEmail(user.email);
       return user;
   }
 
     //login
-      async login(user: User) {
-      const payload =
-      {
-        username: user.username, email: user.email
-      };
-       const accessTokenRedis = this.jwtService.sign(payload);
-       const accessTokenTTL = 900;
-       await Promise.all([
-       this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
-      ]);
-      return {
-       access_token: accessTokenRedis
-      };
-  }
+      async login(user: User): Promise<JwtTokensInterface> {
+      const payload = {
+        username: user.username,
+        email: user.email,
+     };
+      const accessTokenRedis = this.jwtService.sign(payload);
+      const accessTokenTTL = 900;
+        await Promise.all([
+        this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
+     ]);
+     return {
+        username: user.username,
+        email: user.email,
+        mobile_no: user.mobile_no,
+        access_token: accessTokenRedis,
+    };
+
+   }
+
 
     // forget passwordOtp
-       async forgotPasswordOtp(email: string): Promise<{ message: string }>
+       async forgotPasswordOtp(ForgotPasswordOtp:ForgotPasswordOtpInterface): Promise<{message:string}>
        {
-        const user: any = await this.usersService.findUserByEmail(email);
-        if (!user)
-       {
-        throw new BadRequestException('Invalid email');
-       }
-        const otp = generateRandom(6, true);
-        const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 15);
 
-        const otpKey = `forgot-password-otp:${user.email}`;
-        const otpValue = JSON.stringify({ otp, expiresAt });
-        await this.cacheManager.set(otpKey, otpValue, { ttl: 900 });
+         const user = await this.usersService.findUserByEmail(ForgotPasswordOtp.email);
+
+         if (!user)
+          {
+            throw new BadRequestException('Invalid email');
+          }
+         const otp = generateRandom(6, true);
+         const expiresAt = new Date();
+         expiresAt.setMinutes(expiresAt.getMinutes() + 15);
+         const otpKey = `forgot-password-otp:${user.email}`;
+         const otpValue = JSON.stringify({ otp, expiresAt });
+         await this.cacheManager.set(otpKey, otpValue, { ttl: 900 });
+
         // send the OTP to the user's email
-        await this.sendOtp(user.email, otp, expiresAt);
-        return{
-        message: 'OTP sent successfully'
-    };
+         await this.sendOtp(user.email, otp, expiresAt);
+         return{
+              message: 'OTP sent successfully'
+          };
   }
+
 
     //forgot password
-      async forgotPassword(reqBody: ForgotPasswordDto)
-      {
-       const user = await this.usersService.findUserByEmail(reqBody.email);
-       if (!user)
+       async forgotPassword(ForgotPassword: ForgotPasswordInterface): Promise<JwtTokensInterface>
        {
-       throw new BadRequestException('Invalid email');
+         const user = await this.usersService.findUserByEmail(ForgotPassword.email);
+         if (!user)
+         {
+           throw new BadRequestException('Invalid email');
+         }
+        const otpKey = `forgot-password-otp:${user.email}`;
+        const cachedOtpValue = await this.cacheManager.get(otpKey);
+        const cachedOtp = JSON.parse(<string>cachedOtpValue);
+        const { otp } = cachedOtp;
+
+         if (!cachedOtpValue)
+         {
+             throw new UnauthorizedException('OTP has expired');
+         }
+
+         if (otp !== ForgotPassword.otp)
+        {
+           throw new BadRequestException('OTP not matched');
+        }
+
+        try
+        {
+           await this.cacheManager.del(`forget#${ForgotPassword.email}`);
+           return this.login(user);
+        }
+       catch (e: any)
+       {
+         throw new UnauthorizedException('OTP has been expired');
        }
-       const otpKey = `forgot-password-otp:${user.email}`;
-       const cachedOtpValue = await this.cacheManager.get(otpKey);
-       const cachedOtp = JSON.parse(<string>cachedOtpValue);
-       const { otp } = cachedOtp;
-      if (!cachedOtpValue)
-      {
-      throw new UnauthorizedException('OTP has expired');
-      }
-       if (otp !== reqBody.otp)
-      {
-        throw new BadRequestException('OTP not matched');
-      }
-      try
-      {
-         await this.cacheManager.del(`forget#${reqBody.email}`);
-         return this.login(user);
-      }
-      catch (e: any)
-      {
-        throw new UnauthorizedException('OTP has been expired');
-      }
 
   }
+
 
     //profile get
       async getProfile(accessToken: string) {
-      const cachedToken = await this.cacheManager.get(accessToken);
-      if (!cachedToken)
-      {
-      throw new UnauthorizedException('Token expired');
-      }
-      return cachedToken
+        const cachedToken = await this.cacheManager.get(accessToken);
+        if (!cachedToken)
+       {
+         throw new UnauthorizedException('Token expired');
+       }
+
+       return cachedToken
+
   }
 
-    //change password
-      async changePassword(@Body() reqBody: ChangeUserPasswordDto, accessToken: string) {
-      const cachedToken = await this.cacheManager.get(accessToken);
-      if (!cachedToken)
-      {
-      throw new UnauthorizedException('Token expired');
-      }
-      const user = await this.usersService.findUserByEmail(reqBody.email);
-      if (!user)
-      {
-      throw new NotFoundException('Invalid User');
-      }
-      else
-     {
-         if (reqBody.newPassword !== reqBody.confirmPassword)
-         {
-        throw new NotAcceptableException('Password not matched');
-         }
-         if (reqBody.newPassword === reqBody.confirmPassword)
+
+
+  //change password
+        async changePassword(
+          @Body() reqBody: ChangeUserPasswordInterface, accessToken: string
+        ):Promise<{message:string}> {
+
+        const cachedToken = await this.cacheManager.get(accessToken);
+        if (!cachedToken)
         {
-        const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-        await this.usersService.updatePassword( reqBody.email, hashedPassword);
+          throw new UnauthorizedException('Token expired');
         }
-      return { message: "Password successfully updated." };
-    }
+
+       const user = await this.usersService.findUserByEmail(reqBody.email);
+       if (!user)
+        {
+           throw new NotFoundException('Invalid User');
+        }
+       else
+        {
+           if (reqBody.newPassword !== reqBody.confirmPassword)
+            {
+               throw new NotAcceptableException('Password not matched');
+            }
+
+           if (reqBody.newPassword === reqBody.confirmPassword)
+           {
+             const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+             await this.usersService.updatePassword( reqBody.email, hashedPassword);
+           }
+
+          return {
+             message: "Password successfully updated."
+           };
+      }
   }
 
-   //logout
-     async logout(accessToken: string) {
-     const cachedToken = await this.cacheManager.get(accessToken);
-     if (!cachedToken)
-     {
-      throw new NotFoundException('Token expired');
-     }
-     await this.cacheManager.del(accessToken);
-     return { message: 'Successfully logout' };
+       //logout
+       async logout(accessToken: string) :Promise<{message:string}> {
+        const cachedToken = await this.cacheManager.get(accessToken);
+
+        if (!cachedToken)
+        {
+           throw new NotFoundException('Token expired');
+        }
+        await this.cacheManager.del(accessToken);
+         return {
+           message: 'Successfully logout'
+         };
   }
 
 

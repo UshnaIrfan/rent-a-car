@@ -3,23 +3,23 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-valid
 
 export class ChangeUserPasswordDto {
 
-  @ApiProperty({ type: String, required: true })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
+    @ApiProperty({ type: String, required: true })
+    @IsEmail()
+    @IsNotEmpty()
+     email: string;
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(64)
-  newPassword: string;
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(8)
+    @MaxLength(64)
+     newPassword: string;
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(64)
-  confirmPassword: string;
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(8)
+    @MaxLength(64)
+      confirmPassword: string;
 
 }
