@@ -106,16 +106,16 @@ export class AuthService {
 
 
       //email ( random token)
-     async token(randomUserToken: randomUserTokenInterface) {
+     async token(randomUserToken: randomUserTokenInterface)
+     {
      const user = await this.usersService.findUserByEmail(randomUserToken.email);
+       if (!user)
+        {
+         throw new BadRequestException('Invalid email');
+        }
 
-      if (!user)
-      {
-       throw new BadRequestException('Invalid email');
-      }
-
-     // Set initial token status to false
-     //let tokenStatus = false;
+      // Set initial token status to false
+      //let tokenStatus = false;
 
      const token = generateRandomToken(32);
      const expiresAt = new Date();
@@ -123,7 +123,7 @@ export class AuthService {
      const tokenKey = `forgot-password-token:${user.email}`;
      const tokenValue = JSON.stringify({ token, expiresAt });
 
-      console.log("token is",tokenValue)
+
     // Save token
       await this.cacheManager.set(tokenKey, tokenValue, { ttl: 900 });
 
@@ -147,32 +147,36 @@ export class AuthService {
      {
        const user = await this.usersService.findUserByEmail(reqBody.email);
        if (!user)
-       {
+        {
          throw new BadRequestException('Invalid email');
-       }
+        }
        const tokenKey = `forgot-password-token:${user.email}`;
        const cachedToken = await this.cacheManager.get(tokenKey);
-
-       if (!cachedToken) {
+       if (!cachedToken)
+        {
          throw new UnauthorizedException('Token expired');
-       }
+        }
 
        const parsedToken = JSON.parse(<string>cachedToken);
-       if (parsedToken.token !== accessToken) {
+       if (parsedToken.token !== accessToken)
+        {
          throw new UnauthorizedException('Invalid token');
-       } else {
-         if (reqBody.newPassword !== reqBody.confirmPassword) {
+        }
+       else
+        {
+          if (reqBody.newPassword !== reqBody.confirmPassword)
+           {
            throw new NotAcceptableException('Password not matched');
-         }
-
-         if (reqBody.newPassword === reqBody.confirmPassword) {
+           }
+          if (reqBody.newPassword === reqBody.confirmPassword)
+          {
            const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
            await this.usersService.updatePassword(reqBody.email, hashedPassword);
-         }
-
-         return {
-           message: "Password successfully updated."
-         };
+            return this.login(user);
+          }
+         // return {
+         //   message: "Password successfully updated."
+         // };
        }
   }
 

@@ -76,10 +76,8 @@ export class AuthController {
          @ApiBearerAuth()
          @Put('changePasswordToken')
          async changePasswordToken(
-           @Body() reqBody: ChangeUserPasswordDto,
-           @Request() req)
+         @Body() reqBody: ChangeUserPasswordDto, @Request() req)
          {
-           console.log("here")
            const authHeader = req.headers.authorization;
            const accessToken = authHeader.split(' ')[1];
            return this.authService.Password(reqBody, accessToken);
