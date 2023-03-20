@@ -48,7 +48,16 @@ import { User } from "./modules/users/schemas/user.schema";
 
 
     // Database connection
-     TypeOrmModule.forRootAsync({
+
+    //   MongooseModule.forRootAsync({
+//      imports: [ConfigModule],
+//     useFactory: (configService: ConfigService) => ({
+//     uri: configService.get('MONGO_URI'),
+//   }),
+//   inject: [ConfigService],
+// }),
+
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',

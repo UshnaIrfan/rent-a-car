@@ -73,18 +73,6 @@ export class UsersRepository {
        }
 
 
-
-       // async updatePassword(email: string, password: string): Promise<User | null>
-       //   {
-       //     const user = await this.userModel.findOne({ where: { email } });
-       //     if (user)
-       //       {
-       //         user.password = password;
-       //        return this.userModel.save(user);
-       //       }
-       //      return null;
-       //  }
-
          async updatePassword(email: string, password: string): Promise<User>
          {
            const user = await this.userModel.findOne({ where: { email } });
@@ -93,7 +81,7 @@ export class UsersRepository {
               throw new NotFoundException('Invalid User');
             }
              user.password = password;
-            return this.userModel.save(user);
+             return this.userModel.save(user);
          }
 
 
