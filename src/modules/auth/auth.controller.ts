@@ -34,6 +34,7 @@ export class AuthController {
          @Body() signUpUserDto: SignUpUserDto
          ):Promise<User>
        {
+
           return this.authService.signup(signUpUserDto);
        }
 
@@ -64,7 +65,9 @@ export class AuthController {
       //forget password
        @ApiBody({type:ForgotPasswordDto})
        @Put('forgotPassword')
-       async forgotPassword(@Body() ForgotPassword: ForgotPasswordDto): Promise<JwtTokensInterface>
+       async forgotPassword(
+         @Body() ForgotPassword: ForgotPasswordDto
+       ): Promise<JwtTokensInterface>
        {
          return this.authService.forgotPassword(ForgotPassword);
        }

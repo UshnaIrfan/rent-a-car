@@ -13,10 +13,11 @@ import { Cache } from 'cache-manager';
 import {MailerService} from "@nestjs-modules/mailer";
 import { generateRandom } from "../../helpers/string.helper";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
-import { SignupUserInterface } from "./interfaces/signup-user.interface";
-import { ForgotPasswordInterface } from "./interfaces/forgot-password.interface";
-import {ChangeUserPasswordInterface} from "./interfaces/change-user-password.interface";
-import {ForgotPasswordOtpInterface} from "./interfaces/forgot-password-otp.interface";
+import signupUserInterface from "./interfaces/signup-user.interface";
+import forgotPasswordInterface from "./interfaces/forgot-password.interface";
+import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
+import forgotPasswordOtpInterface from "./interfaces/forgot-password-otp.interface";
+import { SignUpUserDto } from "./dto/signup-user.dto";
 
 
 @Injectable()
@@ -29,9 +30,10 @@ export class AuthService {
   ) {
   }
 
-  // Sign up
-      async signup(Signup:SignupUserInterface):Promise<User>
+     // Sign up
+      async signup(Signup:signupUserInterface):Promise<User>
       {
+
       const username = await this.usersService.findUserByUsername(Signup.username);
       if (username)
       {
@@ -66,7 +68,7 @@ export class AuthService {
         await Promise.all([
         this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
      ]);
-     return {
+      return {
         username: user.username,
         email: user.email,
         mobile_no: user.mobile_no,
@@ -77,9 +79,10 @@ export class AuthService {
 
 
     // forget passwordOtp
-       async forgotPasswordOtp(ForgotPasswordOtp:ForgotPasswordOtpInterface): Promise<{message:string}>
+       async forgotPasswordOtp(
+         ForgotPasswordOtp:forgotPasswordOtpInterface
+           ): Promise<{message:string}>
        {
-
          const user = await this.usersService.findUserByEmail(ForgotPasswordOtp.email);
 
          if (!user)
@@ -98,18 +101,20 @@ export class AuthService {
          return{
               message: 'OTP sent successfully'
           };
-  }
+     }
 
 
     //forgot password
-       async forgotPassword(ForgotPassword: ForgotPasswordInterface): Promise<JwtTokensInterface>
+       async forgotPassword(
+         ForgotPassword: forgotPasswordInterface
+         ): Promise<JwtTokensInterface>
        {
          const user = await this.usersService.findUserByEmail(ForgotPassword.email);
          if (!user)
          {
            throw new BadRequestException('Invalid email');
          }
-        const otpKey = `forgot-password-otp:${user.email}`;
+         const otpKey = `forgot-password-otp:${user.email}`;
         const cachedOtpValue = await this.cacheManager.get(otpKey);
         const cachedOtp = JSON.parse(<string>cachedOtpValue);
         const { otp } = cachedOtp;
@@ -134,111 +139,117 @@ export class AuthService {
          throw new UnauthorizedException('OTP has been expired');
        }
 
-  }
+    }
 
 
     //profile get
-      async getProfile(accessToken: string) {
-        const cachedToken = await this.cacheManager.get(accessToken);
-        if (!cachedToken)
-       {
-         throw new UnauthorizedException('Token expired');
+        async getProfile(accessToken: string)
+        {
+          const cachedToken = await this.cacheManager.get(accessToken);
+          if (!cachedToken)
+          {
+            throw new UnauthorizedException('Token expired');
+          }
+
+          return cachedToken
+
        }
 
-       return cachedToken
-
-  }
 
 
+       //change password
+          async changePassword(
+          @Body() reqBody: changeUserPasswordInterface, accessToken: string
+            ):Promise<{message:string}>
+         {
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+             {
+               throw new UnauthorizedException('Token expired');
+             }
 
-  //change password
-        async changePassword(
-          @Body() reqBody: ChangeUserPasswordInterface, accessToken: string
-        ):Promise<{message:string}> {
-
-        const cachedToken = await this.cacheManager.get(accessToken);
-        if (!cachedToken)
-        {
-          throw new UnauthorizedException('Token expired');
-        }
-
-       const user = await this.usersService.findUserByEmail(reqBody.email);
-       if (!user)
-        {
-           throw new NotFoundException('Invalid User');
-        }
-       else
-        {
-           if (reqBody.newPassword !== reqBody.confirmPassword)
+           const user = await this.usersService.findUserByEmail(reqBody.email);
+           if (!user)
             {
-               throw new NotAcceptableException('Password not matched');
+              throw new NotFoundException('Invalid User');
             }
-
-           if (reqBody.newPassword === reqBody.confirmPassword)
+          else
            {
+             if (reqBody.newPassword !== reqBody.confirmPassword)
+              {
+               throw new NotAcceptableException('Password not matched');
+              }
+
+             if (reqBody.newPassword === reqBody.confirmPassword)
+             {
              const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
              await this.usersService.updatePassword( reqBody.email, hashedPassword);
-           }
+             }
 
-          return {
+           return {
              message: "Password successfully updated."
            };
-      }
+       }
   }
 
        //logout
-       async logout(accessToken: string) :Promise<{message:string}> {
-        const cachedToken = await this.cacheManager.get(accessToken);
-
-        if (!cachedToken)
+        async logout(accessToken: string) :Promise<{message:string}>
         {
-           throw new NotFoundException('Token expired');
-        }
+         const cachedToken = await this.cacheManager.get(accessToken);
+
+          if (!cachedToken)
+           {
+             throw new NotFoundException('Token expired');
+           }
         await this.cacheManager.del(accessToken);
          return {
            message: 'Successfully logout'
-         };
-  }
+            };
+
+        }
 
 
   // Generating new hashed password to save in database
-    private static async hashPassword(password: string): Promise<string>
-    {
-    const salt = await bcrypt.genSalt();
-    return bcrypt.hash(password, salt);
-    }
+        private static async hashPassword(password: string): Promise<string>
+         {
+            const salt = await bcrypt.genSalt();
+           return bcrypt.hash(password, salt);
+         }
 
      //used for validation purpose
-     async validateUser(username: string, password: string): Promise<User> {
-     const user = await this.usersService.findUserByUsername(username);
-     if (!user)
-     {
-      throw new UnauthorizedException('Invalid username');
-     }
-     const passwordValid = await bcrypt.compare(password, user.password);
-     if (!passwordValid)
-     {
-      throw new UnauthorizedException('Invalid password');
-     }
-     return user;
-  }
+       async validateUser(username: string, password: string): Promise<User>
+       {
+        const user = await this.usersService.findUserByUsername(username);
+          if (!user)
+           {
+             throw new UnauthorizedException('Invalid username');
+           }
+        const passwordValid = await bcrypt.compare(password, user.password);
+          if (!passwordValid)
+           {
+             throw new UnauthorizedException('Invalid password');
+           }
+          return user;
+      }
 
      // sending email
-     async sendWelcomeEmail(email: string) {
-     await this.mailerService.sendMail({
-      to: email,
-      subject: 'Welcome to boilerplate!',
-      text: 'Thank you for signing up for boilerplate',
-    });
-  }
+      async sendWelcomeEmail(email: string)
+      {
+         await this.mailerService.sendMail({
+         to: email,
+         subject: 'Welcome to boilerplate!',
+         text: 'Thank you for signing up for boilerplate',
+       });
+      }
 
      //sending Otp
-      async sendOtp(email: string, otp: string, expiresAt: Date) {
-      await this.mailerService.sendMail({
-      to: email,
-      subject: 'Password reset OTP',
-      text: `Your OTP for resetting your password is: ${otp}`,
-    });
-  }
+      async sendOtp(email: string, otp: string, expiresAt: Date)
+      {
+        await this.mailerService.sendMail({
+        to: email,
+        subject: 'Password reset OTP',
+        text: `Your OTP for resetting your password is: ${otp}`,
+      });
+     }
 
 }

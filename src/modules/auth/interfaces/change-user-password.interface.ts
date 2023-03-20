@@ -1,25 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+export default interface changeUserPasswordInterface{
 
-export class ChangeUserPasswordInterface {
-
-  @ApiProperty({ type: String, required: true })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(64)
-  newPassword: string;
-
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(64)
-  confirmPassword: string;
+  readonly email: string;
+  readonly newPassword: string;
+  readonly  confirmPassword: string;
 
 }

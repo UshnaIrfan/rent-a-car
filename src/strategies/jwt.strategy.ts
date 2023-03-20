@@ -17,22 +17,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-    //  async validate(payload: any): Promise<User> {
-    //  const user = await this.userService.findUserByUsername(payload.username);
-    //  if (!user) {
-    //   throw new UnauthorizedException("Invalid user");
-    //   }
-    //  return user;
-    // }
 
-    async validate(payload: any): Promise<User> {
-    const user = await this.userService.findUserByUsername(payload.username);
-    if (!user) {
-      throw new UnauthorizedException("Invalid user");
-    }
-    if (user.email !== payload.email) {
-      throw new UnauthorizedException("Invalid email");
-    }
+    async validate(payload: any): Promise<User>
+    {
+      const user = await this.userService.findUserByUsername(payload.username);
+      if (!user)
+       {
+         throw new UnauthorizedException("Invalid user");
+       }
+     if (user.email !== payload.email)
+      {
+       throw new UnauthorizedException("Invalid email");
+      }
     return user;
   }
 
