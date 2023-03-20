@@ -57,7 +57,7 @@ import { User } from "./modules/users/schemas/user.schema";
 //   inject: [ConfigService],
 // }),
 
-    TypeOrmModule.forRootAsync({
+     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',

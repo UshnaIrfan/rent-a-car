@@ -18,6 +18,7 @@ import {ForgotPasswordDto} from "./dto/forgot-password.dto";
 import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import { User } from "../users/schemas/user.schema";
+import {randomUserTokenDto} from "./dto/random-user-token.dto";
 
 
 @ApiTags('Auth')
@@ -33,10 +34,9 @@ export class AuthController {
        async signup(
          @Body() signUpUserDto: SignUpUserDto
          ):Promise<User>
-       {
-
+         {
           return this.authService.signup(signUpUserDto);
-       }
+         }
 
 
       // login
@@ -46,47 +46,72 @@ export class AuthController {
        async login(
          @Request() req
         ):Promise<JwtTokensInterface>
-       {
-         return this.authService.login(req.user);
-       }
+         {
+           return this.authService.login(req.user);
+         }
 
 
-     //forget password otp
+      //forget password otp
        @ApiBody({type:ForgotPasswordOtpDto})
        @Post('forgotPassword/otp')
        async forgotPasswordOtp(
          @Body() forgotPasswordOtpDto: ForgotPasswordOtpDto
          ): Promise<{message:string}>
-       {
+         {
            return this.authService.forgotPasswordOtp(forgotPasswordOtpDto);
-       }
+         }
 
 
-      //forget password
+         //email ( random token)
+        @ApiBody({type:randomUserTokenDto})
+        @Post('randomToken')
+        async token(
+         @Body() randomUserToken: randomUserTokenDto)
+         {
+          return this.authService.token(randomUserToken);
+         }
+
+       // token password
+         @ApiBody({type:ChangeUserPasswordDto})
+         @ApiBearerAuth()
+         @Put('changePasswordToken')
+         async changePasswordToken(
+           @Body() reqBody: ChangeUserPasswordDto,
+           @Request() req)
+         {
+           console.log("here")
+           const authHeader = req.headers.authorization;
+           const accessToken = authHeader.split(' ')[1];
+           return this.authService.Password(reqBody, accessToken);
+         }
+
+
+
+       //forget password
        @ApiBody({type:ForgotPasswordDto})
        @Put('forgotPassword')
        async forgotPassword(
          @Body() ForgotPassword: ForgotPasswordDto
        ): Promise<JwtTokensInterface>
-       {
-         return this.authService.forgotPassword(ForgotPassword);
-       }
+        {
+          return this.authService.forgotPassword(ForgotPassword);
+        }
 
 
      //change password
       @ApiBody({type:ChangeUserPasswordDto})
       @ApiBearerAuth()
       @UseGuards(JwtAuthGuard)
-      @Put('/changePassword')
+      @Put('changePassword')
       async changePassword(
         @Body() reqBody: ChangeUserPasswordDto,
         @Request() req,
         ): Promise<{message:string}>
-      {
-       const authHeader = req.headers.authorization;
-       const accessToken = authHeader.split(' ')[1];
-       return this.authService.changePassword(reqBody, accessToken);
-      }
+        {
+         const authHeader = req.headers.authorization;
+         const accessToken = authHeader.split(' ')[1];
+         return this.authService.changePassword(reqBody, accessToken);
+        }
 
 
      //profile get
@@ -94,11 +119,10 @@ export class AuthController {
       @UseGuards(JwtAuthGuard)
       @Get('/profile')
       async getProfile(@Request() req)
-      {
-       const accessToken = req.headers.authorization.split(' ')[1];
+       {
+         const accessToken = req.headers.authorization.split(' ')[1];
          return this.authService.getProfile(accessToken);
-
-      }
+       }
 
 
      //logout
@@ -108,10 +132,10 @@ export class AuthController {
       async logout(
         @Request() req
          ): Promise<{message:string}>
-      {
-      const accessToken = req.headers.authorization.split(' ')[1];
-      return this.authService.logout(accessToken);
-      }
+       {
+        const accessToken = req.headers.authorization.split(' ')[1];
+        return this.authService.logout(accessToken);
+       }
 
 
 }

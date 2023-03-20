@@ -57,10 +57,10 @@ export class UsersRepository {
 
        async findUserByUsername(username: string): Promise<User | null>
         {
-         return this.userModel.findOne(
+             return this.userModel.findOne(
            {
                  where: { username },
-          });
+                });
         }
 
 

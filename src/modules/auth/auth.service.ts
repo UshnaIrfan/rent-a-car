@@ -2,7 +2,7 @@ import {
   BadRequestException, Body,
   CACHE_MANAGER,
   Inject,
-  Injectable,
+  Injectable, InternalServerErrorException,
   NotAcceptableException, NotFoundException, UnauthorizedException
 } from "@nestjs/common";
 import {UsersService} from "../users/users.service";
@@ -17,7 +17,8 @@ import signupUserInterface from "./interfaces/signup-user.interface";
 import forgotPasswordInterface from "./interfaces/forgot-password.interface";
 import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
 import forgotPasswordOtpInterface from "./interfaces/forgot-password-otp.interface";
-import { SignUpUserDto } from "./dto/signup-user.dto";
+import randomUserTokenInterface from "./interfaces/random-user-token.dto";
+import { generateRandomToken } from "../../helpers/randontoken.helper";
 
 
 @Injectable()
@@ -80,7 +81,7 @@ export class AuthService {
 
     // forget passwordOtp
        async forgotPasswordOtp(
-         ForgotPasswordOtp:forgotPasswordOtpInterface
+             ForgotPasswordOtp:forgotPasswordOtpInterface
            ): Promise<{message:string}>
        {
          const user = await this.usersService.findUserByEmail(ForgotPasswordOtp.email);
@@ -104,7 +105,102 @@ export class AuthService {
      }
 
 
-    //forgot password
+      //email ( random token)
+     async token(randomUserToken: randomUserTokenInterface) {
+     const user = await this.usersService.findUserByEmail(randomUserToken.email);
+
+      if (!user)
+      {
+       throw new BadRequestException('Invalid email');
+      }
+
+     // Set initial token status to false
+     //let tokenStatus = false;
+
+     const token = generateRandomToken(32);
+     const expiresAt = new Date();
+     expiresAt.setMinutes(expiresAt.getMinutes() + 15);
+     const tokenKey = `forgot-password-token:${user.email}`;
+     const tokenValue = JSON.stringify({ token, expiresAt });
+
+      console.log("token is",tokenValue)
+    // Save token
+      await this.cacheManager.set(tokenKey, tokenValue, { ttl: 900 });
+
+    // send the token to the user's email
+      await this.sendToken(user.email, token, expiresAt);
+
+    // Update token status to true after sending the token to the user's email
+   //  tokenStatus = true;
+
+     return {
+      message: 'Token sent successfully',
+      //tokenStatus
+    };
+  }
+
+
+
+  // token password
+     async Password(
+     @Body() reqBody: changeUserPasswordInterface, accessToken: string)
+     {
+       const user = await this.usersService.findUserByEmail(reqBody.email);
+       if (!user)
+       {
+         throw new BadRequestException('Invalid email');
+       }
+       const tokenKey = `forgot-password-token:${user.email}`;
+       const cachedToken = await this.cacheManager.get(tokenKey);
+
+       if (!cachedToken) {
+         throw new UnauthorizedException('Token expired');
+       }
+
+       const parsedToken = JSON.parse(<string>cachedToken);
+       if (parsedToken.token !== accessToken) {
+         throw new UnauthorizedException('Invalid token');
+       } else {
+         if (reqBody.newPassword !== reqBody.confirmPassword) {
+           throw new NotAcceptableException('Password not matched');
+         }
+
+         if (reqBody.newPassword === reqBody.confirmPassword) {
+           const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+           await this.usersService.updatePassword(reqBody.email, hashedPassword);
+         }
+
+         return {
+           message: "Password successfully updated."
+         };
+       }
+  }
+
+
+
+
+
+
+
+
+
+
+     async sendToken(email: string, token: string, expiresAt: Date) {
+     await this.mailerService.sendMail({
+      to: email,
+      subject: 'Password reset token',
+      text: `Your password reset token is: ${token}`,
+    });
+  }
+
+
+
+
+
+
+
+
+  //forgot password
        async forgotPassword(
          ForgotPassword: forgotPasswordInterface
          ): Promise<JwtTokensInterface>
@@ -115,9 +211,9 @@ export class AuthService {
            throw new BadRequestException('Invalid email');
          }
          const otpKey = `forgot-password-otp:${user.email}`;
-        const cachedOtpValue = await this.cacheManager.get(otpKey);
-        const cachedOtp = JSON.parse(<string>cachedOtpValue);
-        const { otp } = cachedOtp;
+         const cachedOtpValue = await this.cacheManager.get(otpKey);
+         const cachedOtp = JSON.parse(<string>cachedOtpValue);
+         const { otp } = cachedOtp;
 
          if (!cachedOtpValue)
          {
@@ -126,20 +222,22 @@ export class AuthService {
 
          if (otp !== ForgotPassword.otp)
         {
-           throw new BadRequestException('OTP not matched');
+            throw new BadRequestException('OTP not matched');
         }
 
         try
-        {
+         {
            await this.cacheManager.del(`forget#${ForgotPassword.email}`);
            return this.login(user);
-        }
-       catch (e: any)
-       {
-         throw new UnauthorizedException('OTP has been expired');
-       }
+         }
+        catch (e: any)
+          {
+           throw new UnauthorizedException('OTP has been expired');
+          }
 
     }
+
+
 
 
     //profile get
@@ -147,11 +245,11 @@ export class AuthService {
         {
           const cachedToken = await this.cacheManager.get(accessToken);
           if (!cachedToken)
-          {
-            throw new UnauthorizedException('Token expired');
-          }
+           {
+             throw new UnauthorizedException('Token expired');
+           }
 
-          return cachedToken
+           return cachedToken
 
        }
 
@@ -159,51 +257,46 @@ export class AuthService {
 
        //change password
           async changePassword(
-          @Body() reqBody: changeUserPasswordInterface, accessToken: string
-            ):Promise<{message:string}>
-         {
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-             {
-               throw new UnauthorizedException('Token expired');
-             }
-
-           const user = await this.usersService.findUserByEmail(reqBody.email);
-           if (!user)
-            {
-              throw new NotFoundException('Invalid User');
+             @Body() reqBody: changeUserPasswordInterface,
+             accessToken: string
+            ):Promise<{message:string}> {
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken) {
+              throw new UnauthorizedException('Token expired');
             }
-          else
-           {
-             if (reqBody.newPassword !== reqBody.confirmPassword)
-              {
-               throw new NotAcceptableException('Password not matched');
+
+            const user = await this.usersService.findUserByEmail(reqBody.email);
+            if (!user) {
+              throw new NotFoundException('Invalid User');
+            } else {
+              if (reqBody.newPassword !== reqBody.confirmPassword) {
+                throw new NotAcceptableException('Password not matched');
               }
 
-             if (reqBody.newPassword === reqBody.confirmPassword)
-             {
-             const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-             await this.usersService.updatePassword( reqBody.email, hashedPassword);
-             }
+              if (reqBody.newPassword === reqBody.confirmPassword) {
+                const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+                await this.usersService.updatePassword(reqBody.email, hashedPassword);
+              }
 
-           return {
-             message: "Password successfully updated."
-           };
-       }
-  }
+              return {
+                message: "Password successfully updated."
+              };
+            }
+          }
+
 
        //logout
         async logout(accessToken: string) :Promise<{message:string}>
-        {
-         const cachedToken = await this.cacheManager.get(accessToken);
+         {
+          const cachedToken = await this.cacheManager.get(accessToken);
 
           if (!cachedToken)
-           {
+            {
              throw new NotFoundException('Token expired');
-           }
-        await this.cacheManager.del(accessToken);
-         return {
-           message: 'Successfully logout'
+            }
+         await this.cacheManager.del(accessToken);
+          return {
+            message: 'Successfully logout'
             };
 
         }
@@ -234,22 +327,26 @@ export class AuthService {
 
      // sending email
       async sendWelcomeEmail(email: string)
-      {
+       {
          await this.mailerService.sendMail({
          to: email,
          subject: 'Welcome to boilerplate!',
          text: 'Thank you for signing up for boilerplate',
        });
-      }
+       }
 
      //sending Otp
       async sendOtp(email: string, otp: string, expiresAt: Date)
-      {
+       {
         await this.mailerService.sendMail({
         to: email,
         subject: 'Password reset OTP',
         text: `Your OTP for resetting your password is: ${otp}`,
       });
-     }
+      }
 
 }
+
+
+
+
