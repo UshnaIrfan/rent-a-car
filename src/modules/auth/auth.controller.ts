@@ -55,28 +55,57 @@ export class AuthController {
        @ApiBody({type:ForgotPasswordOtpDto})
        @Post('forgotPassword/otp')
        async forgotPasswordOtp(
-         @Body() forgotPasswordOtpDto: ForgotPasswordOtpDto
-         ): Promise<{message:string}>
+          @Body() forgotPasswordOtpDto: ForgotPasswordOtpDto
+          ): Promise<{message:string}>
          {
            return this.authService.forgotPasswordOtp(forgotPasswordOtpDto);
          }
 
 
-         //email ( random token)
+        //forget password
+        @ApiBody({type:ForgotPasswordDto})
+        @Put('forgotPassword')
+        async forgotPassword(
+          @Body() ForgotPassword: ForgotPasswordDto
+           ): Promise<JwtTokensInterface>
+         {
+           return this.authService.forgotPassword(ForgotPassword);
+         }
+
+
+        //change password
+        @ApiBody({type:ChangeUserPasswordDto})
+        @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
+        @Put('changePassword')
+        async changePassword(
+         @Body() reqBody: ChangeUserPasswordDto,
+        @Request() req,
+         ): Promise<{message:string}>
+         {
+           const authHeader = req.headers.authorization;
+           const accessToken = authHeader.split(' ')[1];
+          return this.authService.changePassword(reqBody, accessToken);
+         }
+
+
+
+        //email ( random token)
         @ApiBody({type:randomUserTokenDto})
-        @Post('randomToken')
+        @Post('forgotPassword/token')
         async token(
          @Body() randomUserToken: randomUserTokenDto)
          {
           return this.authService.token(randomUserToken);
          }
 
-       // token password
+       //  forgotPassword(token)
          @ApiBody({type:ChangeUserPasswordDto})
          @ApiBearerAuth()
-         @Put('changePasswordToken')
+         @Put('forgotPassword/token')
          async changePasswordToken(
-         @Body() reqBody: ChangeUserPasswordDto, @Request() req)
+         @Body() reqBody: ChangeUserPasswordDto,
+         @Request() req)
          {
            const authHeader = req.headers.authorization;
            const accessToken = authHeader.split(' ')[1];
@@ -85,49 +114,22 @@ export class AuthController {
 
 
 
-       //forget password
-       @ApiBody({type:ForgotPasswordDto})
-       @Put('forgotPassword')
-       async forgotPassword(
-         @Body() ForgotPassword: ForgotPasswordDto
-       ): Promise<JwtTokensInterface>
-        {
-          return this.authService.forgotPassword(ForgotPassword);
-        }
-
-
-     //change password
-      @ApiBody({type:ChangeUserPasswordDto})
-      @ApiBearerAuth()
-      @UseGuards(JwtAuthGuard)
-      @Put('changePassword')
-      async changePassword(
-        @Body() reqBody: ChangeUserPasswordDto,
-        @Request() req,
-        ): Promise<{message:string}>
-        {
-         const authHeader = req.headers.authorization;
-         const accessToken = authHeader.split(' ')[1];
-         return this.authService.changePassword(reqBody, accessToken);
-        }
-
-
      //profile get
-      @ApiBearerAuth()
-      @UseGuards(JwtAuthGuard)
-      @Get('/profile')
-      async getProfile(@Request() req)
-       {
-         const accessToken = req.headers.authorization.split(' ')[1];
-         return this.authService.getProfile(accessToken);
-       }
+        @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
+        @Get('/profile')
+        async getProfile(@Request() req)
+         {
+          const accessToken = req.headers.authorization.split(' ')[1];
+          return this.authService.getProfile(accessToken);
+         }
 
 
      //logout
-      @ApiBearerAuth()
-      @UseGuards(JwtAuthGuard)
-      @Delete('/logout')
-      async logout(
+       @ApiBearerAuth()
+       @UseGuards(JwtAuthGuard)
+       @Delete('/logout')
+       async logout(
         @Request() req
          ): Promise<{message:string}>
        {
