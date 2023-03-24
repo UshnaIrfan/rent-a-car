@@ -99,7 +99,9 @@ export class AuthController {
           return this.authService.token(randomUserToken);
          }
 
-       //  forgotPassword(token)
+
+
+        // forgotPassword(token)
          @ApiBody({type:ChangeUserPasswordDto})
          @ApiBearerAuth()
          @Put('forgotPassword/token')
@@ -114,7 +116,7 @@ export class AuthController {
 
 
 
-     //profile get
+        //profile get
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
         @Get('/profile')
@@ -125,7 +127,7 @@ export class AuthController {
          }
 
 
-     //logout
+       //logout
        @ApiBearerAuth()
        @UseGuards(JwtAuthGuard)
        @Delete('/logout')

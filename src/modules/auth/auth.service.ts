@@ -57,6 +57,7 @@ export class AuthService {
       return user;
   }
 
+
     //login
       async login(user: User): Promise<JwtTokensInterface>
       {
@@ -177,8 +178,8 @@ export class AuthService {
        return {
         message: "Password successfully updated."
          };
-     }
-   }
+      }
+    }
 
 
      //email ( random token)
