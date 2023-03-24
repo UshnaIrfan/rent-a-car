@@ -8,6 +8,7 @@ import {UsersModule} from "./modules/users/users.module";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from "./modules/users/schemas/user.schema";
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -71,6 +72,9 @@ import { User } from "./modules/users/schemas/user.schema";
       }),
       inject: [ConfigService],
     }),
+
+
+    CategoriesModule,
 
   ],
 
