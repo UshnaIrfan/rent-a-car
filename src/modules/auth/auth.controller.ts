@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put
+  Delete, Put, Query
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
@@ -51,42 +51,42 @@ export class AuthController {
          }
 
 
-      //forget password otp
-       @ApiBody({type:ForgotPasswordOtpDto})
-       @Post('forgotPassword/otp')
-       async forgotPasswordOtp(
-          @Body() forgotPasswordOtpDto: ForgotPasswordOtpDto
-          ): Promise<{message:string}>
-         {
-           return this.authService.forgotPasswordOtp(forgotPasswordOtpDto);
-         }
-
-
-        //forget password
-        @ApiBody({type:ForgotPasswordDto})
-        @Put('forgotPassword')
-        async forgotPassword(
-          @Body() ForgotPassword: ForgotPasswordDto
-           ): Promise<JwtTokensInterface>
-         {
-           return this.authService.forgotPassword(ForgotPassword);
-         }
-
-
-        //change password
-        @ApiBody({type:ChangeUserPasswordDto})
-        @ApiBearerAuth()
-        @UseGuards(JwtAuthGuard)
-        @Put('changePassword')
-        async changePassword(
-         @Body() reqBody: ChangeUserPasswordDto,
-        @Request() req,
-         ): Promise<{message:string}>
-         {
-           const authHeader = req.headers.authorization;
-           const accessToken = authHeader.split(' ')[1];
-          return this.authService.changePassword(reqBody, accessToken);
-         }
+      // //forget password otp
+      //  @ApiBody({type:ForgotPasswordOtpDto})
+      //  @Post('forgotPassword/otp')
+      //  async forgotPasswordOtp(
+      //     @Body() forgotPasswordOtpDto: ForgotPasswordOtpDto
+      //     ): Promise<{message:string}>
+      //    {
+      //      return this.authService.forgotPasswordOtp(forgotPasswordOtpDto);
+      //    }
+      //
+      //
+      //   //forget password
+      //   @ApiBody({type:ForgotPasswordDto})
+      //   @Put('forgotPassword')
+      //   async forgotPassword(
+      //     @Body() ForgotPassword: ForgotPasswordDto
+      //      ): Promise<JwtTokensInterface>
+      //    {
+      //      return this.authService.forgotPassword(ForgotPassword);
+      //    }
+      //
+      //
+      //   //change password
+      //   @ApiBody({type:ChangeUserPasswordDto})
+      //   @ApiBearerAuth()
+      //   @UseGuards(JwtAuthGuard)
+      //   @Put('changePassword')
+      //   async changePassword(
+      //    @Body() reqBody: ChangeUserPasswordDto,
+      //   @Request() req,
+      //    ): Promise<{message:string}>
+      //    {
+      //      const authHeader = req.headers.authorization;
+      //      const accessToken = authHeader.split(' ')[1];
+      //     return this.authService.changePassword(reqBody, accessToken);
+      //    }
 
 
 
@@ -102,42 +102,54 @@ export class AuthController {
 
 
         // forgotPassword(token)
-         @ApiBody({type:ChangeUserPasswordDto})
-         @ApiBearerAuth()
-         @Put('forgotPassword/token')
-         async changePasswordToken(
-         @Body() reqBody: ChangeUserPasswordDto,
-         @Request() req)
-         {
-           const authHeader = req.headers.authorization;
-           const accessToken = authHeader.split(' ')[1];
-           return this.authService.Password(reqBody, accessToken);
-         }
+        //  @ApiBody({type:ChangeUserPasswordDto})
+        //  @ApiBearerAuth()
+        //  @Put('forgotPassword/token')
+        //  async changePasswordToken(
+        //  @Body() reqBody: ChangeUserPasswordDto,
+        //  @Request() req)
+        //  {
+        //    const authHeader = req.headers.authorization;
+        //    const accessToken = authHeader.split(' ')[1];
+        //    return this.authService.Password(reqBody, accessToken);
+        //  }
 
+
+
+        @ApiBody({type:ChangeUserPasswordDto})
+        @Put('forgotPassword/token')
+        async changePasswordToken(
+        @Body() reqBody: ChangeUserPasswordDto,
+         @Query(
+           'resetToken')
+           resetToken: string)
+         {
+            return this.authService.Password(reqBody, resetToken);
+         }
 
 
         //profile get
-        @ApiBearerAuth()
-        @UseGuards(JwtAuthGuard)
-        @Get('/profile')
-        async getProfile(@Request() req)
-         {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.authService.getProfile(accessToken);
-         }
-
-
-       //logout
-       @ApiBearerAuth()
-       @UseGuards(JwtAuthGuard)
-       @Delete('/logout')
-       async logout(
-        @Request() req
-         ): Promise<{message:string}>
-       {
-        const accessToken = req.headers.authorization.split(' ')[1];
-        return this.authService.logout(accessToken);
-       }
+       //  @ApiBearerAuth()
+       //  @UseGuards(JwtAuthGuard)
+       //  @Get('/profile')
+       //  async getProfile(@Request() req)
+       //   {
+       //    const accessToken = req.headers.authorization.split(' ')[1];
+       //    return this.authService.getProfile(accessToken);
+       //   }
+       //
+       //
+       // //logout
+       // @ApiBearerAuth()
+       // @UseGuards(JwtAuthGuard)
+       // @Delete('/logout')
+       // async logout(
+       //  @Request() req
+       //   ): Promise<{message:string}>
+       // {
+       //  const accessToken = req.headers.authorization.split(' ')[1];
+       //  return this.authService.logout(accessToken);
+       // }
 
 
 }

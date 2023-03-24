@@ -64,6 +64,11 @@ export class User {
      @PrimaryGeneratedColumn('uuid')
      id: string;
 
+
+     @ApiProperty()
+     @Column({ unique: true })
+     name: string;
+
      @ApiProperty()
      @Column({ unique: true })
      username: string;
@@ -76,7 +81,7 @@ export class User {
      @Column()
      password: string;
 
-     @ApiProperty()
-     @Column({ nullable: true })
-     mobile_no?: string;
+     // @ApiProperty()
+     // @Column({ nullable: true })
+     // mobile_no?: string;
 }

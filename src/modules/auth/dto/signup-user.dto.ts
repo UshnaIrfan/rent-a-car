@@ -14,6 +14,12 @@ export class SignUpUserDto {
     @IsString()
     @IsString()
     @IsNotEmpty()
+    name: string;
+
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsString()
+    @IsNotEmpty()
      username: string;
 
     @ApiProperty({ type: String, required: true  })
@@ -28,9 +34,9 @@ export class SignUpUserDto {
     @MaxLength(64)
      password: string;
 
-    @ApiProperty({ type: String, required: false })
-    @IsPhoneNumber()
-     mobile_no: string;
+    // @ApiProperty({ type: String, required: false })
+    // @IsPhoneNumber()
+    //  mobile_no: string;
 
 
 }
