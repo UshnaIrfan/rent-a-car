@@ -9,11 +9,13 @@ import { MailerModule } from "@nestjs-modules/mailer";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from "./modules/users/schemas/user.schema";
 import { CategoriesModule } from './modules/categories/categories.module';
+import {category} from "./modules/categories/schemas/category.schema";
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    CategoriesModule,
 
     ConfigModule.forRoot(
       {
@@ -67,14 +69,14 @@ import { CategoriesModule } from './modules/categories/categories.module';
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User],
+        entities: [User ,category],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
 
 
-    CategoriesModule,
+
 
   ],
 
