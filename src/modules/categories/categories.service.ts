@@ -34,17 +34,17 @@ export class CategoriesService {
 
 
     // get category by using name
-   async getCategoryUsingName(category_name: string)
-   {
-    try
+    async getCategoryUsingName(category_name: string)
+    {
+     const getcategory=  await this.categoryRepository.getCategoryUsingName(category_name);
+     if (!getcategory)
       {
-      const getcategory = await this.categoryRepository.getCategoryUsingName(category_name);
-      return getcategory;
-     }
-    catch (error)
-     {
-      return `Error fetching category: ${error.message}`;
-     }
+       return { message: "Category with  the given name not found" };
+      }
+      return {
+       record: getcategory
+     };
+
   }
 
 

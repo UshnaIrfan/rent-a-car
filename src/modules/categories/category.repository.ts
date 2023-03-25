@@ -25,10 +25,10 @@ export class CategoryRepository {
               where: { category_name },
         });
 
-      if (!category)
-       {
-         throw new Error(`Category with name ${name} not found`);
-       }
+        if (category.length === 0)
+         {
+          return null;
+         }
 
         return category;
    }
@@ -51,7 +51,7 @@ export class CategoryRepository {
         const category = await this.categoryModel.findOne(
           {
                where: { category_ID},
-          });
+             });
 
          if (!category)
           {
