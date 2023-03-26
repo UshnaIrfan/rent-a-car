@@ -7,15 +7,14 @@ import {
 
 export class updateCategoryDto {
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsString()
-  @IsNotEmpty()
-  category_ID: string;
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     category_ID: string;
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsString()
-  @IsNotEmpty()
-  category_name: string;
+
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsNotEmpty()
+    category_name: string;
 }

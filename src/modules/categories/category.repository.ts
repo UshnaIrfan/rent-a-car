@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {category} from "./schemas/category.schema";
@@ -10,15 +10,15 @@ export class CategoryRepository {
   }
 
 
-  // create category
-   async createCategory(category: CreateCategoryDto): Promise<category | null>
-    {
-     return this.categoryModel.save(category);
-    }
+     // create category
+     async createCategory(category: CreateCategoryDto): Promise<category | null>
+     {
+       return this.categoryModel.save(category);
+     }
 
 
- // get category by using name
-    async getCategoryUsingName(category_name): Promise<category[] | null>
+     // get category by using name
+     async getCategoryByName(category_name:string): Promise<category[] | null>
      {
       const category = await this.categoryModel.find(
         {
@@ -31,22 +31,24 @@ export class CategoryRepository {
          }
 
         return category;
-   }
+    }
 
 
 
-
-     async getCategoryUsingId(category_ID): Promise<any>
+       // get category by Id
+       async getCategoryById(category_ID:string): Promise<category|null>
        {
-        console.log("here1" , category_ID)
-       return  this.categoryModel.findOne({
-        where: { category_ID },
-      })
-  }
+         return  this.categoryModel.findOne(
+           {
+                where: { category_ID },
+            })
+       }
 
 
-  //update category
-    async updateCategory(category_ID: string, category_name: string): Promise<category | null>
+
+
+       //update category
+       async updateCategory(category_ID: string, category_name: string): Promise<category | null>
        {
         const category = await this.categoryModel.findOne(
           {
@@ -58,35 +60,27 @@ export class CategoryRepository {
            return null;
           }
 
-       category.category_name = category_name;
-       return this.categoryModel.save(category);
-  }
-
-
-
-// delete category
-   async deleteCategory(category_ID: string): Promise<boolean>
-     {
-      const category = await this.categoryModel.findOne({ where: { category_ID } });
-       if (!category)
-       {
-         return false;
-       }
-     await this.categoryModel.remove(category);
-      return true;
-  }
+         category.category_name = category_name;
+         return this.categoryModel.save(category);
+      }
 
 
 
 
+    // delete category
+      async deleteCategory(category_ID: string): Promise<boolean>
+      {
+        const category = await this.categoryModel.findOne({ where: { category_ID } });
 
-    async findByCategoryId(category_ID: string): Promise<category | null>
-     {
-       return  this.categoryModel.findOne(
+        if (!category)
          {
-         where: { category_ID },
-       })
-    }
+           return false;
+         }
+       await this.categoryModel.remove(category);
+       return true;
+     }
+
+
 
 }
 

@@ -20,19 +20,19 @@ export class SignUpUserDto {
     @IsString()
     @IsString()
     @IsNotEmpty()
-     username: string;
+    username: string;
 
     @ApiProperty({ type: String, required: true  })
     @IsEmail()
     @IsNotEmpty()
-     email: string;
+    email: string;
 
     @ApiProperty({ type: String, required: true })
     @IsString()
     @IsNotEmpty()
     @MinLength(8)
     @MaxLength(64)
-     password: string;
+    password: string;
 
     // @ApiProperty({ type: String, required: false })
     // @IsPhoneNumber()

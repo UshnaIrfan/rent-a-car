@@ -15,54 +15,53 @@ export class CategoriesController {
 
 
 
-  // create category
-   @ApiBody({type:CreateCategoryDto})
-   @Post('create')
-   async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
-   {
-
-    return this.categoriesService.createCategory(createCategoryDto);
-   }
-
-
-  // get category by using name
-   @Get(':category_name')
-   async  get( @Param('category_name') category_name: string)
-   {
-    return this.categoriesService.getCategoryUsingName(category_name);
-   }
+     // create category
+      @ApiBody({type:CreateCategoryDto})
+      @Post('create')
+      async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
+      {
+        return this.categoriesService.createCategory(createCategoryDto);
+      }
 
 
 
-
-  // get category by id
-  @Get(':category_ID')
-  async getCategoriesById(@Param('category_ID') category_ID: string)
-  {
-    console.log("here1" , category_ID)
-    return this.categoriesService.getCategoryUsingId(category_ID);
-  }
+     // get category by name
+      @Get('/name/:category_name')
+      async  getCategoryByName( @Param('category_name') category_name: string)
+      {
+       return this.categoriesService.getCategoryByName(category_name);
+      }
 
 
 
+      // get category by ID
+       @Get('/id/:category_ID')
+       async  getCategoryByID( @Param('category_ID') category_ID: string)
+       {
+         return this.categoriesService.getCategoryById(category_ID);
+       }
 
 
-  // update category
-   @ApiBody({type:updateCategoryDto})
-   @Put('update')
-   async updateCategory(@Body() updateCategory: updateCategoryDto)
-   {
-    return this.categoriesService.updateCategory(updateCategory);
-  }
+
+      // update category
+       @ApiBody({type:updateCategoryDto})
+       @Put('update')
+       async updateCategory(@Body() updateCategory: updateCategoryDto)
+       {
+        return this.categoriesService.updateCategory(updateCategory);
+       }
 
 
-  // delete category
-   @ApiBody({type:deleteCategoryDto})
-   @Delete('delete')
-   async deleteCategory(@Body() deleteCategory: deleteCategoryDto)
-   {
-    return this.categoriesService.deleteCategory(deleteCategory);
-   }
+
+      // delete category
+      @ApiBody({type:deleteCategoryDto})
+      @Delete('delete')
+      async deleteCategory(@Body() deleteCategory: deleteCategoryDto)
+      {
+        return this.categoriesService.deleteCategory(deleteCategory);
+      }
+
+
 
 
 }

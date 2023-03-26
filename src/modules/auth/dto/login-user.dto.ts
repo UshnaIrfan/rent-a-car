@@ -6,8 +6,8 @@ export  class LoginUserDto {
     //  readonly username: string;
 
      @ApiProperty({ type: String, required: true })
-      readonly email: string;
+     readonly email: string;
 
-    @ApiProperty({ type: String, required: true })
-      readonly password: string;
+     @ApiProperty({ type: String, required: true })
+     readonly password: string;
 }

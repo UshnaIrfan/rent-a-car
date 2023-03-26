@@ -49,13 +49,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>) {}
 
-       async createUser(user: CreateUserDto): Promise<User | null>
+        async createUser(user: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(user);
         }
 
 
-       async findUserByUsername(username: string): Promise<User | null>
+
+        async findUserByUsername(username: string): Promise<User | null>
         {
              return this.userModel.findOne(
            {
@@ -64,13 +65,14 @@ export class UsersRepository {
         }
 
 
-       async findUserByEmail(email: string): Promise<User | null>
+
+        async findUserByEmail(email: string): Promise<User | null>
         {
-         return this.userModel.findOne(
+           return this.userModel.findOne(
            {
                where: { email },
-           });
-       }
+            });
+        }
 
 
          async updatePassword(email: string, password: string): Promise<User>
