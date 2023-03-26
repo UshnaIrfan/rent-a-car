@@ -71,7 +71,6 @@ export class CategoryRepository {
       async deleteCategory(category_ID: string): Promise<boolean>
       {
         const category = await this.categoryModel.findOne({ where: { category_ID } });
-
         if (!category)
          {
            return false;
