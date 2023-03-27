@@ -314,44 +314,44 @@ export class AuthService {
   //      }
   //  }
 
-    async Password(
-      @Body() reqBody: changeUserPasswordInterface,
-      @Query('resetToken') resetToken: string,
-     ) {
-     const user = await this.usersService.findUserByEmail(reqBody.email);
-     if (!user)
+     async Password(
+       @Body() reqBody: changeUserPasswordInterface,
+       @Query('resetToken') resetToken: string,
+      ) {
+      const user = await this.usersService.findUserByEmail(reqBody.email);
+      if (!user)
       {
-       throw new BadRequestException('Invalid email');
+          throw new BadRequestException('Invalid email');
       }
 
-     const tokenKey = `forgot-password-token:${user.email}`;
-     const cachedToken = await this.cacheManager.get(tokenKey);
-     if(!cachedToken)
+      const tokenKey = `forgot-password-token:${user.email}`;
+      const cachedToken = await this.cacheManager.get(tokenKey);
+      if(!cachedToken)
       {
-       throw new UnauthorizedException('token expired');
+        throw new UnauthorizedException('token expired');
       }
-     const parsedToken = JSON.parse(<string>cachedToken);
-     if (parsedToken.token !== resetToken)
+      const parsedToken = JSON.parse(<string>cachedToken);
+      if (parsedToken.token !== resetToken)
       {
-      throw new UnauthorizedException('Invalid token');
+        throw new UnauthorizedException('Invalid token');
       }
 
      if (reqBody.newPassword !== reqBody.confirmPassword)
-      {
-      throw new NotAcceptableException('Passwords do not match');
-      }
-
-    const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-
-    try {
-
-      await this.usersService.updatePassword(reqBody.email, hashedPassword);
-      await this.cacheManager.del(tokenKey);
-      return this.login(user);
-     }
-    catch (e)
      {
-      throw new InternalServerErrorException('Failed to login');
+      throw new NotAcceptableException('Passwords do not match');
+     }
+
+     const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+
+     try
+     {
+       await this.usersService.updatePassword(reqBody.email, hashedPassword);
+       await this.cacheManager.del(tokenKey);
+       return this.login(user);
+     }
+     catch (e)
+     {
+       throw new InternalServerErrorException('Failed to login');
      }
   }
 

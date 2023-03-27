@@ -10,6 +10,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from "./modules/users/schemas/user.schema";
 import { CategoriesModule } from './modules/categories/categories.module';
 import {category} from "./modules/categories/schemas/category.schema";
+import { SellerModule } from './modules/sellers/seller.module';
+import {seller} from "./modules/sellers/schemas/seller.schema";
 
 @Module({
   imports: [
@@ -69,11 +71,14 @@ import {category} from "./modules/categories/schemas/category.schema";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User ,category],
+        entities: [User ,category ,seller],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+
+
+    SellerModule,
 
   ],
 
