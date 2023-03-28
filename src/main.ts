@@ -9,14 +9,14 @@ async function bootstrap() {
        app.use(bodyParser.json({ limit: '50mb' }));
        app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-    //Swagger connection
-     const config = new DocumentBuilder()
-    .setTitle('Boiler_Plate')
-    .setDescription('boilerplate backend')
-    .setVersion('1.0')
-    .addTag('boilerplate')
-    .addBearerAuth({ in: 'header', type: 'http' })
-    .build();
+     //Swagger connection
+      const config = new DocumentBuilder()
+     .setTitle('Boiler_Plate')
+     .setDescription('boilerplate backend')
+     .setVersion('1.0')
+     .addTag('boilerplate')
+     .addBearerAuth({ in: 'header', type: 'http' })
+     .build();
      const document = SwaggerModule.createDocument(app, config);
      SwaggerModule.setup('api', app, document);
 

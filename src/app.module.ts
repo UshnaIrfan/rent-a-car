@@ -18,6 +18,7 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
     AuthModule,
     UsersModule,
     CategoriesModule,
+    SellerModule,
 
     ConfigModule.forRoot(
       {
@@ -76,9 +77,6 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
       }),
       inject: [ConfigService],
     }),
-
-
-    SellerModule,
 
   ],
 

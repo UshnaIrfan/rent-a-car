@@ -28,15 +28,15 @@ export class SellerService {
          throw new BadRequestException(' seller_name already exists');
        }
 
-        try
+         try
          {
          const category = await this.SellerRepository.sellerCategory(createSeller);
          return category;
-        }
-       catch (e)
-       {
+         }
+        catch (e)
+        {
         throw new BadRequestException('Category creation failed');
-       }
+        }
 
 
    }
@@ -102,13 +102,12 @@ export class SellerService {
       const Delete= await this.SellerRepository.deleteSeller(deleteSeller.seller_ID)
       if(!Delete)
       {
-       return { message: "seller with given ID not found" };
+        return { message: "seller with given ID not found" };
       }
 
        return {
       message: 'seller  deleted successfully',
       };
-
    }
 
 

@@ -55,12 +55,11 @@ export class UsersRepository {
         }
 
 
-
         async findUserByUsername(username: string): Promise<User | null>
         {
              return this.userModel.findOne(
            {
-                 where: { username },
+                    where: { username },
                 });
         }
 
@@ -70,14 +69,14 @@ export class UsersRepository {
         {
            return this.userModel.findOne(
            {
-               where: { email },
+                  where: { email },
             });
         }
 
 
          async updatePassword(email: string, password: string): Promise<User>
          {
-           const user = await this.userModel.findOne({ where: { email } });
+            const user = await this.userModel.findOne({ where: { email } });
             if (!user)
             {
               throw new NotFoundException('Invalid User');

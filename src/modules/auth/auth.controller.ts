@@ -91,13 +91,13 @@ export class AuthController {
 
 
         //email ( random token)
-        @ApiBody({type:randomUserTokenDto})
-        @Post('forgotPassword/token')
-        async token(
-         @Body() randomUserToken: randomUserTokenDto)
-         {
+       @ApiBody({type:randomUserTokenDto})
+       @Post('forgotPassword/token')
+       async token(
+       @Body() randomUserToken: randomUserTokenDto)
+       {
           return this.authService.token(randomUserToken);
-         }
+       }
 
 
 
@@ -116,16 +116,14 @@ export class AuthController {
 
 
 
-        @ApiBody({type:ChangeUserPasswordDto})
-        @Put('forgotPassword/token')
-        async changePasswordToken(
-        @Body() reqBody: ChangeUserPasswordDto,
-         @Query(
-           'resetToken')
-           resetToken: string)
-         {
-            return this.authService.Password(reqBody, resetToken);
-         }
+       @ApiBody({type:ChangeUserPasswordDto})
+       @Put('forgotPassword/token')
+       async changePasswordToken(
+       @Body() reqBody: ChangeUserPasswordDto,
+       @Query('resetToken') resetToken: string)
+       {
+         return this.authService.Password(reqBody, resetToken);
+       }
 
 
         //profile get

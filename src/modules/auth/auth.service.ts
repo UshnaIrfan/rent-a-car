@@ -58,6 +58,7 @@ export class AuthService {
   }
 
 
+
     //login
       async login(user: User): Promise<JwtTokensInterface>
       {
@@ -414,7 +415,7 @@ export class AuthService {
      //      return user;
      //  }
 
-      async validateUser(email: string, password: string): Promise<User>
+        async validateUser(email: string, password: string): Promise<User>
         {
           const user = await this.usersService.findUserByEmail(email);
           if (!user)
@@ -427,22 +428,23 @@ export class AuthService {
             throw new UnauthorizedException('Invalid password');
            }
           return user;
-    }
+
+        }
 
      // sending email(signup)
-       async sendWelcomeEmail(email: string)
+         async sendWelcomeEmail(email: string)
          {
          await this.mailerService.sendMail({
          to: email,
          subject: 'Welcome to boilerplate!',
          text: 'Thank you for signing up for boilerplate',
            });
-        }
+         }
 
 
 
      //sending Otp(changePassword)
-       async sendOtp(email: string, otp: string, expiresAt: Date)
+        async sendOtp(email: string, otp: string, expiresAt: Date)
         {
           await this.mailerService.sendMail({
           to: email,
@@ -462,14 +464,15 @@ export class AuthService {
      //    });
      // }
 
-      async sendToken(email: string, emailBody: string)
+       async sendToken(email: string, emailBody: string)
        {
          await this.mailerService.sendMail({
          to: email,
          subject: 'Reset Password',
         html: emailBody,
-      });
-    }
+           });
+      }
+
 
 }
 

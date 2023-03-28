@@ -31,7 +31,7 @@ export class CategoriesService {
          throw new BadRequestException('Category creation failed');
         }
 
-   }
+     }
 
 
 
@@ -49,7 +49,7 @@ export class CategoriesService {
        record: getcategory
         };
 
-   }
+    }
 
 
 
@@ -83,7 +83,7 @@ export class CategoriesService {
       message: 'Category updated successfully',
       record: update
      };
-  }
+    }
 
 
 
