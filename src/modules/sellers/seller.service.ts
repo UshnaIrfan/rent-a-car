@@ -16,14 +16,16 @@ export class SellerService {
     // create seller
      async createseller(createSeller:createSellerInterface):Promise<seller>
      {
-       const  seller_ID= await this.SellerRepository.getSellerById(createSeller.seller_ID);
-       if (seller_ID)
+       const  sellerId= await this.SellerRepository.getSellerById(createSeller.sellerId);
+
+       if (sellerId)
        {
          throw new BadRequestException('seller_ID already exists');
        }
 
-       const  seller_name= await this.SellerRepository.getSellerByName(createSeller.seller_name);
-       if ( seller_name)
+       const  sellerName= await this.SellerRepository.getSellerByName(createSeller.sellerName);
+
+       if ( sellerName)
        {
          throw new BadRequestException(' seller_name already exists');
        }
@@ -44,45 +46,65 @@ export class SellerService {
 
 
   // get  seller by id
-     async getSellerById(seller_ID:string )
-     {
-      const seller = await this.SellerRepository.getSellerById(seller_ID)
-      if(!seller)
-      {
-       return { message: "seller with  the given ID not found" };
-      }
-
-       return {
-       record: seller
-      };
-
-  }
-
-
-  //  async getSellerById(seller_ID: string)
-  //  {
-  //   const seller = await this.SellerRepository.getSellerById(seller_ID);
-  //   console.log(seller)
-  //   if (!seller)
+  //    async getSellerById(seller_ID:string )
   //    {
+  //     const seller = await this.SellerRepository.getSellerById(seller_ID)
+  //     if(!seller)
+  //     {
+  //      return { message: "seller with  the given ID not found" };
+  //     }
+  //
+  //      return {
+  //      record: seller
+  //     };
+  //
+  // }
+
+
+  //    async getSellerById(seller_ID: string)
+  //    {
+  //    const seller = await this.SellerRepository.getSellerById(seller_ID);
+  //    console.log(seller)
+  //     if (!seller)
+  //     {
   //      return { message: "Seller with the given ID not found" };
-  //    }
-  //   return {
-  //      record: {
-  //         seller_ID: seller.seller_ID,
-  //         seller_name: seller.seller_name,
-  //         category: seller.category,
-  //      },
+  //     }
+  //     return {
+  //        record: {
+  //          seller_ID: seller.seller_ID,
+  //          seller_name: seller.seller_name,
+  //          category: seller.category,
+  //       },
   //    };
   //
   // }
 
 
+    async getSellerById(sellerId: string)
+    {
+     const seller = await this.SellerRepository.getSellerById(sellerId);
+     console.log("here" ,seller)
+      if (!seller)
+      {
+         return { message: "Seller with the given ID not found" };
+      }
+       return {
+         seller_ID: seller.sellerId,
+         seller_name: seller.sellerName,
+         categories: seller.categories.map(category => {
+       return {
+             category_ID: category.categoryId,
+             category_name: category.categoryName
+           };
+        }),
+     };
+  }
+
 
     //update category
      async updateSeller(updateSeller:updateSellerInterface)
      {
-      const update= await this.SellerRepository.updateSeller(updateSeller.seller_ID ,updateSeller.seller_name);
+      const update= await this.SellerRepository.updateSeller(updateSeller.sellerId ,updateSeller.sellerName);
       if (!update)
       {
        return { message: "seller with given ID not found" };
@@ -99,7 +121,7 @@ export class SellerService {
     // delete category
      async deleteSeller(deleteSeller:deleteSellerInterface)
      {
-      const Delete= await this.SellerRepository.deleteSeller(deleteSeller.seller_ID)
+      const Delete= await this.SellerRepository.deleteSeller(deleteSeller.sellerId)
       if(!Delete)
       {
         return { message: "seller with given ID not found" };

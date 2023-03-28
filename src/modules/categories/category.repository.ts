@@ -18,11 +18,11 @@ export class CategoryRepository {
 
 
      // get category by using name
-     async getCategoryByName(category_name:string): Promise<category[] | null>
+     async getCategoryByName(categoryName:string): Promise<category[] | null>
      {
       const category = await this.categoryModel.find(
         {
-              where: { category_name },
+              where: { categoryName},
         });
 
         if (category.length === 0)
@@ -36,11 +36,11 @@ export class CategoryRepository {
 
 
        // get category by Id
-       async getCategoryById(category_ID:string): Promise<category|null>
+       async getCategoryById(categoryId:string): Promise<category|null>
        {
          return  this.categoryModel.findOne(
            {
-                where: { category_ID },
+                where: { categoryId },
             })
        }
 
@@ -48,11 +48,11 @@ export class CategoryRepository {
 
 
        //update category
-       async updateCategory(category_ID: string, category_name: string): Promise<category | null>
+       async updateCategory(categoryId: string, categoryName: string): Promise<category | null>
        {
         const category = await this.categoryModel.findOne(
           {
-               where: { category_ID},
+               where: { categoryId},
              });
 
          if (!category)
@@ -60,7 +60,7 @@ export class CategoryRepository {
            return null;
           }
 
-         category.category_name = category_name;
+         category.categoryName = categoryName;
          return this.categoryModel.save(category);
       }
 
@@ -68,9 +68,9 @@ export class CategoryRepository {
 
 
     // delete category
-      async deleteCategory(category_ID: string): Promise<boolean>
+      async deleteCategory(categoryId: string): Promise<boolean>
       {
-        const category = await this.categoryModel.findOne({ where: { category_ID } });
+        const category = await this.categoryModel.findOne({ where: { categoryId } });
         if (!category)
          {
            return false;

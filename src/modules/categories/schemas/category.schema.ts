@@ -1,26 +1,28 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
+import { seller } from "../../sellers/schemas/seller.schema";
 
 
 @Entity({ name: 'categories' })
-
 export class category{
 
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+   @ApiProperty()
+   @PrimaryGeneratedColumn('uuid')
+   id: string;
 
 
    @ApiProperty()
    @Column({unique:true})
-   category_ID: string;
+   categoryId: string;
+
 
    @ApiProperty()
    @Column()
-   category_name: string;
+   categoryName: string;
 
 
 
-
+   @ManyToMany(() => seller, seller => seller.categories)
+   sellers: seller[];
 
 }

@@ -8,14 +8,14 @@ import {
 export class CreateSellerDto {
 
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  seller_ID: string;
+   @ApiProperty({ type: String, required: true })
+   @IsString()
+   @IsNotEmpty()
+   sellerId: string;
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  seller_name: string;
+   @ApiProperty({ type: String, required: true })
+   @IsString()
+   @IsNotEmpty()
+   sellerName: string;
 
 }

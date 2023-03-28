@@ -27,18 +27,18 @@ export class CategoriesController {
 
      // get category by name
       @Get('/name/:category_name')
-      async  getCategoryByName( @Param('category_name') category_name: string)
+      async  getCategoryByName( @Param('categoryName') categoryName: string)
       {
-       return this.categoriesService.getCategoryByName(category_name);
+       return this.categoriesService.getCategoryByName(categoryName);
       }
 
 
 
       // get category by ID
        @Get('/id/:category_ID')
-       async  getCategoryByID( @Param('category_ID') category_ID: string)
+       async  getCategoryByID( @Param('categoryId') categoryId: string)
        {
-         return this.categoriesService.getCategoryById(category_ID);
+         return this.categoriesService.getCategoryById(categoryId);
        }
 
 

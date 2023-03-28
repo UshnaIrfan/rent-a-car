@@ -25,14 +25,16 @@ export class SellerController {
 
      // get seller by ID
       @Get('/id/:seller_ID')
-      async  getSellerByID( @Param('seller_ID') seller_ID: string)
+      async  getSellerByID( @Param('sellerId') sellerId: string)
       {
-        return this.sellerService.getSellerById(seller_ID);
+        return this.sellerService.getSellerById(sellerId);
       }
 
 
 
-     // update category
+
+
+  // update category
       @ApiBody({type:updateSellerDto})
       @Put('update')
       async updateCategory(@Body() updateCategory: updateSellerDto)
@@ -49,7 +51,6 @@ export class SellerController {
       {
          return this.sellerService.deleteSeller(deleteCategory);
       }
-
 
 
 }

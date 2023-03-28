@@ -30,7 +30,7 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-     // Sign up
+      // Sign up
       async signup(Signup:signupUserInterface):Promise<User>
       {
 
@@ -59,7 +59,7 @@ export class AuthService {
 
 
 
-    //login
+      //login
       async login(user: User): Promise<JwtTokensInterface>
       {
         const payload = {
@@ -315,7 +315,7 @@ export class AuthService {
   //      }
   //  }
 
-     async Password(
+       async Password(
        @Body() reqBody: changeUserPasswordInterface,
        @Query('resetToken') resetToken: string,
       ) {
@@ -418,7 +418,7 @@ export class AuthService {
         async validateUser(email: string, password: string): Promise<User>
         {
           const user = await this.usersService.findUserByEmail(email);
-          if (!user)
+           if (!user)
            {
              throw new UnauthorizedException('Invalid email');
            }
@@ -434,10 +434,10 @@ export class AuthService {
      // sending email(signup)
          async sendWelcomeEmail(email: string)
          {
-         await this.mailerService.sendMail({
-         to: email,
-         subject: 'Welcome to boilerplate!',
-         text: 'Thank you for signing up for boilerplate',
+          await this.mailerService.sendMail({
+          to: email,
+          subject: 'Welcome to boilerplate!',
+          text: 'Thank you for signing up for boilerplate',
            });
          }
 
@@ -469,7 +469,7 @@ export class AuthService {
          await this.mailerService.sendMail({
          to: email,
          subject: 'Reset Password',
-        html: emailBody,
+         html: emailBody,
            });
       }
 

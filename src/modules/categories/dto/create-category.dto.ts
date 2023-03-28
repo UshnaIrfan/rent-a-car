@@ -11,10 +11,10 @@ export class CreateCategoryDto {
      @ApiProperty({ type: String, required: true })
      @IsString()
      @IsNotEmpty()
-     category_ID: string;
+     categoryId: string;
 
      @ApiProperty({ type: String, required: true })
      @IsString()
      @IsNotEmpty()
-     category_name: string;
+     categoryName: string;
 }

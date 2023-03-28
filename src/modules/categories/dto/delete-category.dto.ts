@@ -10,6 +10,6 @@ export class deleteCategoryDto {
     @ApiProperty({ type: String, required: true })
     @IsString()
     @IsNotEmpty()
-    category_ID: string;
+    categoryId: string;
 
 }

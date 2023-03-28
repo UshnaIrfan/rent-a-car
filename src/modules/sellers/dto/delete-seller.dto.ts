@@ -7,9 +7,9 @@ import {
 
 export class deleteSellerDto {
 
-  @ApiProperty({ type: String, required: true })
-  @IsString()
-  @IsNotEmpty()
-  seller_ID: string;
+   @ApiProperty({ type: String, required: true })
+   @IsString()
+   @IsNotEmpty()
+   sellerId: string;
 
 }

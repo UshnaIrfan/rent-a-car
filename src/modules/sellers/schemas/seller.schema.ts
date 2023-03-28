@@ -1,6 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    JoinColumn,
+    OneToMany,
+    ManyToMany,
+    JoinTable
+} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import {category} from "../../categories/schemas/category.schema";
+
 
 
 @Entity({ name: 'sellers' })
@@ -14,14 +24,18 @@ export class seller{
 
     @ApiProperty()
     @Column({unique:true})
-    seller_ID: string;
+    sellerId: string;
 
 
     @ApiProperty()
     @Column({unique:true})
-    seller_name: string;
+    sellerName: string;
 
 
+
+    @ManyToMany(() => category, category => category.sellers)
+    @JoinTable()
+    categories: category[];
 
     // @ApiProperty({type: () => category})
     // @ManyToOne(() => category, { eager: true })

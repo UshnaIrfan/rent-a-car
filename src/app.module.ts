@@ -7,11 +7,12 @@ import {AuthModule} from "./modules/auth/auth.module";
 import {UsersModule} from "./modules/users/users.module";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from "./modules/users/schemas/user.schema";
 import { CategoriesModule } from './modules/categories/categories.module';
-import {category} from "./modules/categories/schemas/category.schema";
 import { SellerModule } from './modules/sellers/seller.module';
-import {seller} from "./modules/sellers/schemas/seller.schema";
+import { seller } from "./modules/sellers/schemas/seller.schema";
+import { User } from "./modules/users/schemas/user.schema";
+import { category } from "./modules/categories/schemas/category.schema";
+
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
     UsersModule,
     CategoriesModule,
     SellerModule,
+
 
     ConfigModule.forRoot(
       {
@@ -30,8 +32,8 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
       }),
 
 
-    // mailer module
-     MailerModule.forRootAsync({
+     // mailer module
+      MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         transport: {
@@ -47,11 +49,10 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
 
 
     // redis
-     CacheModule.register({
+      CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     }),
-
 
     // Database connection
 
@@ -63,7 +64,7 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
 //   inject: [ConfigService],
 // }),
 
-     TypeOrmModule.forRootAsync({
+      TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
@@ -72,7 +73,7 @@ import {seller} from "./modules/sellers/schemas/seller.schema";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User ,category ,seller],
+        entities: [User,category ,seller ],
         synchronize: true,
       }),
       inject: [ConfigService],

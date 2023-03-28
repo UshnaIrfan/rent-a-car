@@ -15,8 +15,8 @@ export class CategoriesService {
   // create category
      async createCategory(createCategory:createCategoryInterface):Promise<category>
      {
-       const  category_ID= await this.categoryRepository.getCategoryById(createCategory.category_ID);
-       if (category_ID)
+       const  categoryId= await this.categoryRepository.getCategoryById(createCategory.categoryId);
+       if (categoryId)
        {
          throw new BadRequestException('category_ID already exists');
        }
@@ -36,9 +36,9 @@ export class CategoriesService {
 
 
     // get category by using name
-    async getCategoryByName(category_name: string)
+    async getCategoryByName(categoryName: string)
     {
-     const getcategory=  await this.categoryRepository.getCategoryByName(category_name);
+     const getcategory=  await this.categoryRepository.getCategoryByName(categoryName);
 
      if (!getcategory)
       {
@@ -54,9 +54,9 @@ export class CategoriesService {
 
 
    // get category by id
-      async getCategoryById(category_ID:string )
+      async getCategoryById(categoryId:string )
       {
-        const Getcategory = await this.categoryRepository.getCategoryById(category_ID)
+        const Getcategory = await this.categoryRepository.getCategoryById(categoryId)
         if(!Getcategory)
          {
           return { message: "Category with  the given ID not found" };
@@ -73,7 +73,7 @@ export class CategoriesService {
      //update category
      async updateCategory(updateCategory:updateCategoryInterface)
      {
-      const update= await this.categoryRepository.updateCategory(updateCategory.category_ID, updateCategory.category_name);
+      const update= await this.categoryRepository.updateCategory(updateCategory.categoryId, updateCategory.categoryName);
       if (!update)
       {
        return { message: "Category with given ID not found" };
@@ -90,7 +90,7 @@ export class CategoriesService {
     // delete category
     async deleteCategory(deleteCategory:deleteCategoryInterface)
     {
-      const Delete= await this.categoryRepository.deleteCategory(deleteCategory.category_ID )
+      const Delete= await this.categoryRepository.deleteCategory(deleteCategory.categoryId )
       if(!Delete)
      {
        return { message: "Category with given ID not found" };

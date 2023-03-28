@@ -10,7 +10,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
   imports: [
 
     TypeOrmModule.forFeature([seller]),
-
   ],
 
   controllers: [SellerController],

@@ -6,6 +6,7 @@ import {CreateSellerDto} from "./dto/create-seller.dto";
 import { category } from "../categories/schemas/category.schema";
 
 
+
 @Injectable()
 export class sellerRepository{
   constructor(@InjectRepository(seller) private sellerModel: Repository<seller>) {
@@ -20,18 +21,17 @@ export class sellerRepository{
 
 
    //  get seller by id
-    async getSellerById(seller_ID:string): Promise<seller|null>
-    {
-        return  this.sellerModel.findOne(
-      {
-           where: { seller_ID },
-        })
-    }
-
-
-   //  async getSellerById(seller_ID: string): Promise<seller|null>
+   //  async getSellerById(seller_ID:string): Promise<seller|null>
    //  {
-   //
+   //      return  this.sellerModel.findOne(
+   //    {
+   //         where: { seller_ID },
+   //      })
+   //  }
+
+
+   //   async getSellerById(seller_ID: string): Promise<seller|null>
+   //   {
    //    const seller = await this.sellerModel.createQueryBuilder('seller')
    //    .leftJoinAndSelect('seller.category', 'category')
    //    .where('seller.seller_ID = :seller_ID AND seller.seller_ID = category.category_ID', {
@@ -43,31 +43,49 @@ export class sellerRepository{
    //
    // }
 
+     async getSellerById( sellerId: string): Promise<seller|null>
+     {
 
-    //update seller
-     async updateSeller(seller_ID: string, seller_name: string): Promise<seller | null>
+       // return this.sellerModel.findOne({
+       //   where: {
+       //     id: seller_ID
+       //   },
+       //   relations: ['categories'],
+       // });
+       // const seller = await this.sellerModel.createQueryBuilder('seller')
+       // .leftJoinAndSelect('seller.categories', 'category')
+       // .where('seller.seller_ID = :seller_ID AND category.category_ID = :category_ID', { seller_ID, category_ID: seller_ID })
+       // .getOne();
+
+      return
+
+     }
+
+
+
+
+  //update seller
+     async updateSeller(sellerId: string, sellerName: string): Promise<seller | null>
      {
        const seller = await this.sellerModel.findOne(
       {
-        where: { seller_ID},
+        where: { sellerId},
        });
 
-      if (!seller)
-      {
+      if (!seller) {
         return null;
       }
-
-     seller.seller_name = seller_name;
-     return this.sellerModel.save(seller);
+      seller.sellerName = sellerName;
+      return this.sellerModel.save(seller);
     }
 
 
 
 
      // delete seller
-     async deleteSeller(seller_ID: string): Promise<boolean>
+     async deleteSeller(sellerId: string): Promise<boolean>
      {
-      const seller = await this.sellerModel.findOne({ where: { seller_ID } });
+      const seller = await this.sellerModel.findOne({ where: { sellerId } });
       if (!seller)
       {
        return false;
@@ -79,16 +97,14 @@ export class sellerRepository{
 
 
 
-     async getSellerByName(seller_name:string): Promise<seller|null>
+     async getSellerByName(sellerName:string): Promise<seller|null>
      {
          return  this.sellerModel.findOne(
       {
-            where: { seller_name },
+            where: { sellerName},
         })
 
       }
-
-
 
 
 

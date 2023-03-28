@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import {AuthService} from "../modules/auth/auth.service";
 import { User } from "../modules/users/schemas/user.schema";
 
+
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService ) {
@@ -24,16 +25,16 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   //   }
   // }
 
-    async validate(email: string, password: string): Promise< User>
+     async validate(email: string, password: string): Promise< User>
      {
-      try
+       try
        {
-       const user = await this.authService.validateUser(email, password);
-       return user;
-      }
+        const user = await this.authService.validateUser(email, password);
+        return user;
+       }
       catch (error)
       {
-      throw new UnauthorizedException(error.message);
+       throw new UnauthorizedException(error.message);
       }
    }
 
