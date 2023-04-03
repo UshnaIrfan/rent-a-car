@@ -1,26 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import createReviewInterface from "./interfaces/create-review.interface";
+import {reviewRepository} from "./review.repository";
+import { MailerService } from "@nestjs-modules/mailer";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class ReviewService {
-  create(createReviewDto: CreateReviewDto) {
-    return 'This action adds a new review';
-  }
+  constructor(
+    private readonly reviewRepository:reviewRepository,
 
-  findAll() {
-    return `This action returns all review`;
-  }
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
-  }
 
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
-  }
+
+     async createReview(createReviewInterface:createReviewInterface)
+     {
+       const review= await this.reviewRepository.createReview(createReviewInterface);
+
+     }
+
 }

@@ -15,12 +15,8 @@ import { category } from "./modules/categories/schemas/category.schema";
 import {sellerCategory} from "./modules/sellers/schemas/sellerCategory.schema";
 import { ContactUsModule } from './modules/contact-us/contact-us.module';
 import {contact} from "./modules/contact-us/schemas/contact-us.schema";
-import { config } from "rxjs";
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
-import { builders } from "prettier/doc";
-import join = builders.join;
-import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
 import { ReviewModule } from './modules/review/review.module';
+import {review} from "./modules/review/schemas/review.schema";
 
 
 @Module({
@@ -88,7 +84,7 @@ import { ReviewModule } from './modules/review/review.module';
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category ,seller  ,sellerCategory ,contact],
+        entities: [User,category ,seller  ,sellerCategory ,contact ,review],
         synchronize: true,
       }),
       inject: [ConfigService],

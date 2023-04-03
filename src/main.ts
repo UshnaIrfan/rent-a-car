@@ -33,10 +33,10 @@ async function bootstrap() {
 
       //Swagger connection
        const config = new DocumentBuilder()
-      .setTitle('Boiler_Plate')
-      .setDescription('boilerplate backend')
+      .setTitle('love2Air')
+      .setDescription('love2Air backend')
       .setVersion('1.0')
-      .addTag('boilerplate')
+      .addTag('love2Air')
       .addBearerAuth({ in: 'header', type: 'http' })
       .build();
       const document = SwaggerModule.createDocument(app, config);
