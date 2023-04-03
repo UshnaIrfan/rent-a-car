@@ -12,6 +12,15 @@ import { SellerModule } from './modules/sellers/seller.module';
 import { seller } from "./modules/sellers/schemas/seller.schema";
 import { User } from "./modules/users/schemas/user.schema";
 import { category } from "./modules/categories/schemas/category.schema";
+import {sellerCategory} from "./modules/sellers/schemas/sellerCategory.schema";
+import { ContactUsModule } from './modules/contact-us/contact-us.module';
+import {contact} from "./modules/contact-us/schemas/contact-us.schema";
+import { config } from "rxjs";
+import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+import { builders } from "prettier/doc";
+import join = builders.join;
+import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
+import { ReviewModule } from './modules/review/review.module';
 
 
 @Module({
@@ -20,7 +29,6 @@ import { category } from "./modules/categories/schemas/category.schema";
     UsersModule,
     CategoriesModule,
     SellerModule,
-
 
     ConfigModule.forRoot(
       {
@@ -38,14 +46,21 @@ import { category } from "./modules/categories/schemas/category.schema";
       useFactory: async (configService: ConfigService) => ({
         transport: {
           host: configService.get('MAILER_HOST'),
+          port: 465,
           auth: {
-            user: configService.get('MAILER_USERNAME'),
-            pass: configService.get('MAILER_PASSWORD'),
+             user: configService.get('ADMIN_EMAIL'),
+             pass: configService.get('MAILER_PASSWORD'),
           },
         },
+          defaults: {
+            from: '"love2Air" <ushnairfan77@gmail.com>',
+           },
+            preview: true,
+
+        }),
+
+          inject: [ConfigService],
       }),
-      inject: [ConfigService],
-    }),
 
 
     // redis
@@ -73,14 +88,17 @@ import { category } from "./modules/categories/schemas/category.schema";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category ,seller ],
+        entities: [User,category ,seller  ,sellerCategory ,contact],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
 
-  ],
+      ContactUsModule,
 
+      ReviewModule,
+
+  ],
      controllers: [],
      providers: [],
 })

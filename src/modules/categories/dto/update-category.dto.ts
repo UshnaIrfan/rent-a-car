@@ -12,9 +12,8 @@ export class updateCategoryDto {
      @IsNotEmpty()
      categoryId: string;
 
-
-    @ApiProperty({ type: String, required: true })
-    @IsString()
-    @IsNotEmpty()
-    categoryName: string;
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     categoryName: string;
 }

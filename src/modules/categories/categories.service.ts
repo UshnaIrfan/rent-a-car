@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import {CategoryRepository} from "./category.repository";
 import createCategoryInterface from "./interfaces/create-category.interface";
 import { category } from "./schemas/category.schema";
@@ -12,21 +12,21 @@ export class CategoriesService {
   ) {}
 
 
-  // create category
-     async createCategory(createCategory:createCategoryInterface):Promise<category>
-     {
-       const  categoryId= await this.categoryRepository.getCategoryById(createCategory.categoryId);
-       if (categoryId)
-       {
-         throw new BadRequestException('category_ID already exists');
-       }
+      // create category
+      async createCategory(createCategory:createCategoryInterface):Promise<category>
+      {
 
-       try
+        const  categoryName= await this.categoryRepository.getCategoryByName(createCategory.categoryName);
+        if (categoryName)
+        {
+          throw new BadRequestException(' category_name already exists');
+        }
+        try
         {
           const category = await this.categoryRepository.createCategory(createCategory);
           return category;
         }
-       catch (e)
+        catch (e)
         {
          throw new BadRequestException('Category creation failed');
         }
@@ -35,71 +35,100 @@ export class CategoriesService {
 
 
 
-    // get category by using name
-    async getCategoryByName(categoryName: string)
-    {
-     const getcategory=  await this.categoryRepository.getCategoryByName(categoryName);
 
-     if (!getcategory)
-      {
-       return { message: "Category with  the given name not found" };
+      // get category by id
+       async getCategoryById(id: string):Promise<{ records: category }>
+       {
+          const category = await this.categoryRepository.getCategoryId(id)
+          if (!category)
+          {
+            throw new UnauthorizedException('categories do not exist');
+          }
+           return { records: category};
       }
 
-        return {
-       record: getcategory
-        };
-
-    }
 
 
 
-   // get category by id
-      async getCategoryById(categoryId:string )
-      {
-        const Getcategory = await this.categoryRepository.getCategoryById(categoryId)
-        if(!Getcategory)
-         {
-          return { message: "Category with  the given ID not found" };
-         }
+        // get all categories
+        async getAllCategories() :Promise<{ records: category[] }>
+        {
+          const categories = await this.categoryRepository.getAllCategories()
+          if (!categories)
+          {
+             throw new UnauthorizedException('categories do not exist');
+          }
 
-         return {
-          record: Getcategory
-        };
-
-     }
+          return { records: categories};
+        }
 
 
 
-     //update category
-     async updateCategory(updateCategory:updateCategoryInterface)
-     {
-      const update= await this.categoryRepository.updateCategory(updateCategory.categoryId, updateCategory.categoryName);
-      if (!update)
-      {
-       return { message: "Category with given ID not found" };
-      }
-
-      return {
-      message: 'Category updated successfully',
-      record: update
-     };
-    }
-
-
-
-    // delete category
-    async deleteCategory(deleteCategory:deleteCategoryInterface)
-    {
-      const Delete= await this.categoryRepository.deleteCategory(deleteCategory.categoryId )
-      if(!Delete)
-     {
-       return { message: "Category with given ID not found" };
-     }
-
-     return {
-      message: 'Category  deleted successfully',
-    };
-  }
+  //   // get category by using name
+  //   async getCategoryByName(categoryName: string)
+  //   {
+  //    const getCategory=  await this.categoryRepository.getCategoryByName(categoryName);
+  //
+  //    if (!getCategory)
+  //     {
+  //      return { message: "Category with  the given name not found" };
+  //     }
+  //
+  //       return {
+  //      record: getCategory
+  //       };
+  //
+  //   }
+  //
+  //
+  //
+  //  // get category by id
+  //     async getCategoryById(categoryId:string )
+  //     {
+  //       const category = await this.categoryRepository.getCategoryById(categoryId)
+  //       if(!category)
+  //        {
+  //         return { message: "Category with  the given ID not found" };
+  //        }
+  //
+  //        return {
+  //         record: category
+  //       };
+  //
+  //    }
+  //
+  //
+  //
+  //    //update category
+  //    async updateCategory(updateCategory:updateCategoryInterface)
+  //    {
+  //     const update= await this.categoryRepository.updateCategory(updateCategory.categoryId, updateCategory.categoryName);
+  //     if (!update)
+  //     {
+  //      return { message: "Category with given ID not found" };
+  //     }
+  //
+  //     return {
+  //     message: 'Category updated successfully',
+  //     record: update
+  //    };
+  //   }
+  //
+  //
+  //
+  //   // delete category
+  //   async deleteCategory(deleteCategory:deleteCategoryInterface)
+  //   {
+  //     const Delete= await this.categoryRepository.deleteCategory(deleteCategory.categoryId )
+  //     if(!Delete)
+  //    {
+  //      return { message: "Category with given ID not found" };
+  //    }
+  //
+  //    return {
+  //     message: 'Category  deleted successfully',
+  //   };
+  // }
 
 
 

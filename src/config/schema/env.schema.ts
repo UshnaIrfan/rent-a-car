@@ -14,8 +14,9 @@ export const envSchema = Joi.object({
   DATABASE_PORT:Joi.string().required().description('Database Port'),
   REDIS_URL: Joi.string().required().description('Redis URL'),
   MAILER_HOST: Joi.string().required().description('Mailer host'),
-  MAILER_USERNAME: Joi.string().required().description('Mailer username'),
-  MAILER_PASSWORD: Joi.string().required().description('Mailer password')
+  ADMIN_EMAIL: Joi.string().required().description('Admin email'),
+  MAILER_PASSWORD: Joi.string().required().description('Mailer password'),
+
 });
 
 

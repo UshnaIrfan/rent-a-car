@@ -39,7 +39,7 @@ export class AuthController {
          }
 
 
-      // login
+       // login
        @ApiBody({ type: LoginUserDto })
        @UseGuards(LocalAuthGuard)
        @Post('login')
@@ -127,16 +127,16 @@ export class AuthController {
 
 
         //profile get
-       //  @ApiBearerAuth()
-       //  @UseGuards(JwtAuthGuard)
-       //  @Get('/profile')
-       //  async getProfile(@Request() req)
-       //   {
-       //    const accessToken = req.headers.authorization.split(' ')[1];
-       //    return this.authService.getProfile(accessToken);
-       //   }
-       //
-       //
+        @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
+        @Get('/profile')
+        async getProfile(@Request() req)
+         {
+          const accessToken = req.headers.authorization.split(' ')[1];
+          return this.authService.getProfile(accessToken);
+         }
+
+
        // //logout
        // @ApiBearerAuth()
        // @UseGuards(JwtAuthGuard)

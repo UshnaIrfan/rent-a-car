@@ -5,14 +5,10 @@ import {CategoryRepository} from "./category.repository";
 import {category} from "./schemas/category.schema";
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+
 @Module({
 
-  imports: [
-
-    TypeOrmModule.forFeature([category]),
-
-  ],
-
+  imports: [TypeOrmModule.forFeature([category])],
   controllers: [CategoriesController],
   providers: [CategoriesService ,CategoryRepository],
 

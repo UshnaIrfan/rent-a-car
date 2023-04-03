@@ -56,6 +56,7 @@ export class UsersRepository {
         }
 
 
+
         async findUserByUsername(username: string): Promise<User | null>
         {
              return this.userModel.findOne(
@@ -66,6 +67,7 @@ export class UsersRepository {
 
 
 
+
         async findUserByEmail(email: string): Promise<User | null>
         {
            return this.userModel.findOne(
@@ -73,6 +75,7 @@ export class UsersRepository {
                   where: { email },
             });
         }
+
 
 
          async updatePassword(email: string, password: string): Promise<User>

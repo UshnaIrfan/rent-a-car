@@ -150,7 +150,7 @@ export class AuthService {
 
 
 
-      //change password
+       //change password
     //   async changePassword(
     //   @Body() reqBody: changeUserPasswordInterface,
     //   accessToken: string
@@ -186,7 +186,7 @@ export class AuthService {
     // }
 
 
-     //email ( random token)
+      //email ( random token)
   //    async token(randomUserToken: randomUserTokenInterface)
   //    {
   //     const user = await this.usersService.findUserByEmail(randomUserToken.email);
@@ -245,8 +245,10 @@ export class AuthService {
       const baseUrl = process.env.BASE_URL;
       const changePasswordUrl = `${baseUrl}#/Auth/AuthController_changePasswordToken`;
 
-      const queryParams = `?resetToken=${resetToken}`;
-      const resetUrl = `${changePasswordUrl}${queryParams}`;
+     // const queryParams = `?resetToken=${resetToken}`;
+       const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
+
+       const resetUrl = `${changePasswordUrl}${queryParams}`;
 
       const emailBody = `Please click on the following link to reset your password: <a href="${resetUrl}" target="_blank">${resetUrl}</a>`;
 
@@ -359,21 +361,21 @@ export class AuthService {
 
 
   //profile get
-      //   async getProfile(accessToken: string)
-      //    {
-      //     const cachedToken = await this.cacheManager.get(accessToken);
-      //     if (!cachedToken)
-      //       {
-      //        throw new UnauthorizedException('Token expired');
-      //       }
-      //
-      //       return cachedToken
-      //    }
-      //
-      //
-      //
-      //
-      //  //logout
+        async getProfile(accessToken: string)
+         {
+          const cachedToken = await this.cacheManager.get(accessToken);
+          if (!cachedToken)
+            {
+             throw new UnauthorizedException('Token expired');
+            }
+
+            return cachedToken
+         }
+
+
+
+
+        //logout
       //   async logout(accessToken: string) :Promise<{message:string}>
       //     {
       //     const cachedToken = await this.cacheManager.get(accessToken);
@@ -443,7 +445,7 @@ export class AuthService {
 
 
 
-     //sending Otp(changePassword)
+        //sending Otp(changePassword)
         async sendOtp(email: string, otp: string, expiresAt: Date)
         {
           await this.mailerService.sendMail({

@@ -41,6 +41,7 @@
     "cache-manager": "^4.1.0",
     "cache-manager-redis-store": "^2.0.0",
     "class-validator": "^0.14.0",
+    "cors-ts": "^1.0.3",
     "enum": "^3.0.4",
     "joi": "^17.8.4",
     "mongoose-find-and-filter": "^1.0.0",

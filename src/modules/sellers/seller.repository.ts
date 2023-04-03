@@ -3,108 +3,181 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
-import { category } from "../categories/schemas/category.schema";
-
-
 
 @Injectable()
 export class sellerRepository{
-  constructor(@InjectRepository(seller) private sellerModel: Repository<seller>) {
-  }
+  constructor(
+    @InjectRepository(seller)
+    private sellerModel: Repository<seller>
+  ) {}
 
 
-   // create seller
-    async sellerCategory(category: CreateSellerDto): Promise<seller | null>
-    {
-      return this.sellerModel.save(category);
-    }
-
-
-   //  get seller by id
-   //  async getSellerById(seller_ID:string): Promise<seller|null>
-   //  {
-   //      return  this.sellerModel.findOne(
-   //    {
-   //         where: { seller_ID },
-   //      })
-   //  }
-
-
-   //   async getSellerById(seller_ID: string): Promise<seller|null>
-   //   {
-   //    const seller = await this.sellerModel.createQueryBuilder('seller')
-   //    .leftJoinAndSelect('seller.category', 'category')
-   //    .where('seller.seller_ID = :seller_ID AND seller.seller_ID = category.category_ID', {
-   //      seller_ID,
-   //    })
-   //    .getOne();
-   //
-   //    return seller || null;
-   //
-   // }
-
-     async getSellerById( sellerId: string): Promise<seller|null>
-     {
-
-       // return this.sellerModel.findOne({
-       //   where: {
-       //     id: seller_ID
-       //   },
-       //   relations: ['categories'],
-       // });
-       // const seller = await this.sellerModel.createQueryBuilder('seller')
-       // .leftJoinAndSelect('seller.categories', 'category')
-       // .where('seller.seller_ID = :seller_ID AND category.category_ID = :category_ID', { seller_ID, category_ID: seller_ID })
-       // .getOne();
-
-      return
-
+      // create seller
+      async createSeller(body: CreateSellerDto):Promise<seller|null>
+      {
+         const seller = await this.sellerModel.create();
+         seller.sellerName = body.sellerName;
+         seller.sellerUrl = body.sellerUrl;
+         seller.approvedByAdmin = body.approvedByAdmin;
+         seller.isListing = body.isListing;
+         await this.sellerModel.save(seller);
+          return seller
      }
 
 
 
-
-  //update seller
-     async updateSeller(sellerId: string, sellerName: string): Promise<seller | null>
-     {
-       const seller = await this.sellerModel.findOne(
+      // get seller by name
+       async getSellerName(sellerName:string): Promise<seller|null>
+       {
+          return  this.sellerModel.findOne(
       {
-        where: { sellerId},
-       });
+               where: { sellerName },
+           })
+       }
 
-      if (!seller) {
-        return null;
+
+
+       // get seller by url
+       async getSellerUrl(sellerUrl:string): Promise<seller|null>
+       {
+           return  this.sellerModel.findOne(
+      {
+              where: { sellerUrl },
+          })
+       }
+
+
+
+
+      // get seller by ID
+      async getSellerById(id:string): Promise<seller|null>
+      {
+          return  this.sellerModel.findOne(
+      {
+              where: { id },
+              relations: ['sellerCategories', 'sellerCategories.category'],
+          })
       }
-      seller.sellerName = sellerName;
-      return this.sellerModel.save(seller);
-    }
+
+
+
+       // get all sellers
+       async getAllSellers(): Promise<seller[]|null>
+       {
+         return this.sellerModel.find();
+      }
+
+
+
+
+
+
+      // create seller
+   //  async createSeller(category: CreateSellerDto)
+   //  {
+   //    const seller = await this.sellerModel.create();
+   //    seller.sellerName =category.sellerName
+   //    seller.sellerUrl = category.sellerUrl
+   //    seller.approvedByAdmin= category.approvedByAdmin
+   //      seller.isListing=category.isListing
+   //    return this.sellerModel.save(seller);
+   //  //  await this.sellersRepository.save(seller);
+   //  //  console.log("here" ,category.sellerName)
+   //   // return
+   //  //  return this.sellerModel.save(category);
+   //  }
+
+
+
+      //   async getSellerByCategoryId(sellerId: string): Promise<seller | null>
+  //   {
+  //       const seller = await this.sellerModel.findOne({
+  //        where: {
+  //            sellerId: sellerId
+  //      },
+  //       relations: ['categories'],
+  //   });
+  //
+  //    if (!seller)
+  //    {
+  //      return null;
+  //    }
+  //
+  //    return seller;
+  // }
+  //
+  //
+  //  //  get seller by id
+  //  //  async getSellerById(seller_ID:string): Promise<seller|null>
+  //  //  {
+  //  //      return  this.sellerModel.findOne(
+  //  //    {
+  //  //         where: { seller_ID },
+  //  //      })
+  //  //  }
+  //
+  //
+  //     async getSellerById(sellerId: string): Promise<seller | null>
+  //     {
+  //        const seller = await this.sellerModel.findOne({
+  //        where: {
+  //            sellerId: sellerId
+  //       },
+  //          relations: ['categories'],
+  //       });
+  //
+  //        if (!seller)
+  //        {
+  //          return null;
+  //        }
+  //
+  //        return seller;
+  //  }
+  //
+
+
+
+      //update seller
+    //   async updateSeller(sellerId: string, sellerName: string): Promise<seller | null>
+    //   {
+    //       const seller = await this.sellerModel.findOne(
+    //    {
+    //              where: { sellerId},
+    //         });
+    //
+    //      if (!seller)
+    //      {
+    //        return null;
+    //      }
+    //     seller.sellerName = sellerName;
+    //     return this.sellerModel.save(seller);
+    // }
 
 
 
 
      // delete seller
-     async deleteSeller(sellerId: string): Promise<boolean>
-     {
-      const seller = await this.sellerModel.findOne({ where: { sellerId } });
-      if (!seller)
-      {
-       return false;
-      }
-      await this.sellerModel.remove(seller);
-      return true;
-     }
+     // async deleteSeller(sellerId: string): Promise<boolean>
+     // {
+     //   const seller = await this.sellerModel.findOne({ where: { sellerId } });
+     //   if (!seller)
+     //   {
+     //    return false;
+     //   }
+     //   await this.sellerModel.remove(seller);
+     //   return true;
+     // }
+     //
 
 
 
+     // async getSellerByName(sellerName:string): Promise<seller|null>
+     // {
+     //     return  this.sellerModel.findOne(
+     //  {
+     //        where: { sellerName},
+     //    })
 
-     async getSellerByName(sellerName:string): Promise<seller|null>
-     {
-         return  this.sellerModel.findOne(
-      {
-            where: { sellerName},
-        })
-
-      }
 
 
 

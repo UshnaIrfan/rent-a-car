@@ -14,52 +14,73 @@ export class CategoriesController {
   ) {}
 
 
-
-     // create category
-      @ApiBody({type:CreateCategoryDto})
-      @Post('create')
-      async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
-      {
-        return this.categoriesService.createCategory(createCategoryDto);
-      }
-
-
-
-     // get category by name
-      @Get('/name/:category_name')
-      async  getCategoryByName( @Param('categoryName') categoryName: string)
-      {
-       return this.categoriesService.getCategoryByName(categoryName);
-      }
-
-
-
-      // get category by ID
-       @Get('/id/:category_ID')
-       async  getCategoryByID( @Param('categoryId') categoryId: string)
+       // create category
+       @ApiBody({type:CreateCategoryDto})
+       @Post('create')
+       async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
        {
-         return this.categoriesService.getCategoryById(categoryId);
+          return this.categoriesService.createCategory(createCategoryDto);
        }
 
 
 
-      // update category
-       @ApiBody({type:updateCategoryDto})
-       @Put('update')
-       async updateCategory(@Body() updateCategory: updateCategoryDto)
-       {
-        return this.categoriesService.updateCategory(updateCategory);
-       }
+        // get category by ID
+         @Get('/id/:category_id')
+       //@Get('_id')
+         async  getCategoryByID( @Param('category_id') id: string):Promise<{ records: category }>
+         {
+           return this.categoriesService.getCategoryById(id);
+         }
 
 
 
-      // delete category
-      @ApiBody({type:deleteCategoryDto})
-      @Delete('delete')
-      async deleteCategory(@Body() deleteCategory: deleteCategoryDto)
-      {
-        return this.categoriesService.deleteCategory(deleteCategory);
-      }
+
+        // get all categories
+        @Get('all_categories')
+        async getAllCategories():Promise<{ records: category[] }>
+        {
+           return this.categoriesService.getAllCategories();
+        }
+
+
+
+
+     // // get category by name
+     //  @Get('/name/:category_name')
+     //  async  getCategoryByName( @Param('category_name') categoryName: string)
+     //  {
+     //   return this.categoriesService.getCategoryByName(categoryName);
+     //  }
+
+
+
+      // // get category by ID
+      //  @Get('/id/:category_ID')
+      //  async  getCategoryByID( @Param('category_ID') categoryId: string)
+      //  {
+      //    return this.categoriesService.getCategoryById(categoryId);
+      //  }
+      //
+      //
+      //
+      // // update category
+      //  @ApiBody({type:updateCategoryDto})
+      //  @Put('update')
+      //  async updateCategory(@Body() updateCategory: updateCategoryDto)
+      //  {
+      //   return this.categoriesService.updateCategory(updateCategory);
+      //  }
+      //
+      //
+      //
+      // // delete category
+      // @ApiBody({type:deleteCategoryDto})
+      // @Delete('delete')
+      // async deleteCategory(@Body() deleteCategory: deleteCategoryDto)
+      // {
+      //   return this.categoriesService.deleteCategory(deleteCategory);
+      // }
+
 
 
 
