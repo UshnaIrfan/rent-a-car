@@ -87,7 +87,7 @@ export class ReviewService {
            const existingClickTypes = await this.clicksTypeRepository.findByType(reqBody.type);
            if (existingClickTypes)
            {
-              throw new ConflictException('Click type already exist');
+              throw new ConflictException('Balloon already exist');
            }
 
            const clicked = await this.clicksTypeRepository.createClicksTypes(reqBody);
@@ -124,7 +124,7 @@ export class ReviewService {
           const typeResult = await this.clicksTypeRepository.getAllReviewsTypes()
           if(!typeResult)
           {
-             throw new  NotFoundException('balloon not exist');
+             throw new  NotFoundException('Balloon not exist');
           }
             return { types: typeResult};
       }
@@ -145,7 +145,7 @@ export class ReviewService {
           const reactionTypes=  await this.clicksTypeRepository.getByTypeId(createReviewInterface.balloonId);
           if (!reactionTypes)
           {
-              throw new  NotFoundException('ballon not found')
+              throw new  NotFoundException('Balloon not found')
           }
 
             return this.reviewRepository.submitReview(createReviewInterface);

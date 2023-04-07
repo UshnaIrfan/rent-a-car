@@ -2,10 +2,11 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany,
+  ManyToMany, JoinTable
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
+import { review } from "../../review/schemas/submit-review.schema";
 
 
 @Entity({ name: 'sellers' })
@@ -36,8 +37,9 @@ export class seller{
      isListing: boolean;
 
 
-
+    @ApiProperty({ type: () => [category] })
     @ManyToMany(() => category, category => category.sellers, { cascade: true })
     categories: category[];
+
 
 }

@@ -84,17 +84,5 @@ export class sellerRepository{
 
 
 
-  // create add
-      async addSeller(body: CreateSellerDto):Promise<seller|null>
-      {
-    const seller = await this.sellerModel.create();
-    seller.sellerName = body.sellerName;
-    seller.sellerUrl = body.sellerUrl;
-    seller.approvedByAdmin = body.approvedByAdmin;
-    seller.isListing = body.isListing;
-    await this.sellerModel.save(seller);
-    return seller
-  }
-
 }
 

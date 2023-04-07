@@ -35,6 +35,7 @@ export class  addSellerDto{
     categories: string[];
 
 
+
     @ApiProperty({ type: String, required: true  })
     @IsNotEmpty()
     balloonId: string;
@@ -42,8 +43,5 @@ export class  addSellerDto{
 
     @ApiProperty({ type: String, required: false, default: '' })
     message: string;
-
-
-
 
 }

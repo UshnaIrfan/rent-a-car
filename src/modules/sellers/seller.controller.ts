@@ -40,5 +40,13 @@ export class SellerController {
 
 
 
+       // add seller
+       @ApiBody({type:addSellerDto})
+       @Post('add')
+       async  add(@Body() body:addSellerDto)
+       {
+         return this.sellerService.addSeller(body);
+       }
 
-}
+
+  }
