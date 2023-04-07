@@ -12,11 +12,12 @@ import { SellerModule } from './modules/sellers/seller.module';
 import { seller } from "./modules/sellers/schemas/seller.schema";
 import { User } from "./modules/users/schemas/user.schema";
 import { category } from "./modules/categories/schemas/category.schema";
-import {sellerCategory} from "./modules/sellers/schemas/sellerCategory.schema";
 import { ContactUsModule } from './modules/contact-us/contact-us.module';
 import {contact} from "./modules/contact-us/schemas/contact-us.schema";
 import { ReviewModule } from './modules/review/review.module';
-import {review} from "./modules/review/schemas/review.schema";
+import {review} from "./modules/review/schemas/submit-review.schema";
+import {clicks} from "./modules/review/schemas/create-clicks-titles.schema";
+import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
 
 
 @Module({
@@ -25,6 +26,8 @@ import {review} from "./modules/review/schemas/review.schema";
     UsersModule,
     CategoriesModule,
     SellerModule,
+    ContactUsModule,
+    ReviewModule,
 
     ConfigModule.forRoot(
       {
@@ -66,7 +69,6 @@ import {review} from "./modules/review/schemas/review.schema";
     }),
 
     // Database connection
-
     //   MongooseModule.forRootAsync({
 //      imports: [ConfigModule],
 //     useFactory: (configService: ConfigService) => ({
@@ -84,15 +86,11 @@ import {review} from "./modules/review/schemas/review.schema";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category ,seller  ,sellerCategory ,contact ,review],
+        entities: [User,category ,seller   ,contact ,review ,clicks,clicksTypes],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-
-      ContactUsModule,
-
-      ReviewModule,
 
   ],
      controllers: [],

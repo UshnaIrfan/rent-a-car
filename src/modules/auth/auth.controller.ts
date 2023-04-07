@@ -117,12 +117,11 @@ export class AuthController {
 
 
        @ApiBody({type:ChangeUserPasswordDto})
-       @Put('forgotPassword/token')
+       @Put('changePassword')
        async changePasswordToken(
-       @Body() reqBody: ChangeUserPasswordDto,
-       @Query('resetToken') resetToken: string)
+       @Body() reqBody: ChangeUserPasswordDto)
        {
-         return this.authService.Password(reqBody, resetToken);
+         return this.authService.Password(reqBody);
        }
 
 

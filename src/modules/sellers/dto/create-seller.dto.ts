@@ -1,19 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
    IsBoolean,
-   IsNotEmpty, IsNumber,
+   IsNotEmpty,
    IsString
 } from "class-validator";
-import { Column } from "typeorm";
+
 
 
 export class CreateSellerDto {
 
 
-   // @ApiProperty({ type: String, required: true })
-   // @IsString()
-   // @IsNotEmpty()
-   // sellerId: string;
 
      @ApiProperty({ type: String, required: true })
      @IsString()
@@ -37,7 +33,7 @@ export class CreateSellerDto {
      readonly isListing: boolean;
 
 
-     @ApiProperty({ type: [String], })
+     @ApiProperty({ type: [String]})
      categories: string[];
 
 }

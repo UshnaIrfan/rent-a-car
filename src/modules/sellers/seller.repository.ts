@@ -25,6 +25,12 @@ export class sellerRepository{
      }
 
 
+     // create seller with associated categories
+       async sellerCategories(body:seller):Promise<seller|null>
+       {
+         return this.sellerModel.save(body);
+       }
+
 
       // get seller by name
        async getSellerName(sellerName:string): Promise<seller|null>
@@ -48,138 +54,47 @@ export class sellerRepository{
 
 
 
-
-      // get seller by ID
-      async getSellerById(id:string): Promise<seller|null>
-      {
-          return  this.sellerModel.findOne(
-      {
-              where: { id },
-              relations: ['sellerCategories', 'sellerCategories.category'],
-          })
-      }
-
+      // get seller by ID (associated categories)
+       async getSellerById(id: string): Promise<seller|null>
+       {
+        return this.sellerModel.findOne(
+          {
+            where: { id },
+            relations: ['categories'],
+          });
+       }
 
 
-       // get all sellers
+
+      // get all sellers
        async getAllSellers(): Promise<seller[]|null>
        {
          return this.sellerModel.find();
-      }
+       }
+
+
+       //get seller ID
+       async getSellerId(id:string): Promise<seller|null>
+       {
+         return  this.sellerModel.findOne(
+         {
+              where: { id }
+           })
+       }
 
 
 
-
-
-
-      // create seller
-   //  async createSeller(category: CreateSellerDto)
-   //  {
-   //    const seller = await this.sellerModel.create();
-   //    seller.sellerName =category.sellerName
-   //    seller.sellerUrl = category.sellerUrl
-   //    seller.approvedByAdmin= category.approvedByAdmin
-   //      seller.isListing=category.isListing
-   //    return this.sellerModel.save(seller);
-   //  //  await this.sellersRepository.save(seller);
-   //  //  console.log("here" ,category.sellerName)
-   //   // return
-   //  //  return this.sellerModel.save(category);
-   //  }
-
-
-
-      //   async getSellerByCategoryId(sellerId: string): Promise<seller | null>
-  //   {
-  //       const seller = await this.sellerModel.findOne({
-  //        where: {
-  //            sellerId: sellerId
-  //      },
-  //       relations: ['categories'],
-  //   });
-  //
-  //    if (!seller)
-  //    {
-  //      return null;
-  //    }
-  //
-  //    return seller;
-  // }
-  //
-  //
-  //  //  get seller by id
-  //  //  async getSellerById(seller_ID:string): Promise<seller|null>
-  //  //  {
-  //  //      return  this.sellerModel.findOne(
-  //  //    {
-  //  //         where: { seller_ID },
-  //  //      })
-  //  //  }
-  //
-  //
-  //     async getSellerById(sellerId: string): Promise<seller | null>
-  //     {
-  //        const seller = await this.sellerModel.findOne({
-  //        where: {
-  //            sellerId: sellerId
-  //       },
-  //          relations: ['categories'],
-  //       });
-  //
-  //        if (!seller)
-  //        {
-  //          return null;
-  //        }
-  //
-  //        return seller;
-  //  }
-  //
-
-
-
-      //update seller
-    //   async updateSeller(sellerId: string, sellerName: string): Promise<seller | null>
-    //   {
-    //       const seller = await this.sellerModel.findOne(
-    //    {
-    //              where: { sellerId},
-    //         });
-    //
-    //      if (!seller)
-    //      {
-    //        return null;
-    //      }
-    //     seller.sellerName = sellerName;
-    //     return this.sellerModel.save(seller);
-    // }
-
-
-
-
-     // delete seller
-     // async deleteSeller(sellerId: string): Promise<boolean>
-     // {
-     //   const seller = await this.sellerModel.findOne({ where: { sellerId } });
-     //   if (!seller)
-     //   {
-     //    return false;
-     //   }
-     //   await this.sellerModel.remove(seller);
-     //   return true;
-     // }
-     //
-
-
-
-     // async getSellerByName(sellerName:string): Promise<seller|null>
-     // {
-     //     return  this.sellerModel.findOne(
-     //  {
-     //        where: { sellerName},
-     //    })
-
-
-
+  // create add
+      async addSeller(body: CreateSellerDto):Promise<seller|null>
+      {
+    const seller = await this.sellerModel.create();
+    seller.sellerName = body.sellerName;
+    seller.sellerUrl = body.sellerUrl;
+    seller.approvedByAdmin = body.approvedByAdmin;
+    seller.isListing = body.isListing;
+    await this.sellerModel.save(seller);
+    return seller
+  }
 
 }
 

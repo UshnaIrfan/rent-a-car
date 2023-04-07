@@ -32,14 +32,13 @@ export class CategoryRepository {
 
 
        // get category by id associated sellers
-       async getCategoryId(id:string): Promise<category |null>
+       async getCategoryId(id: string): Promise<category|null>
        {
-         const category = await this.categoryModel.findOne(
-      {
-            where:{id},
-            relations: ['sellerCategories', 'sellerCategories.seller'],
-         })
-          return category;
+         const category = await this.categoryModel.findOne({
+          where: { id },
+          relations: ['sellers'],
+          });
+           return category;
        }
 
 
@@ -53,83 +52,16 @@ export class CategoryRepository {
 
 
        // get category by id
-       async getCategoryById(id:string): Promise<category |null>
-       {
-          const category = await this.categoryModel.findOne(
+        async getCategoryById(id:string): Promise<category |null>
+        {
+            const category = await this.categoryModel.findOne(
       {
-             where:{id}
-           })
-          return category;
-       }
+               where:{id}
+             })
+           return category;
+        }
 
 
-
-
-
-
-  //  // get category by using name
-    //  async getCategoryByName(categoryName:string): Promise<category[] | null>
-    //  {
-    //   const category = await this.categoryModel.find(
-    //     {
-    //           where: { categoryName},
-    //     });
-    //
-    //     if (category.length === 0)
-    //      {
-    //       return null;
-    //      }
-    //
-    //     return category;
-    // }
-    //
-    //
-    //
-    //    // get category by Id
-    //    async getCategoryById(categoryId:string): Promise<category|null>
-    //    {
-    //      return  this.categoryModel.findOne(
-    //        {
-    //             where: { categoryId },
-    //         })
-    //    }
-    //
-    //
-    //
-    //
-    //    //update category
-    //    async updateCategory(categoryId: string, categoryName: string): Promise<category | null>
-    //    {
-    //     const category = await this.categoryModel.findOne(
-    //       {
-    //            where: { categoryId},
-    //          });
-    //
-    //      if (!category)
-    //       {
-    //        return null;
-    //       }
-    //
-    //      category.categoryName = categoryName;
-    //      return this.categoryModel.save(category);
-    //   }
-    //
-    //
-    //
-    //
-    // // delete category
-    //   async deleteCategory(categoryId: string): Promise<boolean>
-    //   {
-    //     const category = await this.categoryModel.findOne({ where: { categoryId } });
-    //     if (!category)
-    //      {
-    //        return false;
-    //      }
-    //    await this.categoryModel.remove(category);
-    //    return true;
-    //  }
-    //
-    //
 
 }
 

@@ -12,12 +12,10 @@ export class SignUpUserDto {
 
     @ApiProperty({ type: String, required: true })
     @IsString()
-    @IsString()
     @IsNotEmpty()
     name: string;
 
     @ApiProperty({ type: String, required: true })
-    @IsString()
     @IsString()
     @IsNotEmpty()
     username: string;

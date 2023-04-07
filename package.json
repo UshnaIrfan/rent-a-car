@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.6.1",
+    "@nestjs/class-transformer": "^0.4.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -54,6 +55,7 @@
     "redis": "^4.6.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "slugify": "^1.6.6",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {

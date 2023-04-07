@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import createContactUsInterface from "./interfaces/create-contact-us.interface";
 import {contactUsRepository} from "./contact-us.repository";
 import {MailerService} from "@nestjs-modules/mailer";
@@ -27,7 +27,7 @@ export class ContactUsService {
         }
         catch (error)
         {
-          throw new UnauthorizedException('Failed to send your message. Please try again later');
+          throw new InternalServerErrorException('Failed to send your message. Please try again later');
         }
      }
 

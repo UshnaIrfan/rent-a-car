@@ -6,6 +6,11 @@ export class ChangeUserPasswordDto {
     @ApiProperty({ type: String, required: true })
     @IsEmail()
     @IsNotEmpty()
+    resetToken: string;
+
+    @ApiProperty({ type: String, required: true })
+    @IsEmail()
+    @IsNotEmpty()
     email: string;
 
     @ApiProperty({ type: String, required: true })

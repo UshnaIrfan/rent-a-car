@@ -13,7 +13,6 @@ export class createContactUsDto {
 
 
     @ApiProperty({ type: String, required: true  })
-    @IsEmail()
     @IsNotEmpty()
     message: string;
 

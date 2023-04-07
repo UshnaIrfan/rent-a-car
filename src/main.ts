@@ -2,30 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
-import cors from "cors-ts";
 
 async function bootstrap() {
-     // const app = await NestFactory.create(AppModule, { cors: {
-     //     credentials: true,
-     //     origin: [
-     //       'http://localhost:3000'
-     //     ],
-     //   }, });
-       const app = await NestFactory.create(AppModule, { cors: true });
-       //  app.enableCors();
-  //     app.use(cors({
-  //     origin: ['http://localhost:3000'],
-  //     methods: 'GET,PUT,POST,DELETE',
-  //     preflightContinue: false,
-  //    optionsSuccessStatus: 204,
-  //    credentials: true,
-  // }));
 
-       app.enableCors({
-       allowedHeaders: '*',
-       origin: '*',
-       credentials: true,
-     });
+       const app = await NestFactory.create(AppModule, { cors: {
+           credentials: true,
+           origin: [
+             'http://localhost:3000'
+           ],
+         }, });
 
 
        app.use(bodyParser.json({ limit: '50mb' }));

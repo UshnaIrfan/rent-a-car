@@ -1,12 +1,11 @@
 import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    OneToMany,
-
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
-import { sellerCategory } from "./sellerCategory.schema";
+import { category } from "../../categories/schemas/category.schema";
 
 
 @Entity({ name: 'sellers' })
@@ -32,12 +31,13 @@ export class seller{
      approvedByAdmin: boolean;
 
 
-    @ApiProperty()
-    @Column('bool')
-    isListing: boolean;
+     @ApiProperty()
+     @Column('bool')
+     isListing: boolean;
 
 
-    @OneToMany(() => sellerCategory, sellerCategory => sellerCategory.seller)
-    sellerCategories: sellerCategory[];
+
+    @ManyToMany(() => category, category => category.sellers, { cascade: true })
+    categories: category[];
 
 }

@@ -11,7 +11,7 @@ export class ContactUsController {
 
      // contact-us
       @ApiBody({type:createContactUsDto})
-      @Post('contact_us')
+      @Post('create')
       async create(
       @Body() contactUsDto: createContactUsDto):Promise<{message: string, contact}>
       {

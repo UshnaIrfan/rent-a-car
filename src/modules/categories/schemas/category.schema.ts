@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
-import { sellerCategory } from "../../sellers/schemas/sellerCategory.schema";
+import { seller } from "../../sellers/schemas/seller.schema";
 
 
 @Entity({ name: 'categories' })
@@ -26,7 +26,9 @@ export class category{
     isListing: boolean;
 
 
-   @OneToMany(() => sellerCategory, sellerCategory => sellerCategory.category)
-   sellerCategories: sellerCategory[];
+
+    @ManyToMany(() => seller, seller => seller.categories)
+    @JoinTable()
+    sellers: seller[];
 
 }
