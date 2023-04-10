@@ -1,8 +1,9 @@
-import { Injectable} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
+import { category } from "../categories/schemas/category.schema";
 
 @Injectable()
 export class sellerRepository{
@@ -81,6 +82,45 @@ export class sellerRepository{
               where: { id }
            })
        }
+
+
+
+
+       // update seller
+       async updateSeller(id:string, sellerName:string,sellerUrl:string): Promise<seller | null>
+       {
+           const seller = await this.sellerModel.findOne(
+         {
+                  where: { id},
+            });
+
+
+           if (!seller)
+           {
+               throw new NotFoundException('seller not found');
+           }
+
+            seller.sellerName = sellerName;
+            seller.sellerUrl = sellerUrl;
+            return this.sellerModel.save(seller);
+       }
+
+
+
+
+      // delete seller
+      async deleteSeller(id: string): Promise<seller | null>
+      {
+        const seller = await this.sellerModel.findOne({ where: { id } });
+        if (!seller)
+        {
+           throw new NotFoundException('seller not found');
+        }
+
+           return await this.sellerModel.remove(seller);
+      }
+
+
 
 
 

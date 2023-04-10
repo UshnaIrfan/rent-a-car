@@ -18,7 +18,13 @@ export class review{
 
      @ApiProperty()
      @Column()
-     balloonId: string;
+     titleId: string;
+
+
+
+     @ApiProperty()
+     @Column()
+     slug: string;
 
 
      @ApiProperty()

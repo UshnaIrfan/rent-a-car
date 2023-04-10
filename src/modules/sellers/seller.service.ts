@@ -10,8 +10,13 @@ import {CategoryRepository} from "../categories/category.repository";
 import {sellerRepository} from "./seller.repository";
 import addSellerInterface from "./interfaces/add-seller.interface";
 import {reviewRepository} from "../review/respositories/review.respository";
-import {clicksTypesRepository} from "../review/respositories/clicksTypes.repository";
+import {createClicksTypesDto} from "../review/dto/create-click-types.dto";
 import { review } from "../review/schemas/submit-review.schema";
+import updateCategoryInterface from "../categories/interfaces/update-category.interface";
+import updateSellerInterface from "./interfaces/update-seller.interface";
+import createSellerInterface from "./interfaces/create-seller.interface";
+import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
+
 
 @Injectable()
 export class SellerService {
@@ -19,7 +24,7 @@ export class SellerService {
       private readonly CategoryRepository:CategoryRepository,
       private readonly SellerRepository:sellerRepository,
       private readonly ReviewRepository:reviewRepository,
-      private readonly clicksTypesRepository:clicksTypesRepository
+      private readonly clicksTitleRepository:clicksTitlesRepository
     ) {}
 
 
@@ -27,12 +32,6 @@ export class SellerService {
     // create seller  (hidden)
     //  async createseller(body: createSellerInterface): Promise<{ record: seller }>
     //  {
-    //    const sellerName = await this.SellerRepository.getSellerName(body.sellerName)
-    //    if (sellerName)
-    //    {
-    //     throw new ConflictException('Seller name already exists');
-    //    }
-    //
     //    const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
     //    if (sellerUrl)
     //    {
@@ -91,13 +90,8 @@ export class SellerService {
 
 
      // add seller
-     async addSeller(body:addSellerInterface):Promise<{seller: seller, review: review}>
+    async addSeller(body:addSellerInterface):Promise<{seller: seller, review: review}>
      {
-        const sellerName = await this.SellerRepository.getSellerName(body.sellerName)
-        if (sellerName)
-        {
-           throw new ConflictException('Seller name already exists');
-        }
 
         const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
         if (sellerUrl)
@@ -121,23 +115,61 @@ export class SellerService {
          }
 
 
-        await this.SellerRepository.sellerCategories(seller);
+         await this.SellerRepository.sellerCategories(seller);
 
-        const typeResult = await this.clicksTypesRepository.getByTypeId(body.balloonId);
-        if(!typeResult)
-        {
-           throw new  NotFoundException('Balloon not exist');
-        }
+         const typeResult = await this.clicksTitleRepository.findByTitle(body.titleId);
+         if(!typeResult)
+         {
+            throw new  NotFoundException('Balloon title not exist');
+         }
 
         const reviewBody = {
-          balloonId: body.balloonId,
+          titleId: body.titleId,
           sellerId: seller.id,
-          message: body.message
+          message: body.message,
+          slug:body.slug
+
        };
 
         const review= await this.ReviewRepository.submitReview(reviewBody);
         return { seller, review };
    }
+
+
+
+
+      // update seller
+      async updateSeller(updateSeller:updateSellerInterface):Promise<{ message: string, update:updateSellerInterface}>
+      {
+
+          const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
+          if (!update)
+          {
+             throw new NotFoundException('seller not found');
+          }
+
+              return { message: "seller updated successfully", update};
+     }
+
+
+
+
+
+     // delete seller
+     async deleteSeller(id:string):Promise<{message: string, deletedSeller: seller}>
+     {
+
+         const deletedSeller = await this.SellerRepository.deleteSeller(id);
+         if (!deletedSeller)
+         {
+            throw new NotFoundException('seller not found');
+         }
+
+
+         return { message: "seller deleted successfully", deletedSeller };
+     }
+
+
 
 
 }

@@ -4,16 +4,17 @@ import { ReviewController } from './review.controller';
 import {review} from "./schemas/submit-review.schema";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import {reviewRepository} from "./respositories/review.respository";
-import {clicks} from "./schemas/create-clicks-titles.schema";
+import {clicksTitlesRepository} from "./respositories/clicksTitles.repository";
 import {clicksTypes} from "./schemas/create-click-types.schema";
 import {sellerRepository} from "../sellers/seller.repository";
 import {seller} from "../sellers/schemas/seller.schema";
+import {clicksTitle} from "./schemas/create-clicks-titles.schema";
 import {clicksTypesRepository} from "./respositories/clicksTypes.repository";
-import {clicksRepository} from "./respositories/clicksTitles.repository";
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([review ,clicks,clicksTypes ,seller])],
+  imports: [TypeOrmModule.forFeature([review ,clicksTitle,clicksTypes ,seller])],
   controllers: [ReviewController],
-  providers: [ReviewService ,reviewRepository,sellerRepository,clicksTypesRepository,clicksRepository]
+  providers: [ReviewService ,reviewRepository,sellerRepository,clicksTypesRepository,clicksTitlesRepository]
 })
 export class ReviewModule {}

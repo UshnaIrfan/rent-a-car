@@ -16,8 +16,8 @@ import { ContactUsModule } from './modules/contact-us/contact-us.module';
 import {contact} from "./modules/contact-us/schemas/contact-us.schema";
 import { ReviewModule } from './modules/review/review.module';
 import {review} from "./modules/review/schemas/submit-review.schema";
-import {clicks} from "./modules/review/schemas/create-clicks-titles.schema";
 import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
+import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema";
 
 
 @Module({
@@ -86,7 +86,7 @@ import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category ,seller   ,contact ,review ,clicks,clicksTypes],
+        entities: [User,category ,seller   ,contact ,review ,clicksTypes,clicksTitle],
         synchronize: true,
       }),
       inject: [ConfigService],

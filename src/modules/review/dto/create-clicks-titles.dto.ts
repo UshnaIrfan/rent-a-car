@@ -1,18 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsNotEmpty
+  IsNotEmpty, MaxLength
 } from "class-validator";
-import slugify from "slugify";
-import {Transform} from "@nestjs/class-transformer";
-
 
 export class createClicksTitlesDto {
 
+
      @ApiProperty({ type: String, required: true })
      @IsNotEmpty()
-     @Transform(({ value }) => slugify(value.toLowerCase(), { lower: true }))
      slug: string;
 
 
-}
+     @ApiProperty({ type: String, required: true })
+     @IsNotEmpty()
+     title: string;
+
+
+     @ApiProperty({ type: String, required: true })
+     @IsNotEmpty()
+     type: string;
+
+
+     @ApiProperty({ type: String, required: true })
+     @IsNotEmpty()
+     @MaxLength(100000)
+     image: string;
+
+
+
+
+  }
 

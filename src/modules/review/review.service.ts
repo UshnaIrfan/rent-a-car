@@ -10,125 +10,93 @@ import {reviewRepository} from "./respositories/review.respository";
 import createClicksTitlesInterface from "./interfaces/create-clicks-titles.interface";
 import {CategoryRepository} from "../categories/category.repository";
 import {sellerRepository} from "../sellers/seller.repository";
-import { clicks } from "./schemas/create-clicks-titles.schema";
+import {clicksTypes} from "./schemas/create-click-types.schema";
 import createClickTypesInteface from "./interfaces/create-click-types.dto";
 import { seller } from "../sellers/schemas/seller.schema";
 import { review } from "./schemas/submit-review.schema";
-import { clicksTypes } from "./schemas/create-click-types.schema";
 import {clicksTypesRepository} from "./respositories/clicksTypes.repository";
-import {clicksRepository} from "./respositories/clicksTitles.repository";
+import {clicksTitlesRepository} from "./respositories/clicksTitles.repository";
 
+import { category } from "../categories/schemas/category.schema";
+import paginationInterface from "./interfaces/pagination.interface";
+import createClicksTypesInterface from "./interfaces/create-click-types.dto";
+import createClickTitleInteface from "./interfaces/create-clicks-titles.interface";
+import { clicksTitle } from "./schemas/create-clicks-titles.schema";
 
 @Injectable()
 export class ReviewService {
+
+
   constructor(
     private readonly reviewRepository:reviewRepository,
     private readonly sellerRepository:sellerRepository,
     private readonly clicksTypeRepository:clicksTypesRepository,
-    private readonly clicksRepository:clicksRepository,
+    private readonly clicksTitleRepository:clicksTitlesRepository,
     ){}
 
 
-       // create click titles  (hidden)
-       // async createClicks(clickReviewInterface:createClicksTitlesInterface):Promise<clicks>
-       // {
-       //     const click = await this.clicksRepository.findBySlug(clickReviewInterface.slug);
-       //     if (click)
-       //     {
-       //       throw new ConflictException('already exist');
-       //     }
-       //
-       //
-       //    try
-       //     {
-       //        return this.clicksRepository.createClicks(clickReviewInterface);
-       //     }
-       //     catch (error)
-       //     {
-       //       throw new BadRequestException('Failed to create clicks review');
-       //     }
-       // }
-
-
-
-        // create click types   (many to many relation)
-    //     async createClickedTypes(reqBody:createClickTypesInteface)
-    //     {
-    //        const existingClickTypes = await this.clicksTypeRepository.findByType(reqBody.type);
-    //        if (existingClickTypes)
-    //        {
-    //          throw new ConflictException('Click type already exist');
-    //        }
-    //
-    //        const clicked = await this.clicksTypeRepository.createClicksTypes(reqBody);
-    //        clicked.clicks = [];
-    //        const clickIDs = reqBody.clicks;
-    //        for (const clickID of clickIDs)
-    //        {
-    //           const clicks = await this.clicksRepository.findBySlug(clickID);
-    //           if (!clicks)
-    //           {
-    //               throw new NotFoundException('click slug does not exist');
-    //           }
-    //          clicked.clicks.push(clicks)
-    //
-    //      }
-    //
-    //         await this.clicksTypeRepository.creatClickTypes(clicked);
-    //         return { record: clicked };
-    // }
-
-
-
-
-        //  create click types (simple)
-        async createClicksTypes(reqBody:createClickTypesInteface):Promise<{ record:clicksTypes}>
-        {
-           const existingClickTypes = await this.clicksTypeRepository.findByType(reqBody.type);
-           if (existingClickTypes)
+       // create click types  (hidden)
+       async createClicksTypes(clickReviewInterface:createClicksTypesInterface):Promise<clicksTypes>
+       {
+           const click = await this.clicksTypeRepository.findByType(clickReviewInterface.type);
+           if (click)
            {
-              throw new ConflictException('Balloon already exist');
+             throw new ConflictException('already exist');
            }
 
-           const clicked = await this.clicksTypeRepository.createClicksTypes(reqBody);
+
+          try
+           {
+              return this.clicksTypeRepository.createClicks(clickReviewInterface);
+           }
+           catch (error)
+           {
+             throw new BadRequestException('Failed to create clicks review');
+           }
+       }
+
+
+
+
+        //  create click titles(simple)
+        async createClicksTitles(reqBody:createClicksTitlesInterface): Promise<{record:clicksTitle}>
+        {
+            const existingClickSlug = await this.clicksTitleRepository.findBySlug(reqBody.slug);
+            if (existingClickSlug)
+            {
+               throw new ConflictException('Slug already exist');
+            }
+
+            const existingClickTitle = await this.clicksTypeRepository.findByType(reqBody.type);
+            if (!existingClickTitle)
+            {
+               throw new NotFoundException('type not found');
+            }
+
+
+           const existingClickTypes = await this.clicksTitleRepository.findByTitle(reqBody.title);
+           if (existingClickTypes)
+           {
+              throw new ConflictException('Balloon title already exist');
+           }
+
+           const clicked = await this.clicksTitleRepository.createClicksTypes(reqBody);
            return { record: clicked };
        }
 
 
 
 
-       //all review types with titles
-   //     async  getAllTypes( ):Promise<{ slugs:clicks[], types: clicksTypes[]}>
-   //     {
-   //        const titleResult = await this.clicksRepository.getAllReviewsTitle()
-   //        if(!titleResult)
-   //        {
-   //           throw new  NotFoundException('slug not not exist');
-   //        }
-   //       const typeResult = await this.clicksTypeRepository.getAllReviewsTypes()
-   //       if(!typeResult)
-   //       {
-   //          throw new  NotFoundException('balloon not exist');
-   //       }
-   //       return {
-   //            slugs: titleResult,
-   //            types: typeResult,
-   //       };
-   // }
-
-
-
-       //all review types with titles
-       async  getAllTypes( ):Promise<{types: clicksTypes[]}>
-       {
-          const typeResult = await this.clicksTypeRepository.getAllReviewsTypes()
-          if(!typeResult)
-          {
-             throw new  NotFoundException('Balloon not exist');
-          }
-            return { types: typeResult};
-      }
-
+          //all review title with types
+         async  getAllTitle( ):Promise<{types: clicksTypes[]}>
+         {
+             const typeResult = await this.clicksTitleRepository.getAllReviewsTitle()
+             if(!typeResult)
+             {
+                 throw new  NotFoundException('Balloon not exist');
+             }
+                return { types: typeResult};
+         }
 
 
 
@@ -136,17 +104,23 @@ export class ReviewService {
        // submit review
        async submitReview(createReviewInterface:submitReviewInterface): Promise<review>
        {
-           const reaction=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
-           if (!reaction)
+           const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
+           if (!seller)
            {
                throw new  NotFoundException('seller not found')
            }
 
-          const reactionTypes=  await this.clicksTypeRepository.getByTypeId(createReviewInterface.balloonId);
-          if (!reactionTypes)
+          const type=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
+          if (!type)
           {
-              throw new  NotFoundException('Balloon not found')
+              throw new  NotFoundException('Balloon title not found')
           }
+
+         const slug=  await this.clicksTitleRepository.findBySlug(createReviewInterface.slug);
+         if (!slug)
+         {
+           throw new  NotFoundException('slug not found')
+         }
 
             return this.reviewRepository.submitReview(createReviewInterface);
        }
@@ -154,25 +128,27 @@ export class ReviewService {
 
 
 
+         // get  reviews (pagination)
+       async getReview(pageNumber: number):Promise<paginationInterface>
+       {
+         const pageSize = 3;
+         const skip = (pageNumber - 1) * pageSize;
+         const [result, totalCount] = await this.reviewRepository.findAndCount(skip, pageSize);
+         const totalPages = Math.ceil(totalCount / pageSize);
 
-       //get review title associated with review types
-     //  async getReviewBySlugName(slug: string):Promise<{ record: clicks }>
-     //  {
-     //     const reaction = await this.clicksRepository.findBySlug(slug);
-     //     if (!reaction)
-     //     {
-     //         throw new NotFoundException('slug name not found');
-     //     }
-     //    else
-     //    {
-     //       const result = await this.clicksRepository.getClickAssociatedTypes(reaction.id);
-     //       if (!result)
-     //       {
-     //          throw new NotFoundException('This type not found');
-     //       }
-     //      return { record: result };
-     //    }
-     // }
+         if (result.length === 0)
+         {
+            throw new NotFoundException('No records found');
+         }
+
+        return {
+           records: result,
+           totalRecords: totalCount,
+           totalPages,
+           currentPage: pageNumber,
+         };
+     }
+
 
 
 

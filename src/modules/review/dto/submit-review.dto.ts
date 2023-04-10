@@ -12,7 +12,12 @@ export class submitReviewDto {
 
      @ApiProperty({ type: String, required: true  })
      @IsNotEmpty()
-     balloonId: string;
+     titleId: string;
+
+
+     @ApiProperty({ type: String, required: true  })
+     @IsNotEmpty()
+     slug: string;
 
 
      @ApiProperty({ type: String, required: false, default: '' })

@@ -3,7 +3,6 @@ import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 
-
 @Injectable()
 export class UsersService {
   constructor(

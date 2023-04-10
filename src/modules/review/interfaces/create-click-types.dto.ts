@@ -1,6 +1,5 @@
-export default interface createClickTypesInteface {
+export default interface createClicksTypesInterface {
 
-  readonly type: string;
-  readonly  image: string;
-  //readonly clicks: string[];
+  readonly  type: string;
+
 }

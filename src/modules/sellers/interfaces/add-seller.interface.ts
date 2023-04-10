@@ -5,7 +5,8 @@ export default interface  addSellerInterface{
     readonly  approvedByAdmin: boolean;
     readonly  isListing: boolean;
     readonly  categories: string[];
-    readonly   balloonId: string;
+    readonly   titleId: string;
+    readonly   slug: string;
     readonly   message: string;
 
 }

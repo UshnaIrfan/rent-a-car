@@ -8,11 +8,6 @@ import {
 export class CreateCategoryDto {
 
 
-     // @ApiProperty({ type: String, required: true })
-     // @IsString()
-     // @IsNotEmpty()
-     // categoryId: string;
-
      @ApiProperty({ type: String, required: true })
      @IsString()
      @IsNotEmpty()

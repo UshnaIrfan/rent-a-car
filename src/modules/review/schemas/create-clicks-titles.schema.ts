@@ -1,32 +1,36 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, BeforeInsert } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
-import { clicksTypes } from "./create-click-types.schema";
-import slugify from 'slugify';
-
-@Entity({ name: 'clicksTitles' })
-export class clicks{
-
-      @ApiProperty()
-      @PrimaryGeneratedColumn('uuid')
-      id: string;
 
 
-      @ApiProperty()
-      @Column({unique:true})
-      slug: string;
+@Entity({ name: 'clicksTitle' })
+export class clicksTitle{
+
+     @ApiProperty()
+     @PrimaryGeneratedColumn('uuid')
+     id: string;
 
 
-     @BeforeInsert()
-     transformSlugToLowerCase() {
-         this.slug = slugify(this.slug, { lower: true });
-     }
+     @ApiProperty()
+     @Column({unique:true})
+     slug: string;
 
 
+     @ApiProperty()
+     @Column({unique:true})
+     title: string;
 
-    // @ManyToMany(() => clicksTypes, clicksTypes => clicksTypes.clicks)
-    // @JoinTable()
-    // clicksTypes: clicksTypes[];
+
+     @ApiProperty()
+     @Column()
+     type: string;
+
+
+    @ApiProperty()
+    @Column({nullable: true ,type: 'longtext'})
+    image: string;
+
 
 
 }
+
 

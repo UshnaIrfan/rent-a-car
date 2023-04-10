@@ -1,6 +1,6 @@
 import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 
@@ -19,6 +19,16 @@ export class reviewRepository{
 
 
 
+
+      // get  reviews (pagination)
+     async findAndCount(skip: number, take: number): Promise<[review[], number]>
+     {
+        const [result, totalCount] = await this.reviewModel.findAndCount({
+         skip,
+         take,
+         });
+         return [result, totalCount];
+     }
 
 
 }

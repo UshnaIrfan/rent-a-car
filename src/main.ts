@@ -8,7 +8,8 @@ async function bootstrap() {
        const app = await NestFactory.create(AppModule, { cors: {
            credentials: true,
            origin: [
-             'http://localhost:3000'
+             'http://localhost:3000',
+             'http://localhost:3001'
            ],
          }, });
 
@@ -26,6 +27,7 @@ async function bootstrap() {
       .build();
       const document = SwaggerModule.createDocument(app, config);
       SwaggerModule.setup('api', app, document);
+
 
      // Server Connection
       const port = process.env.PORT || 3000;

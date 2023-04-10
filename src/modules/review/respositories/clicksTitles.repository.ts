@@ -1,58 +1,52 @@
 import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {clicks} from "../schemas/create-clicks-titles.schema";
-import {clicksTypes} from "../schemas/create-click-types.schema";
+import {createClicksTypesDto} from "../dto/create-click-types.dto";
+import {clicksTitle} from "../schemas/create-clicks-titles.schema";
 import {createClicksTitlesDto} from "../dto/create-clicks-titles.dto";
 
-
 @Injectable()
-export class clicksRepository{
+export class clicksTitlesRepository{
   constructor(
-    @InjectRepository(clicks) private clickModel: Repository<clicks>,
+    @InjectRepository(clicksTitle) private clickTypesModel: Repository<clicksTitle>,
   ){}
 
 
-      // Find all slugs
-      async getAllReviewsTitle():Promise<clicks[]|null>
-      {
-           return this.clickModel.find();
-      }
+
+       // create clicked title
+       async createClicksTypes(body: createClicksTitlesDto):Promise<clicksTitle|null>
+       {
+           return this.clickTypesModel.save(body);
+       }
 
 
 
+       // find all title
+       async getAllReviewsTitle():Promise<clicksTitle[]|null>
+       {
+           return this.clickTypesModel.find();
+       }
 
 
 
-
-      // find by individual slug
-      async findBySlug(slug:string):Promise<clicks| null>
-      {
-         return this.clickModel.findOne({
-           where: { slug},
-         });
-      }
-
-
-
-
-     // create click slug
-     async createClicks(clicksReview:createClicksTitlesDto): Promise<clicks| null>
-     {
-       return this.clickModel.save(clicksReview);
-     }
-
-
-
-     // get  review slugs associated with  review types
-     async getClickAssociatedTypes(id: string):Promise<clicks | null>
-     {
-        return this.clickModel.findOne({
-           where: { id },
-          relations: ['clicksTypes'],
+       // find by individual title name
+       async findByTitle(id:string):Promise<clicksTitle| null>
+       {
+          return this.clickTypesModel.findOne({
+          where: { id },
         });
-     }
+      }
 
 
-}
 
+       //find by slug
+       async findBySlug(slug:string):Promise<clicksTitle| null>
+       {
+         return this.clickTypesModel.findOne({
+           where: { slug },
+         });
+       }
+
+
+
+  }

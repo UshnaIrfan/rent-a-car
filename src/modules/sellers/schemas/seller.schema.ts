@@ -18,7 +18,7 @@ export class seller{
 
 
      @ApiProperty()
-     @Column({unique:true , nullable: true})
+     @Column({ nullable: true})
      sellerName: string;
 
 

@@ -1,8 +1,11 @@
-import { Controller, Post, Body, Get, Param, Put, Delete } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Put, Delete, Query, Patch } from "@nestjs/common";
 import { SellerService } from './seller.service';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
+import {updateSellerDto} from "./dto/update-seller.dto";
+import updateSellerInterface from "./interfaces/update-seller.interface";
+import { CreateSellerDto } from "./dto/create-seller.dto";
 
 
 @ApiTags('Sellers')
@@ -39,7 +42,6 @@ export class SellerController {
 
 
 
-
        // add seller
        @ApiBody({type:addSellerDto})
        @Post('add')
@@ -47,6 +49,30 @@ export class SellerController {
        {
          return this.sellerService.addSeller(body);
        }
+
+
+
+
+        // update seller
+       @Patch('update')
+       async updateSeller(@Body() updateSellerDto:updateSellerDto):Promise<{ message: string, update:updateSellerInterface}>
+       {
+           return this.sellerService.updateSeller(updateSellerDto);
+       }
+
+
+
+
+       // delete seller
+      @Delete('delete')
+      async deleteSeller(@Query('id') id:string):Promise<{message: string, deletedSeller: seller}>
+      {
+         return this.sellerService.deleteSeller(id);
+      }
+
+
+
+
 
 
   }
