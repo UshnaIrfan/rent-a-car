@@ -130,10 +130,10 @@ export class AuthController {
         @UseGuards(JwtAuthGuard)
         @Get('/profile')
         async getProfile(@Request() req)
-         {
+        {
           const accessToken = req.headers.authorization.split(' ')[1];
           return this.authService.getProfile(accessToken);
-         }
+        }
 
 
        // //logout

@@ -5,10 +5,7 @@ import {
    IsString
 } from "class-validator";
 
-
-
 export class CreateSellerDto {
-
 
 
      @ApiProperty({ type: String, required: true })

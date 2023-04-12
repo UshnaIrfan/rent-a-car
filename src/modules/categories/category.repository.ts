@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from "typeorm";
+import {Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
-import {updateCategoryDto} from "./dto/update-category.dto";
+import { seller } from "../sellers/schemas/seller.schema";
 
 @Injectable()
 export class CategoryRepository {
-  constructor(@InjectRepository(category) private categoryModel: Repository<category>
+  constructor(@InjectRepository(category) private categoryModel: Repository<category>,
   ) {}
 
 
@@ -100,6 +100,26 @@ export class CategoryRepository {
     }
 
 
+
+
+      // common seller
+      async getCommonSellers(id: string, sellers: seller[]):Promise<seller[]>
+      {
+          const otherCategories = await this.categoryModel.find({
+           where: { id: Not(id) },
+           relations: ['sellers'],
+            });
+
+
+         const otherSellers = otherCategories.reduce((acc, cur) => {
+         return acc.concat(cur.sellers);
+          }, []);
+
+         return sellers.filter(seller => {
+         return otherSellers.some(s => s.id === seller.id);
+         });
+
+     }
 
 }
 

@@ -26,6 +26,7 @@ export class category{
     isListing: boolean;
 
 
+
     @ApiProperty({ type: () => [seller] })
     @ManyToMany(() => seller, seller => seller.categories)
     @JoinTable()

@@ -4,8 +4,8 @@ import {
   IsString
 } from "class-validator";
 
-
 export class updateSellerDto {
+
 
      @ApiProperty({ type: String, required: true })
      @IsString()
@@ -13,17 +13,16 @@ export class updateSellerDto {
      id: string;
 
 
-
-    @ApiProperty({ type: String, required: true })
-    @IsString()
-    @IsNotEmpty()
-    sellerName: string;
-
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     sellerName: string;
 
 
-    @ApiProperty({ type: String, required: true })
-    @IsString()
-    @IsNotEmpty()
-    sellerUrl: string;
+
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     sellerUrl: string;
 
 }

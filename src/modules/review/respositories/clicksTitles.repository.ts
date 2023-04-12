@@ -1,7 +1,6 @@
 import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {createClicksTypesDto} from "../dto/create-click-types.dto";
 import {clicksTitle} from "../schemas/create-clicks-titles.schema";
 import {createClicksTitlesDto} from "../dto/create-clicks-titles.dto";
 
@@ -29,7 +28,7 @@ export class clicksTitlesRepository{
 
 
 
-       // find by individual title name
+       // find by individual title  id
        async findByTitle(id:string):Promise<clicksTitle| null>
        {
           return this.clickTypesModel.findOne({
@@ -39,7 +38,9 @@ export class clicksTitlesRepository{
 
 
 
-       //find by slug
+
+
+      //find by slug
        async findBySlug(slug:string):Promise<clicksTitle| null>
        {
          return this.clickTypesModel.findOne({

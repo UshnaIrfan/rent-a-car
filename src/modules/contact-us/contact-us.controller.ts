@@ -1,7 +1,7 @@
-import { Controller,  Post, Body} from '@nestjs/common';
+import { Controller, Post, Body, Req } from "@nestjs/common";
 import { ContactUsService } from './contact-us.service';
 import  {createContactUsDto} from "./dto/create-contact-us.dto";
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Contact-us')
 @Controller('contact-us')
@@ -15,7 +15,7 @@ export class ContactUsController {
       async create(
       @Body() contactUsDto: createContactUsDto):Promise<{message: string, contact}>
       {
-        return this.contactUsService.createContact(contactUsDto);
+         return this.contactUsService.createContact(contactUsDto );
       }
 
 

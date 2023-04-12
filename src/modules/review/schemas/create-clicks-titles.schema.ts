@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
-
 @Entity({ name: 'clicksTitle' })
 export class clicksTitle{
 
@@ -28,8 +27,6 @@ export class clicksTitle{
     @ApiProperty()
     @Column({nullable: true ,type: 'longtext'})
     image: string;
-
-
 
 }
 

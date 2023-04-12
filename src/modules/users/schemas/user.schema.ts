@@ -71,9 +71,11 @@ export class User {
      @Column({ unique: true })
      name: string;
 
+
      @ApiProperty()
      @Column({ unique: true })
      username: string;
+
 
      @ApiProperty()
      @Column({ unique: true })
@@ -83,7 +85,5 @@ export class User {
      @Column()
      password: string;
 
-     // @ApiProperty()
-     // @Column({ nullable: true })
-     // mobile_no?: string;
+
 }

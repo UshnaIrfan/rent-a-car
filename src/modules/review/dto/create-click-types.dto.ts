@@ -3,7 +3,6 @@ import {
     IsNotEmpty
 } from "class-validator";
 
-
 export class createClicksTypesDto {
 
     @ApiProperty({ type: String, required: true })

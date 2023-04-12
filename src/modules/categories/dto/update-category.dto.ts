@@ -13,7 +13,6 @@ export class updateCategoryDto {
     id: string;
 
 
-
     @ApiProperty({ type: String, required: true })
     @IsString()
     @IsNotEmpty()

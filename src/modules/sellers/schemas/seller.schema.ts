@@ -2,11 +2,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany, JoinTable
+  ManyToMany
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
-import { review } from "../../review/schemas/submit-review.schema";
 
 
 @Entity({ name: 'sellers' })
@@ -15,6 +14,7 @@ export class seller{
      @ApiProperty()
      @PrimaryGeneratedColumn('uuid')
      id: string;
+
 
 
      @ApiProperty()
@@ -37,9 +37,16 @@ export class seller{
      isListing: boolean;
 
 
-    @ApiProperty({ type: () => [category] })
-    @ManyToMany(() => category, category => category.sellers, { cascade: true })
-    categories: category[];
+
+     @ApiProperty()
+     @Column({ default: null, nullable: true })
+     userId: string;
+
+
+
+     @ApiProperty({ type: () => [category] })
+     @ManyToMany(() => category, category => category.sellers, { cascade: true })
+     categories: category[];
 
 
 }

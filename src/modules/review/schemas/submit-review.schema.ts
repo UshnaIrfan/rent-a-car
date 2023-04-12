@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
-import { seller } from "../../sellers/schemas/seller.schema";
 
 @Entity({ name: 'review' })
 export class review{
@@ -21,10 +20,9 @@ export class review{
      titleId: string;
 
 
-
      @ApiProperty()
-     @Column()
-     slug: string;
+     @Column({default: null, nullable: true})
+     titleSlug: string;
 
 
      @ApiProperty()
@@ -32,5 +30,8 @@ export class review{
      message: string;
 
 
+     @ApiProperty()
+     @Column()
+     userId: string;
 
 }

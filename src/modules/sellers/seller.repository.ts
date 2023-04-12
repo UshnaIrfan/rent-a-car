@@ -14,48 +14,40 @@ export class sellerRepository{
 
 
       // create seller
-      async createSeller(body: CreateSellerDto):Promise<seller|null>
+      async createSeller(body: CreateSellerDto & { userId: string }):Promise<seller|null>
       {
          const seller = await this.sellerModel.create();
          seller.sellerName = body.sellerName;
          seller.sellerUrl = body.sellerUrl;
          seller.approvedByAdmin = body.approvedByAdmin;
          seller.isListing = body.isListing;
+         seller.userId = body.userId;
          await this.sellerModel.save(seller);
           return seller
      }
 
 
-     // create seller with associated categories
+
+
+
+        // create seller with associated categories
        async sellerCategories(body:seller):Promise<seller|null>
        {
          return this.sellerModel.save(body);
        }
 
 
-      // get seller by name
-       async getSellerName(sellerName:string): Promise<seller|null>
-       {
-          return  this.sellerModel.findOne(
-      {
-               where: { sellerName },
-           })
-       }
-
 
 
        // get seller by url
        async getSellerUrl(sellerUrl:string): Promise<seller|null>
        {
-           return  this.sellerModel.findOne(
-      {
-              where: { sellerUrl },
-          })
+           return  this.sellerModel.findOne({ where: { sellerUrl }})
        }
 
 
 
-      // get seller by ID (associated categories)
+       // get seller by ID (associated categories)
        async getSellerById(id: string): Promise<seller|null>
        {
         return this.sellerModel.findOne(
@@ -67,7 +59,7 @@ export class sellerRepository{
 
 
 
-      // get all sellers
+       // get all sellers
        async getAllSellers(): Promise<seller[]|null>
        {
          return this.sellerModel.find();
@@ -77,10 +69,7 @@ export class sellerRepository{
        //get seller ID
        async getSellerId(id:string): Promise<seller|null>
        {
-         return  this.sellerModel.findOne(
-         {
-              where: { id }
-           })
+         return  this.sellerModel.findOne({ where: { id } })
        }
 
 
@@ -89,11 +78,7 @@ export class sellerRepository{
        // update seller
        async updateSeller(id:string, sellerName:string,sellerUrl:string): Promise<seller | null>
        {
-           const seller = await this.sellerModel.findOne(
-         {
-                  where: { id},
-            });
-
+           const seller = await this.sellerModel.findOne({ where: { id}});
 
            if (!seller)
            {
@@ -119,6 +104,8 @@ export class sellerRepository{
 
            return await this.sellerModel.remove(seller);
       }
+
+
 
 
 

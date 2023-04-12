@@ -10,6 +10,7 @@ export  class ForgotPasswordDto {
     @MaxLength(64)
     readonly email: string = '';
 
+
     @ApiProperty({ type: String, required: true })
     @IsNotEmpty()
     @IsString()

@@ -11,11 +11,11 @@ export class clicksTypesRepository{
   ){}
 
 
-     // create click titles
-     async createClicks(clicksReview:createClicksTypesDto):Promise<clicksTypes| null>
-    {
-      return this.clickModel.save(clicksReview);
-    }
+       // create click types
+       async createClicks(clicksReview:createClicksTypesDto):Promise<clicksTypes| null>
+       {
+          return this.clickModel.save(clicksReview);
+       }
 
 
 
@@ -27,8 +27,6 @@ export class clicksTypesRepository{
             where: { type},
          });
         }
-
-
 
 
 

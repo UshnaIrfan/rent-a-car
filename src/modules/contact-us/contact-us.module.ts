@@ -4,11 +4,14 @@ import { ContactUsController } from './contact-us.controller';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import {contact} from "./schemas/contact-us.schema";
 import {contactUsRepository} from "./contact-us.repository";
+import { JwtService } from "@nestjs/jwt";
+import {UsersRepository} from "../users/users.repository";
+import {User} from "../users/schemas/user.schema";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([contact])],
+  imports: [TypeOrmModule.forFeature([contact,User])],
   controllers: [ContactUsController],
-  providers: [ContactUsService ,contactUsRepository]
+  providers: [JwtService,ContactUsService ,contactUsRepository,UsersRepository]
 })
 export class ContactUsModule {}

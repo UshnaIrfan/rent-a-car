@@ -27,7 +27,5 @@ export class createClicksTitlesDto {
      image: string;
 
 
-
-
   }
 
