@@ -1,7 +1,7 @@
 import {
   BadRequestException, Body, CACHE_MANAGER,
   ConflictException, Inject,
-  Injectable,
+  Injectable, NotAcceptableException,
   NotFoundException,
   UnauthorizedException
 } from "@nestjs/common";
@@ -121,19 +121,19 @@ export class SellerService {
      async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
      {
 
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-            throw new UnauthorizedException('Token expired');
-          }
-
-
-          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-          const user = await this.usersRepository.findUserByID(decoded.id)
-          if(!user)
-          {
+       console.log("token is" ,accessToken)
+        const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+        const user = await this.usersRepository.findUserByID(decoded.id)
+        if(!user)
+        {
             throw new  NotFoundException('invalid user')
-          }
+        }
+        const tokenKey = `login:${user.email}`;
+        const cachedToken = await this.cacheManager.get(tokenKey);
+        if(!cachedToken)
+        {
+            throw new UnauthorizedException('token expired');
+        }
 
 
          const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
@@ -172,17 +172,11 @@ export class SellerService {
             throw new  NotFoundException('Balloon title not found');
          }
 
-         const typeSlug = await this.clicksTitleRepository.findBySlug(body.slug);
-         if(!typeSlug)
-         {
-             throw new  NotFoundException('slug not found');
-         }
-
         const reviewBody = {
            titleId: body.titleId,
            sellerId: seller.id,
            message: body.message,
-           slug:body.slug,
+          titleSlug:typeResult.slug,
            userId: decoded.id
        };
 

@@ -97,7 +97,7 @@ export class CategoryRepository {
 
           category.categoryName = categoryName;
           return this.categoryModel.save(category);
-    }
+     }
 
 
 

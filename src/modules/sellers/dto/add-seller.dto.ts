@@ -40,12 +40,6 @@ export class  addSellerDto{
      titleId: string;
 
 
-     @ApiProperty({ type: String, required: true  })
-     @IsNotEmpty()
-     slug: string;
-
-
-
      @ApiProperty({ type: String, required: false, default: '' })
      message: string;
 

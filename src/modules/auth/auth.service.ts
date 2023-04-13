@@ -19,6 +19,7 @@ import changeUserPasswordInterface from "./interfaces/change-user-password.inter
 import forgotPasswordOtpInterface from "./interfaces/forgot-password-otp.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { generateRandomToken } from "../../helpers/randontoken.helper";
+import { jwtConstants } from "./constants/constants";
 
 
 @Injectable()
@@ -62,31 +63,32 @@ export class AuthService {
 
 
        //login
-       async login(user: User): Promise<JwtTokensInterface>
-       {
-           const payload = {
-            id:user.id,
-            name:user.name,
-            username: user.username,
-            email: user.email,
-            password:user.password,
-          };
-         const accessTokenRedis = this.jwtService.sign(payload);
-         const accessTokenTTL = 5400;
-        // const accessTokenTTL = 60;
-         await Promise.all([
-         this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),
-        ]);
-         return {
-            name:user.name,
-            username: user.username,
-            email: user.email,
-            access_token: accessTokenRedis,
-         };
-     }
+     async login(user: User): Promise<JwtTokensInterface>
+     {
+        const payload = {
+              id: user.id,
+              name: user.name,
+              username: user.username,
+              email: user.email,
+              password: user.password,
+       };
+       const accessTokenRedis = this.jwtService.sign(payload);
+       const accessTokenTTL = 5400;
+       const tokenKey = `login:${user.email}`;
+       await Promise.all([
+           this.cacheManager.set(tokenKey, accessTokenRedis, { ttl: accessTokenTTL }),
+       ]);
+    return {
+         name: user.name,
+         username: user.username,
+         email: user.email,
+         access_token: accessTokenRedis,
+    };
+  }
 
 
-        // forget passwordOtp
+
+  // forget passwordOtp
     //    async forgotPasswordOtp(
     //          ForgotPasswordOtp:forgotPasswordOtpInterface
     //        ): Promise<{message:string}>
@@ -365,13 +367,25 @@ export class AuthService {
         //profile get
          async getProfile(accessToken: string)
          {
-             const cachedToken = await this.cacheManager.get(accessToken);
-             if (!cachedToken)
-             {
-               throw new UnauthorizedException('Token expired');
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+            {
+              throw new UnauthorizedException('Token expired');
              }
+           // const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           // const user = await this.usersService.findUserByID(decoded.id)
+           // if(!user)
+           // {
+           //   throw new  NotFoundException('invalid user')
+           // }
+           // const tokenKey = `login:${user.email}`;
+           // const cachedToken = await this.cacheManager.get(tokenKey);
+           if(!cachedToken)
+           {
+             throw new UnauthorizedException('token expired');
+           }
 
-                return cachedToken
+           return  cachedToken
          }
 
 

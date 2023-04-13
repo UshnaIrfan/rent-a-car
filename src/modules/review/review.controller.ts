@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
+  Param, Patch,
   Post,
   Query,
   Req,
@@ -21,6 +21,8 @@ import paginationInterface from "./interfaces/pagination.interface";
 import { clicksTitle } from "./schemas/create-clicks-titles.schema";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 import * as jwt from 'jsonwebtoken';
+import {updateReviewDto} from "./dto/update-review.dto";
+import updateReviewInterface from "./interfaces/update-review.interface";
 
 
 @ApiTags('Review')
@@ -40,8 +42,6 @@ export class ReviewController {
            const accessToken = req.headers.authorization.split(' ')[1];
            return this.reviewService.createClicksTypes(clicksReview,accessToken);
         }
-
-
 
 
 
@@ -84,38 +84,52 @@ export class ReviewController {
 
 
          // get  reviews (pagination)
-         @Get('')
-         async getReview(@Query('page') page: number = 1):Promise<paginationInterface>
-         {
-           return this.reviewService.getReview(page);
-         }
+         // @Get('')
+         // async getReview(@Query('page') page: number = 1):Promise<paginationInterface>
+         // {
+         //   return this.reviewService.getReview(page);
+         // }
 
 
 
-      // balloons count
+        // balloons count
       // @Get('/count')
       // async getReviewsWithCounts()
       // {
       //    const reviews = await this.reviewService.getReviewsWithCounts();
       //    return reviews;
       // }
-     @Get('/count/:seller_id')
-     async getReviewsWithCounts(@Param('seller_id') sellerId: string)
-     {
-       const reviews = await this.reviewService.getReviewsWithCounts(sellerId);
-       return reviews;
-     }
+         @Get('/count/:seller_id')
+         async getReviewsWithCounts(@Param('seller_id') sellerId: string)
+         {
+            return  await this.reviewService.getReviewsWithCounts(sellerId);
+         }
 
 
 
 
+       // loved/air  review
+       //  @Get('/:seller_id')
+       // async getReviewsWithTypes(@Param('seller_id') sellerId: string)
+       // {
+       //    return  await this.reviewService.getReviewsWithTypes(sellerId);
+       // }
 
-     @Get('show/:seller_id')
-    async getReviewsWithTypes(@Param('seller_id') sellerId: string)
-    {
-       const reviews = await this.reviewService.getReviewsWithTypes(sellerId);
-       return reviews;
-   }
+         @Get('/:seller_id')
+         async getReviewsWithTypes(
+         @Param('seller_id') sellerId: string,
+         @Query('page') page: number = 1)
+         {
+           return await this.reviewService.getReviewsWithTypes(sellerId, page);
+         }
 
+
+
+         //update review
+         @Patch('update')
+         async updateReview(@Body() updateReviewDto:updateReviewDto):Promise<{ message: string, updateReview:updateReviewInterface}>
+         {
+            return this.reviewService.updateReview(updateReviewDto);
+         }
 
 }

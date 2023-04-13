@@ -32,4 +32,11 @@ export class UsersService {
       return this.usersRepository.updatePassword(email,password);
      }
 
+
+
+    async findUserByID (id:string): Promise<User | null>
+    {
+       return this.usersRepository.findUserByID (id);
+    }
+
 }
