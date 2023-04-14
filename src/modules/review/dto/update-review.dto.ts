@@ -6,12 +6,21 @@ import {
 export class updateReviewDto {
 
 
+    // @ApiProperty({ type: String, required: true  })
+    // @IsNotEmpty()
+    // sellerId: string;
+
     @ApiProperty({ type: String, required: true  })
     @IsNotEmpty()
-    sellerId: string;
+    reviewId: string;
 
 
-    @ApiProperty({ type: String, required: false, default: '' })
+    @ApiProperty({ type: String, required: true  })
+    @IsNotEmpty()
+    titleId: string;
+
+
+    @ApiProperty({ type: String, required: false })
     message: string;
 
 }

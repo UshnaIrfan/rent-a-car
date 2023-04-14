@@ -12,6 +12,7 @@ import updateCategoryInterface from "./interfaces/update-category.interface";
 import {UsersRepository} from "../users/users.repository";
 import { JwtService } from "@nestjs/jwt";
 import { seller } from "../sellers/schemas/seller.schema";
+import { jwtConstants } from "../auth/constants/constants";
 
 
 @Injectable()
@@ -24,10 +25,15 @@ export class CategoriesService {
   ) {}
 
 
-      // create category (hidden)
+      // create category
       async createCategory(createCategory:createCategoryInterface,accessToken: string):Promise<category>
       {
-
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
+           {
+              throw new  NotFoundException('invalid user')
+           }
           const cachedToken = await this.cacheManager.get(accessToken);
           if (!cachedToken)
           {
@@ -90,7 +96,12 @@ export class CategoriesService {
        // update category
        async updateCategory(updateCategory:updateCategoryInterface,accessToken: string):Promise<{ message: string, updateCategory: updateCategoryInterface }>
        {
-
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
+           {
+               throw new  NotFoundException('invalid user')
+           }
            const cachedToken = await this.cacheManager.get(accessToken);
            if (!cachedToken)
            {
@@ -114,7 +125,12 @@ export class CategoriesService {
        // delete category
        async deleteCategory(id:string,accessToken: string): Promise<{ message: string, deletedCategory: category }>
        {
-
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
+           {
+              throw new  NotFoundException('invalid user')
+           }
            const cachedToken = await this.cacheManager.get(accessToken);
            if (!cachedToken)
            {
@@ -135,7 +151,7 @@ export class CategoriesService {
 
 
 
-    //  common sellers
+     //  common sellers
      async get(id: string):Promise<{ records: seller[] | null }>
      {
        const category = await this.categoryRepository.getCategoryId(id);

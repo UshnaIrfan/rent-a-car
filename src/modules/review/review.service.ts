@@ -20,7 +20,8 @@ import { jwtConstants } from "../auth/constants/constants";
 import {UsersRepository} from "../users/users.repository";
 import { Cache } from 'cache-manager';
 import updateReviewInterface from "./interfaces/update-review.interface";
-import updateCategoryInterface from "../categories/interfaces/update-category.interface";
+import {seller} from "../sellers/schemas/seller.schema";
+import likeDislikeInterface from "./interfaces/like-dislike.interface";
 
 
 @Injectable()
@@ -39,18 +40,17 @@ export class ReviewService {
        // create click types
        async createClicksTypes(clickReviewInterface:createClicksTypesInterface,accessToken: string):Promise<clicksTypes>
        {
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-              throw new UnauthorizedException('Token expired');
-           }
-
 
            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
            const user = await this.usersRepository.findUserByID(decoded.id)
            if(!user)
            {
-             throw new  NotFoundException('invalid user')
+              throw new  NotFoundException('invalid user')
+           }
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+           {
+              throw new UnauthorizedException('Token expired');
            }
 
            const click = await this.clicksTypeRepository.findByType(clickReviewInterface.type);
@@ -75,19 +75,16 @@ export class ReviewService {
         //  create click titles
         async createClicksTitles(reqBody:createClicksTitlesInterface,accessToken: string): Promise<{record:clicksTitle}>
         {
-
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken)
-            {
-              throw new UnauthorizedException('Token expired');
-            }
-
-
             const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
             const user = await this.usersRepository.findUserByID(decoded.id)
             if(!user)
             {
-              throw new  NotFoundException('invalid user')
+               throw new  NotFoundException('invalid user')
+            }
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken)
+            {
+              throw new UnauthorizedException('Token expired');
             }
 
             const existingClickSlug = await this.clicksTitleRepository.findBySlug(reqBody.slug);
@@ -133,30 +130,29 @@ export class ReviewService {
         // submit review
         async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
         {
+
+            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+            const user = await this.usersRepository.findUserByID(decoded.id)
+            if(!user)
+            {
+              throw new  NotFoundException('invalid user')
+            }
             const cachedToken = await this.cacheManager.get(accessToken);
             if (!cachedToken)
             {
                throw new UnauthorizedException('Token expired');
             }
 
-            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-            const user = await this.usersRepository.findUserByID(decoded.id)
-            if(!user)
-            {
-               throw new  NotFoundException('invalid user')
-            }
-
-
             const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
             if(!seller)
             {
-               throw new  NotFoundException('seller not found')
+               throw new  NotFoundException('seller not exist')
             }
 
            const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
            if (!title)
            {
-              throw new  NotFoundException('Balloon title not found')
+              throw new  NotFoundException('Balloon  not exist')
            }
 
           const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
@@ -193,8 +189,6 @@ export class ReviewService {
      // }
 
 
-
-
          // balloons count
      //  async getReviewsWithCounts()
      //  {
@@ -222,39 +216,40 @@ export class ReviewService {
      //       return result;
      // }
 
-        async getReviewsWithCounts(sellerId: string)
+
+        async getReviewsWithCounts(sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
         {
+           const seller = await this.sellerRepository.getSellerById(sellerId);
+           if (!seller)
+           {
+              throw new NotFoundException(`Seller not exist`);
+           }
 
-         const seller = await this.sellerRepository.getSellerById(sellerId)
-         if (!seller)
-         {
-           throw new NotFoundException(`Seller  not found`);
-         }
+          const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+          const counts = {};
 
-        const reviews = await this.reviewRepository.review(sellerId);
-        const counts = {};
+          for (const review of reviews)
+          {
+            const { titleId } = review;
+            counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
+          }
 
-        for (const review of reviews)
-        {
-          const { titleId } = review;
-          counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
+          const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
+          const titles = Object.keys(counts);
+
+          for (const title of allTitles)
+          {
+            const { id } = title;
+            if (!counts[id])
+            {
+                titles.push(id);
+                counts[id] = 0;
+            }
         }
 
-       const titles = Object.keys(counts);
-       const result = [];
-
-       for (const titleId of titles)
-       {
-         //const titleReviews = reviews.filter((review) => review.titleId === titleId);
-          const count = counts[titleId];
-          result.push({
-          titleId,
-          count,
-        //  reviews: titleReviews,
-         });
-       }
-       return { seller,result};
-    }
+        const result = titles.map((titleId) => ({ titleId, count: counts[titleId]}));
+        return { seller, result };
+   }
 
 
 
@@ -331,32 +326,32 @@ export class ReviewService {
 
       async getReviewsWithTypes(sellerId: string, page: number = 1)
       {
-         const toAir = [];
-         const toLove = [];
+          const toAir = [];
+          const toLove = [];
 
-        const seller = await this.reviewRepository.Review(sellerId);
-        if (!seller)
-        {
-          throw new NotFoundException(`Seller not found with ID: ${sellerId}`);
-        }
-
-       const allReviews = await this.reviewRepository.review(sellerId);
-
-       var toAirCount = 0;
-       var toLoveCount = 0;
-
-       for (const review of allReviews)
-       {
-          const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-          if (!title)
+          const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+          if (!seller)
           {
-              throw new NotFoundException(`Title not found with ID: ${review.titleId}`);
+            throw new NotFoundException(`Seller not exist`);
           }
-         const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
-         if (!matchingSlugTitle)
-         {
-            throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-         }
+
+          const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+
+          var toAirCount = 0;
+          var toLoveCount = 0;
+
+        for (const review of allReviews)
+        {
+            const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+            if (!title)
+            {
+               throw new NotFoundException(`Title not exist`);
+            }
+           const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+           if (!matchingSlugTitle)
+           {
+              throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+          }
 
         if (title.type === matchingSlugTitle.type)
         {
@@ -431,17 +426,86 @@ export class ReviewService {
 
 
      //update review
-      async  updateReview(updateReviewInterface:updateReviewInterface):Promise<{ message: string, updateReview:updateReviewInterface}>
+      async  updateReview(updateReviewInterface:updateReviewInterface)
       {
-        const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.sellerId , updateReviewInterface.message);
-        if (!updateReview)
-        {
-           throw new NotFoundException('seller id not found');
-        }
+         const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
 
          return { message: "updated successfully" ,updateReview};
-
      }
+
+
+
+
+
+
+
+
+       async createLikeDislike(reqBody:likeDislikeInterface)
+       {
+         const toLike = [];
+         const toDislike = [];
+         const user = await this.usersRepository.findUserByID(reqBody.userId)
+         if(!user)
+         {
+           throw new  NotFoundException('invalid user')
+         }
+         const review = await this.reviewRepository.reviewById(reqBody.reviewId)
+         if(!review)
+         {
+           throw new  NotFoundException('review not found')
+         }
+         console.log(review)
+
+
+
+                   const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+                   if (!title)
+                   {
+                     throw new NotFoundException(`Title not found with ID: ${review.titleId}`);
+                   }
+                  const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+                  if (!matchingSlugTitle)
+                  {
+                     throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+                  }
+
+                 if (title.type === matchingSlugTitle.type)
+                 {
+                     if (title.slug === matchingSlugTitle.slug)
+                     {
+                        if (title.type === 'to-air')
+                        {
+
+                          toDislike.push(review);
+
+                        }
+                       else if (title.type === 'to-love')
+                       {
+
+                            toLike.push(review);
+
+                       }
+                  }
+                  else
+                  {
+                       if (title.type === 'to-air')
+                       {
+
+                         toDislike.push(review);
+
+                      }
+                      else if (title.type === 'to-love')
+                      {
+
+                           toLike.push(review);
+
+                      }
+                  }
+               }
+
+
+   }
+
 
 
 }

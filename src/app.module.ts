@@ -18,6 +18,8 @@ import { ReviewModule } from './modules/review/review.module';
 import {review} from "./modules/review/schemas/submit-review.schema";
 import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
 import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema";
+import {likeDislikeSchema} from "./modules/review/schemas/like-dislike.schema";
+
 
 @Module({
   imports: [
@@ -85,7 +87,7 @@ import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema"
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category ,seller   ,contact ,review ,clicksTypes,clicksTitle],
+        entities: [User,category ,seller   ,contact ,review ,clicksTypes,clicksTitle,likeDislikeSchema],
         synchronize: true,
       }),
       inject: [ConfigService],

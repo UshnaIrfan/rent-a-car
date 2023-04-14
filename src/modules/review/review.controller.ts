@@ -22,7 +22,9 @@ import { clicksTitle } from "./schemas/create-clicks-titles.schema";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 import * as jwt from 'jsonwebtoken';
 import {updateReviewDto} from "./dto/update-review.dto";
+import {seller} from "../sellers/schemas/seller.schema";
 import updateReviewInterface from "./interfaces/update-review.interface";
+import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 
 
 @ApiTags('Review')
@@ -100,7 +102,7 @@ export class ReviewController {
       //    return reviews;
       // }
          @Get('/count/:seller_id')
-         async getReviewsWithCounts(@Param('seller_id') sellerId: string)
+         async getReviewsWithCounts(@Param('seller_id') sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
             return  await this.reviewService.getReviewsWithCounts(sellerId);
          }
@@ -127,9 +129,21 @@ export class ReviewController {
 
          //update review
          @Patch('update')
-         async updateReview(@Body() updateReviewDto:updateReviewDto):Promise<{ message: string, updateReview:updateReviewInterface}>
+         async updateReview(
+         @Body() updateReviewDto:updateReviewDto)
          {
             return this.reviewService.updateReview(updateReviewDto);
          }
 
+
+
+
+        @ApiBearerAuth()
+        @ApiBody({type:likeDislikeReviewDto})
+        @Post('likeDislike')
+        async createLikeDislike(
+        @Body() Review:likeDislikeReviewDto)
+        {
+          return this.reviewService.createLikeDislike(Review);
+       }
 }

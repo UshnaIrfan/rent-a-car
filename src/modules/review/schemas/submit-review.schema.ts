@@ -26,12 +26,17 @@ export class review{
 
 
      @ApiProperty()
-     @Column({ default: null, nullable: true })
+     @Column({ default: null,nullable: true})
      message: string;
 
 
      @ApiProperty()
      @Column()
      userId: string;
+
+
+     @ApiProperty()
+     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+     createdAt: Date;
 
 }

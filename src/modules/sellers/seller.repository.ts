@@ -23,7 +23,7 @@ export class sellerRepository{
          seller.isListing = body.isListing;
          seller.userId = body.userId;
          await this.sellerModel.save(seller);
-          return seller
+         return seller
      }
 
 
@@ -82,7 +82,7 @@ export class sellerRepository{
 
            if (!seller)
            {
-               throw new NotFoundException('seller not found');
+               return null
            }
 
             seller.sellerName = sellerName;
@@ -99,9 +99,8 @@ export class sellerRepository{
         const seller = await this.sellerModel.findOne({ where: { id } });
         if (!seller)
         {
-           throw new NotFoundException('seller not found');
+           return null
         }
-
            return await this.sellerModel.remove(seller);
       }
 

@@ -7,6 +7,8 @@ import {updateSellerDto} from "./dto/update-seller.dto";
 import updateSellerInterface from "./interfaces/update-seller.interface";
 import { CreateSellerDto } from "./dto/create-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
+import {likeDislikeReviewDto} from "../review/dto/like-dislike-review.dto";
+
 
 @ApiTags('Sellers')
 @Controller('sellers')

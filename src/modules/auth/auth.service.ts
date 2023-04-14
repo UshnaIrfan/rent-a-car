@@ -74,15 +74,13 @@ export class AuthService {
        };
        const accessTokenRedis = this.jwtService.sign(payload);
        const accessTokenTTL = 5400;
-       const tokenKey = `login:${user.email}`;
        await Promise.all([
-           this.cacheManager.set(tokenKey, accessTokenRedis, { ttl: accessTokenTTL }),
-       ]);
-    return {
-         name: user.name,
-         username: user.username,
-         email: user.email,
-         access_token: accessTokenRedis,
+       this.cacheManager.set( accessTokenRedis, user,{ ttl: accessTokenTTL })]);
+       return {
+           name: user.name,
+           username: user.username,
+           email: user.email,
+           access_token: accessTokenRedis,
     };
   }
 
@@ -369,23 +367,10 @@ export class AuthService {
          {
            const cachedToken = await this.cacheManager.get(accessToken);
            if (!cachedToken)
-            {
-              throw new UnauthorizedException('Token expired');
-             }
-           // const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           // const user = await this.usersService.findUserByID(decoded.id)
-           // if(!user)
-           // {
-           //   throw new  NotFoundException('invalid user')
-           // }
-           // const tokenKey = `login:${user.email}`;
-           // const cachedToken = await this.cacheManager.get(tokenKey);
-           if(!cachedToken)
            {
-             throw new UnauthorizedException('token expired');
+              throw new UnauthorizedException('Token expired');
            }
-
-           return  cachedToken
+              return  cachedToken
          }
 
 

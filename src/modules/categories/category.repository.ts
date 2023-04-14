@@ -72,7 +72,7 @@ export class CategoryRepository {
          const category = await this.categoryModel.findOne({ where: { id } });
          if (!category)
          {
-             throw new NotFoundException('Category not found');
+             return null
          }
 
           return await this.categoryModel.remove(category);
@@ -85,14 +85,11 @@ export class CategoryRepository {
       // update category
       async updateCategory(id:string, categoryName:string): Promise<category | null>
       {
-          const category = await this.categoryModel.findOne(
-          {
-                  where: { id},
-              });
+          const category = await this.categoryModel.findOne({ where: { id}});
 
           if (!category)
           {
-             throw new NotFoundException('Category not found');
+             return null
           }
 
           category.categoryName = categoryName;

@@ -4,4 +4,5 @@ export default interface submitReviewInterface {
    readonly  titleId: string;
    readonly  message: string;
 
+
 }

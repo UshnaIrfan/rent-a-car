@@ -78,12 +78,12 @@ export class UsersRepository {
 
 
 
-         async updatePassword(email: string, password: string): Promise<User>
+         async updatePassword(email: string, password: string): Promise<User| null>
          {
             const user = await this.userModel.findOne({ where: { email } });
             if (!user)
             {
-              throw new NotFoundException('Invalid User');
+              return null
             }
              user.password = password;
              return this.userModel.save(user);
@@ -93,10 +93,7 @@ export class UsersRepository {
 
          async findUserByID(id: string): Promise<User | null>
          {
-              return this.userModel.findOne(
-        {
-                  where: { id },
-                });
+              return this.userModel.findOne({ where: { id }});
          }
 
 

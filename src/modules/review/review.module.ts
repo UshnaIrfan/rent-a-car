@@ -14,14 +14,17 @@ import { JwtService } from "@nestjs/jwt";
 import {UsersRepository} from "../users/users.repository";
 import {User} from "../users/schemas/user.schema";
 import * as redisStore from 'cache-manager-redis-store';
+import {likeDislikeRepository} from "./respositories/like-dislike.repository";
+import {likeDislikeSchema} from "./schemas/like-dislike.schema";
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([review ,clicksTitle,clicksTypes ,seller,User]),
+  imports: [TypeOrmModule.forFeature([review ,clicksTitle,clicksTypes ,seller,User,likeDislikeSchema]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     })],
   controllers: [ReviewController],
-  providers: [ UsersRepository,JwtService,ReviewService ,reviewRepository,sellerRepository,clicksTypesRepository,clicksTitlesRepository]
+  providers: [ UsersRepository,JwtService,ReviewService ,reviewRepository,sellerRepository,clicksTypesRepository,clicksTitlesRepository,likeDislikeRepository]
 })
 export class ReviewModule {}

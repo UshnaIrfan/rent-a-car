@@ -16,8 +16,9 @@ export class submitReviewDto {
 
 
 
-     @ApiProperty({ type: String, required: false, default: '' })
-     message: string;
+     @ApiProperty({ type: String, required: false, default: null })
+     message: string | null;
+
 
 
  }

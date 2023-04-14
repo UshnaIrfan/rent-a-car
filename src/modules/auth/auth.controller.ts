@@ -32,23 +32,20 @@ export class AuthController {
        @ApiBody({type:SignUpUserDto})
        @Post('signup')
        async signup(
-         @Body() signUpUserDto: SignUpUserDto
-         ):Promise<User>
-         {
+       @Body() signUpUserDto: SignUpUserDto):Promise<User>
+       {
           return this.authService.signup(signUpUserDto);
-         }
+       }
 
 
        // login
        @ApiBody({ type: LoginUserDto })
        @UseGuards(LocalAuthGuard)
        @Post('login')
-       async login(
-         @Request() req
-        ):Promise<JwtTokensInterface>
-         {
+       async login(@Request() req):Promise<JwtTokensInterface>
+       {
            return this.authService.login(req.user);
-         }
+       }
 
 
       // //forget password otp

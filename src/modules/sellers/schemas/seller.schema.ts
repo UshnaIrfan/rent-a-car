@@ -39,7 +39,7 @@ export class seller{
 
 
      @ApiProperty()
-     @Column({ default: null, nullable: true })
+     @Column({ default: null })
      userId: string;
 
 

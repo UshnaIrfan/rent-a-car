@@ -29,14 +29,14 @@ export class UsersService {
 
      async updatePassword(email: string ,password:string): Promise<User | null>
      {
-      return this.usersRepository.updatePassword(email,password);
+       return this.usersRepository.updatePassword(email,password);
      }
 
 
 
-    async findUserByID (id:string): Promise<User | null>
-    {
+     async findUserByID (id:string): Promise<User | null>
+     {
        return this.usersRepository.findUserByID (id);
-    }
+     }
 
 }

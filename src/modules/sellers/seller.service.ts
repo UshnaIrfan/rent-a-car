@@ -40,20 +40,18 @@ export class SellerService {
      async createseller(body: createSellerInterface,accessToken: string): Promise<{ record: seller }>
      {
 
+         const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+         const user = await this.usersRepository.findUserByID(decoded.id)
+         if(!user)
+         {
+           throw new  NotFoundException('invalid user')
+         }
+
         const cachedToken = await this.cacheManager.get(accessToken);
         if (!cachedToken)
         {
            throw new UnauthorizedException('Token expired');
         }
-
-
-       const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-
-       const user = await this.usersRepository.findUserByID(decoded.id)
-       if(!user)
-       {
-         throw new  NotFoundException('invalid user')
-       }
        const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
        if (Url)
        {
@@ -121,26 +119,23 @@ export class SellerService {
      async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
      {
 
-       console.log("token is" ,accessToken)
         const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
         const user = await this.usersRepository.findUserByID(decoded.id)
         if(!user)
         {
             throw new  NotFoundException('invalid user')
         }
-        const tokenKey = `login:${user.email}`;
-        const cachedToken = await this.cacheManager.get(tokenKey);
+        const cachedToken = await this.cacheManager.get(accessToken);
         if(!cachedToken)
         {
             throw new UnauthorizedException('token expired');
         }
 
-
-         const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
-         if (sellerUrl)
-         {
+        const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
+        if (sellerUrl)
+        {
             throw new ConflictException('Seller Url already exists');
-         }
+        }
 
          const data: addSellerInterface & { userId: string } = {
             ...body,
@@ -191,19 +186,25 @@ export class SellerService {
       // update seller
       async updateSeller(updateSeller:updateSellerInterface,accessToken: string):Promise<{ message: string, update:updateSellerInterface}>
       {
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-             throw new UnauthorizedException('Token expired');
-          }
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
+           {
+               throw new  NotFoundException('invalid user')
+           }
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+           {
+               throw new UnauthorizedException('Token expired');
+           }
 
-         const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
+          const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
           if (!update)
           {
              throw new NotFoundException('seller not found');
           }
 
-              return { message: "seller updated successfully", update};
+            return { message: "seller updated successfully", update};
      }
 
 
@@ -213,7 +214,12 @@ export class SellerService {
      // delete seller
      async deleteSeller(id:string,accessToken: string):Promise<{message: string, deletedSeller: seller}>
      {
-
+          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+          const user = await this.usersRepository.findUserByID(decoded.id)
+          if(!user)
+          {
+            throw new  NotFoundException('invalid user')
+          }
           const cachedToken = await this.cacheManager.get(accessToken);
           if (!cachedToken)
           {
@@ -225,7 +231,6 @@ export class SellerService {
          {
             throw new NotFoundException('seller not found');
          }
-
 
          return { message: "seller deleted successfully", deletedSeller };
      }
