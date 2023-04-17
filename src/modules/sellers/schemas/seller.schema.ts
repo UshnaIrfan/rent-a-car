@@ -38,11 +38,6 @@ export class seller{
 
 
 
-     @ApiProperty()
-     @Column({ default: null })
-     userId: string;
-
-
 
      @ApiProperty({ type: () => [category] })
      @ManyToMany(() => category, category => category.sellers, { cascade: true })

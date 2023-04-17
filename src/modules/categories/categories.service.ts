@@ -26,25 +26,14 @@ export class CategoriesService {
 
 
       // create category
-      async createCategory(createCategory:createCategoryInterface,accessToken: string):Promise<category>
+      async createCategory(createCategory:createCategoryInterface):Promise<category>
       {
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
-              throw new  NotFoundException('invalid user')
-           }
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-            throw new UnauthorizedException('Token expired');
-          }
-
 
           const  categoryName= await this.categoryRepository.getCategoryByName(createCategory.categoryName);
           if (categoryName)
           {
              throw new ConflictException(' category already exists');
+
           }
 
 
@@ -69,11 +58,11 @@ export class CategoriesService {
            const category = await this.categoryRepository.getCategoryId(id)
            if (!category)
            {
-            throw new  NotFoundException('categories do not exist');
+            throw new  NotFoundException('invalid category id');
            }
 
            return { records: category};
-      }
+       }
 
 
 
@@ -84,7 +73,7 @@ export class CategoriesService {
            const categories = await this.categoryRepository.getAllCategories()
            if (!categories)
            {
-            throw new  NotFoundException('categories do not exist');
+            throw new  NotFoundException('Categories not exist');
            }
 
             return { records: categories};
@@ -94,25 +83,13 @@ export class CategoriesService {
 
 
        // update category
-       async updateCategory(updateCategory:updateCategoryInterface,accessToken: string):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+       async updateCategory(updateCategory:updateCategoryInterface):Promise<{ message: string, updateCategory: updateCategoryInterface }>
        {
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
-               throw new  NotFoundException('invalid user')
-           }
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-              throw new UnauthorizedException('Token expired');
-           }
-
 
            const update = await this.categoryRepository.updateCategory(updateCategory.id, updateCategory.categoryName);
            if (!update)
            {
-             throw new NotFoundException('Category not found');
+             throw new NotFoundException('Category not exist');
            }
 
            return { message: "Category updated successfully", updateCategory };
@@ -123,25 +100,13 @@ export class CategoriesService {
 
 
        // delete category
-       async deleteCategory(id:string,accessToken: string): Promise<{ message: string, deletedCategory: category }>
+       async deleteCategory(id:string): Promise<{ message: string, deletedCategory: category }>
        {
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
-              throw new  NotFoundException('invalid user')
-           }
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-              throw new UnauthorizedException('Token expired');
-           }
-
 
            const deletedCategory = await this.categoryRepository.deleteCategory(id);
            if (!deletedCategory)
            {
-             throw new NotFoundException('Category not found');
+             throw new NotFoundException('Category not exist');
            }
 
 
@@ -157,7 +122,7 @@ export class CategoriesService {
        const category = await this.categoryRepository.getCategoryId(id);
        if (!category)
        {
-         throw new NotFoundException('Category not found');
+         throw new NotFoundException('Category not exist');
        }
 
        const commonSellers = await this.categoryRepository.getCommonSellers(id, category.sellers);

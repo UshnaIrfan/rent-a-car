@@ -14,14 +14,13 @@ export class sellerRepository{
 
 
       // create seller
-      async createSeller(body: CreateSellerDto & { userId: string }):Promise<seller|null>
+      async createSeller(body: CreateSellerDto):Promise<seller|null>
       {
          const seller = await this.sellerModel.create();
          seller.sellerName = body.sellerName;
          seller.sellerUrl = body.sellerUrl;
          seller.approvedByAdmin = body.approvedByAdmin;
          seller.isListing = body.isListing;
-         seller.userId = body.userId;
          await this.sellerModel.save(seller);
          return seller
      }

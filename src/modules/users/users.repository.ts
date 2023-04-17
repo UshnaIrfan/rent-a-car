@@ -59,10 +59,7 @@ export class UsersRepository {
 
         async findUserByUsername(username: string): Promise<User | null>
         {
-             return this.userModel.findOne(
-           {
-                    where: { username },
-                });
+             return this.userModel.findOne({ where: { username }});
         }
 
 
@@ -70,11 +67,18 @@ export class UsersRepository {
 
         async findUserByEmail(email: string): Promise<User | null>
         {
-           return this.userModel.findOne(
-           {
-                  where: { email },
-            });
+           return this.userModel.findOne({ where: { email }});
         }
+
+
+
+       async findUserByID(id: string): Promise<User | null>
+       {
+          return this.userModel.findOne({ where: { id }, });
+       }
+
+
+
 
 
 
@@ -87,13 +91,6 @@ export class UsersRepository {
             }
              user.password = password;
              return this.userModel.save(user);
-         }
-
-
-
-         async findUserByID(id: string): Promise<User | null>
-         {
-              return this.userModel.findOne({ where: { id }});
          }
 
 

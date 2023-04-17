@@ -17,13 +17,11 @@ export class SellerController {
 
 
       //create seller
-       @ApiBearerAuth()
        @ApiBody({type:CreateSellerDto})
        @Post('create')
-       async  create(@Body() createSellerDto: CreateSellerDto,@Req() req):Promise<{record:seller}>
+       async  create(@Body() createSellerDto: CreateSellerDto):Promise<{record:seller}>
        {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.sellerService.createseller(createSellerDto,accessToken);
+          return this.sellerService.createseller(createSellerDto);
        }
 
 
@@ -60,28 +58,21 @@ export class SellerController {
 
 
         // update seller
-       @ApiBearerAuth()
        @Patch('update')
-       async updateSeller(@Body() updateSellerDto:updateSellerDto,@Req() req):Promise<{ message: string, update:updateSellerInterface}>
+       async updateSeller(@Body() updateSellerDto:updateSellerDto):Promise<{ message: string, update:updateSellerInterface}>
        {
-            const accessToken = req.headers.authorization.split(' ')[1];
-            return this.sellerService.updateSeller(updateSellerDto , accessToken);
+            return this.sellerService.updateSeller(updateSellerDto);
        }
 
 
 
 
        // delete seller
-       @ApiBearerAuth()
        @Delete('delete')
-       async deleteSeller(@Query('id') id:string,@Req() req):Promise<{message: string, deletedSeller: seller}>
+       async deleteSeller(@Query('id') id:string):Promise<{message: string, deletedSeller: seller}>
        {
-           const accessToken = req.headers.authorization.split(' ')[1];
-           return this.sellerService.deleteSeller(id,accessToken);
+           return this.sellerService.deleteSeller(id);
        }
-
-
-
 
 
 

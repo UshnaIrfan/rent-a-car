@@ -15,13 +15,12 @@ export class CategoriesController {
 
 
        // create category
-       @ApiBearerAuth()
        @ApiBody({type:CreateCategoryDto})
        @Post('create')
-       async  create(@Body() createCategoryDto: CreateCategoryDto,@Req() req):Promise<category>
+       async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
        {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.categoriesService.createCategory(createCategoryDto,accessToken);
+
+          return this.categoriesService.createCategory(createCategoryDto);
        }
 
 
@@ -46,23 +45,19 @@ export class CategoriesController {
 
 
        // update category
-       @ApiBearerAuth()
        @Patch('update')
-       async updateCategory(@Body() updateCategoryDto: updateCategoryDto,@Req() req):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+       async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
        {
-         const accessToken = req.headers.authorization.split(' ')[1];
-         return this.categoriesService.updateCategory(updateCategoryDto,accessToken);
+         return this.categoriesService.updateCategory(updateCategoryDto);
        }
 
 
 
        // delete category
-       @ApiBearerAuth()
        @Delete('delete')
-       async deleteCategory(@Query('id') id:string,@Req() req):Promise<{ message: string, deletedCategory: category }>
+       async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
        {
-           const accessToken = req.headers.authorization.split(' ')[1];
-           return this.categoriesService.deleteCategory(id ,accessToken );
+           return this.categoriesService.deleteCategory(id);
        }
 
 

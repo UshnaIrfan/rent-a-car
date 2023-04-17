@@ -47,7 +47,8 @@ export class AuthService {
          if (email)
          {
             throw new ConflictException('Email already exists');
-          }
+         }
+
 
          const { password } = Signup;
          const user = await this.usersService.createUser({
@@ -62,31 +63,32 @@ export class AuthService {
 
 
 
+
        //login
-     async login(user: User): Promise<JwtTokensInterface>
-     {
-        const payload = {
-              id: user.id,
-              name: user.name,
-              username: user.username,
-              email: user.email,
-              password: user.password,
-       };
-       const accessTokenRedis = this.jwtService.sign(payload);
-       const accessTokenTTL = 5400;
-       await Promise.all([
-       this.cacheManager.set( accessTokenRedis, user,{ ttl: accessTokenTTL })]);
-       return {
-           name: user.name,
-           username: user.username,
-           email: user.email,
-           access_token: accessTokenRedis,
-    };
-  }
+      async login(user: User): Promise<JwtTokensInterface>
+      {
+          const payload = {
+                id: user.id,
+                name: user.name,
+                username: user.username,
+                email: user.email,
+                password: user.password,
+          };
+        const accessTokenRedis = this.jwtService.sign(payload);
+        const accessTokenTTL = 5400;
+        await Promise.all([
+        this.cacheManager.set( accessTokenRedis, user,{ ttl: accessTokenTTL })]);
+        return {
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            access_token: accessTokenRedis,
+      };
+   }
 
 
 
-  // forget passwordOtp
+       // forget passwordOtp
     //    async forgotPasswordOtp(
     //          ForgotPasswordOtp:forgotPasswordOtpInterface
     //        ): Promise<{message:string}>
@@ -268,7 +270,7 @@ export class AuthService {
 
 
 
-  // forgotPassword(token)
+      // forgotPassword(token)
   //      async Password(
   //      @Body() reqBody: changeUserPasswordInterface, accessToken: string)
   //      {
@@ -322,7 +324,7 @@ export class AuthService {
            const user = await this.usersService.findUserByEmail(reqBody.email);
            if (!user)
            {
-               throw new  NotFoundException('Invalid email');
+              throw new  NotFoundException('Invalid email');
            }
 
            const tokenKey = `forgot-password-token:${user.email}`;

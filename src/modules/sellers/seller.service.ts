@@ -37,33 +37,15 @@ export class SellerService {
 
 
     // create seller
-     async createseller(body: createSellerInterface,accessToken: string): Promise<{ record: seller }>
+     async createseller(body: createSellerInterface): Promise<{ record: seller }>
      {
-
-         const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-         const user = await this.usersRepository.findUserByID(decoded.id)
-         if(!user)
-         {
-           throw new  NotFoundException('invalid user')
-         }
-
-        const cachedToken = await this.cacheManager.get(accessToken);
-        if (!cachedToken)
-        {
-           throw new UnauthorizedException('Token expired');
-        }
        const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
        if (Url)
        {
         throw new ConflictException('Seller Url already exists');
        }
 
-       const data: createSellerInterface & { userId: string } = {
-         ...body,
-         userId: decoded.id,
-       };
-
-       const seller = await this.SellerRepository.createSeller(data);
+       const seller = await this.SellerRepository.createSeller(body);
        seller.categories = [];
        const categoriesIDs = body.categories;
        for (const categoryID of categoriesIDs)
@@ -118,18 +100,17 @@ export class SellerService {
      // add seller
      async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
      {
-
-        const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-        const user = await this.usersRepository.findUserByID(decoded.id)
-        if(!user)
-        {
+         const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+         const user = await this.usersRepository.findUserByID(decoded.id)
+         if(!user)
+         {
             throw new  NotFoundException('invalid user')
-        }
-        const cachedToken = await this.cacheManager.get(accessToken);
-        if(!cachedToken)
-        {
+         }
+         const cachedToken = await this.cacheManager.get(accessToken);
+         if(!cachedToken)
+         {
             throw new UnauthorizedException('token expired');
-        }
+         }
 
         const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
         if (sellerUrl)
@@ -137,13 +118,7 @@ export class SellerService {
             throw new ConflictException('Seller Url already exists');
         }
 
-         const data: addSellerInterface & { userId: string } = {
-            ...body,
-           userId: decoded.id,
-          };
-
-
-         const seller = await this.SellerRepository.createSeller(data);
+         const seller = await this.SellerRepository.createSeller(body);
          seller.categories = [];
 
 
@@ -184,19 +159,8 @@ export class SellerService {
 
 
       // update seller
-      async updateSeller(updateSeller:updateSellerInterface,accessToken: string):Promise<{ message: string, update:updateSellerInterface}>
+      async updateSeller(updateSeller:updateSellerInterface):Promise<{ message: string, update:updateSellerInterface}>
       {
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
-               throw new  NotFoundException('invalid user')
-           }
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-               throw new UnauthorizedException('Token expired');
-           }
 
           const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
           if (!update)
@@ -212,19 +176,8 @@ export class SellerService {
 
 
      // delete seller
-     async deleteSeller(id:string,accessToken: string):Promise<{message: string, deletedSeller: seller}>
+     async deleteSeller(id:string):Promise<{message: string, deletedSeller: seller}>
      {
-          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-          const user = await this.usersRepository.findUserByID(decoded.id)
-          if(!user)
-          {
-            throw new  NotFoundException('invalid user')
-          }
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-             throw new UnauthorizedException('Token expired');
-          }
 
          const deletedSeller = await this.SellerRepository.deleteSeller(id);
          if (!deletedSeller)

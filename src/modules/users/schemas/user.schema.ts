@@ -68,7 +68,7 @@ export class User {
 
 
      @ApiProperty()
-     @Column({ unique: true })
+     @Column({})
      name: string;
 
 
@@ -82,7 +82,7 @@ export class User {
      email: string;
 
      @ApiProperty()
-     @Column()
+     @Column({ unique: true })
      password: string;
 
 

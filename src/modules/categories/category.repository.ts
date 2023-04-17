@@ -12,7 +12,7 @@ export class CategoryRepository {
 
 
       // create category
-      async createCategory(category: CreateCategoryDto): Promise<category | null>
+      async createCategory(category: CreateCategoryDto):Promise<category | null>
       {
          return this.categoryModel.save(category);
       }
@@ -103,8 +103,8 @@ export class CategoryRepository {
       async getCommonSellers(id: string, sellers: seller[]):Promise<seller[]>
       {
           const otherCategories = await this.categoryModel.find({
-           where: { id: Not(id) },
-           relations: ['sellers'],
+              where: { id: Not(id) },
+              relations: ['sellers'],
             });
 
 

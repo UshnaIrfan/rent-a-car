@@ -35,28 +35,24 @@ export class ReviewController {
 
 
        // create click types
-        @ApiBearerAuth()
         @ApiBody({type:createClicksTypesDto})
         @Post('createClicksTypes')
         async createClicksTypes(
-        @Body() clicksReview:createClicksTypesDto,@Req() req):Promise<clicksTypes>
+        @Body() clicksReview:createClicksTypesDto):Promise<clicksTypes>
         {
-           const accessToken = req.headers.authorization.split(' ')[1];
-           return this.reviewService.createClicksTypes(clicksReview,accessToken);
+           return this.reviewService.createClicksTypes(clicksReview);
         }
 
 
 
 
        // create click titles
-        @ApiBearerAuth()
         @ApiBody({type:createClicksTitlesDto})
         @Post('createClicksTitles')
         async createClicksTitle(
-        @Body() clicksTypes:createClicksTitlesDto,@Req() req): Promise<{record:clicksTitle}>
+        @Body() clicksTypes:createClicksTitlesDto): Promise<{record:clicksTitle}>
         {
-             const accessToken = req.headers.authorization.split(' ')[1];
-             return this.reviewService.createClicksTitles(clicksTypes,accessToken);
+             return this.reviewService.createClicksTitles(clicksTypes);
         }
 
 
@@ -76,10 +72,10 @@ export class ReviewController {
          @ApiBody({type:submitReviewDto})
          @Post('submit')
          async submitReview(
-         @Body() submitReview:submitReviewDto, @Req() req): Promise<review>
+         @Body() submitReview:submitReviewDto,@Req() req): Promise<review>
          {
              const accessToken = req.headers.authorization.split(' ')[1];
-             return this.reviewService.submitReview(submitReview ,accessToken);
+             return this.reviewService.submitReview(submitReview,accessToken);
          }
 
 
@@ -138,14 +134,14 @@ export class ReviewController {
 
 
 
-     // Me
+       //like dislike submit review
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
         async createLikeDislike(
         @Body() Review:likeDislikeReviewDto)
         {
           return this.reviewService.createLikeDislike(Review);
-       }
+        }
 
 
 

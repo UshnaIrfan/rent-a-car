@@ -21,6 +21,7 @@ export class UsersService {
      }
 
 
+
      async createUser(user: CreateUserDto): Promise<User | null>
      {
       return this.usersRepository.createUser(user);
@@ -36,7 +37,7 @@ export class UsersService {
 
      async findUserByID (id:string): Promise<User | null>
      {
-       return this.usersRepository.findUserByID (id);
+       return this.usersRepository.findUserByID(id);
      }
 
 }

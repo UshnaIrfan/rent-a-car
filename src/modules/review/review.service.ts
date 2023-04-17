@@ -40,21 +40,8 @@ export class ReviewService {
 
 
        // create click types
-       async createClicksTypes(clickReviewInterface:createClicksTypesInterface,accessToken: string):Promise<clicksTypes>
+       async createClicksTypes(clickReviewInterface:createClicksTypesInterface):Promise<clicksTypes>
        {
-
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
-              throw new  NotFoundException('invalid user')
-           }
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-              throw new UnauthorizedException('Token expired');
-           }
-
            const click = await this.clicksTypeRepository.findByType(clickReviewInterface.type);
            if (click)
            {
@@ -75,19 +62,8 @@ export class ReviewService {
 
 
         //  create click titles
-        async createClicksTitles(reqBody:createClicksTitlesInterface,accessToken: string): Promise<{record:clicksTitle}>
+        async createClicksTitles(reqBody:createClicksTitlesInterface): Promise<{record:clicksTitle}>
         {
-            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-            const user = await this.usersRepository.findUserByID(decoded.id)
-            if(!user)
-            {
-               throw new  NotFoundException('invalid user')
-            }
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken)
-            {
-              throw new UnauthorizedException('Token expired');
-            }
 
             const existingClickSlug = await this.clicksTitleRepository.findBySlug(reqBody.slug);
             if (existingClickSlug)
@@ -154,7 +130,7 @@ export class ReviewService {
            const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
            if (!title)
            {
-              throw new  NotFoundException('Balloon  not exist')
+              throw new  NotFoundException('Balloon title not exist')
            }
 
           const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
@@ -440,88 +416,100 @@ export class ReviewService {
 
 
 
-// me
-  async createLikeDislike(reqBody: likeDislikeInterface)
-  {
-
-     const review = await this.reviewRepository.reviewById(reqBody.reviewId);
-     if (!review)
+     //like dislike submit review
+     async createLikeDislike(reqBody: likeDislikeInterface)
      {
-       throw new NotFoundException('review not found');
-     }
+       const user = await this.usersRepository.findUserByID(reqBody.userId);
+       if (!user)
+       {
+         throw new NotFoundException('invalid user id');
+       }
+       const review = await this.reviewRepository.reviewById(reqBody.reviewId);
+       if (!review)
+       {
+         throw new NotFoundException('invalid review id');
+       }
         return  await this.likeDislikeRepository.createLikeDislike(reqBody);
-   }
-
-
-
-
-
-
-
-  async getReviewsWithTypes(sellerId: string, page: number = 1) {
-    const toAir = [];
-    const toLove = [];
-    const toAirLikes = {};
-    const toLoveLikes = {};
-    const reviewLikes = {};
-    const reviewDislikes = {};
-
-    const seller = await this.reviewRepository.reviewBySellerId(sellerId);
-    if (!seller) {
-      throw new NotFoundException(`Seller not exist`);
     }
 
-    const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
 
 
-    var toAirCount = 0;
-    var toLoveCount = 0;
-    for (const review of allReviews) {
+
+
+
+
+    async getReviewsWithTypes(sellerId: string, page: number = 1)
+    {
+       const toAir = [];
+       const toLove = [];
+
+       const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+       if (!seller)
+       {
+         throw new NotFoundException(`Seller not exist`);
+       }
+
+       const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+
+       var toAirCount = 0;
+       var toLoveCount = 0;
+      for (const review of allReviews)
+      {
 
       const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
-
-
-      // Get the user count for this review
       const userCount = result.length;
 
       const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-      if (!title) {
+      if (!title)
+      {
         throw new NotFoundException(`Title not exist`);
       }
+
+
       const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(
-        review.titleSlug,
-      );
-      if (!matchingSlugTitle) {
-        throw new NotFoundException(
-          `Title not found with slug: ${review.titleSlug}`,
-        );
+        review.titleSlug);
+      if (!matchingSlugTitle)
+      {
+        throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
       }
 
 
-
-
-      if (title.type === matchingSlugTitle.type) {
-        if (title.slug === matchingSlugTitle.slug) {
-          if (title.type === 'to-air') {
-            if (review.message !== null) {
-              toAir.push({ ...review, Helpful:userCount, user: result });
+      if (title.type === matchingSlugTitle.type)
+      {
+        if (title.slug === matchingSlugTitle.slug)
+        {
+          if (title.type === 'to-air')
+          {
+            if (review.message !== null)
+            {
+              toAir.push({ ...review, Helpful:userCount});
               toAirCount++;
             }
-          } else if (title.type === 'to-love') {
-            if (review.message !== null) {
-              toLove.push({ ...review, Best_Awards:userCount, user: result});
+          }
+          else if (title.type === 'to-love')
+          {
+            if (review.message !== null)
+            {
+              toLove.push({ ...review, Best_Awards:userCount});
               toLoveCount++;
             }
           }
-        } else {
-          if (title.type === 'to-air') {
-            if (review.message !== null) {
-              toAir.push({ ...review, Helpful:userCount, user: result });
+        }
+        else
+        {
+          if (title.type === 'to-air')
+          {
+            if (review.message !== null)
+            {
+              toAir.push({ ...review, Helpful:userCount});
               toAirCount++;
             }
-          } else if (title.type === 'to-love') {
-            if (review.message !== null) {
-              toLove.push({ ...review, Best_Awards:userCount, user: result });
+          }
+          else if (title.type === 'to-love')
+          {
+            if (review.message !== null)
+            {
+              toLove.push({ ...review, Best_Awards:userCount});
               toLoveCount++;
             }
           }
@@ -567,4 +555,4 @@ export class ReviewService {
 
 
 
-  }
+}
