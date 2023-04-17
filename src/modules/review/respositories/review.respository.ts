@@ -96,5 +96,11 @@ export class reviewRepository{
        return this.reviewModel.findOne({ where: {id }});
      }
 
+  async reviewId(id:string):Promise<review[]| null>
+  {
+    return this.reviewModel.find({ where: {id }});
+  }
+
+
 }
 

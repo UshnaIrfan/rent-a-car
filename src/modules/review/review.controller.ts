@@ -138,7 +138,7 @@ export class ReviewController {
 
 
 
-        @ApiBearerAuth()
+     // Me
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
         async createLikeDislike(
@@ -146,4 +146,10 @@ export class ReviewController {
         {
           return this.reviewService.createLikeDislike(Review);
        }
+
+
+
+
+
+
 }

@@ -10,21 +10,14 @@ export class likeDislikeSchema{
 
 
     @ApiProperty()
-    @Column({unique:true})
+    @Column({})
     userId: string;
 
 
    @ApiProperty()
-   @Column({unique:true})
+   @Column({})
    reviewId: string;
 
-   @ApiProperty()
-   @Column({unique:true})
-   like: number;
-
-   @ApiProperty()
-   @Column({unique:true})
-   dislike: number;
 
 }
 

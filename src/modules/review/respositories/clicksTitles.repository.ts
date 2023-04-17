@@ -1,6 +1,6 @@
 import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { OrderByCondition, Repository } from "typeorm";
 import {clicksTitle} from "../schemas/create-clicks-titles.schema";
 import {createClicksTitlesDto} from "../dto/create-clicks-titles.dto";
 
@@ -21,10 +21,21 @@ export class clicksTitlesRepository{
 
 
        // find all title
-       async getAllReviewsTitle():Promise<clicksTitle[]|null>
+       // async getAllReviewsTitle():Promise<clicksTitle[]|null>
+       // {
+       //     return this.clickTypesModel.find();
+       // }
+
+       async getAllReviewsTitle(): Promise<clicksTitle[] | null>
        {
-           return this.clickTypesModel.find();
-       }
+        const orderBy: OrderByCondition = {
+         'type': 'DESC',
+         'slug':'ASC'
+        };
+        const result = await this.clickTypesModel.find({ order: orderBy });
+        return result;
+      }
+
 
 
 
