@@ -44,7 +44,7 @@ export class CategoriesService {
           const  categoryName= await this.categoryRepository.getCategoryByName(createCategory.categoryName);
           if (categoryName)
           {
-             throw new ConflictException(' category_name already exists');
+             throw new ConflictException(' category already exists');
           }
 
 
