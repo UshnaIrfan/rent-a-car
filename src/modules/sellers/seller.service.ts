@@ -142,6 +142,11 @@ export class SellerService {
             throw new  NotFoundException('Balloon title not found');
          }
 
+        const previousReview = await this.ReviewRepository.findReviewByUserAndSeller(decoded.id,seller.id);
+        if (previousReview)
+        {
+          throw new ConflictException('You have already submitted a review for this seller');
+        }
         const reviewBody = {
            titleId: body.titleId,
            sellerId: seller.id,

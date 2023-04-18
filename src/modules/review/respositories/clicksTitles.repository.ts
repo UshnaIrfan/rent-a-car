@@ -26,12 +26,12 @@ export class clicksTitlesRepository{
        //     return this.clickTypesModel.find();
        // }
 
-       async getAllReviewsTitle(): Promise<clicksTitle[] | null>
-       {
-        const orderBy: OrderByCondition = {
-         'type': 'DESC',
-         'slug':'ASC'
-        };
+        async getAllReviewsTitle(): Promise<clicksTitle[] | null>
+        {
+           const orderBy: OrderByCondition = {
+            'type': 'DESC',
+             'slug':'ASC'
+          };
         const result = await this.clickTypesModel.find({ order: orderBy });
         return result;
       }

@@ -81,22 +81,7 @@ export class ReviewController {
 
 
 
-         // get  reviews (pagination)
-         // @Get('')
-         // async getReview(@Query('page') page: number = 1):Promise<paginationInterface>
-         // {
-         //   return this.reviewService.getReview(page);
-         // }
-
-
-
         // balloons count
-      // @Get('/count')
-      // async getReviewsWithCounts()
-      // {
-      //    const reviews = await this.reviewService.getReviewsWithCounts();
-      //    return reviews;
-      // }
          @Get('/count/:seller_id')
          async getReviewsWithCounts(@Param('seller_id') sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
@@ -106,13 +91,7 @@ export class ReviewController {
 
 
 
-       // loved/air  review
-       //  @Get('/:seller_id')
-       // async getReviewsWithTypes(@Param('seller_id') sellerId: string)
-       // {
-       //    return  await this.reviewService.getReviewsWithTypes(sellerId);
-       // }
-
+         // loved/air  review
          @Get('/:seller_id')
          async getReviewsWithTypes(
          @Param('seller_id') sellerId: string,
@@ -135,12 +114,14 @@ export class ReviewController {
 
 
        //like dislike submit review
+        @ApiBearerAuth()
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
         async createLikeDislike(
-        @Body() Review:likeDislikeReviewDto)
+        @Body() Review:likeDislikeReviewDto,@Req() req)
         {
-          return this.reviewService.createLikeDislike(Review);
+          const accessToken = req.headers.authorization.split(' ')[1];
+          return this.reviewService.createLikeDislike(Review,accessToken);
         }
 
 

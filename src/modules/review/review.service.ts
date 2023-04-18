@@ -25,6 +25,7 @@ import likeDislikeInterface from "./interfaces/like-dislike.interface";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import {likeDislikeRepository} from "./respositories/like-dislike.repository";
 
+
 @Injectable()
 export class ReviewService {
   constructor(
@@ -35,7 +36,8 @@ export class ReviewService {
     private readonly usersRepository:UsersRepository,
     private jwtService: JwtService,
     private readonly likeDislikeRepository:likeDislikeRepository,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+
     ){}
 
 
@@ -105,96 +107,91 @@ export class ReviewService {
 
 
 
+
         // submit review
+      //   async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
+      //   {
+      //
+      //       const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+      //       const user = await this.usersRepository.findUserByID(decoded.id)
+      //       if(!user)
+      //       {
+      //         throw new  NotFoundException('invalid user')
+      //       }
+      //       const cachedToken = await this.cacheManager.get(accessToken);
+      //       if (!cachedToken)
+      //       {
+      //          throw new UnauthorizedException('Token expired');
+      //       }
+      //
+      //       const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
+      //       if(!seller)
+      //       {
+      //          throw new  NotFoundException('seller not exist')
+      //       }
+      //
+      //      const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
+      //      if (!title)
+      //      {
+      //         throw new  NotFoundException('Balloon title not exist')
+      //      }
+      //
+      //     const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
+      //       ...createReviewInterface,
+      //       userId: decoded.id,
+      //       titleSlug:title.slug
+      //     };
+      //
+      //     return this.reviewRepository.submitReview(reviewData);
+      // }
+
         async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
         {
-
-            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-            const user = await this.usersRepository.findUserByID(decoded.id)
-            if(!user)
-            {
-              throw new  NotFoundException('invalid user')
-            }
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken)
-            {
-               throw new UnauthorizedException('Token expired');
-            }
-
-            const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
-            if(!seller)
-            {
-               throw new  NotFoundException('seller not exist')
-            }
-
-           const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
-           if (!title)
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
            {
-              throw new  NotFoundException('Balloon title not exist')
+               throw new  NotFoundException('invalid user')
+           }
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+           {
+               throw new UnauthorizedException('Token expired');
            }
 
-          const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
-            ...createReviewInterface,
-            userId: decoded.id,
-            titleSlug:title.slug
-          };
+          const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
+          if(!seller)
+          {
+              throw new  NotFoundException('seller not exist')
+          }
+
+         const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
+         if (!title)
+         {
+             throw new  NotFoundException('Balloon title not exist')
+         }
+
+
+         const previousReview = await this.reviewRepository.findReviewByUserAndSeller(decoded.id, createReviewInterface.sellerId);
+         if (previousReview)
+         {
+            throw new ConflictException('You have already submitted a review for this seller');
+         }
+
+
+         const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
+          ...createReviewInterface,
+           userId: decoded.id,
+           titleSlug:title.slug
+        };
 
           return this.reviewRepository.submitReview(reviewData);
-      }
+  }
 
 
-
-
-         // get  reviews (pagination)
-     //    async getReview(pageNumber: number):Promise<paginationInterface>
-     //    {
-     //       const pageSize = 3;
-     //       const skip = (pageNumber - 1) * pageSize;
-     //       const [result, totalCount] = await this.reviewRepository.findAndCount(skip, pageSize);
-     //       const totalPages = Math.ceil(totalCount / pageSize);
-     //
-     //       if (result.length === 0)
-     //       {
-     //          throw new NotFoundException('No records found');
-     //       }
-     //
-     //     return {
-     //         records: result,
-     //         totalRecords: totalCount,
-     //         totalPages,
-     //         currentPage: pageNumber,
-     //     };
-     // }
 
 
          // balloons count
-     //  async getReviewsWithCounts()
-     //  {
-     //      const reviews = await this.reviewRepository.review();
-     //      const counts = {};
-     //      const groupedReviews = {};
-     //
-     //     for (const review of reviews)
-     //     {
-     //        const { titleId } = review;
-     //        counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
-     //        if (!groupedReviews[titleId])
-     //        {
-     //            groupedReviews[titleId] = [];
-     //        }
-     //           groupedReviews[titleId].push(review);
-     //    }
-     //
-     //     const result = Object.entries(groupedReviews).map(([titleId, reviews]) => ({
-     //         titleId,
-     //         count: counts[titleId],
-     //         reviews,
-     //      }));
-     //
-     //       return result;
-     // }
-
-
         async getReviewsWithCounts(sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
         {
            const seller = await this.sellerRepository.getSellerById(sellerId);
@@ -235,74 +232,7 @@ export class ReviewService {
 
 
        // loved/air  review
-  //     async getReviewsWithTypes(sellerId: string)
-  //     {
-  //        const toAir = [];
-  //        const toLove = [];
-  //
-  //      const seller = await this.reviewRepository.Review(sellerId);
-  //      if (!seller)
-  //      {
-  //        throw new NotFoundException(`Seller not found with ID: ${sellerId}`);
-  //      }
-  //
-  //      const reviews = await this.reviewRepository.review(sellerId);
-  //
-  //      for (const review of reviews)
-  //      {
-  //         const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-  //         if (!title)
-  //         {
-  //           throw new NotFoundException(`Title not found with ID: ${review.titleId}`);
-  //         }
-  //        const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
-  //        if (!matchingSlugTitle)
-  //        {
-  //           throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-  //        }
-  //
-  //       if (title.type === matchingSlugTitle.type)
-  //       {
-  //           if (title.slug === matchingSlugTitle.slug)
-  //           {
-  //              if (title.type === 'to-air')
-  //              {
-  //                 if (review.message !== null)
-  //                 {
-  //                    toAir.push(review);
-  //                 }
-  //              }
-  //             else if (title.type === 'to-love')
-  //             {
-  //                if (review.message !== null)
-  //                {
-  //                    toLove.push(review);
-  //                }
-  //             }
-  //        }
-  //        else
-  //        {
-  //             if (title.type === 'to-air')
-  //             {
-  //                if (review.message !== null)
-  //                {
-  //                      toAir.push(review);
-  //                }
-  //            }
-  //            else if (title.type === 'to-love')
-  //            {
-  //               if (review.message !== null)
-  //               {
-  //                 toLove.push(review);
-  //               }
-  //            }
-  //        }
-  //     }
-  //   }
-  //       return {  toAir, toLove };
-  // }
-
-  //uncomment for testing
+      //uncomment for testing
   //     async getReviewsWithTypes(sellerId: string, page: number = 1)
   //     {
   //         const toAir = [];
@@ -404,97 +334,102 @@ export class ReviewService {
   //
 
 
-     //update review
-      async  updateReview(updateReviewInterface:updateReviewInterface)
-      {
-         const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
-
-         return { message: "updated successfully" ,updateReview};
-     }
-
-
-
-
-
-     //like dislike submit review
-     async createLikeDislike(reqBody: likeDislikeInterface)
-     {
-       const user = await this.usersRepository.findUserByID(reqBody.userId);
-       if (!user)
+      //update review
+       async  updateReview(updateReviewInterface:updateReviewInterface)
        {
-         throw new NotFoundException('invalid user id');
-       }
-       const review = await this.reviewRepository.reviewById(reqBody.reviewId);
-       if (!review)
-       {
-         throw new NotFoundException('invalid review id');
-       }
-        return  await this.likeDislikeRepository.createLikeDislike(reqBody);
-    }
-
-
-
-
-
-
-
-    async getReviewsWithTypes(sellerId: string, page: number = 1)
-    {
-       const toAir = [];
-       const toLove = [];
-
-       const seller = await this.reviewRepository.reviewBySellerId(sellerId);
-       if (!seller)
-       {
-         throw new NotFoundException(`Seller not exist`);
+          const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
+          return { message: "updated successfully" ,updateReview};
        }
 
-       const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
-
-       var toAirCount = 0;
-       var toLoveCount = 0;
-      for (const review of allReviews)
-      {
-
-      const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
-      const userCount = result.length;
-
-      const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-      if (!title)
-      {
-        throw new NotFoundException(`Title not exist`);
-      }
 
 
-      const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(
-        review.titleSlug);
-      if (!matchingSlugTitle)
-      {
-        throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-      }
+       //like dislike submit review
+       async createLikeDislike(likeDislikeInterface: likeDislikeInterface,accessToken:string)
+       {
+          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+          const user = await this.usersRepository.findUserByID(decoded.id)
+          if(!user)
+          {
+             throw new  NotFoundException('invalid user')
+          }
+          const cachedToken = await this.cacheManager.get(accessToken);
+          if (!cachedToken)
+          {
+             throw new UnauthorizedException('Token expired');
+          }
+
+          const review = await this.reviewRepository.reviewById(likeDislikeInterface.reviewId);
+          if (!review)
+          {
+              throw new NotFoundException('invalid review id');
+          }
+         const likedislike = {
+           ...likeDislikeInterface,
+           userId: decoded.id,
+
+         };
+          return  await this.likeDislikeRepository.createLikeDislike(likedislike);
+       }
 
 
-      if (title.type === matchingSlugTitle.type)
-      {
-        if (title.slug === matchingSlugTitle.slug)
+
+
+
+        //love/air  reviews
+       async getReviewsWithTypes(sellerId: string, page: number = 1)
+       {
+         const toAir = [];
+         const toLove = [];
+         const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+         if (!seller)
+         {
+             throw new NotFoundException(`Seller not exist`);
+         }
+
+        const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+        var toAirCount = 0;
+        var toLoveCount = 0;
+        for (const review of allReviews)
         {
-          if (title.type === 'to-air')
-          {
-            if (review.message !== null)
-            {
-              toAir.push({ ...review, Helpful:userCount});
-              toAirCount++;
-            }
-          }
-          else if (title.type === 'to-love')
-          {
-            if (review.message !== null)
-            {
-              toLove.push({ ...review, Best_Awards:userCount});
-              toLoveCount++;
-            }
-          }
+
+         const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
+         const userCount = result.length;
+
+         const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+         if (!title)
+         {
+            throw new NotFoundException(`Title not exist`);
+         }
+
+
+        const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+        if (!matchingSlugTitle)
+        {
+           throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
         }
+
+
+        if (title.type === matchingSlugTitle.type)
+        {
+          if (title.slug === matchingSlugTitle.slug)
+          {
+             if (title.type === 'to-air')
+             {
+               if (review.message !== null)
+               {
+                  toAir.push({ ...review, Helpful:userCount});
+                  toAirCount++;
+               }
+            }
+            else if (title.type === 'to-love')
+            {
+               if (review.message !== null)
+               {
+                 toLove.push({ ...review, Best_Awards:userCount});
+                 toLoveCount++;
+               }
+            }
+         }
         else
         {
           if (title.type === 'to-air')
@@ -517,15 +452,15 @@ export class ReviewService {
       }
     }
 
-    const limit = 3;
-    const offset = (page - 1) * limit;
-    const paginatedToAirReviews = toAir.slice(offset, offset + limit);
-    const paginatedToLoveReviews = toLove.slice(offset, offset + limit);
+     const limit = 3;
+     const offset = (page - 1) * limit;
+     const paginatedToAirReviews = toAir.slice(offset, offset + limit);
+     const paginatedToLoveReviews = toLove.slice(offset, offset + limit);
 
-    const totalToAirRecords = toAir.length;
-    const totalToLoveRecords = toLove.length;
-    const totalToAirPages = Math.ceil(toAir.length / limit);
-    const totalToLovePages = Math.ceil(toLove.length / limit);
+     const totalToAirRecords = toAir.length;
+     const totalToLoveRecords = toLove.length;
+     const totalToAirPages = Math.ceil(toAir.length / limit);
+     const totalToLovePages = Math.ceil(toLove.length / limit);
 
     return {
       toAir: {
@@ -552,6 +487,7 @@ export class ReviewService {
       },
     };
   }
+
 
 
 

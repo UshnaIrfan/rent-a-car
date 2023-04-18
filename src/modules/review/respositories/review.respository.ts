@@ -90,17 +90,25 @@ export class reviewRepository{
 
 
 
-
       async reviewById(id:string):Promise<review| null>
       {
-       return this.reviewModel.findOne({ where: {id }});
-     }
+          return this.reviewModel.findOne({ where: {id }});
+      }
 
-  async reviewId(id:string):Promise<review[]| null>
-  {
-    return this.reviewModel.find({ where: {id }});
-  }
+
+
+
+
+
+      async findReviewByUserAndSeller(userId: string, sellerId: string): Promise<review>
+      {
+         const review = await this.reviewModel.findOne({
+         where: { userId, sellerId}});
+
+          return review;
+      }
 
 
 }
+
 

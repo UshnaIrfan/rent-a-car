@@ -133,17 +133,15 @@ export class AuthController {
         }
 
 
-       // //logout
-       // @ApiBearerAuth()
-       // @UseGuards(JwtAuthGuard)
-       // @Delete('/logout')
-       // async logout(
-       //  @Request() req
-       //   ): Promise<{message:string}>
-       // {
-       //  const accessToken = req.headers.authorization.split(' ')[1];
-       //  return this.authService.logout(accessToken);
-       // }
+        //logout
+        @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
+        @Delete('/logout')
+        async logout(@Request() req): Promise<{message:string}>
+        {
+          const accessToken = req.headers.authorization.split(' ')[1];
+          return this.authService.logout(accessToken);
+        }
 
 
 }

@@ -79,6 +79,7 @@ export class AuthService {
         await Promise.all([
         this.cacheManager.set( accessTokenRedis, user,{ ttl: accessTokenTTL })]);
         return {
+            id:user.id,
             name: user.name,
             username: user.username,
             email: user.email,
@@ -379,20 +380,16 @@ export class AuthService {
 
 
         //logout
-      //   async logout(accessToken: string) :Promise<{message:string}>
-      //     {
-      //     const cachedToken = await this.cacheManager.get(accessToken);
-      //
-      //     if (!cachedToken)
-      //       {
-      //        throw new NotFoundException('Token expired');
-      //       }
-      //     await this.cacheManager.del(accessToken);
-      //     return {
-      //       message: 'Successfully logout'
-      //       };
-      //
-      //   }
+          async logout(accessToken: string) :Promise<{message:string}>
+          {
+             const cachedToken = await this.cacheManager.get(accessToken);
+             if (!cachedToken)
+             {
+                throw new NotFoundException('Token expired');
+             }
+               await this.cacheManager.del(accessToken);
+               return { message: 'Successfully logout' };
+          }
 
 
 
