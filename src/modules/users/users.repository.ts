@@ -44,6 +44,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
+import { seller } from "../sellers/schemas/seller.schema";
 
 
 @Injectable()
@@ -80,18 +81,37 @@ export class UsersRepository {
 
 
 
-
-
-         async updatePassword(email: string, password: string): Promise<User| null>
-         {
-            const user = await this.userModel.findOne({ where: { email } });
-            if (!user)
-            {
+       async updatePassword(email: string, password: string): Promise<User| null>
+       {
+          const user = await this.userModel.findOne({ where: { email } });
+          if (!user)
+          {
               return null
-            }
+          }
              user.password = password;
              return this.userModel.save(user);
          }
+
+
+         // get all users
+        async getAllUsers(): Promise<User[]|null>
+        {
+          return this.userModel.find();
+        }
+
+
+
+
+       //delete user
+       async deleteUser(id: string): Promise<User| null>
+       {
+         const user = await this.userModel.findOne({ where: { id } });
+         if (!user)
+         {
+            return null
+         }
+          return await this.userModel.remove(user);
+       }
 
 
 }

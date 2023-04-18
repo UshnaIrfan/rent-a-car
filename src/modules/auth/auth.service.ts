@@ -20,6 +20,7 @@ import forgotPasswordOtpInterface from "./interfaces/forgot-password-otp.interfa
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { generateRandomToken } from "../../helpers/randontoken.helper";
 import { jwtConstants } from "./constants/constants";
+import { seller } from "../sellers/schemas/seller.schema";
 
 
 @Injectable()
@@ -271,54 +272,8 @@ export class AuthService {
 
 
 
-      // forgotPassword(token)
-  //      async Password(
-  //      @Body() reqBody: changeUserPasswordInterface, accessToken: string)
-  //      {
-  //         const user = await this.usersService.findUserByEmail(reqBody.email);
-  //         if (!user)
-  //          {
-  //            throw new BadRequestException('Invalid email');
-  //          }
-  //         const tokenKey = `forgot-password-token:${user.email}`;
-  //         const cachedToken = await this.cacheManager.get(tokenKey);
-  //         if (!cachedToken)
-  //         {
-  //           throw new UnauthorizedException('Token expired');
-  //         }
-  //
-  //       const parsedToken = JSON.parse(<string>cachedToken);
-  //       if (parsedToken.token !== accessToken)
-  //        {
-  //         throw new UnauthorizedException('Invalid token');
-  //        }
-  //       else
-  //       {
-  //          if (reqBody.newPassword !== reqBody.confirmPassword)
-  //            {
-  //            throw new NotAcceptableException('Password not matched');
-  //            }
-  //
-  //
-  //          if (reqBody.newPassword === reqBody.confirmPassword)
-  //            {
-  //             const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-  //             try
-  //               {
-  //                await this.usersService.updatePassword(reqBody.email, hashedPassword);
-  //                 await this.cacheManager.del(tokenKey);
-  //                 return this.login(user);
-  //               }
-  //             catch (e)
-  //              {
-  //               throw new InternalServerErrorException('Failed to login');
-  //              }
-  //
-  //          }
-  //
-  //      }
-  //  }
 
+      // forgotPassword(token)
        async Password(
        @Body() reqBody: changeUserPasswordInterface)
        {
@@ -375,6 +330,35 @@ export class AuthService {
            }
               return  cachedToken
          }
+
+
+
+        //get all users
+        async getAllUsers( ):Promise<{records:User[]}>
+        {
+          const users = await this.usersService.getAllUsers()
+          if(!users)
+          {
+            throw new  NotFoundException('users not exist');
+          }
+            return { records:users};
+        }
+
+
+
+         //delete user
+         async deleteUser(id:string):Promise<{message: string, deletedUser:User}>
+         {
+
+           const deletedUser = await this.usersService.deleteUser(id);
+           if (!deletedUser)
+           {
+              throw new NotFoundException('user not found');
+           }
+
+           return { message: "user deleted successfully", deletedUser };
+         }
+
 
 
 

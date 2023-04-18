@@ -40,4 +40,21 @@ export class UsersService {
        return this.usersRepository.findUserByID(id);
      }
 
+
+
+      // get all users
+      async getAllUsers (): Promise<User[]|null>
+      {
+        return this.usersRepository.getAllUsers( );
+      }
+
+
+
+      // delete  user
+     async deleteUser (id:string): Promise<User|null>
+     {
+        return this.usersRepository.deleteUser(id);
+     }
+
+
 }

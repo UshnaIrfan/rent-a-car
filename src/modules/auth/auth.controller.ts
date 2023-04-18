@@ -19,6 +19,7 @@ import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import { User } from "../users/schemas/user.schema";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
+import { seller } from "../sellers/schemas/seller.schema";
 
 
 @ApiTags('Auth')
@@ -28,24 +29,24 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-      // Sign up
-       @ApiBody({type:SignUpUserDto})
-       @Post('signup')
-       async signup(
-       @Body() signUpUserDto: SignUpUserDto):Promise<User>
-       {
-          return this.authService.signup(signUpUserDto);
-       }
+        // Sign up
+        @ApiBody({type:SignUpUserDto})
+        @Post('signup')
+        async signup(
+        @Body() signUpUserDto: SignUpUserDto):Promise<User>
+        {
+            return this.authService.signup(signUpUserDto);
+        }
 
 
-       // login
-       @ApiBody({ type: LoginUserDto })
-       @UseGuards(LocalAuthGuard)
-       @Post('login')
-       async login(@Request() req):Promise<JwtTokensInterface>
-       {
+        // login
+        @ApiBody({ type: LoginUserDto })
+        @UseGuards(LocalAuthGuard)
+        @Post('login')
+        async login(@Request() req):Promise<JwtTokensInterface>
+        {
            return this.authService.login(req.user);
-       }
+        }
 
 
       // //forget password otp
@@ -88,38 +89,24 @@ export class AuthController {
 
 
         //email ( random token)
-       @ApiBody({type:randomUserTokenDto})
-       @Post('forgotPassword/token')
-       async token(
-       @Body() randomUserToken: randomUserTokenDto)
-       {
+        @ApiBody({type:randomUserTokenDto})
+        @Post('forgotPassword/token')
+        async token(
+        @Body() randomUserToken: randomUserTokenDto)
+        {
           return this.authService.token(randomUserToken);
-       }
+        }
 
 
 
         // forgotPassword(token)
-        //  @ApiBody({type:ChangeUserPasswordDto})
-        //  @ApiBearerAuth()
-        //  @Put('forgotPassword/token')
-        //  async changePasswordToken(
-        //  @Body() reqBody: ChangeUserPasswordDto,
-        //  @Request() req)
-        //  {
-        //    const authHeader = req.headers.authorization;
-        //    const accessToken = authHeader.split(' ')[1];
-        //    return this.authService.Password(reqBody, accessToken);
-        //  }
-
-
-
-       @ApiBody({type:ChangeUserPasswordDto})
-       @Put('changePassword')
-       async changePasswordToken(
-       @Body() reqBody: ChangeUserPasswordDto)
-       {
-         return this.authService.Password(reqBody);
-       }
+        @ApiBody({type:ChangeUserPasswordDto})
+        @Put('changePassword')
+        async changePasswordToken(
+        @Body() reqBody: ChangeUserPasswordDto)
+        {
+          return this.authService.Password(reqBody);
+        }
 
 
         //profile get
@@ -131,6 +118,25 @@ export class AuthController {
           const accessToken = req.headers.authorization.split(' ')[1];
           return this.authService.getProfile(accessToken);
         }
+
+
+
+        //get all users
+        @Get('all-user')
+        async  getAllUsers( ):Promise<{records:User[]}>
+        {
+           return this.authService.getAllUsers();
+        }
+
+
+
+         //delete user
+        @Delete('delete')
+        async deleteUser(@Query('id') id:string):Promise<{message: string, deletedUser: User}>
+        {
+          return this.authService.deleteUser(id);
+        }
+
 
 
         //logout
