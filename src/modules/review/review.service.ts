@@ -155,45 +155,88 @@ export class ReviewService {
 
 
          // balloons count
-        async getReviewsWithCounts(sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
-        {
-           const seller = await this.sellerRepository.getSellerById(sellerId);
-           if (!seller)
-           {
+   //      async getReviewsWithCounts(sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
+   //      {
+   //         const seller = await this.sellerRepository.getSellerById(sellerId);
+   //         if (!seller)
+   //         {
+   //            throw new NotFoundException(`Seller not exist`);
+   //         }
+   //
+   //        const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+   //        const counts = {};
+   //
+   //        for (const review of reviews)
+   //        {
+   //          const { titleId } = review;
+   //          counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
+   //        }
+   //
+   //        const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
+   //        const titles = Object.keys(counts);
+   //
+   //        for (const title of allTitles)
+   //        {
+   //          const { id } = title;
+   //          if (!counts[id])
+   //          {
+   //              titles.push(id);
+   //              counts[id] = 0;
+   //          }
+   //      }
+   //
+   //      const result = titles.map((titleId) => ({ titleId, count: counts[titleId]}));
+   //      return { seller, result };
+   // }
+         async getReviewsWithCounts(sellerId: string): Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
+         {
+            const seller = await this.sellerRepository.getSellerById(sellerId);
+            if (!seller)
+            {
               throw new NotFoundException(`Seller not exist`);
-           }
+            }
 
-          const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
-          const counts = {};
+           const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+           const counts = {};
 
           for (const review of reviews)
           {
-            const { titleId } = review;
-            counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
+             const { titleId } = review;
+             counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
           }
 
-          const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
-          const titles = Object.keys(counts);
+         const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
+         const titles = Object.keys(counts);
 
-          for (const title of allTitles)
-          {
+         for (const title of allTitles)
+         {
             const { id } = title;
             if (!counts[id])
             {
-                titles.push(id);
-                counts[id] = 0;
-            }
+             titles.push(id);
+             counts[id] = 0;
+           }
         }
 
-        const result = titles.map((titleId) => ({ titleId, count: counts[titleId]}));
-        return { seller, result };
-   }
+        const result = titles.map((titleId) => ({ titleId, count: counts[titleId] }));
+
+       // Sort the result array in the same order as returned by getAllReviewsTitle
+       const allReviewsTitle = await this.clicksTitleRepository.getAllReviewsTitle();
+       result.sort((a, b) =>
+       {
+         const aIndex = allReviewsTitle.findIndex((title) => title.id === a.titleId);
+         const bIndex = allReviewsTitle.findIndex((title) => title.id === b.titleId);
+         return aIndex - bIndex;
+       });
+
+         return { seller, result };
+    }
 
 
 
 
 
-       // loved/air  review
+  // loved/air  review
       //uncomment for testing
   //     async getReviewsWithTypes(sellerId: string, page: number = 1)
   //     {
