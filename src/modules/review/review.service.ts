@@ -109,42 +109,6 @@ export class ReviewService {
 
 
         // submit review
-      //   async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
-      //   {
-      //
-      //       const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-      //       const user = await this.usersRepository.findUserByID(decoded.id)
-      //       if(!user)
-      //       {
-      //         throw new  NotFoundException('invalid user')
-      //       }
-      //       const cachedToken = await this.cacheManager.get(accessToken);
-      //       if (!cachedToken)
-      //       {
-      //          throw new UnauthorizedException('Token expired');
-      //       }
-      //
-      //       const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
-      //       if(!seller)
-      //       {
-      //          throw new  NotFoundException('seller not exist')
-      //       }
-      //
-      //      const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
-      //      if (!title)
-      //      {
-      //         throw new  NotFoundException('Balloon title not exist')
-      //      }
-      //
-      //     const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
-      //       ...createReviewInterface,
-      //       userId: decoded.id,
-      //       titleSlug:title.slug
-      //     };
-      //
-      //     return this.reviewRepository.submitReview(reviewData);
-      // }
-
         async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
         {
            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
@@ -224,7 +188,6 @@ export class ReviewService {
         const result = titles.map((titleId) => ({ titleId, count: counts[titleId]}));
         return { seller, result };
    }
-
 
 
 
@@ -487,119 +450,118 @@ export class ReviewService {
   //   };
   // }
 
-
-
-
-  async getReviewsWithTypes(sellerId: string, page: number = 1)
-  {
-    const toAir = [];
-    const toLove = [];
-    const seller = await this.reviewRepository.reviewBySellerId(sellerId);
-    if (!seller)
-    {
-      throw new NotFoundException(`Seller not exist`);
-    }
-
-    const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
-    var toAirCount = 0;
-    var toLoveCount = 0;
-    for (const review of allReviews)
-    {
-
-      const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
-      const userCount = result.length;
-
-      const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-      if (!title)
-      {
-        throw new NotFoundException(`Title not exist`);
-      }
-
-
-      const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
-      if (!matchingSlugTitle)
-      {
-        throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-      }
-
-
-      if (title.type === matchingSlugTitle.type)
-      {
-        if (title.slug === matchingSlugTitle.slug)
+        async getReviewsWithTypes(sellerId: string, page: number = 1)
         {
-          if (title.type === 'to-air')
-          {
-            if ( review.message && review.message.trim() !== '')
+            const toAir = [];
+            const toLove = [];
+            const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+            if (!seller)
             {
-              toAir.push({ ...review, Helpful:userCount});
-              toAirCount++;
+                throw new NotFoundException(`Seller not exist`);
             }
-          }
-          else if (title.type === 'to-love')
-          {
-            if (review.message && review.message.trim() !== '' )
+
+           const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+           var toAirCount = 0;
+           var toLoveCount = 0;
+           for (const review of allReviews)
+           {
+
+              const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
+              const userCount = result.length;
+
+              const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+              if (!title)
+              {
+                 throw new NotFoundException(`Title not exist`);
+              }
+
+
+            const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+            if (!matchingSlugTitle)
             {
-              toLove.push({ ...review, Best_Awards:userCount});
-              toLoveCount++;
+                throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
             }
-          }
-        }
-        else
-        {
-          if (title.type === 'to-air')
-          {
-            if (review.message && review.message.trim() !== '' )
+
+
+         if (title.type === matchingSlugTitle.type)
+         {
+            if (title.slug === matchingSlugTitle.slug)
             {
-              toAir.push({ ...review, Helpful:userCount});
-              toAirCount++;
-            }
+              if (title.type === 'to-air')
+              {
+                 if ( review.message && review.message.trim() !== '')
+                 {
+                    toAir.push({ ...review, Helpful:userCount});
+                    toAirCount++;
+                 }
+              }
+             else if (title.type === 'to-love')
+             {
+                 if (review.message && review.message.trim() !== '' )
+                 {
+                    toLove.push({ ...review, Best_Awards:userCount});
+                    toLoveCount++;
+                 }
+             }
           }
-          else if (title.type === 'to-love')
-          {
-            if ( review.message && review.message.trim() !== '')
+         else
+         {
+             if (title.type === 'to-air')
+             {
+                if (review.message && review.message.trim() !== '' )
+                {
+                   toAir.push({ ...review, Helpful:userCount});
+                   toAirCount++;
+               }
+            }
+            else if (title.type === 'to-love')
             {
-              toLove.push({ ...review, Best_Awards:userCount});
-              toLoveCount++;
-            }
-          }
+               if ( review.message && review.message.trim() !== '')
+               {
+                  toLove.push({ ...review, Best_Awards:userCount});
+                  toLoveCount++;
+               }
+           }
         }
       }
     }
 
-    const limit = 3;
-    const offset = (page - 1) * limit;
-    const paginatedToAirReviews = toAir.slice(offset, offset + limit);
-    const paginatedToLoveReviews = toLove.slice(offset, offset + limit);
+      const limit = 3;
+      const offset = (page - 1) * limit;
+      const paginatedToAirReviews = toAir.slice(offset, offset + limit);
+      const paginatedToLoveReviews = toLove.slice(offset, offset + limit);
 
-    const totalToAirRecords = toAir.length;
-    const totalToLoveRecords = toLove.length;
-    const totalToAirPages = Math.ceil(toAir.length / limit);
-    const totalToLovePages = Math.ceil(toLove.length / limit);
+      const totalToAirRecords = toAir.length;
+      const totalToLoveRecords = toLove.length;
+      const totalToAirPages = Math.ceil(toAir.length / limit);
+      const totalToLovePages = Math.ceil(toLove.length / limit);
 
-    return {
-      toAir: {
-        data: paginatedToAirReviews.map((review) => {
-          return {
-            ...review,
+     return {
+        toAir: {
+          data: paginatedToAirReviews.map((review) => {
+            return {
+               ...review,
 
-          };
-        }),
-        totalRecords: totalToAirRecords,
-        totalPages: totalToAirPages,
-        currentPage: page,
-      },
-      toLove: {
-        data: paginatedToLoveReviews.map((review) => {
-          return {
-            ...review,
+            };
+         }),
+         totalRecords: totalToAirRecords,
+         totalPages: totalToAirPages,
+         currentPage: page,
+       },
+       toLove: {
+          data: paginatedToLoveReviews.map((review) => {
+           return {
+              ...review,
 
-          };
-        }),
-        totalRecords: totalToLoveRecords,
-        totalPages: totalToLovePages,
-        currentPage: page,
+           };
+         }),
+         totalRecords: totalToLoveRecords,
+         totalPages: totalToLovePages,
+         currentPage: page,
       },
     };
   }
+
+
 
 }

@@ -53,7 +53,7 @@ import {likeDislikeSchema} from "./modules/review/schemas/like-dislike.schema";
           },
         },
           defaults: {
-            from: '"love2Air" <ushnairfan77@gmail.com>',
+            from: '"love2Air" <ushnairfan12345@gmail.com>',
            },
             preview: true,
 

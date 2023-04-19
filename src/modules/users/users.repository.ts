@@ -39,12 +39,11 @@
 //
 // }
 //typeorm
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
-import { seller } from "../sellers/schemas/seller.schema";
 
 
 @Injectable()
@@ -111,6 +110,26 @@ export class UsersRepository {
             return null
          }
           return await this.userModel.remove(user);
+       }
+
+
+
+
+
+       //update user
+       async updateUser(id:string, name:string,username:string,email:string,password:string): Promise<User | null>
+       {
+         const user = await this.userModel.findOne({ where: { id}});
+         if (!user)
+         {
+           return null
+         }
+
+           user.name = name;
+           user.username = username;
+           user.email = email;
+           user.password = password;
+           return this.userModel.save(user);
        }
 
 

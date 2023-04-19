@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query, Req } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
@@ -6,6 +6,9 @@ import { category } from "./schemas/category.schema";
 import {updateCategoryDto} from "./dto/update-category.dto";
 import updateCategoryInterface from "./interfaces/update-category.interface";
 import { seller } from "../sellers/schemas/seller.schema";
+import {RoleGuard} from "../../guards/role.guard";
+
+
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
@@ -15,6 +18,7 @@ export class CategoriesController {
 
 
        // create category
+        @UseGuards(RoleGuard)
        @ApiBody({type:CreateCategoryDto})
        @Post('create')
        async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>

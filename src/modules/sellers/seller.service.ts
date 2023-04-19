@@ -36,7 +36,7 @@ export class SellerService {
 
 
 
-    // create seller
+     // create seller
      async createseller(body: createSellerInterface): Promise<{ record: seller }>
      {
        const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)

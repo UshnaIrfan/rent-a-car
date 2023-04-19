@@ -34,31 +34,31 @@ export class ReviewController {
      ){}
 
 
-       // create click types
-        @ApiBody({type:createClicksTypesDto})
-        @Post('createClicksTypes')
-        async createClicksTypes(
-        @Body() clicksReview:createClicksTypesDto):Promise<clicksTypes>
-        {
+         // create click types
+         @ApiBody({type:createClicksTypesDto})
+         @Post('createClicksTypes')
+         async createClicksTypes(
+         @Body() clicksReview:createClicksTypesDto):Promise<clicksTypes>
+         {
            return this.reviewService.createClicksTypes(clicksReview);
-        }
+         }
 
 
 
 
-       // create click titles
-        @ApiBody({type:createClicksTitlesDto})
-        @Post('createClicksTitles')
-        async createClicksTitle(
-        @Body() clicksTypes:createClicksTitlesDto): Promise<{record:clicksTitle}>
-        {
+         // create click titles
+         @ApiBody({type:createClicksTitlesDto})
+         @Post('createClicksTitles')
+         async createClicksTitle(
+         @Body() clicksTypes:createClicksTitlesDto): Promise<{record:clicksTitle}>
+         {
              return this.reviewService.createClicksTitles(clicksTypes);
-        }
+         }
 
 
 
 
-        //all review  titles with associated types
+         //all review  titles with associated types
          @Get('all-titles')
          async  getAllTitle( ):Promise<{title: clicksTypes[]}>
          {
@@ -81,7 +81,7 @@ export class ReviewController {
 
 
 
-        // balloons count
+         // balloons count
          @Get('/count/:seller_id')
          async getReviewsWithCounts(@Param('seller_id') sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
@@ -113,7 +113,7 @@ export class ReviewController {
 
 
 
-       //like dislike submit review
+        //like dislike submit review
         @ApiBearerAuth()
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
@@ -123,7 +123,6 @@ export class ReviewController {
           const accessToken = req.headers.authorization.split(' ')[1];
           return this.reviewService.createLikeDislike(Review,accessToken);
         }
-
 
 
 

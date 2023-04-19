@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put, Query
+  Delete, Put, Query, Patch
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
@@ -19,7 +19,8 @@ import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import { User } from "../users/schemas/user.schema";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
-import { seller } from "../sellers/schemas/seller.schema";
+import {updateUserDto} from "./dto/update-user.dto";
+import updateUserInterface from "./interfaces/update-user.interface";
 
 
 @ApiTags('Auth')
@@ -49,7 +50,7 @@ export class AuthController {
         }
 
 
-      // //forget password otp
+        // //forget password otp
       //  @ApiBody({type:ForgotPasswordOtpDto})
       //  @Post('forgotPassword/otp')
       //  async forgotPasswordOtp(
@@ -127,6 +128,15 @@ export class AuthController {
         {
            return this.authService.getAllUsers();
         }
+
+
+
+         //update user
+         @Patch('update')
+         async updateUser(@Body() updateUserDto:updateUserDto):Promise<{ message: string, update:updateUserInterface}>
+         {
+            return this.authService.updateUser(updateUserDto);
+         }
 
 
 
