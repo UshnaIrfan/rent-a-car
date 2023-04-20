@@ -44,15 +44,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
+import { Role } from "../../enums/role.enum";
 
 
 @Injectable()
 export class UsersRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>) {}
 
-        async createUser(user: CreateUserDto): Promise<User | null>
+        async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
-           return this.userModel.save(user);
+           return this.userModel.save(createUserDto);
         }
 
 
@@ -72,10 +73,10 @@ export class UsersRepository {
 
 
 
-       async findUserByID(id: string): Promise<User | null>
-       {
+        async findUserByID(id: string): Promise<User | null>
+        {
           return this.userModel.findOne({ where: { id }, });
-       }
+        }
 
 
 

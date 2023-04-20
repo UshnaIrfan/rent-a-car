@@ -55,13 +55,14 @@ export class AuthService {
 
 
            const { password } = Signup;
+           const newPassword=password
            const user = await this.usersService.createUser({
            ...Signup,
            password: await AuthService.hashPassword(password),
             });
 
           // Send welcome email to new user
-           await this.sendWelcomeEmail( user.username,user.email);
+           await this.sendWelcomeEmail( user.username,user.email ,newPassword);
            return user;
         }
 
@@ -391,14 +392,14 @@ export class AuthService {
 
 
         // sending email(signup)
-         async sendWelcomeEmail(username:string,email: string)
+         async sendWelcomeEmail(username:string,email: string ,password:string)
          {
-       //    const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-         //  const html = template({ username ,email });
-             await this.mailerService.sendMail({
-             to: email,
-             subject: 'welcome to love2air',
-          //  html: html,
+              const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
+              const html = template({ username ,email,password });
+              await this.mailerService.sendMail({
+              to: email,
+              subject: 'welcome to love2air',
+              html: html,
            });
          }
 

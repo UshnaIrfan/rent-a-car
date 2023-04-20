@@ -38,7 +38,6 @@ export class seller{
 
 
 
-
      @ApiProperty({ type: () => [category] })
      @ManyToMany(() => category, category => category.sellers, { cascade: true })
      categories: category[];

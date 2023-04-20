@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
   xmlns="http://www.w3.org/1999/xhtml"
@@ -137,7 +138,7 @@
                               font-size: 24px;
                             "
                   >
-                    <strong>Dear Admin,</strong>
+                    <strong>Dear {{username}},</strong>
                   </h1>
                 </td>
               </tr>
@@ -183,7 +184,7 @@
                                 margin-bottom: 28px;
                               "
                     >
-                      A user, <strong>[Name],</strong> has registered in LOVE TO AIR. Please find the user's details below:
+                      Dear user   you have been  registered in LOVE TO AIR. Following are your login detail
                     </p>
 
                     <p
@@ -195,14 +196,15 @@
 
                               "
                     >
-                      Name:
-                      <strong>
-                        [Name]
-                      </strong>
-                      <br/ >
+
                       Email:
                       <strong>
-                        [Email]
+                        {{email}}
+                      </strong>
+                      <br/>
+                      Password:
+                      <strong>
+                        {{password}}
                       </strong>
                     </p>
 
@@ -216,7 +218,7 @@
 
                             "
                     >
-                      Please ensure the user details/informations are secure and the user's account is updated with the new details/informations.
+                      Please ensure the user details/informations are secure and the your account is updated with the new details/informations.
                     </p>
 
                     <p

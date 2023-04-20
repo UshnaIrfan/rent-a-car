@@ -57,6 +57,8 @@
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from "../../../enums/role.enum";
+import { Prop } from "@nestjs/mongoose";
 
 @Entity({ name: 'users' })
 
@@ -84,6 +86,11 @@ export class User {
      @ApiProperty()
      @Column({ unique: true })
      password: string;
+
+
+     // @ApiProperty()
+     // @Column({default: null,nullable: true})
+     // roles: string;
 
 
 }

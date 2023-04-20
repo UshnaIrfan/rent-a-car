@@ -105,9 +105,5 @@ export class sellerRepository{
 
 
 
-
-
-
-
 }
 
