@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsNotEmpty,
-  IsString
+     IsBoolean,
+     IsNotEmpty,
+     IsString
 } from "class-validator";
+import { string } from "joi";
 
 export class updateSellerDto {
 
@@ -25,4 +27,17 @@ export class updateSellerDto {
      @IsNotEmpty()
      sellerUrl: string;
 
+
+     // @ApiProperty({ type: Boolean})
+     // @IsBoolean()
+     // readonly  approvedByAdmin: boolean;
+     //
+     //
+     // @ApiProperty({ type: Boolean})
+     // @IsBoolean()
+     // readonly isListing: boolean;
+     //
+     //
+     // @ApiProperty({ type: [string]})
+     // categories: string;
 }

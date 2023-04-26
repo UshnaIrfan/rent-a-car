@@ -13,13 +13,16 @@ import {UsersRepository} from "../users/users.repository";
 import { JwtService } from "@nestjs/jwt";
 import { seller } from "../sellers/schemas/seller.schema";
 import { jwtConstants } from "../auth/constants/constants";
-
+import {reviewRepository} from "../review/respositories/review.respository";
+import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
 
 @Injectable()
 export class CategoriesService {
   constructor(
     private readonly categoryRepository:CategoryRepository,
     private readonly usersRepository:UsersRepository,
+    private readonly reviewRepository:reviewRepository,
+    private readonly clickTitlesRepository:clicksTitlesRepository,
     private jwtService: JwtService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
@@ -129,6 +132,52 @@ export class CategoriesService {
        return { records: commonSellers.length > 0 ? commonSellers : null };
 
      }
+
+
+
+
+      async getReviewsPositive(categoryId: string)
+      {
+         const category = await this.categoryRepository.getCategoryId(categoryId);
+         if (!category)
+         {
+           throw new NotFoundException('Category not exist');
+         }
+
+         let latestPositiveReview = null;
+
+        for (const seller of category.sellers)
+        {
+          const review = await this.reviewRepository.getLatestPositiveReviewBySellerId(seller.id);
+          if (review && (!latestPositiveReview || review.createdAt > latestPositiveReview.createdAt))
+          {
+            const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(review.titleSlug);
+            if (matchingSlugTitle)
+            {
+               const title = await this.clickTitlesRepository.findByTitle(review.titleId);
+               if (title && title.type === 'to-love' && matchingSlugTitle.type === 'to-love' && review.message && review.message.trim() !== '')
+               {
+                  latestPositiveReview = review;
+               }
+              else
+              {
+                  throw new NotFoundException(`Title not exist with id: ${review.titleId}`);
+              }
+           }
+           else
+           {
+             throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+           }
+      }
+    }
+     return {
+           'to-love': latestPositiveReview ? [latestPositiveReview] : [],
+      };
+  }
+
+
+
+
 
 
 }

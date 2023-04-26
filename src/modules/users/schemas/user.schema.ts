@@ -92,5 +92,8 @@ export class User {
      // @Column({default: null,nullable: true})
      // roles: string;
 
+     @ApiProperty()
+     @Column({ default: 'L2A_USER',nullable:true})
+     roles: string;
 
 }

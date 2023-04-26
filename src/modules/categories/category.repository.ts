@@ -5,6 +5,7 @@ import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
 import { seller } from "../sellers/schemas/seller.schema";
 
+
 @Injectable()
 export class CategoryRepository {
   constructor(@InjectRepository(category) private categoryModel: Repository<category>,

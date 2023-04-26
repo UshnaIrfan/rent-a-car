@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsNotEmpty
+  IsNotEmpty, IsOptional
 } from "class-validator";
 
 export class submitReviewDto {
@@ -17,6 +17,7 @@ export class submitReviewDto {
 
 
      @ApiProperty({ type: String, required: false, default: null })
+     @IsOptional()
      message: string | null;
 
 

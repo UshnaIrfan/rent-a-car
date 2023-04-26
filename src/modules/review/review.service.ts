@@ -22,9 +22,7 @@ import { Cache } from 'cache-manager';
 import updateReviewInterface from "./interfaces/update-review.interface";
 import {seller} from "../sellers/schemas/seller.schema";
 import likeDislikeInterface from "./interfaces/like-dislike.interface";
-import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import {likeDislikeRepository} from "./respositories/like-dislike.repository";
-
 
 @Injectable()
 export class ReviewService {

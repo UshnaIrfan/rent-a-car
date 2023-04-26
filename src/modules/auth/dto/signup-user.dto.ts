@@ -39,5 +39,10 @@ export class SignUpUserDto {
      // @ApiProperty({ required: false ,default:null })
      // roles: string;
 
+     @ApiProperty({ required: false, default: Role.L2A_USER })
+     @IsOptional()
+     roles: string ;
+
+
 
 }

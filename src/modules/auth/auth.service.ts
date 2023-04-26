@@ -24,6 +24,7 @@ import { seller } from "../sellers/schemas/seller.schema";
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
+import { Role } from "../../enums/role.enum";
 
 
 @Injectable()
@@ -56,9 +57,12 @@ export class AuthService {
 
            const { password } = Signup;
            const newPassword=password
+
+
            const user = await this.usersService.createUser({
            ...Signup,
            password: await AuthService.hashPassword(password),
+
             });
 
           // Send welcome email to new user
@@ -300,15 +304,24 @@ export class AuthService {
 
 
         //get all users
-        async getAllUsers( ):Promise<{records:User[]}>
-        {
-          const users = await this.usersService.getAllUsers()
-          if(!users)
-          {
-            throw new  NotFoundException('users not exist');
-          }
-            return { records:users};
-        }
+        // async getAllUsers( ):Promise<{records:User[]}>
+        // {
+        //   const users = await this.usersService.getAllUsers()
+        //   if(!users)
+        //   {
+        //     throw new  NotFoundException('users not exist');
+        //   }
+        //     return { records:users};
+        // }
+  async getAllUsers(page:number )
+  {
+    const users = await this.usersService.getAllUsers(page)
+    if(!users)
+    {
+      throw new  NotFoundException('users not exist');
+    }
+    return { records:users};
+  }
 
 
 

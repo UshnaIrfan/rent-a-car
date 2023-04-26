@@ -32,15 +32,14 @@ export class CategoriesController {
 
 
        // create category
-         // @ApiBearerAuth()
-        @ApiBody({type:CreateCategoryDto})
-        @Post('create')
-      //  @Roles(Role.L2A_ADMIN)
-        async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
-        {
-
+       //  @ApiBearerAuth()
+         @ApiBody({type:CreateCategoryDto})
+         @Post('create')
+       //  @Roles(Role.L2A_ADMIN)
+         async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
+         {
           return this.categoriesService.createCategory(createCategoryDto);
-        }
+         }
 
 
 
@@ -88,6 +87,23 @@ export class CategoriesController {
        {
           return this.categoriesService.get(id);
        }
+
+
+
+
+
+
+     @Get('/:category_id')
+     async getReviewsPositive(
+     @Param('category_id') categoryId: string)
+     {
+       return  this.categoriesService.getReviewsPositive(categoryId);
+     }
+
+
+
+
+
 
 
 }

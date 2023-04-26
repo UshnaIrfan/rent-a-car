@@ -4,5 +4,5 @@ export default interface  createSellerInterface{
     readonly sellerUrl: string;
     readonly  approvedByAdmin: boolean;
     readonly  isListing: boolean;
-    readonly categories: string[];
+    readonly  categories: string[];
 }

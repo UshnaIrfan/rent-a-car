@@ -25,5 +25,9 @@ export class CreateUserDto {
      // @ApiProperty({  required: false,default:null})
      // roles: string|null;
 
+     @ApiProperty({ required: false, default: Role.L2A_USER })
+     @IsOptional()
+     roles: string ;
+
 
 }

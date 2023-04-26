@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from "typeorm";
+import { IsNull, Like, Not, Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
@@ -37,11 +37,6 @@ export class reviewRepository{
 
 
 
-
-      // async review():Promise<review[]|null>
-      // {
-      //    return this.reviewModel.find();
-      // }
        async reviewBySellerIdALL(sellerId:string):Promise<review[]| null>
        {
           return this.reviewModel.find({
@@ -60,29 +55,29 @@ export class reviewRepository{
 
 
        //update review
-       async updateReview(titleId: string, message: string,  id: string): Promise<review | null>
-      {
-         const review = await this.reviewModel.findOne({ where: { id } });
-         if (!review)
-         {
-            throw new NotFoundException('review id not found');
-         }
-
-        if (titleId)
+        async updateReview(titleId: string, message: string,  id: string): Promise<review | null>
         {
-           const result = await this.titleRepository.findByTitle(titleId);
-           if (!result)
+           const review = await this.reviewModel.findOne({ where: { id } });
+           if (!review)
            {
-              throw new NotFoundException('Title id not found ');
+              throw new NotFoundException('review id not found');
            }
+
+          if (titleId)
+          {
+             const result = await this.titleRepository.findByTitle(titleId);
+             if (!result)
+             {
+                throw new NotFoundException('Title id not found ');
+             }
              review.titleId = titleId;
              review.titleSlug = result.slug;
-         }
+          }
 
-        if (message)
-        {
-          review.message = message;
-        }
+         if (message)
+         {
+            review.message = message;
+         }
 
           return this.reviewModel.save(review);
    }
@@ -90,23 +85,54 @@ export class reviewRepository{
 
 
 
-      async reviewById(id:string):Promise<review| null>
-      {
+        async reviewById(id:string):Promise<review| null>
+        {
           return this.reviewModel.findOne({ where: {id }});
-      }
+        }
 
 
 
 
-
-
-      async findReviewByUserAndSeller(userId: string, sellerId: string): Promise<review>
-      {
-         const review = await this.reviewModel.findOne({
-         where: { userId, sellerId}});
-
+       async findReviewByUserAndSeller(userId: string, sellerId: string): Promise<review>
+       {
+          const review = await this.reviewModel.findOne({
+          where: { userId, sellerId}});
           return review;
-      }
+       }
+
+
+
+
+
+
+
+
+  //   async getPositiveReviewsBySellerId(sellerId: string): Promise<review[]> {
+  //     return this.reviewModel.find({
+  //     where: {
+  //       sellerId,
+  //       message: Not(IsNull())
+  //     },
+  //     order: {
+  //       createdAt: 'DESC'
+  //     }
+  //   });
+  // }
+
+
+     async getLatestPositiveReviewBySellerId(sellerId: string): Promise<review | null>
+     {
+        const latestReview = await this.reviewModel.findOne({
+        where: { sellerId, message: Not(IsNull())},
+        order: {
+        createdAt: 'DESC'
+       }, });
+
+      return latestReview || null;
+   }
+
+
+
 
 
 }

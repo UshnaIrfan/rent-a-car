@@ -27,6 +27,7 @@ export class clicksTitle{
      @ApiProperty()
      @Column({nullable: true ,type: 'longtext'})
      image: string;
+     length: Boolean;
 
 }
 

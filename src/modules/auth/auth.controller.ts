@@ -21,6 +21,7 @@ import { User } from "../users/schemas/user.schema";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {updateUserDto} from "./dto/update-user.dto";
 import updateUserInterface from "./interfaces/update-user.interface";
+import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 
 
 @ApiTags('Auth')
@@ -38,6 +39,8 @@ export class AuthController {
         {
             return this.authService.signup(signUpUserDto);
         }
+
+
 
 
         // login
@@ -123,11 +126,16 @@ export class AuthController {
 
 
         //get all users
+        // @Get('all-user')
+        // async  getAllUsers( ):Promise<{records:User[]}>
+        // {
+        //    return this.authService.getAllUsers();
+        // }
         @Get('all-user')
-        async  getAllUsers( ):Promise<{records:User[]}>
+        async getReview(@Query('page') page: number = 1)
         {
-           return this.authService.getAllUsers();
-        }
+         return this.authService.getAllUsers(page);
+       }
 
 
 

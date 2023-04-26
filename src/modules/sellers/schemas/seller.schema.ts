@@ -7,7 +7,6 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
 
-
 @Entity({ name: 'sellers' })
 export class seller{
 
@@ -40,7 +39,7 @@ export class seller{
 
      @ApiProperty({ type: () => [category] })
      @ManyToMany(() => category, category => category.sellers, { cascade: true })
-     categories: category[];
+     categories: any[];
 
 
 }

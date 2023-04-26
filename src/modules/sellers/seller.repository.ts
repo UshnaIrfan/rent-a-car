@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import { category } from "../categories/schemas/category.schema";
+import { review } from "../review/schemas/submit-review.schema";
 
 @Injectable()
 export class sellerRepository{
@@ -103,6 +104,18 @@ export class sellerRepository{
            return await this.sellerModel.remove(seller);
       }
 
+
+
+
+      // get all sellers(pagination)
+      async findAndCount(skip: number, take: number): Promise<[seller[], number]>
+      {
+        const [result, totalCount] = await this.sellerModel.findAndCount({
+        skip,
+        take,
+       });
+        return [result, totalCount];
+     }
 
 
 }

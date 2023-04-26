@@ -20,6 +20,8 @@ import {UsersRepository} from "../users/users.repository";
 import { Cache } from 'cache-manager';
 import submitReviewInterface from "../review/interfaces/submit-review.interface";
 import createContactUsInterface from "../contact-us/interfaces/create-contact-us.interface";
+import paginationSellerInterface from "./interfaces/pagination-seller.interface";
+
 
 
 @Injectable()
@@ -36,111 +38,131 @@ export class SellerService {
 
 
 
-     // create seller
-     async createseller(body: createSellerInterface): Promise<{ record: seller }>
-     {
-       const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
-       if (Url)
-       {
-        throw new ConflictException('Seller Url already exists');
-       }
-
-       const seller = await this.SellerRepository.createSeller(body);
-       seller.categories = [];
-       const categoriesIDs = body.categories;
-       for (const categoryID of categoriesIDs)
-       {
-         const category = await this.CategoryRepository.getCategoryById(categoryID);
-         if (!category)
+      // create seller
+      async createseller(body: createSellerInterface):Promise<{record:seller}>
+      {
+         const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
+         if (Url)
          {
-           throw new NotFoundException('Category does not exist');
+           throw new ConflictException('Seller Url already exists');
          }
-         seller.categories.push(category);
-       }
 
-        await this.SellerRepository.sellerCategories(seller);
-        return { record: seller };
-    }
+         const seller = await this.SellerRepository.createSeller(body);
+         seller.categories = [];
+        const categoriesIDs = body.categories;
+        for (const categoryID of categoriesIDs)
+        {
+           const category = await this.CategoryRepository.getCategoryById(categoryID);
+           if (!category)
+           {
+              throw new NotFoundException('Category does not exist');
+           }
+           seller.categories.push(category);
+        }
+
+         await this.SellerRepository.sellerCategories(seller);
+         return { record: seller };
+     }
 
 
 
 
+       // get seller by ID (associated categories)
+        async getSellerById(id:string ) :Promise<{record:seller}>
+        {
+            const seller = await this.SellerRepository.getSellerById(id)
+           if(!seller)
+           {
+              throw new  NotFoundException('seller with  the given ID not found');
+           }
 
-      // get seller by ID (associated categories)
-       async getSellerById(id:string ) :Promise<{record:seller}>
-       {
-         const seller = await this.SellerRepository.getSellerById(id)
-          if(!seller)
-          {
-            throw new  NotFoundException('seller with  the given ID not found');
-          }
-
-           return { record: seller };
-
+            return { record: seller };
        }
 
 
 
         // get all sellers
-       async getAllSellers( ):Promise<{records:seller[]}>
-       {
-          const sellers = await this.SellerRepository.getAllSellers()
-          if(!sellers)
+       // async getAllSellers( ):Promise<{records:seller[]}>
+       // {
+       //    const sellers = await this.SellerRepository.getAllSellers()
+       //    if(!sellers)
+       //    {
+       //      throw new  NotFoundException('sellers do not exist');
+       //
+       //    }
+       //
+       //      return { records: sellers};
+       // }
+
+          async getAllSellers(pageNumber: number):Promise<paginationSellerInterface >
           {
-            throw new  NotFoundException('sellers do not exist');
+             const pageSize = 10;
+             const skip = (pageNumber - 1) * pageSize;
+             const [result, totalCount] = await this.SellerRepository.findAndCount(skip, pageSize);
+             const totalPages = Math.ceil(totalCount / pageSize);
 
-          }
+             if (result.length === 0)
+             {
+               throw new NotFoundException('No records found');
+             }
 
-            return { records: sellers};
-       }
-
-
-
-
-     // add seller
-     async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
-     {
-         const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-         const user = await this.usersRepository.findUserByID(decoded.id)
-         if(!user)
-         {
-            throw new  NotFoundException('invalid user')
-         }
-         const cachedToken = await this.cacheManager.get(accessToken);
-         if(!cachedToken)
-         {
-            throw new UnauthorizedException('token expired');
-         }
-
-        const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
-        if (sellerUrl)
-        {
-            throw new ConflictException('Seller Url already exists');
+          return {
+              records: result,
+              totalRecords: totalCount,
+              totalPages,
+              currentPage: pageNumber,
+          };
         }
 
-         const seller = await this.SellerRepository.createSeller(body);
-         seller.categories = [];
 
 
-         const categoriesIDs = body.categories;
-         for (const categoryID of categoriesIDs)
-         {
-           const category = await this.CategoryRepository.getCategoryById(categoryID);
-            if (!category)
-            {
+
+
+
+       // add seller
+      async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
+      {
+          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+          const user = await this.usersRepository.findUserByID(decoded.id)
+          if(!user)
+          {
+             throw new  NotFoundException('invalid user')
+          }
+          const cachedToken = await this.cacheManager.get(accessToken);
+          if(!cachedToken)
+          {
+             throw new UnauthorizedException('token expired');
+          }
+
+          const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
+          if (sellerUrl)
+          {
+            throw new ConflictException('Seller Url already exists');
+          }
+
+          const seller = await this.SellerRepository.createSeller(body);
+          seller.categories = [];
+
+
+          const categoriesIDs = body.categories;
+          for (const categoryID of categoriesIDs)
+          {
+            const category = await this.CategoryRepository.getCategoryById(categoryID);
+             if (!category)
+             {
                throw new NotFoundException('Category does not exist');
-            }
-             seller.categories.push(category);
-         }
+             }
+              seller.categories.push(category);
+          }
 
 
-         await this.SellerRepository.sellerCategories(seller);
+          await this.SellerRepository.sellerCategories(seller);
 
-         const typeResult = await this.clicksTitleRepository.findByTitle(body.titleId);
-         if(!typeResult)
-         {
-            throw new  NotFoundException('Balloon title not found');
-         }
+          const typeResult = await this.clicksTitleRepository.findByTitle(body.titleId);
+          if(!typeResult)
+          {
+             throw new  NotFoundException('Balloon title not found');
+          }
 
         const previousReview = await this.ReviewRepository.findReviewByUserAndSeller(decoded.id,seller.id);
         if (previousReview)

@@ -8,6 +8,7 @@ import updateSellerInterface from "./interfaces/update-seller.interface";
 import { CreateSellerDto } from "./dto/create-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
 import {likeDislikeReviewDto} from "../review/dto/like-dislike-review.dto";
+import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 
 
 @ApiTags('Sellers')
@@ -16,7 +17,7 @@ export class SellerController {
   constructor(private readonly sellerService: SellerService) {}
 
 
-      //create seller
+       //create seller
        @ApiBody({type:CreateSellerDto})
        @Post('create')
        async  create(@Body() createSellerDto: CreateSellerDto):Promise<{record:seller}>
@@ -36,11 +37,17 @@ export class SellerController {
 
 
        // get all sellers
-       @Get('all-sellers')
-       async  getAllSellers( ):Promise<{records:seller[]}>
-       {
-          return this.sellerService.getAllSellers();
-       }
+       // @Get('all-sellers')
+       // async  getAllSellers( ):Promise<{records:seller[]}>
+       // {
+       //    return this.sellerService.getAllSellers();
+       // }
+        @Get('all-sellers')
+        async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
+        {
+           return this.sellerService.getAllSellers(page);
+        }
+
 
 
 
@@ -59,7 +66,7 @@ export class SellerController {
 
         // update seller
        @Patch('update')
-       async updateSeller(@Body() updateSellerDto:updateSellerDto):Promise<{ message: string, update:updateSellerInterface}>
+       async updateSeller(@Body() updateSellerDto:updateSellerDto)
        {
             return this.sellerService.updateSeller(updateSellerDto);
        }

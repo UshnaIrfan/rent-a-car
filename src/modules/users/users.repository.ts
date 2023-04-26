@@ -45,6 +45,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { Role } from "../../enums/role.enum";
+import { seller } from "../sellers/schemas/seller.schema";
 
 
 @Injectable()
@@ -132,6 +133,18 @@ export class UsersRepository {
            user.password = password;
            return this.userModel.save(user);
        }
+
+
+
+
+  async findAndCount(skip: number, take: number): Promise<[User[], number]>
+  {
+    const [result, totalCount] = await this.userModel.findAndCount({
+      skip,
+      take,
+    });
+    return [result, totalCount];
+  }
 
 
 }

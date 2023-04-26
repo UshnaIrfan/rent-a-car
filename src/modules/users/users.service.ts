@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 import updateUserInterface from "../auth/interfaces/update-user.interface";
+import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 
 
 @Injectable()
@@ -45,14 +46,35 @@ export class UsersService {
 
 
       // get all users
-      async getAllUsers (): Promise<User[]|null>
-      {
-        return this.usersRepository.getAllUsers( );
-      }
+      // async getAllUsers (): Promise<User[]|null>
+      // {
+      //   return this.usersRepository.getAllUsers( );
+      // }
+  async getAllUsers(pageNumber: number)
+  {
+    const pageSize = 10;
+    const skip = (pageNumber - 1) * pageSize;
+    const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize);
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    if (result.length === 0)
+    {
+      throw new NotFoundException('No records found');
+    }
+
+    return {
+      records: result,
+      totalRecords: totalCount,
+      totalPages,
+      currentPage: pageNumber,
+    };
+  }
 
 
 
-      // update user
+
+
+  // update user
       async  updateUser (id:string, name:string,username:string,email:string,password:string)
       {
          return this.usersRepository.updateUser(id,name,username,email,password);
