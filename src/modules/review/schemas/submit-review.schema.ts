@@ -16,7 +16,7 @@ export class review{
 
 
      @ApiProperty()
-     @Column()
+     @Column({default: null, nullable: true})
      titleId: string;
 
 

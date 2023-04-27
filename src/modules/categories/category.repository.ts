@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
-import { seller } from "../sellers/schemas/seller.schema";
-
 
 
 @Injectable()
@@ -67,36 +65,33 @@ export class CategoryRepository {
 
 
 
-
        // delete category
-      async deleteCategory(id: string): Promise<category | null>
-      {
-         const category = await this.categoryModel.findOne({ where: { id } });
-         if (!category)
-         {
-             return null
-         }
+       async deleteCategory(id: string): Promise<category | null>
+       {
+          const category = await this.categoryModel.findOne({ where: { id } });
+          if (!category)
+          {
+              return null
+          }
 
           return await this.categoryModel.remove(category);
-     }
+      }
 
 
 
 
 
-      // update category
-      async updateCategory(id:string, categoryName:string): Promise<category | null>
-      {
+        // update category
+       async updateCategory(id:string, categoryName:string): Promise<category | null>
+       {
           const category = await this.categoryModel.findOne({ where: { id}});
-
           if (!category)
           {
              return null
           }
-
           category.categoryName = categoryName;
           return this.categoryModel.save(category);
-     }
+      }
 
 
 
@@ -127,15 +122,15 @@ export class CategoryRepository {
           relations: ['sellers'],
           });
 
-        if (!category)
-        {
+         if (!category)
+         {
            throw new NotFoundException('Category not found');
-        }
+         }
 
-       const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
+        const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
 
-       if (filteredSellers.length === category.sellers.length)
-       {
+        if (filteredSellers.length === category.sellers.length)
+        {
            throw new NotFoundException('Seller not associated with this category');
         }
 

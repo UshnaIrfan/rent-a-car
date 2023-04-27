@@ -18,8 +18,6 @@ import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { category } from "./schemas/category.schema";
 import {updateCategoryDto} from "./dto/update-category.dto";
 import updateCategoryInterface from "./interfaces/update-category.interface";
-import { seller } from "../sellers/schemas/seller.schema";
-import {RoleGuard} from "../../guards/role.guard";
 import {Role} from "../../enums/role.enum";
 import {Roles} from "../../decorators/role.decorators";
 import paginationCategoryInterface from "./interfaces/pagination-category.interface";
@@ -32,11 +30,11 @@ export class CategoriesController {
   ) {}
 
 
-       // create category
-         @ApiBearerAuth()
+         // create category
+        // @ApiBearerAuth()
          @ApiBody({type:CreateCategoryDto})
          @Post('admin/create')
-         @Roles(Role.L2A_ADMIN)
+         //@Roles(Role.L2A_ADMIN)
          async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
          {
           return this.categoriesService.createCategory(createCategoryDto);
@@ -101,7 +99,6 @@ export class CategoriesController {
         {
             return this.categoriesService.get(categoryId, excludeSellerId);
         }
-
 
 
 

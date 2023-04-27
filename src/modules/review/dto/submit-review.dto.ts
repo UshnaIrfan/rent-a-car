@@ -10,9 +10,9 @@ export class submitReviewDto {
      sellerId: string;
 
 
-     @ApiProperty({ type: String, required: true  })
-     @IsNotEmpty()
-     titleId: string;
+     @ApiProperty({ type: String, required: false ,default:null  })
+     @IsOptional()
+     titleId: string | null;
 
 
 

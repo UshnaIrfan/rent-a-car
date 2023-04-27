@@ -35,7 +35,7 @@ export class  addSellerDto{
 
 
 
-     @ApiProperty({ type: String, required: false})
+     @ApiProperty({ type: String, required: false ,default:null})
      @IsOptional()
      @IsNotEmpty()
      titleId: string;

@@ -12,17 +12,18 @@ import {reviewRepository} from "../review/respositories/review.respository";
 import {review} from "../review/schemas/submit-review.schema";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
 import {clicksTitle} from "../review/schemas/create-clicks-titles.schema";
-
+import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
+import {likeDislikeSchema} from "../review/schemas/like-dislike.schema";
 
 @Module({
 
-  imports: [TypeOrmModule.forFeature([category,User,review,clicksTitle]),
+  imports: [TypeOrmModule.forFeature([category,User,review,clicksTitle,likeDislikeSchema]),
     CacheModule.register({
     store: redisStore,
     uri: process.env.REDIS_URL,
   })],
   controllers: [CategoriesController],
-  providers: [CategoriesService ,CategoryRepository,UsersRepository,JwtService,reviewRepository,clicksTitlesRepository],
+  providers: [CategoriesService ,CategoryRepository,UsersRepository,JwtService,reviewRepository,clicksTitlesRepository,likeDislikeRepository],
 
 })
 export class CategoriesModule {}

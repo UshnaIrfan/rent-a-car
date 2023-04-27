@@ -5,7 +5,6 @@ import {AuthService} from "../modules/auth/auth.service";
 import { User } from "../modules/users/schemas/user.schema";
 
 
-
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {

@@ -110,11 +110,31 @@ export class reviewRepository{
         const latestReview = await this.reviewModel.findOne({
         where: { sellerId, message: Not(IsNull())},
         order: {
-        createdAt: 'DESC'
-       }, });
+           createdAt: 'DESC'
+        //  createdAt:'ASC'
+       }});
 
       return latestReview || null;
    }
+
+
+
+
+
+  async getAllLatestPositiveReviewsBySellerId(sellerId: string): Promise<review[]> {
+    const latestReviews = await this.reviewModel.find({
+      where: { sellerId, message: Not(IsNull()) },
+      order: { createdAt: 'DESC' },
+    });
+
+    return latestReviews;
+  }
+
+
+
+
+
+
 
 
 
