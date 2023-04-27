@@ -4,6 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 import updateUserInterface from "../auth/interfaces/update-user.interface";
 import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
+import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
 
 
 @Injectable()
@@ -45,30 +46,30 @@ export class UsersService {
 
 
 
-      // get all users
+      // get all users(pagination)
       // async getAllUsers (): Promise<User[]|null>
       // {
       //   return this.usersRepository.getAllUsers( );
       // }
-  async getAllUsers(pageNumber: number)
-  {
-    const pageSize = 10;
-    const skip = (pageNumber - 1) * pageSize;
-    const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize);
-    const totalPages = Math.ceil(totalCount / pageSize);
+       async getAllUsers(pageNumber: number):Promise<paginationUserInterface>
+       {
+          const pageSize = 10;
+          const skip = (pageNumber - 1) * pageSize;
+          const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize);
+          const totalPages = Math.ceil(totalCount / pageSize);
 
-    if (result.length === 0)
-    {
-      throw new NotFoundException('No records found');
-    }
+          if (result.length === 0)
+          {
+            throw new NotFoundException('No records found');
+          }
 
-    return {
-      records: result,
-      totalRecords: totalCount,
-      totalPages,
-      currentPage: pageNumber,
-    };
-  }
+        return {
+            records: result,
+            totalRecords: totalCount,
+            totalPages,
+            currentPage: pageNumber,
+         };
+      }
 
 
 

@@ -21,9 +21,9 @@ export class category{
     approvedByAdmin: boolean;
 
 
-    @ApiProperty()
-    @Column('bool')
-    isListing: boolean;
+    // @ApiProperty()
+    // @Column('bool')
+    // isListing: boolean;
 
 
 

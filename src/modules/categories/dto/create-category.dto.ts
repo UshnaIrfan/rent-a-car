@@ -20,8 +20,8 @@ export class CreateCategoryDto {
      readonly approvedByAdmin: boolean;
 
 
-     @ApiProperty({ type: Boolean, default: true })
-     @IsBoolean()
-     readonly  isListing: boolean;
+     // @ApiProperty({ type: Boolean, default: true })
+     // @IsBoolean()
+     // readonly  isListing: boolean;
 
 }

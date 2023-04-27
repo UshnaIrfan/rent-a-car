@@ -15,6 +15,8 @@ import { seller } from "../sellers/schemas/seller.schema";
 import { jwtConstants } from "../auth/constants/constants";
 import {reviewRepository} from "../review/respositories/review.respository";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
+import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
+import paginationCategoryInterface from "./interfaces/pagination-category.interface";
 
 @Injectable()
 export class CategoriesService {
@@ -70,17 +72,36 @@ export class CategoriesService {
 
 
 
-        // get all categories
-        async getAllCategories() :Promise<{ records: category[] }>
-        {
-           const categories = await this.categoryRepository.getAllCategories()
-           if (!categories)
+        // get all categories(pagination)
+        // async getAllCategories() :Promise<{ records: category[] }>
+        // {
+        //    const categories = await this.categoryRepository.getAllCategories()
+        //    if (!categories)
+        //    {
+        //     throw new  NotFoundException('Categories not exist');
+        //    }
+        //
+        //     return { records: categories};
+        // }
+           async getAllCategories(pageNumber: number):Promise<paginationCategoryInterface>
            {
-            throw new  NotFoundException('Categories not exist');
-           }
+               const pageSize = 10;
+               const skip = (pageNumber - 1) * pageSize;
+               const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize);
+               const totalPages = Math.ceil(totalCount / pageSize);
 
-            return { records: categories};
-        }
+               if (result.length === 0)
+               {
+                   throw new NotFoundException('No records found');
+               }
+
+             return {
+               records: result,
+               totalRecords: totalCount,
+               totalPages,
+               currentPage: pageNumber,
+          };
+       }
 
 
 
@@ -292,7 +313,7 @@ export class CategoriesService {
              id:category.id,
              categoryName: category.categoryName,
              approvedByAdmin:category.approvedByAdmin,
-             isListing:category.isListing
+            // isListing:category.isListing
         };
 
       return {

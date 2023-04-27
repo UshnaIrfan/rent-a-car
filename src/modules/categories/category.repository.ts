@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
+import { seller } from "../sellers/schemas/seller.schema";
 
 
 
@@ -144,6 +145,16 @@ export class CategoryRepository {
 
 
 
+
+        //  get all categories(pagination)
+        async findAndCount(skip: number, take: number): Promise<[category[], number]>
+        {
+            const [result, totalCount] = await this.categoryModel.findAndCount({
+            skip,
+            take,
+         });
+            return [result, totalCount];
+        }
 
 
 }

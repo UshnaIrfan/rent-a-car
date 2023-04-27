@@ -27,6 +27,7 @@ import updateUserInterface from "./interfaces/update-user.interface";
 import { Role } from "../../enums/role.enum";
 import { validate } from "class-validator";
 import { SignUpUserDto } from "./dto/signup-user.dto";
+import paginationUserInterface from "./interfaces/pagination-user.interface";
 
 
 @Injectable()
@@ -398,15 +399,10 @@ export class AuthService {
         //   }
         //     return { records:users};
         // }
-  async getAllUsers(page:number )
-  {
-    const users = await this.usersService.getAllUsers(page)
-    if(!users)
-    {
-      throw new  NotFoundException('users not exist');
-    }
-    return { records:users};
-  }
+        async getAllUsers(page:number):Promise<paginationUserInterface>
+        {
+           return this.usersService.getAllUsers(page);
+        }
 
 
 

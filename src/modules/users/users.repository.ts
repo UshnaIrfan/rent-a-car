@@ -137,14 +137,16 @@ export class UsersRepository {
 
 
 
-  async findAndCount(skip: number, take: number): Promise<[User[], number]>
-  {
-    const [result, totalCount] = await this.userModel.findAndCount({
-      skip,
-      take,
-    });
-    return [result, totalCount];
-  }
+        // get all users(pagination)
+        async findAndCount(skip: number, take: number): Promise<[User[], number]>
+        {
+           const [result, totalCount] = await this.userModel.findAndCount({
+           skip,
+           take,
+           });
+          return [result, totalCount];
+        }
+
 
 
 }

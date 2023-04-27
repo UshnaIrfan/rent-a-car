@@ -22,6 +22,7 @@ import { seller } from "../sellers/schemas/seller.schema";
 import {RoleGuard} from "../../guards/role.guard";
 import {Role} from "../../enums/role.enum";
 import {Roles} from "../../decorators/role.decorators";
+import paginationCategoryInterface from "./interfaces/pagination-category.interface";
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -43,40 +44,45 @@ export class CategoriesController {
 
 
 
-        // get category by ID
-       @Get('/id/:category_id')
-       async  getCategoryByID(@Param('category_id') id: string):Promise<{ records: category }>
-       {
-           return this.categoriesService.getCategoryById(id);
-       }
+         // get category by ID
+          @Get('/id/:category_id')
+          async  getCategoryByID(@Param('category_id') id: string):Promise<{ records: category }>
+          {
+            return this.categoriesService.getCategoryById(id);
+          }
 
 
 
 
-        // get all categories
-        @Get('all-categories')
-        async getAllCategories():Promise<{ records: category[] }>
+        // get all categories(pagination)
+        // @Get('all-categories')
+        // async getAllCategories():Promise<{ records: category[] }>
+        // {
+        //    return this.categoriesService.getAllCategories();
+        // }
+         @Get('all-categories')
+         async getReview(@Query('page') page: number = 1):Promise<paginationCategoryInterface>
+         {
+              return this.categoriesService.getAllCategories(page);
+         }
+
+
+
+         // update category
+         @Patch('update')
+         async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+         {
+            return this.categoriesService.updateCategory(updateCategoryDto);
+         }
+
+
+
+        // delete category
+        @Delete('delete')
+        async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
         {
-           return this.categoriesService.getAllCategories();
-        }
-
-
-
-       // update category
-       @Patch('update')
-       async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
-       {
-         return this.categoriesService.updateCategory(updateCategoryDto);
-       }
-
-
-
-       // delete category
-       @Delete('delete')
-       async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
-       {
            return this.categoriesService.deleteCategory(id);
-       }
+        }
 
 
 
@@ -107,9 +113,6 @@ export class CategoriesController {
         {
           return  this.categoriesService.getReviewsPositive(categoryId);
         }
-
-
-
 
 
 
