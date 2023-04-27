@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
-import { seller } from "../sellers/schemas/seller.schema";
+
 
 
 @Injectable()
@@ -101,23 +101,50 @@ export class CategoryRepository {
 
 
       // common seller
-      async getCommonSellers(id: string, sellers: seller[]):Promise<seller[]>
-      {
-          const otherCategories = await this.categoryModel.find({
-              where: { id: Not(id) },
-              relations: ['sellers'],
-            });
+     //  async getCommonSellers(id: string, sellers: seller[]):Promise<seller[]>
+     //  {
+     //      const otherCategories = await this.categoryModel.find({
+     //          where: { id: Not(id) },
+     //          relations: ['sellers'],
+     //        });
+     //
+     //
+     //     const otherSellers = otherCategories.reduce((acc, cur) => {
+     //     return acc.concat(cur.sellers);
+     //      }, []);
+     //
+     //     return sellers.filter(seller => {
+     //     return otherSellers.some(s => s.id === seller.id);
+     //     });
+     //
+     // }
+
+       async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
+       {
+          const category = await this.categoryModel.findOne({
+          where: { id: categoryId },
+          relations: ['sellers'],
+          });
+
+        if (!category)
+        {
+           throw new NotFoundException('Category not found');
+        }
+
+       const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
+
+       if (filteredSellers.length === category.sellers.length)
+       {
+           throw new NotFoundException('Seller not associated with this category');
+        }
+
+          category.sellers = filteredSellers;
+          return [category];
+      }
 
 
-         const otherSellers = otherCategories.reduce((acc, cur) => {
-         return acc.concat(cur.sellers);
-          }, []);
 
-         return sellers.filter(seller => {
-         return otherSellers.some(s => s.id === seller.id);
-         });
 
-     }
 
 }
 

@@ -104,22 +104,7 @@ export class reviewRepository{
 
 
 
-
-
-
-  //   async getPositiveReviewsBySellerId(sellerId: string): Promise<review[]> {
-  //     return this.reviewModel.find({
-  //     where: {
-  //       sellerId,
-  //       message: Not(IsNull())
-  //     },
-  //     order: {
-  //       createdAt: 'DESC'
-  //     }
-  //   });
-  // }
-
-
+      // latest positive review
      async getLatestPositiveReviewBySellerId(sellerId: string): Promise<review | null>
      {
         const latestReview = await this.reviewModel.findOne({

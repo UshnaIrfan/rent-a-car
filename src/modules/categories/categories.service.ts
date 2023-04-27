@@ -120,60 +120,189 @@ export class CategoriesService {
 
 
      //  common sellers
-     async get(id: string):Promise<{ records: seller[] | null }>
-     {
-       const category = await this.categoryRepository.getCategoryId(id);
-       if (!category)
+     // async get(id: string):Promise<{ records: seller[] | null }>
+     // {
+     //   const category = await this.categoryRepository.getCategoryId(id);
+     //   if (!category)
+     //   {
+     //     throw new NotFoundException('Category not exist');
+     //   }
+     //
+     //   const commonSellers = await this.categoryRepository.getCommonSellers(id, category.sellers);
+     //   return { records: commonSellers.length > 0 ? commonSellers : null };
+     //
+     // }
+
+       async get(category_Id: string, seller_Id: string)
        {
-         throw new NotFoundException('Category not exist');
-       }
-
-       const commonSellers = await this.categoryRepository.getCommonSellers(id, category.sellers);
-       return { records: commonSellers.length > 0 ? commonSellers : null };
-
-     }
-
-
-
-
-      async getReviewsPositive(categoryId: string)
-      {
-         const category = await this.categoryRepository.getCategoryId(categoryId);
-         if (!category)
-         {
-           throw new NotFoundException('Category not exist');
-         }
-
-         let latestPositiveReview = null;
-
-        for (const seller of category.sellers)
-        {
-          const review = await this.reviewRepository.getLatestPositiveReviewBySellerId(seller.id);
-          if (review && (!latestPositiveReview || review.createdAt > latestPositiveReview.createdAt))
-          {
-            const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(review.titleSlug);
-            if (matchingSlugTitle)
-            {
-               const title = await this.clickTitlesRepository.findByTitle(review.titleId);
-               if (title && title.type === 'to-love' && matchingSlugTitle.type === 'to-love' && review.message && review.message.trim() !== '')
-               {
-                  latestPositiveReview = review;
-               }
-              else
-              {
-                  throw new NotFoundException(`Title not exist with id: ${review.titleId}`);
-              }
-           }
-           else
-           {
-             throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-           }
+         const result = await this.categoryRepository.getCommonSellers(category_Id, seller_Id);
+         return {
+             records: result.length > 0 ? result : null,
+        };
       }
-    }
-     return {
-           'to-love': latestPositiveReview ? [latestPositiveReview] : [],
-      };
-  }
+
+
+
+
+  // async getReviewsPositive(categoryId: string)
+  // {
+  //   const category = await this.categoryRepository.getCategoryId(categoryId);
+  //   if (!category) {
+  //     throw new NotFoundException('Category not exist');
+  //   }
+  //
+  //   const toLove = [];
+  //
+  //   for (const seller of category.sellers) {
+  //     const latestPositiveReview = await this.reviewRepository.getLatestPositiveReviewBySellerId(seller.id);
+  //
+  //     if (latestPositiveReview) {
+  //       const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
+  //
+  //       if (matchingSlugTitle) {
+  //         const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+  //
+  //         if (title) {
+  //           if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love') {
+  //             if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '') {
+  //               toLove.push(latestPositiveReview);
+  //               break; // break out of the loop after finding a positive review for the seller
+  //             }
+  //           }
+  //         } else {
+  //           throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
+  //         }
+  //       } else {
+  //         throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+  //       }
+  //     }
+  //   }
+  //
+  //   return {
+  //     'to-love': toLove,
+  //   };
+  // }
+  //
+
+
+  // async getReviewsPositive(categoryId: string) {
+  //   const category = await this.categoryRepository.getCategoryId(categoryId);
+  //   if (!category) {
+  //     throw new NotFoundException('Category not exist');
+  //   }
+  //
+  //   const toLove = [];
+  //   const sellerMap = {}; // dictionary to keep track of associated sellers
+  //   const allSellers = [...category.sellers];
+  //   const categorySellers = [];
+  //
+  //   for (const seller of allSellers) {
+  //     const latestPositiveReview = await this.reviewRepository.getLatestPositiveReviewBySellerId(seller.id);
+  //
+  //     if (latestPositiveReview) {
+  //       const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
+  //
+  //       if (matchingSlugTitle) {
+  //         const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+  //
+  //         if (title) {
+  //           if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love') {
+  //             if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '') {
+  //               sellerMap[latestPositiveReview.id] = seller; // add associated seller to dictionary
+  //
+  //               if (category.sellers.includes(seller)) {
+  //                 categorySellers.push(seller);
+  //               }
+  //
+  //               toLove.push(latestPositiveReview);
+  //               break; // break out of the loop after finding a positive review for the seller
+  //             }
+  //           }
+  //         } else {
+  //           throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
+  //         }
+  //       } else {
+  //         throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+  //       }
+  //     }
+  //   }
+  //
+  //   return {
+  //     sellers: categorySellers,
+  //     'to-love': toLove
+  //   };
+  // }
+
+
+
+          // latest positive review
+         async getReviewsPositive(categoryId: string)
+         {
+            const category = await this.categoryRepository.getCategoryId(categoryId);
+            if (!category)
+            {
+               throw new NotFoundException('Category not exist');
+            }
+
+            const toreview = [];
+            const sellerMap = {};
+            const categorySellers = [];
+
+          for (const seller of category.sellers)
+          {
+             const latestPositiveReview = await this.reviewRepository.getLatestPositiveReviewBySellerId(seller.id);
+
+             if (latestPositiveReview)
+             {
+                const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
+
+               if (matchingSlugTitle)
+               {
+                  const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+                  if (title)
+                  {
+                     if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
+                     {
+                         if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
+                         {
+                              sellerMap[latestPositiveReview.id] = seller;
+
+                         if (!categorySellers.includes(seller))
+                         {
+                            categorySellers.push(seller);
+                         }
+
+                         toreview.push(latestPositiveReview);
+                         break;
+                        }
+                    }
+                  }
+                 else
+                 {
+                     throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
+                 }
+              }
+             else
+             {
+                   throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+             }
+          }
+       }
+         const categoryObj = {
+             id:category.id,
+             categoryName: category.categoryName,
+             approvedByAdmin:category.approvedByAdmin,
+             isListing:category.isListing
+        };
+
+      return {
+              category:categoryObj,
+             sellers: categorySellers,
+             'to-review': toreview
+       };
+   }
+
+
 
 
 

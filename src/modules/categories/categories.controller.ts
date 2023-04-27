@@ -32,10 +32,10 @@ export class CategoriesController {
 
 
        // create category
-       //  @ApiBearerAuth()
+         @ApiBearerAuth()
          @ApiBody({type:CreateCategoryDto})
-         @Post('create')
-       //  @Roles(Role.L2A_ADMIN)
+         @Post('admin/create')
+         @Roles(Role.L2A_ADMIN)
          async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
          {
           return this.categoriesService.createCategory(createCategoryDto);
@@ -82,23 +82,31 @@ export class CategoriesController {
 
 
        //  common sellers
-       @Get('/other/:id')
-       async get(@Param('id') id: string):Promise<{ records: seller[] | null }>
-       {
-          return this.categoriesService.get(id);
-       }
+       // @Get('/other/:id')
+       // async get(@Param('id') id: string):Promise<{ records: seller[] | null }>
+       // {
+       //    return this.categoriesService.get(id);
+       // }
+
+        @Get('/other/:categoryId')
+        async get(
+        @Param('categoryId') categoryId: string,
+        @Query('excludeSeller') excludeSellerId: string)
+        {
+            return this.categoriesService.get(categoryId, excludeSellerId);
+        }
 
 
 
 
 
-
-     @Get('/:category_id')
-     async getReviewsPositive(
-     @Param('category_id') categoryId: string)
-     {
-       return  this.categoriesService.getReviewsPositive(categoryId);
-     }
+        // latest positive review
+        @Get('/:category_id')
+        async getReviewsPositive(
+        @Param('category_id') categoryId: string)
+        {
+          return  this.categoriesService.getReviewsPositive(categoryId);
+        }
 
 
 

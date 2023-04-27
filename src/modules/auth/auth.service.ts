@@ -25,6 +25,8 @@ import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
 import { Role } from "../../enums/role.enum";
+import { validate } from "class-validator";
+import { SignUpUserDto } from "./dto/signup-user.dto";
 
 
 @Injectable()
@@ -39,14 +41,44 @@ export class AuthService {
 
 
          // Sign up
-         async signup(Signup:signupUserInterface):Promise<User>
-         {
+        //  async signup(Signup:signupUserInterface):Promise<User>
+        //  {
+        //
+        //    const username = await this.usersService.findUserByUsername(Signup.username);
+        //    if (username)
+        //    {
+        //       throw new ConflictException('Username already exists');
+        //    }
+        //
+        //    const email = await this.usersService.findUserByEmail(Signup.email);
+        //    if (email)
+        //    {
+        //       throw new ConflictException('Email already exists');
+        //    }
+        //
+        //
+        //    const { password } = Signup;
+        //    const newPasswords=password
+        //
+        //
+        //    const user = await this.usersService.createUser({
+        //    ...Signup,
+        //    password: await AuthService.hashPassword(password),
+        //
+        //     });
+        //
+        //   // Send welcome email to new user
+        //    await this.sendWelcomeEmail( user.username,user.email ,newPasswords);
+        //    return user;
+        // }
 
-           const username = await this.usersService.findUserByUsername(Signup.username);
-           if (username)
-           {
-              throw new ConflictException('Username already exists');
-           }
+        async signup(@Body() Signup: SignUpUserDto): Promise<User>
+        {
+            const username = await this.usersService.findUserByUsername(Signup.username);
+            if (username)
+            {
+               throw new ConflictException('Username already exists');
+            }
 
            const email = await this.usersService.findUserByEmail(Signup.email);
            if (email)
@@ -54,21 +86,25 @@ export class AuthService {
               throw new ConflictException('Email already exists');
            }
 
+          const { password } = Signup;
+          const newPasswords=password
+          const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
-           const { password } = Signup;
-           const newPassword=password
+          if (!isPasswordStrongEnough)
+          {
+              throw new BadRequestException('Password is too weak');
+          }
 
-
-           const user = await this.usersService.createUser({
-           ...Signup,
+         const user = await this.usersService.createUser({
+            ...Signup,
            password: await AuthService.hashPassword(password),
+        });
 
-            });
+       // Send welcome email to new user
+        await this.sendWelcomeEmail(user.username, user.email, newPasswords);
+        return user;
+    }
 
-          // Send welcome email to new user
-           await this.sendWelcomeEmail( user.username,user.email ,newPassword);
-           return user;
-        }
 
 
 
@@ -245,48 +281,97 @@ export class AuthService {
 
 
        // forgotPassword(token)
-        async Password(
-        @Body() reqBody: changeUserPasswordInterface)
+      //  async Password(
+    //     @Body() reqBody: changeUserPasswordInterface)
+    //     {
+    //         const user = await this.usersService.findUserByEmail(reqBody.email);
+    //         if (!user)
+    //         {
+    //           throw new  NotFoundException('Invalid email');
+    //         }
+    //
+    //         const tokenKey = `forgot-password-token:${user.email}`;
+    //         const cachedToken = await this.cacheManager.get(tokenKey);
+    //         if(!cachedToken)
+    //         {
+    //           throw new UnauthorizedException('token expired');
+    //         }
+    //
+    //        const parsedToken = JSON.parse(<string>cachedToken);
+    //        if (parsedToken.token !== reqBody.resetToken)
+    //        {
+    //           throw new UnauthorizedException('Invalid token');
+    //        }
+    //
+    //        if (reqBody.newPassword !== reqBody.confirmPassword)
+    //        {
+    //           throw new NotAcceptableException('Passwords do not match');
+    //        }
+    //
+    //        const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+    //        try
+    //        {
+    //            await this.usersService.updatePassword(reqBody.email, hashedPassword);
+    //            await this.sendPasswordUpdatedEmail(reqBody.email);
+    //            const loginResult = this.login(user);
+    //            await this.cacheManager.del(tokenKey);
+    //            return loginResult;
+    //        }
+    //       catch (e)
+    //       {
+    //           throw new InternalServerErrorException('Failed to login');
+    //       }
+    //
+    // }
+
+
+        async Password(@Body() reqBody: changeUserPasswordInterface)
         {
             const user = await this.usersService.findUserByEmail(reqBody.email);
             if (!user)
             {
-              throw new  NotFoundException('Invalid email');
+               throw new  NotFoundException('Invalid email');
             }
 
-            const tokenKey = `forgot-password-token:${user.email}`;
-            const cachedToken = await this.cacheManager.get(tokenKey);
-            if(!cachedToken)
-            {
+           const tokenKey = `forgot-password-token:${user.email}`;
+           const cachedToken = await this.cacheManager.get(tokenKey);
+           if(!cachedToken)
+           {
               throw new UnauthorizedException('token expired');
-            }
-
-           const parsedToken = JSON.parse(<string>cachedToken);
-           if (parsedToken.token !== reqBody.resetToken)
-           {
-              throw new UnauthorizedException('Invalid token');
            }
 
-           if (reqBody.newPassword !== reqBody.confirmPassword)
-           {
-              throw new NotAcceptableException('Passwords do not match');
-           }
-
-           const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-           try
-           {
-               await this.usersService.updatePassword(reqBody.email, hashedPassword);
-               await this.sendPasswordUpdatedEmail(reqBody.email);
-               const loginResult = this.login(user);
-               await this.cacheManager.del(tokenKey);
-               return loginResult;
-           }
-          catch (e)
+          const parsedToken = JSON.parse(<string>cachedToken);
+          if (parsedToken.token !== reqBody.resetToken)
           {
-              throw new InternalServerErrorException('Failed to login');
+             throw new UnauthorizedException('Invalid token');
           }
 
-    }
+          if (reqBody.newPassword !== reqBody.confirmPassword)
+          {
+             throw new NotAcceptableException('Passwords do not match');
+          }
+          const isPasswordStrongEnough = reqBody.newPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+          if (!isPasswordStrongEnough)
+          {
+             throw new BadRequestException('Password is too weak');
+         }
+
+          const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+          try
+          {
+             await this.usersService.updatePassword(reqBody.email, hashedPassword);
+             await this.sendPasswordUpdatedEmail(reqBody.email);
+             const loginResult = this.login(user);
+             await this.cacheManager.del(tokenKey);
+             return loginResult;
+         }
+        catch (e)
+        {
+            throw new InternalServerErrorException('Failed to login');
+        }
+
+  }
+
 
 
 

@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmail,
-  IsNotEmpty, IsOptional,
-  IsString,
-  MaxLength,
-  MinLength
+     IsEmail,
+     IsNotEmpty, IsOptional,
+     IsString,
+     MaxLength,
+     MinLength, IsUppercase, IsLowercase, Matches
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
 
@@ -33,8 +33,10 @@ export class SignUpUserDto {
      @IsNotEmpty()
      @MinLength(8)
      @MaxLength(64)
+     @Matches(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+          message: 'Password is too weak',
+     })
      password: string;
-
 
      // @ApiProperty({ required: false ,default:null })
      // roles: string;

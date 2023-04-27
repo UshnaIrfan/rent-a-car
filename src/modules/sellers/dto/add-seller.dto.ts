@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsBoolean,
-  IsNotEmpty,
-  IsString
+     IsBoolean,
+     IsNotEmpty, IsOptional,
+     IsString
 } from "class-validator";
 
 export class  addSellerDto{
@@ -35,12 +35,14 @@ export class  addSellerDto{
 
 
 
-     @ApiProperty({ type: String, required: true  })
+     @ApiProperty({ type: String, required: false})
+     @IsOptional()
      @IsNotEmpty()
      titleId: string;
 
 
      @ApiProperty({ type: String, required: false, default: null })
+     @IsOptional()
      message: string | null;
 
 }
