@@ -11,7 +11,7 @@ import { category } from "../../categories/schemas/category.schema";
 export enum status {
      PENDING = 'pending',
      ACCEPTED = 'approved',
-     REJECTED = ' rejected'
+     REJECTED = 'rejected'
 }
 
 
@@ -34,16 +34,15 @@ export class seller{
      sellerUrl: string;
 
 
-     @ApiProperty()
-     @Column(
-       {
-            type:"enum",
-            enum: status,
-            default: status.PENDING
-       }
-     )
-     approvedByAdmin: string;
-
+  @ApiProperty()
+  @Column(
+    {
+      type:"enum",
+      enum: status,
+      default: status.PENDING
+    }
+  )
+  approvedByAdmin: string;
 
 
      // @ApiProperty()

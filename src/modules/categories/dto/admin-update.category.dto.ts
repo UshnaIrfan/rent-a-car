@@ -24,7 +24,8 @@ export class adminUpdateCategoryDto {
   @ApiProperty({ type: String, required: true })
   @IsString()
   @IsNotEmpty()
-   readonly approvedByAdmin: string;
+  readonly approvedByAdmin: string;
+
 
 
 }
