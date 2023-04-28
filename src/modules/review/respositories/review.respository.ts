@@ -121,17 +121,20 @@ export class reviewRepository{
 
 
 
+
+
+
   async getLatestReviewBySellerId(sellerId: string): Promise<review | null> {
     const review = await this.reviewModel.findOne({
-      where: [
-        { sellerId: sellerId,
-          message: Not(IsNull()),
-          titleId: In([
-            "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-            "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-            "df368bbf-9155-4d36-932e-c94d34e7154a"
-          ])}
-      ],
+      where: {
+        sellerId: sellerId,
+        message: Not(IsNull()),
+        titleId: In([
+          "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+          "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+          "df368bbf-9155-4d36-932e-c94d34e7154a"
+        ])
+      },
       order: { createdAt: 'DESC' }
     });
 
