@@ -7,6 +7,14 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
 
+
+export enum status {
+     PENDING = 'pending',
+     ACCEPTED = 'approved',
+     REJECTED = ' rejected'
+}
+
+
 @Entity({ name: 'sellers' })
 export class seller{
 
@@ -27,8 +35,20 @@ export class seller{
 
 
      @ApiProperty()
-     @Column('bool')
-     approvedByAdmin: boolean;
+     @Column(
+       {
+            type:"enum",
+            enum: status,
+            default: status.PENDING
+       }
+     )
+     approvedByAdmin: string;
+
+
+
+     // @ApiProperty()
+     // @Column('bool')
+     // approvedByAdmin: boolean;
 
 
      @ApiProperty()

@@ -156,7 +156,7 @@ export class CategoryRepository {
 
 
           // admin update category status
-         async adminUpdateCategory(categoryId:string, approvedByAdmin:boolean) : Promise<category | null>
+         async adminUpdateCategory(categoryId:string, approvedByAdmin:string) : Promise<category | null>
          {
             const category = await this.categoryModel.findOne({ where: { id:categoryId}});
             if (!category)

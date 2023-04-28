@@ -4,6 +4,7 @@ import {
    IsNotEmpty,
    IsString
 } from "class-validator";
+import { string } from "joi";
 
 export class CreateSellerDto {
 
@@ -20,9 +21,13 @@ export class CreateSellerDto {
      sellerUrl: string;
 
 
-     @ApiProperty({ type: Boolean, default: false })
-     @IsBoolean()
-     readonly  approvedByAdmin: boolean;
+
+     @ApiProperty({ type: string })
+     @IsString()
+     readonly approvedByAdmin: string;
+     // @ApiProperty({ type: Boolean, default: false })
+     // @IsBoolean()
+     // readonly  approvedByAdmin: boolean;
 
 
      @ApiProperty({ type: Boolean, default: true })

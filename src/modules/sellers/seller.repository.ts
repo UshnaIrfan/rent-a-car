@@ -122,7 +122,7 @@ export class sellerRepository{
 
 
       //admin update seller status
-      async adminUpdateSeller(sellerId:string, approvedByAdmin:boolean,isListing:boolean): Promise<seller | null>
+      async adminUpdateSeller(sellerId:string, approvedByAdmin:string,isListing:boolean): Promise<seller | null>
       {
          const seller = await this.sellerModel.findOne({ where: { id:sellerId}});
          if (!seller)

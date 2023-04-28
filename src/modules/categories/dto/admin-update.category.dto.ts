@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsString
 } from "class-validator";
+import { string } from "joi";
 
 export class adminUpdateCategoryDto {
 
@@ -15,11 +16,15 @@ export class adminUpdateCategoryDto {
 
 
 
-  @ApiProperty({ type: Boolean, default: false })
-  @IsBoolean()
-  readonly approvedByAdmin: boolean;
+  // @ApiProperty({ type: Boolean, default: false })
+  // @IsBoolean()
+  // readonly approvedByAdmin: boolean;
 
 
+  @ApiProperty({ type: String, required: true })
+  @IsString()
+  @IsNotEmpty()
+   readonly approvedByAdmin: string;
 
 
 }
