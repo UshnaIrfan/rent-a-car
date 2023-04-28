@@ -21,6 +21,7 @@ import { Cache } from 'cache-manager';
 import submitReviewInterface from "../review/interfaces/submit-review.interface";
 import createContactUsInterface from "../contact-us/interfaces/create-contact-us.interface";
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
+import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
 
 
 
@@ -214,6 +215,23 @@ export class SellerService {
 
          return { message: "seller deleted successfully", deletedSeller };
      }
+
+
+
+
+
+       //admin update seller status
+       async  adminUpdateSeller (adminUpdateSellerInterface:adminUpdateSellerInterface):Promise<{ update: updateSellerInterface; message: string }>
+       {
+
+         const update = await this.SellerRepository.adminUpdateSeller(adminUpdateSellerInterface.sellerId, adminUpdateSellerInterface.approvedByAdmin,adminUpdateSellerInterface.isListing);
+         if (!update)
+         {
+           throw new NotFoundException('seller not found');
+         }
+
+         return { message: "seller updated successfully", update};
+      }
 
 
 

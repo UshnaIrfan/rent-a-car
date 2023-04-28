@@ -9,6 +9,8 @@ import { CreateSellerDto } from "./dto/create-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
 import {likeDislikeReviewDto} from "../review/dto/like-dislike-review.dto";
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
+import {adminUpdateSellerDto} from "./dto/admin-update.seller.dto";
+import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
 
 
 @ApiTags('Sellers')
@@ -81,6 +83,15 @@ export class SellerController {
            return this.sellerService.deleteSeller(id);
        }
 
+
+
+
+       //admin update seller status
+       @Patch('admin/update')
+       async adminUpdateSeller(@Body() adminUpdateSellerDto:adminUpdateSellerDto):Promise<{ update: updateSellerInterface; message: string }>
+       {
+          return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
+       }
 
 
   }

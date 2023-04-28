@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'review' })
@@ -38,5 +38,7 @@ export class review{
      @ApiProperty()
      @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
      createdAt: Date;
+
+
 
 }

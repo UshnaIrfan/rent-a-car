@@ -605,4 +605,85 @@ export class ReviewService {
 
 
 
+
+
+
+
+  //
+  async getReviews(sellerId: string) {
+    const toAir = [];
+    const toLove = [];
+    const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+    if (!seller) {
+      throw new NotFoundException(`Seller not exist`);
+    }
+
+    const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+    var toAirCount = 0;
+    var toLoveCount = 0;
+    for (const review of allReviews) {
+      const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
+      const userCount = result.length;
+
+      const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+      if (!title) {
+        throw new NotFoundException(`Title not exist`);
+      }
+
+      const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+      if (!matchingSlugTitle) {
+        throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+      }
+
+      if (title.type === matchingSlugTitle.type) {
+        if (title.slug === matchingSlugTitle.slug) {
+          if (title.type === 'to-air') {
+            if (review.message && review.message.trim() !== '') {
+              toAir.push({ ...review, Helpful:userCount });
+              toAirCount++;
+            }
+          } else if (title.type === 'to-love') {
+            if (review.message && review.message.trim() !== '') {
+              toLove.push({ ...review, Best_Awards:userCount });
+              toLoveCount++;
+            }
+          }
+        } else {
+          if (title.type === 'to-air') {
+            if (review.message && review.message.trim() !== '') {
+              toAir.push({ ...review, Helpful:userCount });
+              toAirCount++;
+            }
+          } else if (title.type === 'to-love') {
+            if (review.message && review.message.trim() !== '') {
+              toLove.push({ ...review, Best_Awards:userCount });
+              toLoveCount++;
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      toLove: toLove,
+    };
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

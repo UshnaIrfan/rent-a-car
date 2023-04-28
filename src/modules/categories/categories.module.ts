@@ -14,16 +14,22 @@ import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repos
 import {clicksTitle} from "../review/schemas/create-clicks-titles.schema";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 import {likeDislikeSchema} from "../review/schemas/like-dislike.schema";
+import {ReviewService} from "../review/review.service";
+import {ReviewModule} from "../review/review.module";
+import {sellerRepository} from "../sellers/seller.repository";
+import {seller} from "../sellers/schemas/seller.schema";
+import {clicksTypes} from "../review/schemas/create-click-types.schema";
+import {clicksTypesRepository} from "../review/respositories/clicksTypes.repository";
 
 @Module({
 
-  imports: [TypeOrmModule.forFeature([category,User,review,clicksTitle,likeDislikeSchema]),
+  imports: [TypeOrmModule.forFeature([category ,clicksTypes,seller,User,review,clicksTitle,likeDislikeSchema ,ReviewModule]),
     CacheModule.register({
     store: redisStore,
     uri: process.env.REDIS_URL,
   })],
   controllers: [CategoriesController],
-  providers: [CategoriesService ,CategoryRepository,UsersRepository,JwtService,reviewRepository,clicksTitlesRepository,likeDislikeRepository],
+  providers: [clicksTypesRepository,sellerRepository,CategoriesService ,ReviewService,CategoryRepository,UsersRepository,JwtService,reviewRepository,clicksTitlesRepository,likeDislikeRepository],
 
 })
 export class CategoriesModule {}

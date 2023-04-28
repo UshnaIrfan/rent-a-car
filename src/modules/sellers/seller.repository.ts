@@ -118,5 +118,25 @@ export class sellerRepository{
      }
 
 
+
+
+
+      //admin update seller status
+      async adminUpdateSeller(sellerId:string, approvedByAdmin:boolean,isListing:boolean): Promise<seller | null>
+      {
+         const seller = await this.sellerModel.findOne({ where: { id:sellerId}});
+         if (!seller)
+         {
+            return null
+         }
+
+         seller.approvedByAdmin = approvedByAdmin;
+         seller.isListing = isListing;
+         return this.sellerModel.save(seller);
+      }
+
+
+
+
 }
 

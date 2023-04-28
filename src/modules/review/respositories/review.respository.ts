@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Like, Not, Repository } from "typeorm";
+import { In, IsNull, Like, Not, Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
@@ -19,12 +19,14 @@ export class reviewRepository{
        //submit review
        async submitReview(createReview:submitReviewDto):Promise<review| null>
        {
-         return this.reviewModel.save(createReview);
+            return this.reviewModel.save(createReview);
        }
 
 
 
-       // get  reviews (pagination)
+
+
+  // get  reviews (pagination)
        async findAndCount(skip: number, take: number): Promise<[review[], number]>
        {
          const [result, totalCount] = await this.reviewModel.findAndCount({
@@ -104,37 +106,38 @@ export class reviewRepository{
 
 
 
-      // latest positive review
-     async getLatestPositiveReviewBySellerId(sellerId: string): Promise<review | null>
-     {
-        const latestReview = await this.reviewModel.findOne({
-        where: { sellerId, message: Not(IsNull())},
-        order: {
-           createdAt: 'DESC'
-        //  createdAt:'ASC'
-       }});
 
-      return latestReview || null;
-   }
-
-
+    // latest positive review
+    //  async getLatestReviewBySellerId(sellerId: string): Promise<review |null>
+    //  {
+    //     const review = await this.reviewModel.findOne({
+    //     where: [{ sellerId: sellerId }, { message: Not(IsNull()) }],
+    //     order: { createdAt: 'DESC' }
+    //   });
+    //    console.log(review);
+    //
+    //   return review;
+    // }
 
 
 
-  async getAllLatestPositiveReviewsBySellerId(sellerId: string): Promise<review[]> {
-    const latestReviews = await this.reviewModel.find({
-      where: { sellerId, message: Not(IsNull()) },
-      order: { createdAt: 'DESC' },
+  async getLatestReviewBySellerId(sellerId: string): Promise<review | null> {
+    const review = await this.reviewModel.findOne({
+      where: [
+        { sellerId: sellerId,
+          message: Not(IsNull()),
+          titleId: In([
+            "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+            "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+            "df368bbf-9155-4d36-932e-c94d34e7154a"
+          ])}
+      ],
+      order: { createdAt: 'DESC' }
     });
 
-    return latestReviews;
+    console.log(review);
+    return review;
   }
-
-
-
-
-
-
 
 
 

@@ -21,6 +21,9 @@ import updateCategoryInterface from "./interfaces/update-category.interface";
 import {Role} from "../../enums/role.enum";
 import {Roles} from "../../decorators/role.decorators";
 import paginationCategoryInterface from "./interfaces/pagination-category.interface";
+import {adminUpdateCategoryDto} from "./dto/admin-update.category.dto";
+import adminUpdateCategoryInterface from "./interfaces/admin-update.category.interface";
+
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -112,6 +115,15 @@ export class CategoriesController {
         }
 
 
+
+
+
+        // admin update category status
+        @Patch('admin/update')
+        async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
+        {
+             return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
+        }
 
 
 }
