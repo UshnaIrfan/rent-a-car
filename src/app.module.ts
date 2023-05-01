@@ -19,7 +19,6 @@ import {review} from "./modules/review/schemas/submit-review.schema";
 import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
 import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema";
 import {likeDislikeSchema} from "./modules/review/schemas/like-dislike.schema";
-import {SES} from "@aws-sdk/client-ses";
 import { AdminModule } from './modules/admin/admin.module';
 
 
