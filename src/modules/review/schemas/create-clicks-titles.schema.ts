@@ -29,6 +29,12 @@ export class clicksTitle{
      image: string;
      length: Boolean;
 
+
+     @ApiProperty()
+     @Column()
+     imageName: string;
+
+
 }
 
 

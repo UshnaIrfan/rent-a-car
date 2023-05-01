@@ -4,7 +4,7 @@ import {
    IsNotEmpty,
    IsString
 } from "class-validator";
-import { string } from "joi";
+import { status } from "../../categories/schemas/category.schema";
 
 export class CreateSellerDto {
 
@@ -22,17 +22,16 @@ export class CreateSellerDto {
 
 
 
-     @ApiProperty({ type: string })
+     @ApiProperty({ type: String, enum: status, default: status.PENDING })
      @IsString()
-     readonly approvedByAdmin: string;
-     // @ApiProperty({ type: Boolean, default: false })
-     // @IsBoolean()
-     // readonly  approvedByAdmin: boolean;
+     readonly approvedByAdmin: string = status.PENDING;
+
 
 
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
      readonly isListing: boolean;
+
 
 
      @ApiProperty({ type: [String]})

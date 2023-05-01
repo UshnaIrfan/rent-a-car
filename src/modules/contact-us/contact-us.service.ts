@@ -1,12 +1,9 @@
-import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import createContactUsInterface from "./interfaces/create-contact-us.interface";
 import {contactUsRepository} from "./contact-us.repository";
 import {MailerService} from "@nestjs-modules/mailer";
 import { ConfigService } from '@nestjs/config';
-import { jwtConstants } from "../auth/constants/constants";
-import { JwtService } from '@nestjs/jwt';
-import {UsersRepository} from "../users/users.repository";
-import submitReviewInterface from "../review/interfaces/submit-review.interface";
+
 
 @Injectable()
 export class ContactUsService {
@@ -14,8 +11,7 @@ export class ContactUsService {
     private readonly contactUsRepository:contactUsRepository,
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
-    private jwtService: JwtService,
-    private readonly usersRepository:UsersRepository,
+
   ) {}
 
 
@@ -37,6 +33,7 @@ export class ContactUsService {
            throw new InternalServerErrorException('Failed to send your message. Please try again later');
          }
      }
+
 
 
 

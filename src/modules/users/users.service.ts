@@ -13,36 +13,38 @@ export class UsersService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-     async findUserByUsername(username: string): Promise<User | null>
-     {
-       return this.usersRepository.findUserByUsername(username);
-     }
+
+      async findUserByUsername(username: string): Promise<User | null>
+      {
+         return this.usersRepository.findUserByUsername(username);
+      }
 
 
-     async findUserByEmail(email: string): Promise<User | null>
-     {
-      return this.usersRepository.findUserByEmail(email);
-     }
-
-
-
-     async createUser(user: CreateUserDto): Promise<User | null>
-     {
-      return this.usersRepository.createUser(user);
-     }
-
-
-     async updatePassword(email: string ,password:string): Promise<User | null>
-     {
-       return this.usersRepository.updatePassword(email,password);
-     }
+      async findUserByEmail(email: string): Promise<User | null>
+      {
+         return this.usersRepository.findUserByEmail(email);
+      }
 
 
 
-     async findUserByID (id:string): Promise<User | null>
-     {
-       return this.usersRepository.findUserByID(id);
-     }
+      async createUser(user: CreateUserDto): Promise<User | null>
+      {
+         return this.usersRepository.createUser(user);
+      }
+
+
+
+      async updatePassword(email: string ,password:string): Promise<User | null>
+      {
+          return this.usersRepository.updatePassword(email,password);
+      }
+
+
+
+      async findUserByID (id:string): Promise<User | null>
+      {
+         return this.usersRepository.findUserByID(id);
+      }
 
 
 
@@ -75,10 +77,10 @@ export class UsersService {
 
 
 
-  // update user
+      // update user
       async  updateUser (id:string, name:string,username:string,email:string,password:string)
       {
-         return this.usersRepository.updateUser(id,name,username,email,password);
+          return this.usersRepository.updateUser(id,name,username,email,password);
       }
 
 
@@ -86,7 +88,7 @@ export class UsersService {
       // delete  user
       async deleteUser(id:string): Promise<User|null>
       {
-        return this.usersRepository.deleteUser(id);
+          return this.usersRepository.deleteUser(id);
       }
 
 

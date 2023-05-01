@@ -2,10 +2,9 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "t
 import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
 
-
 export enum status {
      PENDING = 'pending',
-     ACCEPTED = 'approved',
+     APPROVED = 'approved',
      REJECTED = 'rejected'
 }
 
@@ -22,34 +21,21 @@ export class category{
     categoryName: string;
 
 
-
     @ApiProperty()
     @Column(
       {
           type:"enum",
           enum: status,
           default: status.PENDING
-      }
-    )
+      })
     approvedByAdmin: string;
 
 
 
 
-
-    // @ApiProperty()
-    // @Column()
-    // approvedByAdmin: string;
-
-    // @ApiProperty()
-    // @Column('bool')
-    // approvedByAdmin: boolean;
-
-
     // @ApiProperty()
     // @Column('bool')
     // isListing: boolean;
-
 
 
     @ApiProperty({ type: () => [seller] })

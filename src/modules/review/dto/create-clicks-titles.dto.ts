@@ -27,5 +27,10 @@ export class createClicksTitlesDto {
      image: string;
 
 
+     @ApiProperty({ type: String, required: true })
+     @IsNotEmpty()
+     imageName: string;
+
+
   }
 

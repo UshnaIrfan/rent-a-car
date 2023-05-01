@@ -4,5 +4,6 @@ export default interface createClickTitleInteface {
     readonly  title: string;
     readonly type: string;
     readonly  image: string;
+    readonly  imageName: string;
 
 }

@@ -1,12 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, IsNull, Like, Not, Repository } from "typeorm";
+import { In, IsNull,    Not, Raw, Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
-import { seller } from "../../sellers/schemas/seller.schema";
-import { clicksTitle } from "../schemas/create-clicks-titles.schema";
-import { category } from "../../categories/schemas/category.schema";
+
 
 @Injectable()
 export class reviewRepository{
@@ -122,25 +120,41 @@ export class reviewRepository{
 
 
 
+  //   async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
+  //   {
+  //     const positiveReviews = await this.reviewModel.findOne(
+  //       {
+  //              where: [{ sellerId: sellerId, message: Not(IsNull())},
+  //                      {  titleId: In([
+  //                            "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+  //                             "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+  //                             "df368bbf-9155-4d36-932e-c94d34e7154a"
+  //                      ])}],
+  //               order: { createdAt: 'DESC' }
+  //             });
+  //
+  //            console.log(positiveReviews)
+  //            return positiveReviews;
+  // }
 
 
-  async getLatestReviewBySellerId(sellerId: string): Promise<review | null> {
-    const review = await this.reviewModel.findOne({
-      where: {
-        sellerId: sellerId,
-        message: Not(IsNull()),
-        titleId: In([
-          "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-          "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-          "df368bbf-9155-4d36-932e-c94d34e7154a"
-        ])
-      },
-      order: { createdAt: 'DESC' }
-    });
 
-    console.log(review);
-    return review;
-  }
+      async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
+      {
+             const positiveReviews = await this.reviewModel.findOne(
+           {
+                where: [{ sellerId: sellerId,  message: Not(IsNull())},
+                   {titleId: In([
+                        "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+                        "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+                        "df368bbf-9155-4d36-932e-c94d34e7154a"
+                   ])}],
+                 order: { createdAt: 'DESC' }
+                 });
+
+                console.log(positiveReviews)
+                return positiveReviews;
+        }
 
 
 

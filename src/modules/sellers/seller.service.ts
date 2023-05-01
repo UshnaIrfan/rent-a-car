@@ -1,7 +1,7 @@
 import {
-  BadRequestException, Body, CACHE_MANAGER,
+   CACHE_MANAGER,
   ConflictException, Inject,
-  Injectable, NotAcceptableException,
+  Injectable,
   NotFoundException,
   UnauthorizedException
 } from "@nestjs/common";
@@ -18,8 +18,6 @@ import { jwtConstants } from "../auth/constants/constants";
 import { JwtService } from '@nestjs/jwt';
 import {UsersRepository} from "../users/users.repository";
 import { Cache } from 'cache-manager';
-import submitReviewInterface from "../review/interfaces/submit-review.interface";
-import createContactUsInterface from "../contact-us/interfaces/create-contact-us.interface";
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
 

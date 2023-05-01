@@ -21,25 +21,31 @@ export class clicksTitlesRepository{
 
 
        // find all title
-       // async getAllReviewsTitle():Promise<clicksTitle[]|null>
-       // {
-       //     return this.clickTypesModel.find();
-       // }
+      //   async getAllReviewsTitle(): Promise<clicksTitle[] | null>
+      //   {
+      //      const orderBy: OrderByCondition = {
+      //       'type': 'DESC',
+      //        'slug':'ASC'
+      //     };
+      //   const result = await this.clickTypesModel.find({ order: orderBy });
+      //   return result;
+      // }
 
-        async getAllReviewsTitle(): Promise<clicksTitle[] | null>
-        {
-           const orderBy: OrderByCondition = {
-            'type': 'DESC',
-             'slug':'ASC'
-          };
-        const result = await this.clickTypesModel.find({ order: orderBy });
+       async getAllReviewsTitle(): Promise<clicksTitle[] | null>
+       {
+         const orderBy: OrderByCondition = {
+           'type': 'DESC',
+           'slug':'ASC'
+         };
+        const result = await this.clickTypesModel.find({ order: orderBy, select: ['id', 'slug', 'title', 'type','imageName']});
         return result;
-      }
+       }
 
 
 
 
-       // find by individual title  id
+
+      // find by individual title  id
        async findByTitle(id:string):Promise<clicksTitle| null>
        {
           return this.clickTypesModel.findOne({

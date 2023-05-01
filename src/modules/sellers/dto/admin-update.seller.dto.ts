@@ -4,25 +4,22 @@ import {
   IsNotEmpty,
   IsString
 } from "class-validator";
-import { string } from "joi";
+import { status } from "../../categories/schemas/category.schema";
+
 
 export class adminUpdateSellerDto{
 
 
-    @ApiProperty({ type: String, required: true })
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     sellerId: string;
+
+
+
+    @ApiProperty({ type: String, enum: status, default: status.PENDING })
     @IsString()
-    @IsNotEmpty()
-    sellerId: string;
-
-
-
-  @ApiProperty({ type: string })
-  @IsString()
-  readonly approvedByAdmin: string;
-
-    // @ApiProperty({ type: Boolean, default: false })
-    // @IsBoolean()
-    // readonly  approvedByAdmin: boolean;
+    readonly approvedByAdmin: string = status.PENDING;
 
 
 

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Req } from "@nestjs/common";
 import { ContactUsService } from './contact-us.service';
 import  {createContactUsDto} from "./dto/create-contact-us.dto";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Contact-us')
 @Controller('contact-us')

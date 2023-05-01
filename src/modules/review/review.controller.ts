@@ -17,13 +17,9 @@ import {createClicksTypesDto} from "./dto/create-click-types.dto";
 import { submitReviewDto } from "./dto/submit-review.dto";
 import { review } from "./schemas/submit-review.schema";
 import {clicksTypes} from "./schemas/create-click-types.schema";
-import paginationInterface from "./interfaces/pagination.interface";
 import { clicksTitle } from "./schemas/create-clicks-titles.schema";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
-import * as jwt from 'jsonwebtoken';
 import {updateReviewDto} from "./dto/update-review.dto";
 import {seller} from "../sellers/schemas/seller.schema";
-import updateReviewInterface from "./interfaces/update-review.interface";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 
 

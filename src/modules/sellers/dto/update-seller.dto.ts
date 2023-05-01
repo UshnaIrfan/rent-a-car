@@ -4,7 +4,7 @@ import {
      IsNotEmpty,
      IsString
 } from "class-validator";
-import { string } from "joi";
+
 
 export class updateSellerDto {
 
