@@ -24,8 +24,6 @@ import { seller } from "../sellers/schemas/seller.schema";
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
-import { Role } from "../../enums/role.enum";
-import { validate } from "class-validator";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
 
@@ -41,38 +39,51 @@ export class AuthService {
 
 
 
-         // Sign up
-        //  async signup(Signup:signupUserInterface):Promise<User>
-        //  {
-        //
-        //    const username = await this.usersService.findUserByUsername(Signup.username);
-        //    if (username)
-        //    {
-        //       throw new ConflictException('Username already exists');
-        //    }
-        //
-        //    const email = await this.usersService.findUserByEmail(Signup.email);
-        //    if (email)
-        //    {
-        //       throw new ConflictException('Email already exists');
-        //    }
-        //
-        //
-        //    const { password } = Signup;
-        //    const newPasswords=password
-        //
-        //
-        //    const user = await this.usersService.createUser({
-        //    ...Signup,
-        //    password: await AuthService.hashPassword(password),
-        //
-        //     });
-        //
-        //   // Send welcome email to new user
-        //    await this.sendWelcomeEmail( user.username,user.email ,newPasswords);
-        //    return user;
-        // }
 
+         // ADMIN APIS
+         //get all users
+        getAllUsers(page:number):Promise<paginationUserInterface>
+        {
+          return this.usersService.getAllUsers(page);
+        }
+
+
+
+
+        //update user
+       async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
+       {
+          const hashedPassword = await AuthService.hashPassword(updateUser.password);
+          const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email,hashedPassword);
+          if (!update)
+          {
+             throw new NotFoundException('invalid user id');
+          }
+          return { message: "User updated successfully", update};
+       }
+
+
+
+
+        //delete user
+       async deleteUser(id:string):Promise<{message: string, deletedUser:User}>
+       {
+          const deletedUser = await this.usersService.deleteUser(id);
+          if (!deletedUser)
+          {
+             throw new NotFoundException('user not found');
+          }
+
+          return { message: "user deleted successfully", deletedUser };
+       }
+
+
+
+
+
+
+        //FRONTEND APIS
+        // Sign up
         async signup(@Body() Signup: SignUpUserDto): Promise<User>
         {
             const username = await this.usersService.findUserByUsername(Signup.username);
@@ -117,8 +128,9 @@ export class AuthService {
                    id: user.id,
                    name: user.name,
                    username: user.username,
-                  email: user.email,
-                  password: user.password,
+                   email: user.email,
+                   password: user.password,
+                   roles:user.roles,
             };
            const accessTokenRedis = this.jwtService.sign(payload);
            const accessTokenTTL = 5400;
@@ -129,6 +141,7 @@ export class AuthService {
                name: user.name,
                username: user.username,
                email: user.email,
+               roles:user.roles,
                access_token: accessTokenRedis,
         };
      }
@@ -282,50 +295,6 @@ export class AuthService {
 
 
        // forgotPassword(token)
-      //  async Password(
-    //     @Body() reqBody: changeUserPasswordInterface)
-    //     {
-    //         const user = await this.usersService.findUserByEmail(reqBody.email);
-    //         if (!user)
-    //         {
-    //           throw new  NotFoundException('Invalid email');
-    //         }
-    //
-    //         const tokenKey = `forgot-password-token:${user.email}`;
-    //         const cachedToken = await this.cacheManager.get(tokenKey);
-    //         if(!cachedToken)
-    //         {
-    //           throw new UnauthorizedException('token expired');
-    //         }
-    //
-    //        const parsedToken = JSON.parse(<string>cachedToken);
-    //        if (parsedToken.token !== reqBody.resetToken)
-    //        {
-    //           throw new UnauthorizedException('Invalid token');
-    //        }
-    //
-    //        if (reqBody.newPassword !== reqBody.confirmPassword)
-    //        {
-    //           throw new NotAcceptableException('Passwords do not match');
-    //        }
-    //
-    //        const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-    //        try
-    //        {
-    //            await this.usersService.updatePassword(reqBody.email, hashedPassword);
-    //            await this.sendPasswordUpdatedEmail(reqBody.email);
-    //            const loginResult = this.login(user);
-    //            await this.cacheManager.del(tokenKey);
-    //            return loginResult;
-    //        }
-    //       catch (e)
-    //       {
-    //           throw new InternalServerErrorException('Failed to login');
-    //       }
-    //
-    // }
-
-
         async Password(@Body() reqBody: changeUserPasswordInterface)
         {
             const user = await this.usersService.findUserByEmail(reqBody.email);
@@ -375,7 +344,6 @@ export class AuthService {
 
 
 
-
         //profile get
          async getProfile(accessToken: string)
          {
@@ -385,56 +353,6 @@ export class AuthService {
               throw new UnauthorizedException('Token expired');
            }
               return  cachedToken
-         }
-
-
-
-        //get all users
-        // async getAllUsers( ):Promise<{records:User[]}>
-        // {
-        //   const users = await this.usersService.getAllUsers()
-        //   if(!users)
-        //   {
-        //     throw new  NotFoundException('users not exist');
-        //   }
-        //     return { records:users};
-        // }
-        async getAllUsers(page:number):Promise<paginationUserInterface>
-        {
-           return this.usersService.getAllUsers(page);
-        }
-
-
-
-        //update user
-        async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
-        {
-
-          const hashedPassword = await AuthService.hashPassword(updateUser.password);
-          const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email,hashedPassword);
-          if (!update)
-          {
-             throw new NotFoundException('invalid user id');
-          }
-
-             return { message: "User updated successfully", update};
-         }
-
-
-
-
-
-         //delete user
-         async deleteUser(id:string):Promise<{message: string, deletedUser:User}>
-         {
-
-           const deletedUser = await this.usersService.deleteUser(id);
-           if (!deletedUser)
-           {
-              throw new NotFoundException('user not found');
-           }
-
-           return { message: "user deleted successfully", deletedUser };
          }
 
 

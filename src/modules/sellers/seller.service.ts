@@ -81,19 +81,19 @@ export class SellerService {
 
 
         // get all sellers
-       // async getAllSellers( ):Promise<{records:seller[]}>
-       // {
-       //    const sellers = await this.SellerRepository.getAllSellers()
-       //    if(!sellers)
-       //    {
-       //      throw new  NotFoundException('sellers do not exist');
-       //
-       //    }
-       //
-       //      return { records: sellers};
-       // }
+       async getAllSellers( ):Promise<{records:seller[]}>
+       {
+          const sellers = await this.SellerRepository.getAllSellers()
+          if(!sellers)
+          {
+            throw new  NotFoundException('sellers do not exist');
 
-          async getAllSellers(pageNumber: number):Promise<paginationSellerInterface >
+          }
+
+            return { records: sellers};
+       }
+
+          async getAllAdminSellers(pageNumber: number):Promise<paginationSellerInterface >
           {
              const pageSize = 10;
              const skip = (pageNumber - 1) * pageSize;

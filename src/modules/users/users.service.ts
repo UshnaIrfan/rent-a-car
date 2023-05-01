@@ -49,10 +49,6 @@ export class UsersService {
 
 
       // get all users(pagination)
-      // async getAllUsers (): Promise<User[]|null>
-      // {
-      //   return this.usersRepository.getAllUsers( );
-      // }
        async getAllUsers(pageNumber: number):Promise<paginationUserInterface>
        {
           const pageSize = 10;

@@ -125,38 +125,6 @@ export class AuthController {
 
 
 
-        //get all users
-        // @Get('all-user')
-        // async  getAllUsers( ):Promise<{records:User[]}>
-        // {
-        //    return this.authService.getAllUsers();
-        // }
-        @Get('all-user')
-        async getReview(@Query('page') page: number = 1):Promise<paginationUserInterface>
-        {
-         return this.authService.getAllUsers(page);
-        }
-
-
-
-         //update user
-         @Patch('update')
-         async updateUser(@Body() updateUserDto:updateUserDto):Promise<{ message: string, update:updateUserInterface}>
-         {
-            return this.authService.updateUser(updateUserDto);
-         }
-
-
-
-         //delete user
-        @Delete('delete')
-        async deleteUser(@Query('id') id:string):Promise<{message: string, deletedUser: User}>
-        {
-          return this.authService.deleteUser(id);
-        }
-
-
-
         //logout
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)

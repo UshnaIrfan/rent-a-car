@@ -19,13 +19,12 @@ export class SellerController {
   constructor(private readonly sellerService: SellerService) {}
 
 
-       //create seller
-       @ApiBody({type:CreateSellerDto})
-       @Post('create')
-       async  create(@Body() createSellerDto: CreateSellerDto):Promise<{record:seller}>
-       {
-          return this.sellerService.createseller(createSellerDto);
-       }
+        // get all sellers
+        @Get('all-sellers')
+        async  getAllSellers( ):Promise<{records:seller[]}>
+        {
+            return this.sellerService.getAllSellers();
+        }
 
 
 
@@ -35,20 +34,6 @@ export class SellerController {
        {
           return this.sellerService.getSellerById(id);
        }
-
-
-
-       // get all sellers
-       // @Get('all-sellers')
-       // async  getAllSellers( ):Promise<{records:seller[]}>
-       // {
-       //    return this.sellerService.getAllSellers();
-       // }
-        @Get('all-sellers')
-        async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
-        {
-           return this.sellerService.getAllSellers(page);
-        }
 
 
 
@@ -66,32 +51,6 @@ export class SellerController {
 
 
 
-        // update seller
-       @Patch('update')
-       async updateSeller(@Body() updateSellerDto:updateSellerDto)
-       {
-            return this.sellerService.updateSeller(updateSellerDto);
-       }
-
-
-
-
-       // delete seller
-       @Delete('delete')
-       async deleteSeller(@Query('id') id:string):Promise<{message: string, deletedSeller: seller}>
-       {
-           return this.sellerService.deleteSeller(id);
-       }
-
-
-
-
-       //admin update seller status
-       @Patch('admin/update')
-       async adminUpdateSeller(@Body() adminUpdateSellerDto:adminUpdateSellerDto):Promise<{ update: updateSellerInterface; message: string }>
-       {
-          return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
-       }
 
 
   }

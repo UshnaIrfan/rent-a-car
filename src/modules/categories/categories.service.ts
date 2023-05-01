@@ -78,17 +78,19 @@ export class CategoriesService {
 
 
         // get all categories(pagination)
-        // async getAllCategories() :Promise<{ records: category[] }>
-        // {
-        //    const categories = await this.categoryRepository.getAllCategories()
-        //    if (!categories)
-        //    {
-        //     throw new  NotFoundException('Categories not exist');
-        //    }
-        //
-        //     return { records: categories};
-        // }
-         async getAllCategories(pageNumber: number):Promise<paginationCategoryInterface>
+        async getAllCategories() :Promise<{ records: category[] }>
+        {
+           const categories = await this.categoryRepository.getAllCategories()
+           if (!categories)
+           {
+            throw new  NotFoundException('Categories not exist');
+           }
+
+            return { records: categories};
+        }
+
+         //get all categories(pagination)
+         async getAllAdminCategories(pageNumber: number):Promise<paginationCategoryInterface>
          {
               const pageSize = 10;
               const skip = (pageNumber - 1) * pageSize;
@@ -145,19 +147,6 @@ export class CategoriesService {
 
 
      //  common sellers
-     // async get(id: string):Promise<{ records: seller[] | null }>
-     // {
-     //   const category = await this.categoryRepository.getCategoryId(id);
-     //   if (!category)
-     //   {
-     //     throw new NotFoundException('Category not exist');
-     //   }
-     //
-     //   const commonSellers = await this.categoryRepository.getCommonSellers(id, category.sellers);
-     //   return { records: commonSellers.length > 0 ? commonSellers : null };
-     //
-     // }
-
        async get(category_Id: string, seller_Id: string)
        {
          const result = await this.categoryRepository.getCommonSellers(category_Id, seller_Id);
@@ -169,82 +158,176 @@ export class CategoriesService {
 
 
 
-
-
       //  latest positive review
-        async getReviewsPositive(categoryId: string)
+   //      async getReviewsPositive(categoryId: string)
+   //      {
+   //          const category = await this.categoryRepository.getCategoryId(categoryId);
+   //          if (!category)
+   //          {
+   //             throw new NotFoundException('Category not exist');
+   //          }
+   //
+   //
+   //         const toreview = [];
+   //         const sellerMap = {};
+   //         const categorySellers = [];
+   //
+   //        for (const seller of category.sellers)
+   //        {
+   //             console.log("seller",seller.id)
+   //             const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
+   //
+   //             if (latestPositiveReview)
+   //             {
+   //                const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
+   //                const userCount = result.length;
+   //                const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
+   //
+   //               if (matchingSlugTitle)
+   //               {
+   //                   const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+   //                   if (title)
+   //                   {
+   //                      if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
+   //                      {
+   //                         if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
+   //                         {
+   //                             sellerMap[latestPositiveReview.id] = seller;
+   //                             if (!categorySellers.includes(seller))
+   //                             {
+   //                                 categorySellers.push(seller );
+   //                             }
+   //
+   //                            toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
+   //                            break;
+   //                        }
+   //                    }
+   //                 }
+   //              else
+   //              {
+   //                  throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
+   //              }
+   //          }
+   //        else
+   //        {
+   //           throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+   //        }
+   //      }
+   //  }
+   //      const categoryObj = {
+   //          id:category.id,
+   //          categoryName: category.categoryName,
+   //         approvedByAdmin:category.approvedByAdmin,
+   //       // isListing:category.isListing
+   //      };
+   //
+   //    return {
+   //        category:categoryObj,
+   //        sellers: categorySellers,
+   //        'to-review': toreview
+   //     };
+   // }
+   //
+
+
+
+  async getReviewsPositive(categoryId: string)
+  {
+    const category = await this.categoryRepository.getCategoryId(categoryId);
+    if (!category)
+    {
+      throw new NotFoundException('Category not exist');
+    }
+
+    const toreview = [];
+    const sellerMap = {};
+    const categorySellers = [];
+
+    for (const seller of category.sellers)
+    {
+
+      const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
+
+
+      console.log("latest review" ,latestPositiveReview)
+      if (latestPositiveReview)
+      {
+        const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
+        const userCount = result.length;
+        const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
+
+        if (matchingSlugTitle)
         {
-            const category = await this.categoryRepository.getCategoryId(categoryId);
-            if (!category)
-            {
-               throw new NotFoundException('Category not exist');
-            }
-
-           const toreview = [];
-           const sellerMap = {};
-           const categorySellers = [];
-
-          for (const seller of category.sellers)
+          const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+          if (title)
           {
-               console.log("seller",seller.id)
-               const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
-
-               if (latestPositiveReview)
-               {
-                  const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
-                  const userCount = result.length;
-                  const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-
-                 if (matchingSlugTitle)
-                 {
-                     const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
-                     if (title)
-                     {
-                        if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
-                        {
-                           if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
-                           {
-                               sellerMap[latestPositiveReview.id] = seller;
-                               if (!categorySellers.includes(seller))
-                               {
-                                   categorySellers.push(seller );
-                               }
-
-                              toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
-                              break;
-                          }
-                      }
-                   }
-                else
+            if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
+            {
+              if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
+              {
+                sellerMap[latestPositiveReview.id] = seller;
+                if (!categorySellers.includes(seller))
                 {
-                    throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
+                  categorySellers.push(seller );
                 }
+
+                toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
+                break;
+              }
             }
+          }
           else
           {
-             throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+            throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
           }
         }
+        else
+        {
+          throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+        }
+      }
     }
-        const categoryObj = {
-            id:category.id,
-            categoryName: category.categoryName,
-           approvedByAdmin:category.approvedByAdmin,
-         // isListing:category.isListing
-        };
+    const categoryObj = {
+      id:category.id,
+      categoryName: category.categoryName,
+      approvedByAdmin:category.approvedByAdmin,
+      // isListing:category.isListing
+    };
 
-      return {
-          category:categoryObj,
-          sellers: categorySellers,
-          'to-review': toreview
-       };
-   }
-
-
+    return {
+      category:categoryObj,
+      sellers: categorySellers,
+      'to-review': toreview
+    };
+  }
 
 
 
-      // admin update category status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // admin update category status
        async adminUpdateCategory(adminUpdateCategoryInterface:adminUpdateCategoryInterface):Promise<{ updateAdmin: category; message: string }>
        {
           const updateAdmin = await this.categoryRepository.adminUpdateCategory(adminUpdateCategoryInterface.categoryId,adminUpdateCategoryInterface.approvedByAdmin);

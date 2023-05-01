@@ -16,13 +16,6 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { category } from "./schemas/category.schema";
-import {updateCategoryDto} from "./dto/update-category.dto";
-import updateCategoryInterface from "./interfaces/update-category.interface";
-import {Role} from "../../enums/role.enum";
-import {Roles} from "../../decorators/role.decorators";
-import paginationCategoryInterface from "./interfaces/pagination-category.interface";
-import {adminUpdateCategoryDto} from "./dto/admin-update.category.dto";
-import adminUpdateCategoryInterface from "./interfaces/admin-update.category.interface";
 
 
 @ApiTags('Categories')
@@ -33,19 +26,16 @@ export class CategoriesController {
   ) {}
 
 
-         // create category
-        // @ApiBearerAuth()
-         @ApiBody({type:CreateCategoryDto})
-         @Post('admin/create')
-         //@Roles(Role.L2A_ADMIN)
-         async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
-         {
-          return this.categoriesService.createCategory(createCategoryDto);
-         }
+          // get all categories
+          @Get('all-categories')
+          async getAllCategories():Promise<{ records: category[] }>
+          {
+              return this.categoriesService.getAllCategories();
+          }
 
 
 
-         // get category by ID
+          // get category by ID
           @Get('/id/:category_id')
           async  getCategoryByID(@Param('category_id') id: string):Promise<{ records: category }>
           {
@@ -55,75 +45,27 @@ export class CategoriesController {
 
 
 
-        // get all categories(pagination)
-        // @Get('all-categories')
-        // async getAllCategories():Promise<{ records: category[] }>
-        // {
-        //    return this.categoriesService.getAllCategories();
-        // }
-         @Get('all-categories')
-         async getReview(@Query('page') page: number = 1):Promise<paginationCategoryInterface>
+         //  common sellers
+         @Get('/other/:categoryId')
+         async get(
+         @Param('categoryId') categoryId: string,
+         @Query('excludeSeller') excludeSellerId: string)
          {
-              return this.categoriesService.getAllCategories(page);
-         }
-
-
-
-         // update category
-         @Patch('update')
-         async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
-         {
-            return this.categoriesService.updateCategory(updateCategoryDto);
-         }
-
-
-
-        // delete category
-        @Delete('delete')
-        async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
-        {
-           return this.categoriesService.deleteCategory(id);
-        }
-
-
-
-
-       //  common sellers
-       // @Get('/other/:id')
-       // async get(@Param('id') id: string):Promise<{ records: seller[] | null }>
-       // {
-       //    return this.categoriesService.get(id);
-       // }
-
-        @Get('/other/:categoryId')
-        async get(
-        @Param('categoryId') categoryId: string,
-        @Query('excludeSeller') excludeSellerId: string)
-        {
             return this.categoriesService.get(categoryId, excludeSellerId);
-        }
-
-
-
-
-        // latest positive review
-        @Get('/:category_id')
-        async getReviewsPositive(
-        @Param('category_id') categoryId: string)
-        {
-          return  this.categoriesService.getReviewsPositive(categoryId);
-        }
+         }
 
 
 
 
 
-        // admin update category status
-        @Patch('admin/update')
-        async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
-        {
-             return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
-        }
+         // latest positive review
+         @Get('/:category_id')
+         async getReviewsPositive(
+         @Param('category_id') categoryId: string)
+         {
+            return  this.categoriesService.getReviewsPositive(categoryId);
+         }
+
 
 
 }

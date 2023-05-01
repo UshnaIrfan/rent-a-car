@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import {Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
-
+import {status} from "./schemas/category.schema";
 
 @Injectable()
 export class CategoryRepository {
@@ -36,19 +36,31 @@ export class CategoryRepository {
        async getCategoryId(id: string): Promise<category|null>
        {
          const category = await this.categoryModel.findOne({
-          where: { id },
+          where: { id ,approvedByAdmin:status.APPROVED },
           relations: ['sellers'],
           });
-           return category;
+
+         if (!category) {
+           throw new NotFoundException('Category not found');
+         }
+
+         category.sellers = category.sellers.filter((seller) => seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
+         return category;
        }
 
 
 
-        // get all categories
-        async getAllCategories(): Promise<category[] |null>
-        {
-           return this.categoryModel.find();
-        }
+
+      // get all categories
+       async getAllCategories(): Promise<category[] |null>
+       {
+         return  this.categoryModel.find({
+           where: {
+             approvedByAdmin: status.APPROVED,
+           },
+         });
+       }
+
 
 
 
@@ -97,51 +109,56 @@ export class CategoryRepository {
 
 
       // common seller
-     //  async getCommonSellers(id: string, sellers: seller[]):Promise<seller[]>
-     //  {
-     //      const otherCategories = await this.categoryModel.find({
-     //          where: { id: Not(id) },
-     //          relations: ['sellers'],
-     //        });
-     //
-     //
-     //     const otherSellers = otherCategories.reduce((acc, cur) => {
-     //     return acc.concat(cur.sellers);
-     //      }, []);
-     //
-     //     return sellers.filter(seller => {
-     //     return otherSellers.some(s => s.id === seller.id);
-     //     });
-     //
-     // }
-
-       async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
-       {
-          const category = await this.categoryModel.findOne({
-          where: { id: categoryId },
-          relations: ['sellers'],
+      //  async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
+      //  {
+      //     const category = await this.categoryModel.findOne({
+      //     where: { id: categoryId,approvedByAdmin:status.APPROVED },
+      //     relations: ['sellers'],
+      //     });
+      //
+      //    if (!category)
+      //    {
+      //      throw new NotFoundException('Category not found');
+      //    }
+      //
+      //   const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
+      //
+      //   if (filteredSellers.length === category.sellers.length)
+      //   {
+      //      throw new NotFoundException('Seller not associated with this category');
+      //   }
+      //
+      //     category.sellers = filteredSellers;
+      //     return [category];
+      // }
+        async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
+        {
+          const category = await this.categoryModel.findOne(
+         {
+            where: { id: categoryId, approvedByAdmin: status.APPROVED },
+           relations: ['sellers'],
           });
 
          if (!category)
          {
-           throw new NotFoundException('Category not found');
+            throw new NotFoundException('Category not found');
          }
 
-        const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
-
-        if (filteredSellers.length === category.sellers.length)
+        const filteredSellers = category.sellers.filter((seller) => seller.id !== excludeSellerId && seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
+        if (filteredSellers.length === 0)
         {
-           throw new NotFoundException('Seller not associated with this category');
+           throw new NotFoundException('No approved seller found for this category');
         }
 
-          category.sellers = filteredSellers;
-          return [category];
-      }
+         category.sellers = filteredSellers;
+         return [category];
+    }
 
 
 
 
-        //  get all categories(pagination)
+
+      //  get all categories(pagination)
         async findAndCount(skip: number, take: number): Promise<[category[], number]>
         {
             const [result, totalCount] = await this.categoryModel.findAndCount({

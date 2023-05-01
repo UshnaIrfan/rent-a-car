@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
+import {status} from "./schemas/seller.schema";
 
 
 @Injectable()
@@ -49,19 +50,33 @@ export class sellerRepository{
        // get seller by ID (associated categories)
        async getSellerById(id: string): Promise<seller|null>
        {
-        return this.sellerModel.findOne(
+         const seller = await  this.sellerModel.findOne(
           {
-            where: { id },
+            where: { id, approvedByAdmin: status.APPROVED ,isListing:true},
             relations: ['categories'],
           });
+         const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === status.APPROVED);
+
+         seller.categories = approvedCategories;
+
+         return seller;
        }
 
 
 
-       // get all sellers
+
+
+
+  // get all sellers
        async getAllSellers(): Promise<seller[]|null>
        {
-         return this.sellerModel.find();
+
+         return  this.sellerModel.find({
+           where: {
+             approvedByAdmin: status.APPROVED,
+             isListing:true,
+           },
+         });
        }
 
 
@@ -69,7 +84,7 @@ export class sellerRepository{
        //get seller ID
        async getSellerId(id:string): Promise<seller|null>
        {
-         return  this.sellerModel.findOne({ where: { id } })
+         return  this.sellerModel.findOne({ where: { id ,approvedByAdmin: status.APPROVED } })
        }
 
 
