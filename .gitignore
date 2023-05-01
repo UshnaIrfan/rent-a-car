@@ -30,5 +30,5 @@ lerna-debug.log*
 # IDE - VSCode
 .vscode/*
 
-*.env.*
+*.env*
 !.env.example
