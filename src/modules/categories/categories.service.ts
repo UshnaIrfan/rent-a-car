@@ -12,11 +12,8 @@ import updateCategoryInterface from "./interfaces/update-category.interface";
 import {UsersRepository} from "../users/users.repository";
 import { JwtService } from "@nestjs/jwt";
 import {ReviewService} from "../review/review.service";
-import { seller } from "../sellers/schemas/seller.schema";
-import { jwtConstants } from "../auth/constants/constants";
 import {reviewRepository} from "../review/respositories/review.respository";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
-import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 import paginationCategoryInterface from "./interfaces/pagination-category.interface";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 import adminUpdateCategoryInterface from "./interfaces/admin-update.category.interface";
@@ -35,6 +32,8 @@ export class CategoriesService {
   ) {}
 
 
+
+      //ADMIN APIS
       // create category
       async createCategory(createCategory:createCategoryInterface):Promise<category>
       {
@@ -62,7 +61,97 @@ export class CategoriesService {
 
 
 
-       // get category by id
+
+      //get all categories(pagination)
+      async getAllAdminCategories(pageNumber: number):Promise<paginationCategoryInterface>
+      {
+          const pageSize = 10;
+          const skip = (pageNumber - 1) * pageSize;
+          const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize);
+          const totalPages = Math.ceil(totalCount / pageSize);
+          if (result.length === 0)
+          {
+             throw new NotFoundException('No records found');
+          }
+
+         return {
+            records: result,
+            totalRecords: totalCount,
+            totalPages,
+           currentPage: pageNumber,
+         };
+     }
+
+
+
+
+
+      // update category
+      async updateCategory(updateCategory:updateCategoryInterface):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+      {
+
+        const update = await this.categoryRepository.updateCategory(updateCategory.id, updateCategory.categoryName);
+        if (!update)
+        {
+           throw new NotFoundException('Category not exist');
+        }
+
+       return { message: "Category updated successfully", updateCategory };
+      }
+
+
+
+
+      // delete category
+      async deleteCategory(id:string): Promise<{ message: string, deletedCategory: category }>
+      {
+
+         const deletedCategory = await this.categoryRepository.deleteCategory(id);
+         if (!deletedCategory)
+         {
+           throw new NotFoundException('Category not exist');
+         }
+
+       return { message: "Category deleted successfully", deletedCategory };
+     }
+
+
+
+
+       // admin update category status
+       async adminUpdateCategory(adminUpdateCategoryInterface:adminUpdateCategoryInterface):Promise<{ updateAdmin: category; message: string }>
+       {
+           const updateAdmin = await this.categoryRepository.adminUpdateCategory(adminUpdateCategoryInterface.categoryId,adminUpdateCategoryInterface.approvedByAdmin);
+           if (!updateAdmin)
+           {
+               throw new NotFoundException('Category not exist');
+           }
+           return { message: "Category status updated successfully",updateAdmin };
+      }
+
+
+
+
+
+
+         //FRONTEND APIS
+       // get all categories
+       async getAllCategories() :Promise<{ records: category[] }>
+       {
+         const categories = await this.categoryRepository.getAllCategories()
+         if (!categories)
+         {
+            throw new  NotFoundException('Categories not exist');
+         }
+
+         return { records: categories};
+        }
+
+
+
+
+
+        // get category by id
        async getCategoryById(id: string):Promise<{ records: category }>
        {
            const category = await this.categoryRepository.getCategoryId(id)
@@ -77,76 +166,8 @@ export class CategoriesService {
 
 
 
-        // get all categories(pagination)
-        async getAllCategories() :Promise<{ records: category[] }>
-        {
-           const categories = await this.categoryRepository.getAllCategories()
-           if (!categories)
-           {
-            throw new  NotFoundException('Categories not exist');
-           }
 
-            return { records: categories};
-        }
-
-         //get all categories(pagination)
-         async getAllAdminCategories(pageNumber: number):Promise<paginationCategoryInterface>
-         {
-              const pageSize = 10;
-              const skip = (pageNumber - 1) * pageSize;
-              const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize);
-              const totalPages = Math.ceil(totalCount / pageSize);
-              if (result.length === 0)
-              {
-                  throw new NotFoundException('No records found');
-              }
-
-             return {
-               records: result,
-               totalRecords: totalCount,
-               totalPages,
-               currentPage: pageNumber,
-          };
-       }
-
-
-
-
-       // update category
-       async updateCategory(updateCategory:updateCategoryInterface):Promise<{ message: string, updateCategory: updateCategoryInterface }>
-       {
-
-           const update = await this.categoryRepository.updateCategory(updateCategory.id, updateCategory.categoryName);
-           if (!update)
-           {
-             throw new NotFoundException('Category not exist');
-           }
-
-           return { message: "Category updated successfully", updateCategory };
-
-      }
-
-
-
-
-       // delete category
-       async deleteCategory(id:string): Promise<{ message: string, deletedCategory: category }>
-       {
-
-           const deletedCategory = await this.categoryRepository.deleteCategory(id);
-           if (!deletedCategory)
-           {
-             throw new NotFoundException('Category not exist');
-           }
-
-
-           return { message: "Category deleted successfully", deletedCategory };
-       }
-
-
-
-
-     //  common sellers
+       //  common sellers
        async get(category_Id: string, seller_Id: string)
        {
          const result = await this.categoryRepository.getCommonSellers(category_Id, seller_Id);
@@ -302,42 +323,6 @@ export class CategoriesService {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // admin update category status
-       async adminUpdateCategory(adminUpdateCategoryInterface:adminUpdateCategoryInterface):Promise<{ updateAdmin: category; message: string }>
-       {
-          const updateAdmin = await this.categoryRepository.adminUpdateCategory(adminUpdateCategoryInterface.categoryId,adminUpdateCategoryInterface.approvedByAdmin);
-          if (!updateAdmin)
-          {
-            throw new NotFoundException('Category not exist');
-           }
-           return { message: "Category status updated successfully",updateAdmin };
-
-       }
 
 
 

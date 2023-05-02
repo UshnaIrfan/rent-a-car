@@ -17,20 +17,20 @@ export class AdminCategoryController {
 
 
 
-      // create  admin category
-      @ApiBearerAuth()
-      @ApiBody({type:CreateCategoryDto})
-      @Post('categories/create')
-      @Roles(Role.L2A_ADMIN)
-      async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
-      {
+       // create  admin category
+       @ApiBearerAuth()
+       @ApiBody({type:CreateCategoryDto})
+       @Post('categories/create')
+       @Roles(Role.L2A_ADMIN)
+       async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
+       {
          return this.categoriesService.createCategory(createCategoryDto);
-      }
+       }
 
 
 
 
-      // get all categories
+       // get all categories
        @ApiBearerAuth()
        @Get('categories/all-categories')
        @Roles(Role.L2A_ADMIN)
@@ -42,37 +42,39 @@ export class AdminCategoryController {
 
 
 
-      // update category
+       // update category
+       @ApiBearerAuth()
+       @ApiBody({type:updateCategoryDto})
+       @Patch('categories/update')
+       @Roles(Role.L2A_ADMIN)
+       async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+       {
+          return this.categoriesService.updateCategory(updateCategoryDto);
+       }
+
+
+
+      // delete category
       @ApiBearerAuth()
-      @ApiBody({type:updateCategoryDto})
-      @Patch('update')
+      @Delete('categories/delete')
       @Roles(Role.L2A_ADMIN)
-      async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
+      async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
       {
-         return this.categoriesService.updateCategory(updateCategoryDto);
+        return this.categoriesService.deleteCategory(id);
       }
 
 
 
-     // delete category
-     @ApiBearerAuth()
-     @Delete('delete')
-     @Roles(Role.L2A_ADMIN)
-     async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
-     {
-        return this.categoriesService.deleteCategory(id);
-    }
 
+      // admin update category status
+      @ApiBearerAuth()
+      @ApiBody({type:adminUpdateCategoryDto})
+      @Patch('categories/update/status')
+      @Roles(Role.L2A_ADMIN)
+      async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
+      {
+         return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
+     }
 
-
-    // admin update category status
-    @ApiBearerAuth()
-    @ApiBody({type:adminUpdateCategoryDto})
-    @Patch('update/status')
-    @Roles(Role.L2A_ADMIN)
-    async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
-    {
-       return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
-    }
 
 }

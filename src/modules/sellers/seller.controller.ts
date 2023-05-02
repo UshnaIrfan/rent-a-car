@@ -3,14 +3,7 @@ import { SellerService } from './seller.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
-import {updateSellerDto} from "./dto/update-seller.dto";
-import updateSellerInterface from "./interfaces/update-seller.interface";
-import { CreateSellerDto } from "./dto/create-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
-import {likeDislikeReviewDto} from "../review/dto/like-dislike-review.dto";
-import paginationSellerInterface from "./interfaces/pagination-seller.interface";
-import {adminUpdateSellerDto} from "./dto/admin-update.seller.dto";
-import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
 
 
 @ApiTags('Sellers')

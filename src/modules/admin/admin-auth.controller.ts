@@ -18,7 +18,7 @@ export class adminAuthController {
 
       //get all users
       @ApiBearerAuth()
-      @Get('user/all-user')
+      @Get('user/all-users')
       @Roles(Role.L2A_ADMIN)
       async getReview(@Query('page') page: number = 1):Promise<paginationUserInterface>
       {

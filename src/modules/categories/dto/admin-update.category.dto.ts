@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsString
 } from "class-validator";
-import {status} from "../schemas/category.schema";
 
 export class adminUpdateCategoryDto {
 
@@ -14,10 +13,8 @@ export class adminUpdateCategoryDto {
      categoryId: string;
 
 
-
-    @ApiProperty({ type: String, enum: status, default: status.PENDING ,required:true })
-    @IsString()
-    @IsNotEmpty()
-    readonly approvedByAdmin: string = status.PENDING;
+     @ApiProperty({ type: String })
+     @IsString()
+     readonly approvedByAdmin: string;
 
 }

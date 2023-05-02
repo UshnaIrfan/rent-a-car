@@ -54,6 +54,11 @@ export class AuthService {
        async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
        {
           const hashedPassword = await AuthService.hashPassword(updateUser.password);
+          const isPasswordStrongEnough = hashedPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+          if (!isPasswordStrongEnough)
+           {
+              throw new BadRequestException('Password is too weak');
+          }
           const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email,hashedPassword);
           if (!update)
           {
@@ -215,42 +220,6 @@ export class AuthService {
 
 
 
-       //change password
-    //   async changePassword(
-    //   @Body() reqBody: changeUserPasswordInterface,
-    //   accessToken: string
-    //   ):Promise<{message:string}> {
-    //    const cachedToken = await this.cacheManager.get(accessToken);
-    //    if (!cachedToken)
-    //      {
-    //       throw new UnauthorizedException('Token expired');
-    //      }
-    //
-    //   const user = await this.usersService.findUserByEmail(reqBody.email);
-    //   if (!user)
-    //     {
-    //     throw new NotFoundException('Invalid User');
-    //     }
-    //   else
-    //   {
-    //      if (reqBody.newPassword !== reqBody.confirmPassword)
-    //       {
-    //       throw new NotAcceptableException('Password not matched');
-    //       }
-    //
-    //      if (reqBody.newPassword === reqBody.confirmPassword)
-    //      {
-    //      const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-    //      await this.usersService.updatePassword(reqBody.email, hashedPassword);
-    //      }
-    //
-    //    return {
-    //     message: "Password successfully updated."
-    //      };
-    //   }
-    // }
-
-
        //email ( random token)
        async token(randomUserToken: randomUserTokenInterface)
        {
@@ -294,7 +263,7 @@ export class AuthService {
 
 
 
-       // forgotPassword(token)
+       // change password
         async Password(@Body() reqBody: changeUserPasswordInterface)
         {
             const user = await this.usersService.findUserByEmail(reqBody.email);

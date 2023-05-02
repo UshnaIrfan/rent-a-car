@@ -4,7 +4,6 @@ import {
      IsNotEmpty, IsOptional,
      IsString
 } from "class-validator";
-import { string } from "joi";
 import {status} from "../schemas/seller.schema";
 
 export class  addSellerDto{

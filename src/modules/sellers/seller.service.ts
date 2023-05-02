@@ -37,27 +37,29 @@ export class SellerService {
 
 
 
-      // create seller
-      async createseller(body: createSellerInterface):Promise<{record:seller}>
-      {
-         const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
-         if (Url)
-         {
-           throw new ConflictException('Seller Url already exists');
-         }
 
-         const seller = await this.SellerRepository.createSeller(body);
-         seller.categories = [];
-        const categoriesIDs = body.categories;
-        for (const categoryID of categoriesIDs)
-        {
-           const category = await this.CategoryRepository.getCategoryById(categoryID);
-           if (!category)
-           {
+       // ADMIN APIS
+       // create seller
+       async createseller(body: createSellerInterface):Promise<{record:seller}>
+       {
+          const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
+          if (Url)
+          {
+             throw new ConflictException('Seller Url already exists');
+          }
+
+          const seller = await this.SellerRepository.createSeller(body);
+          seller.categories = [];
+          const categoriesIDs = body.categories;
+          for (const categoryID of categoriesIDs)
+          {
+            const category = await this.CategoryRepository.getCategoryById(categoryID);
+            if (!category)
+            {
               throw new NotFoundException('Category does not exist');
-           }
-           seller.categories.push(category);
-        }
+            }
+            seller.categories.push(category);
+         }
 
          await this.SellerRepository.sellerCategories(seller);
          return { record: seller };
@@ -66,10 +68,97 @@ export class SellerService {
 
 
 
-       // get seller by ID (associated categories)
+      // all seller get
+      async getAllAdminSellers(pageNumber: number):Promise<paginationSellerInterface >
+      {
+          const pageSize = 10;
+          const skip = (pageNumber - 1) * pageSize;
+          const [result, totalCount] = await this.SellerRepository.findAndCount(skip, pageSize);
+          const totalPages = Math.ceil(totalCount / pageSize);
+          if (result.length === 0)
+          {
+             throw new NotFoundException('No records found');
+          }
+
+       return {
+          records: result,
+          totalRecords: totalCount,
+          totalPages,
+          currentPage: pageNumber,
+       };
+  }
+
+
+       // update seller
+      async updateSeller(updateSeller:updateSellerInterface):Promise<{ message: string, update:updateSellerInterface}>
+      {
+
+         const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
+         if (!update)
+         {
+           throw new NotFoundException('seller not found');
+        }
+        return { message: "seller updated successfully", update};
+     }
+
+
+
+
+      // delete seller
+      async deleteSeller(id:string):Promise<{message: string, deletedSeller: seller}>
+      {
+
+        const deletedSeller = await this.SellerRepository.deleteSeller(id);
+        if (!deletedSeller)
+        {
+           throw new NotFoundException('seller not found');
+       }
+
+        return { message: "seller deleted successfully", deletedSeller };
+     }
+
+
+
+
+      //admin update seller status
+      async  adminUpdateSeller (adminUpdateSellerInterface:adminUpdateSellerInterface):Promise<{ update: updateSellerInterface; message: string }>
+      {
+
+         const update = await this.SellerRepository.adminUpdateSeller(adminUpdateSellerInterface.sellerId, adminUpdateSellerInterface.approvedByAdmin,adminUpdateSellerInterface.isListing);
+         if (!update)
+         {
+            throw new NotFoundException('seller not found');
+         }
+
+         return { message: "seller updated successfully", update};
+     }
+
+
+
+
+
+
+
+        // FRONTEND APIS
+        // get all sellers
+        async getAllSellers( ):Promise<{records:seller[]}>
+        {
+           const sellers = await this.SellerRepository.getAllSellers()
+           if(!sellers)
+           {
+             throw new  NotFoundException('sellers do not exist');
+           }
+
+         return { records: sellers};
+       }
+
+
+
+
+        // get seller by ID (associated categories)
         async getSellerById(id:string ) :Promise<{record:seller}>
         {
-            const seller = await this.SellerRepository.getSellerById(id)
+           const seller = await this.SellerRepository.getSellerById(id)
            if(!seller)
            {
               throw new  NotFoundException('seller with  the given ID not found');
@@ -77,43 +166,6 @@ export class SellerService {
 
             return { record: seller };
        }
-
-
-
-        // get all sellers
-       async getAllSellers( ):Promise<{records:seller[]}>
-       {
-          const sellers = await this.SellerRepository.getAllSellers()
-          if(!sellers)
-          {
-            throw new  NotFoundException('sellers do not exist');
-
-          }
-
-            return { records: sellers};
-       }
-
-          async getAllAdminSellers(pageNumber: number):Promise<paginationSellerInterface >
-          {
-             const pageSize = 10;
-             const skip = (pageNumber - 1) * pageSize;
-             const [result, totalCount] = await this.SellerRepository.findAndCount(skip, pageSize);
-             const totalPages = Math.ceil(totalCount / pageSize);
-
-             if (result.length === 0)
-             {
-               throw new NotFoundException('No records found');
-             }
-
-          return {
-              records: result,
-              totalRecords: totalCount,
-              totalPages,
-              currentPage: pageNumber,
-          };
-        }
-
-
 
 
 
@@ -179,57 +231,6 @@ export class SellerService {
         const review= await this.ReviewRepository.submitReview(reviewBody);
         return { seller, review };
    }
-
-
-
-
-
-      // update seller
-      async updateSeller(updateSeller:updateSellerInterface):Promise<{ message: string, update:updateSellerInterface}>
-      {
-
-          const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
-          if (!update)
-          {
-             throw new NotFoundException('seller not found');
-          }
-
-            return { message: "seller updated successfully", update};
-     }
-
-
-
-
-
-     // delete seller
-     async deleteSeller(id:string):Promise<{message: string, deletedSeller: seller}>
-     {
-
-         const deletedSeller = await this.SellerRepository.deleteSeller(id);
-         if (!deletedSeller)
-         {
-            throw new NotFoundException('seller not found');
-         }
-
-         return { message: "seller deleted successfully", deletedSeller };
-     }
-
-
-
-
-
-       //admin update seller status
-       async  adminUpdateSeller (adminUpdateSellerInterface:adminUpdateSellerInterface):Promise<{ update: updateSellerInterface; message: string }>
-       {
-
-         const update = await this.SellerRepository.adminUpdateSeller(adminUpdateSellerInterface.sellerId, adminUpdateSellerInterface.approvedByAdmin,adminUpdateSellerInterface.isListing);
-         if (!update)
-         {
-           throw new NotFoundException('seller not found');
-         }
-
-         return { message: "seller updated successfully", update};
-      }
 
 
 

@@ -18,63 +18,65 @@ export class AdminSellerController {
 
 
 
-      // create  admin seller
-      @ApiBearerAuth()
-      @ApiBody({type:CreateSellerDto})
-      @Post('sellers/create')
-      @Roles(Role.L2A_ADMIN)
-      async  create(@Body() createSellerDto: CreateSellerDto):Promise<{record:seller}>
-      {
+       // create  admin seller
+       @ApiBearerAuth()
+       @ApiBody({type:CreateSellerDto})
+       @Post('sellers/create')
+       @Roles(Role.L2A_ADMIN)
+       async  create(@Body() createSellerDto: CreateSellerDto):Promise<{record:seller}>
+       {
           return this.sellerService.createseller(createSellerDto);
+       }
+
+
+
+
+      // GET all sellers
+      @ApiBearerAuth()
+      @Get('sellers/all-sellers')
+      @Roles(Role.L2A_ADMIN)
+      async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
+      {
+          return this.sellerService.getAllAdminSellers(page);
       }
 
 
- // GET
-    @ApiBearerAuth()
-    @Get('all-sellers')
-    @Roles(Role.L2A_ADMIN)
-    async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
-    {
-        return this.sellerService.getAllAdminSellers(page);
-    }
+
+
+      // update seller
+      @ApiBearerAuth()
+      @ApiBody({type:updateSellerDto})
+      @Patch('sellers/update')
+      @Roles(Role.L2A_ADMIN)
+      async updateSeller(@Body() updateSellerDto:updateSellerDto)
+      {
+         return this.sellerService.updateSeller(updateSellerDto);
+      }
 
 
 
 
-    // update seller
-    @ApiBearerAuth()
-    @ApiBody({type:updateSellerDto})
-    @Patch('update')
-    @Roles(Role.L2A_ADMIN)
-    async updateSeller(@Body() updateSellerDto:updateSellerDto)
-    {
-        return this.sellerService.updateSeller(updateSellerDto);
-    }
+       // delete seller
+      @ApiBearerAuth()
+      @Delete('sellers/delete')
+      @Roles(Role.L2A_ADMIN)
+      async deleteSeller(@Query('id') id:string):Promise<{message: string, deletedSeller: seller}>
+      {
+         return this.sellerService.deleteSeller(id);
+      }
 
 
 
 
-    // delete seller
-    @ApiBearerAuth()
-    @Delete('delete')
-    @Roles(Role.L2A_ADMIN)
-    async deleteSeller(@Query('id') id:string):Promise<{message: string, deletedSeller: seller}>
-    {
-        return this.sellerService.deleteSeller(id);
-    }
-
-
-
-
-    //admin update seller status
-     @ApiBearerAuth()
-     @ApiBody({type:adminUpdateSellerDto})
-    @Patch('admin/update')
-    @Roles(Role.L2A_ADMIN)
-    async adminUpdateSeller(@Body() adminUpdateSellerDto:adminUpdateSellerDto):Promise<{ update: updateSellerInterface; message: string }>
-    {
-        return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
-    }
+      //admin update seller status
+      @ApiBearerAuth()
+      @ApiBody({type:adminUpdateSellerDto})
+      @Patch('seller/update/status')
+      @Roles(Role.L2A_ADMIN)
+      async adminUpdateSeller(@Body() adminUpdateSellerDto:adminUpdateSellerDto):Promise<{ update: updateSellerInterface; message: string }>
+      {
+          return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
+      }
 
 
 

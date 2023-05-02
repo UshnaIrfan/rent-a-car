@@ -103,7 +103,7 @@ export class AuthController {
 
 
 
-        // forgotPassword(token)
+        //change password
         @ApiBody({type:ChangeUserPasswordDto})
         @Put('changePassword')
         async changePasswordToken(
