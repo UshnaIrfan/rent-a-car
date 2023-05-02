@@ -14,10 +14,57 @@ export class UsersService {
   ) {}
 
 
+      //ADMIN APIS
+     // get all users(pagination)
+      async getAllUsers(pageNumber: number):Promise<paginationUserInterface>
+      {
+         const pageSize = 10;
+         const skip = (pageNumber - 1) * pageSize;
+         const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize);
+         const totalPages = Math.ceil(totalCount / pageSize);
+
+        if (result.length === 0)
+        {
+            throw new NotFoundException('No records found');
+         }
+
+      return {
+           records: result,
+           totalRecords: totalCount,
+           totalPages,
+          currentPage: pageNumber,
+      };
+    }
+
+
+
+
+
+
+      // update user
+      async  updateUser (id:string, name:string,username:string,email:string)
+      {
+        return this.usersRepository.updateUser(id,name,username,email);
+      }
+
+
+
+      // delete  user
+      async deleteUser(id:string): Promise<User|null>
+      {
+         return this.usersRepository.deleteUser(id);
+      }
+
+
+
+
+      //FRONTEND APIS
       async findUserByUsername(username: string): Promise<User | null>
       {
          return this.usersRepository.findUserByUsername(username);
       }
+
+
 
 
       async findUserByEmail(email: string): Promise<User | null>
@@ -31,6 +78,7 @@ export class UsersService {
       {
          return this.usersRepository.createUser(user);
       }
+
 
 
 
@@ -48,44 +96,6 @@ export class UsersService {
 
 
 
-      // get all users(pagination)
-       async getAllUsers(pageNumber: number):Promise<paginationUserInterface>
-       {
-          const pageSize = 10;
-          const skip = (pageNumber - 1) * pageSize;
-          const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize);
-          const totalPages = Math.ceil(totalCount / pageSize);
-
-          if (result.length === 0)
-          {
-            throw new NotFoundException('No records found');
-          }
-
-        return {
-            records: result,
-            totalRecords: totalCount,
-            totalPages,
-            currentPage: pageNumber,
-         };
-      }
-
-
-
-
-
-      // update user
-      async  updateUser (id:string, name:string,username:string,email:string,password:string)
-      {
-          return this.usersRepository.updateUser(id,name,username,email,password);
-      }
-
-
-
-      // delete  user
-      async deleteUser(id:string): Promise<User|null>
-      {
-          return this.usersRepository.deleteUser(id);
-      }
 
 
 }

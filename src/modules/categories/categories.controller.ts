@@ -68,4 +68,15 @@ export class CategoriesController {
 
 
 
+
+         // category by name search
+         // @Get()
+         // async search(@Query('query') query: string)
+         // {
+         //    return this.categoriesService.search(query);
+         // }
+
+
+
+
 }

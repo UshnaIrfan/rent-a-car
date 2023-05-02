@@ -52,6 +52,56 @@ import { seller } from "../sellers/schemas/seller.schema";
 export class UsersRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>) {}
 
+
+
+
+       //ADMIN APIS
+       //update user
+       async updateUser(id:string, name:string,username:string,email:string): Promise<User | null>
+       {
+         const user = await this.userModel.findOne({ where: { id}});
+         if (!user)
+         {
+               return null
+         }
+
+         user.name = name;
+         user.username = username;
+         user.email = email;
+         return this.userModel.save(user);
+       }
+
+
+
+
+       //delete user
+       async deleteUser(id: string): Promise<User| null>
+       {
+           const user = await this.userModel.findOne({ where: { id } });
+           if (!user)
+           {
+              return null
+           }
+           return await this.userModel.remove(user);
+      }
+
+
+
+
+       // get all users(pagination)
+        async findAndCount(skip: number, take: number): Promise<[User[], number]>
+        {
+           const [result, totalCount] = await this.userModel.findAndCount({
+           skip,
+           take,
+          });
+          return [result, totalCount];
+        }
+
+
+
+
+        //FRONTEND APIS
         async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(createUserDto);
@@ -102,50 +152,6 @@ export class UsersRepository {
 
 
 
-
-       //delete user
-       async deleteUser(id: string): Promise<User| null>
-       {
-         const user = await this.userModel.findOne({ where: { id } });
-         if (!user)
-         {
-            return null
-         }
-          return await this.userModel.remove(user);
-       }
-
-
-
-
-
-       //update user
-       async updateUser(id:string, name:string,username:string,email:string,password:string): Promise<User | null>
-       {
-         const user = await this.userModel.findOne({ where: { id}});
-         if (!user)
-         {
-           return null
-         }
-
-           user.name = name;
-           user.username = username;
-           user.email = email;
-           user.password = password;
-           return this.userModel.save(user);
-       }
-
-
-
-
-        // get all users(pagination)
-        async findAndCount(skip: number, take: number): Promise<[User[], number]>
-        {
-           const [result, totalCount] = await this.userModel.findAndCount({
-           skip,
-           take,
-           });
-          return [result, totalCount];
-        }
 
 
 

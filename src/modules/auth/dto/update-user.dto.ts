@@ -36,15 +36,5 @@ export class updateUserDto {
 
 
 
-    @ApiProperty({ type: String, required: true })
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(8)
-    @MaxLength(64)
-    @Matches(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
-      message: 'Password is too weak',
-    })
-    password: string;
-
 
 }

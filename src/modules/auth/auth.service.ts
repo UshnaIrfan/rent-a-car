@@ -54,14 +54,7 @@ export class AuthService {
        async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
        {
 
-           const { password } = updateUser;
-           const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-           if (!isPasswordStrongEnough)
-           {
-             throw new BadRequestException('Password is too weak');
-           }
-          const hashedPassword = await AuthService.hashPassword(updateUser.password);
-          const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email,hashedPassword);
+          const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email);
           if (!update)
           {
              throw new NotFoundException('invalid user id');

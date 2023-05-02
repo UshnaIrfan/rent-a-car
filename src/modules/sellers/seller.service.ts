@@ -135,11 +135,17 @@ export class SellerService {
 
 
 
+       // seller by name search
+      async search(query: string,categoryId?: string)
+      {
+        const result = await this.SellerRepository.search(query,categoryId);
+        return result;
+      }
 
 
 
 
-        // FRONTEND APIS
+         // FRONTEND APIS
         // get all sellers
         async getAllSellers( ):Promise<{records:seller[]}>
         {
@@ -231,6 +237,9 @@ export class SellerService {
         const review= await this.ReviewRepository.submitReview(reviewBody);
         return { seller, review };
    }
+
+
+
 
 
 

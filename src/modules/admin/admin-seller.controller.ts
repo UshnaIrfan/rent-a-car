@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Query, Patch, Delete } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../decorators/role.decorators";
 import { Role } from "../../enums/role.enum";
 import {SellerService} from "../sellers/seller.service";
@@ -71,11 +71,24 @@ export class AdminSellerController {
       //admin update seller status
       @ApiBearerAuth()
       @ApiBody({type:adminUpdateSellerDto})
-      @Patch('seller/update/status')
+      @Patch('sellers/update/status')
       @Roles(Role.L2A_ADMIN)
       async adminUpdateSeller(@Body() adminUpdateSellerDto:adminUpdateSellerDto):Promise<{ update: updateSellerInterface; message: string }>
       {
           return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
+      }
+
+
+
+      //  seller by name search
+      @ApiBearerAuth()
+      @ApiQuery({ name: 'query', required: true })
+      @ApiQuery({ name: 'categoryId', required: false })
+      @Get('sellers/search')
+      @Roles(Role.L2A_ADMIN)
+      async search(@Query('query') query: string, @Query('categoryId') categoryId?: string)
+      {
+          return this.sellerService.search(query, categoryId);
       }
 
 

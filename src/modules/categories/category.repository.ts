@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import {Not, Repository } from "typeorm";
+import { Like, Not, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
 import {status} from "./schemas/category.schema";
@@ -11,27 +11,86 @@ export class CategoryRepository {
   ) {}
 
 
-      // create category
-      async createCategory(category: CreateCategoryDto):Promise<category | null>
-      {
+
+         //ADMIN APS
+         // create category
+         async createCategory(category: CreateCategoryDto):Promise<category | null>
+         {
+             return this.categoryModel.save(category);
+         }
+
+
+
+        // get category by name
+         async getCategoryByName(categoryName:string): Promise<category | null>
+         {
+            const category = await this.categoryModel.findOne(
+      { where: { categoryName}});
+            return category;
+        }
+
+
+
+
+       // get all categories(pagination)
+        async findAndCount(skip: number, take: number): Promise<[category[], number]>
+        {
+           const [result, totalCount] = await this.categoryModel.findAndCount({
+           skip,
+           take,
+           });
+          return [result, totalCount];
+        }
+
+
+
+
+       // update category
+        async updateCategory(id:string, categoryName:string): Promise<category | null>
+        {
+           const category = await this.categoryModel.findOne({ where: { id}});
+           if (!category)
+           {
+             return null
+           }
+         category.categoryName = categoryName;
          return this.categoryModel.save(category);
       }
 
 
 
-      // get category by name
-      async getCategoryByName(categoryName:string): Promise<category | null>
-      {
-       const category = await this.categoryModel.findOne(
-      {
-             where: { categoryName},
-       });
 
-         return category;
-      }
+        // admin update category status
+        async adminUpdateCategory(categoryId:string, approvedByAdmin:string) : Promise<category | null>
+        {
+             const category = await this.categoryModel.findOne({ where: { id:categoryId}});
+             if (!category)
+             {
+                return null
+             }
+            category.approvedByAdmin = approvedByAdmin;
+            return this.categoryModel.save(category);
+       }
 
 
 
+
+        // delete category
+        async deleteCategory(id: string): Promise<category | null>
+        {
+           const category = await this.categoryModel.findOne({ where: { id } });
+           if (!category)
+           {
+                return null
+          }
+
+         return await this.categoryModel.remove(category);
+       }
+
+
+
+
+       // FRONTEND APIS
        // get category by id associated sellers
        async getCategoryId(id: string): Promise<category|null>
        {
@@ -74,36 +133,6 @@ export class CategoryRepository {
            return category;
         }
 
-
-
-
-       // delete category
-       async deleteCategory(id: string): Promise<category | null>
-       {
-          const category = await this.categoryModel.findOne({ where: { id } });
-          if (!category)
-          {
-              return null
-          }
-
-          return await this.categoryModel.remove(category);
-      }
-
-
-
-
-
-        // update category
-       async updateCategory(id:string, categoryName:string): Promise<category | null>
-       {
-          const category = await this.categoryModel.findOne({ where: { id}});
-          if (!category)
-          {
-             return null
-          }
-          category.categoryName = categoryName;
-          return this.categoryModel.save(category);
-      }
 
 
 
@@ -157,32 +186,20 @@ export class CategoryRepository {
 
 
 
+        // category by name search
+       //  async search(query: string): Promise<category[]|null>
+       //  {
+       //     const records = await this.categoryModel.find({
+       //     where: { categoryName: Like(`${query}%`)} });
+       //
+       //     if (!records.length)
+       //     {
+       //       throw new NotFoundException('No categories were found matching the search data');
+       //     }
+       //      return records;
+       // }
 
-      //  get all categories(pagination)
-        async findAndCount(skip: number, take: number): Promise<[category[], number]>
-        {
-            const [result, totalCount] = await this.categoryModel.findAndCount({
-            skip,
-            take,
-         });
-            return [result, totalCount];
-        }
 
-
-
-
-
-          // admin update category status
-         async adminUpdateCategory(categoryId:string, approvedByAdmin:string) : Promise<category | null>
-         {
-            const category = await this.categoryModel.findOne({ where: { id:categoryId}});
-            if (!category)
-            {
-               return null
-            }
-             category.approvedByAdmin = approvedByAdmin;
-            return this.categoryModel.save(category);
-         }
 
 
 
