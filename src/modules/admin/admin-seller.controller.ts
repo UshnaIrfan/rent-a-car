@@ -32,13 +32,13 @@ export class AdminSellerController {
 
 
       // GET all sellers
-      @ApiBearerAuth()
-      @Get('sellers/all-sellers')
-      @Roles(Role.L2A_ADMIN)
-      async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
-      {
-          return this.sellerService.getAllAdminSellers(page);
-      }
+      // @ApiBearerAuth()
+      // @Get('sellers/all-sellers')
+      // @Roles(Role.L2A_ADMIN)
+      // async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
+      // {
+      //     return this.sellerService.getAllAdminSellers(page);
+      // }
 
 
 
@@ -81,15 +81,26 @@ export class AdminSellerController {
 
 
       //  seller by name search
-      @ApiBearerAuth()
-      @ApiQuery({ name: 'query', required: true })
-      @ApiQuery({ name: 'categoryId', required: false })
-      @Get('sellers/search')
-      @Roles(Role.L2A_ADMIN)
-      async search(@Query('query') query: string, @Query('categoryId') categoryId?: string)
-      {
-          return this.sellerService.search(query, categoryId);
-      }
+      // @ApiBearerAuth()
+      // @ApiQuery({ name: 'query', required: true })
+      // @ApiQuery({ name: 'categoryId', required: false })
+      // @Get('sellers/search')
+      // @Roles(Role.L2A_ADMIN)
+      // async search(@Query('query') query: string, @Query('categoryId') categoryId?: string)
+      // {
+      //     return this.sellerService.search(query, categoryId);
+      // }
+       @ApiBearerAuth()
+       @ApiQuery({ name: 'page', type: Number, required: true })
+       @ApiQuery({ name: 'query', required: false })
+       @ApiQuery({ name: 'categoryId', required: false })
+       @Get('sellers/search')
+       @Roles(Role.L2A_ADMIN)
+       async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
+       {
+           return this.sellerService.search(page ,query, categoryId);
+       }
+
 
 
 

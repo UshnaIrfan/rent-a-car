@@ -136,11 +136,29 @@ export class SellerService {
 
 
        // seller by name search
-      async search(query: string,categoryId?: string)
-      {
-        const result = await this.SellerRepository.search(query,categoryId);
-        return result;
-      }
+      // async search(query: string,categoryId?: string)
+      // {
+      //   const result = await this.SellerRepository.search(query,categoryId);
+      //   return result;
+      // }
+
+     async search(pageNumber: number, query?: string, categoryId?: string)
+     {
+         const pageSize = 10;
+         const skip = (pageNumber - 1) * pageSize;
+         const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId);
+         const totalPages = Math.ceil(totalCount / pageSize);
+         if (result.length === 0)
+         {
+            throw new NotFoundException('No records found');
+         }
+       return {
+          records: result,
+          totalRecords: totalCount,
+          totalPages,
+          currentPage: pageNumber,
+      };
+   }
 
 
 
