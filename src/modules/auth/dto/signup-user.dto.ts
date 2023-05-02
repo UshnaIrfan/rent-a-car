@@ -4,7 +4,7 @@ import {
      IsNotEmpty, IsOptional,
      IsString,
      MaxLength,
-     MinLength, IsUppercase, IsLowercase, Matches
+     MinLength, Matches
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
 

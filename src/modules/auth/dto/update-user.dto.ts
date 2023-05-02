@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
   IsNotEmpty,
-  IsString,
+  IsString, Matches,
   MaxLength,
-  MinLength,
+  MinLength
 } from "class-validator";
 
 export class updateUserDto {
@@ -35,11 +35,16 @@ export class updateUserDto {
      email: string;
 
 
+
     @ApiProperty({ type: String, required: true })
     @IsString()
     @IsNotEmpty()
     @MinLength(8)
     @MaxLength(64)
+    @Matches(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/, {
+      message: 'Password is too weak',
+    })
     password: string;
+
 
 }

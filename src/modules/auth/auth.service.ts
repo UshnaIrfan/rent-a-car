@@ -53,12 +53,14 @@ export class AuthService {
         //update user
        async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
        {
-          const hashedPassword = await AuthService.hashPassword(updateUser.password);
-          const isPasswordStrongEnough = hashedPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-          if (!isPasswordStrongEnough)
+
+           const { password } = updateUser;
+           const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+           if (!isPasswordStrongEnough)
            {
-              throw new BadRequestException('Password is too weak');
-          }
+             throw new BadRequestException('Password is too weak');
+           }
+          const hashedPassword = await AuthService.hashPassword(updateUser.password);
           const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email,hashedPassword);
           if (!update)
           {

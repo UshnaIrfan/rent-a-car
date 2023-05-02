@@ -250,76 +250,72 @@ export class CategoriesService {
    // }
    //
 
-
-
-  async getReviewsPositive(categoryId: string)
-  {
-    const category = await this.categoryRepository.getCategoryId(categoryId);
-    if (!category)
-    {
-      throw new NotFoundException('Category not exist');
-    }
-
-    const toreview = [];
-    const sellerMap = {};
-    const categorySellers = [];
-
-    for (const seller of category.sellers)
-    {
-
-      const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
-
-
-      console.log("latest review" ,latestPositiveReview)
-      if (latestPositiveReview)
-      {
-        const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
-        const userCount = result.length;
-        const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-
-        if (matchingSlugTitle)
-        {
-          const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
-          if (title)
+       async getReviewsPositive(categoryId: string)
+       {
+          const category = await this.categoryRepository.getCategoryId(categoryId);
+          if (!category)
           {
-            if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
+             throw new NotFoundException('Category not exist');
+          }
+
+         const toreview = [];
+         const sellerMap = {};
+         const categorySellers = [];
+
+         for (const seller of category.sellers)
+         {
+
+            const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
+            console.log("latest review" ,latestPositiveReview)
+            if (latestPositiveReview)
             {
-              if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
-              {
-                sellerMap[latestPositiveReview.id] = seller;
-                if (!categorySellers.includes(seller))
-                {
-                  categorySellers.push(seller );
-                }
+              const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
+              const userCount = result.length;
+              const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
 
-                toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
-                break;
+             if (matchingSlugTitle)
+             {
+                const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
+                if (title)
+                {
+                   if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
+                   {
+                     if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
+                     {
+                         sellerMap[latestPositiveReview.id] = seller;
+                         if (!categorySellers.includes(seller))
+                         {
+                           categorySellers.push(seller );
+                         }
+
+                        toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
+                        break;
+                    }
+                  }
               }
+            else
+            {
+              throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
             }
-          }
-          else
-          {
-            throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
-          }
-        }
+         }
         else
-        {
-          throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
+         {
+           throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
         }
       }
     }
-    const categoryObj = {
-      id:category.id,
-      categoryName: category.categoryName,
-      approvedByAdmin:category.approvedByAdmin,
+      const categoryObj = {
+         id:category.id,
+         categoryName: category.categoryName,
+         approvedByAdmin:category.approvedByAdmin,
       // isListing:category.isListing
-    };
+     };
 
     return {
-      category:categoryObj,
-      sellers: categorySellers,
-      'to-review': toreview
-    };
+       category:categoryObj,
+       sellers: categorySellers,
+       'to-review': toreview
+     };
   }
 
 

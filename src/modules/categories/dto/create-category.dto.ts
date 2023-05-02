@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsString
 } from "class-validator";
-import { string } from "joi";
 import {status} from "../schemas/category.schema";
 
 

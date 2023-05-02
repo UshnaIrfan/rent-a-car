@@ -67,7 +67,7 @@ export class sellerRepository{
 
 
 
-  // get all sellers
+       // get all sellers
        async getAllSellers(): Promise<seller[]|null>
        {
 
@@ -128,10 +128,10 @@ export class sellerRepository{
           const [result, totalCount] = await this.sellerModel.findAndCount({
           skip,
           take,
+          relations: ['categories'],
           });
           return [result, totalCount];
        }
-
 
 
 
