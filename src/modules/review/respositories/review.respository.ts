@@ -165,36 +165,20 @@ export class reviewRepository{
     }
 
 
-    //
-    // if (categoryId && sellerId) {
-    //   const categoryID = await this.categoryRepository.getCategoryId(categoryId);
-    //   if (!categoryID) {
-    //     throw new NotFoundException('category not found.');
-    //   }
-    //
-    //   console.log(categoryID)
-    //   const seller = await this.reviewBySellerId(sellerId);
-    //   if (!seller) {
-    //     throw new NotFoundException('Seller not found.');
-    //   }
-    //
-    //
-    //   for (const seller of categoryID.sellers) {
-    //
-    // //    console.log(seller)
-    //     whereConditions = {
-    //       sellerId: sellerId,
-    //
-    //       message: Like(`%${query}%`),
-    //     };
-    //   }
-    //
-    //
-    //
-    // }
 
+    if (categoryId && sellerId) {
+      const categoryID = await this.categoryRepository.getCategoryId(categoryId);
+      if (!categoryID) {
+        throw new NotFoundException('Category not found.');
+      }
 
+      const seller = categoryID.sellers.find(seller => seller.id === sellerId);
+      if (!seller) {
+        throw new NotFoundException('Seller not found in the given category.');
+      }
 
+      console.log(seller)
+    }
 
 
 

@@ -34,7 +34,7 @@ export class AdminCategoryController {
        @ApiBearerAuth()
        @Get('categories/all-categories')
        @Roles(Role.L2A_ADMIN)
-       async getReview(@Query('page') page: number = 0):Promise<paginationCategoryInterface>
+       async getReview(@Query('page') page: number = 1):Promise<paginationCategoryInterface>
        {
             return this.categoriesService.getAllAdminCategories(page);
        }

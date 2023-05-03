@@ -276,7 +276,7 @@ export class ReviewService {
 
 
         //love/air  reviews
-        async getReviewsWithTypes(sellerId: string, page: number = 0)
+        async getReviewsWithTypes(sellerId: string, page: number = 1)
         {
             const toAir = [];
             const toLove = [];

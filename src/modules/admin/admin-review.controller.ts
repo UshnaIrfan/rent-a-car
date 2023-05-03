@@ -22,7 +22,7 @@ export class adminReviewController {
   @ApiQuery({ name: 'userId', required: false })
   @ApiQuery({ name: 'type', required: false })
   @Get('review/search')
-  async search(@Query('page') page: number = 0,@Query('query') query?: string, @Query('sellerId') sellerId?: string,
+  async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('sellerId') sellerId?: string,
                @Query('userId') userId?: string,@Query('type') type?: string,
                @Query('categoryId') categoryId?: string)
   {
