@@ -276,7 +276,7 @@ export class ReviewService {
 
 
         //love/air  reviews
-        async getReviewsWithTypes(sellerId: string, page: number = 1)
+        async getReviewsWithTypes(sellerId: string, page: number = 0)
         {
             const toAir = [];
             const toLove = [];
@@ -390,6 +390,27 @@ export class ReviewService {
 
 
 
+
+
+  //ADMIN APIS
+
+  async search(pageNumber: number, query?: string, sellerId?: string ,userId?:string,type?:string,categoryId?:string)
+  {
+    const pageSize = 10;
+    const skip = (pageNumber - 1) * pageSize;
+    const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,query,sellerId,userId ,type,categoryId);
+    const totalPages = Math.ceil(totalCount / pageSize);
+    if (result.length === 0)
+    {
+      throw new NotFoundException('No records found');
+    }
+    return {
+      records: result,
+      totalRecords: totalCount,
+      totalPages,
+      currentPage: pageNumber,
+    };
+  }
 
 
 

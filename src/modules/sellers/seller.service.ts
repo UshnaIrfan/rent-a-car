@@ -152,14 +152,13 @@ export class SellerService {
          {
             throw new NotFoundException('No records found');
          }
-       return {
-          records: result,
-          totalRecords: totalCount,
-          totalPages,
-          currentPage: pageNumber,
-      };
-   }
-
+         return {
+            records: result,
+            totalRecords: totalCount,
+            totalPages,
+            currentPage: pageNumber,
+       };
+    }
 
 
 

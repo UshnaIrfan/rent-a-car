@@ -96,7 +96,7 @@ export class AdminSellerController {
        @ApiQuery({ name: 'categoryId', required: false })
        @Get('sellers/search')
        @Roles(Role.L2A_ADMIN)
-       async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
+       async search(@Query('page') page: number = 0,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
        {
            return this.sellerService.search(page ,query, categoryId);
        }

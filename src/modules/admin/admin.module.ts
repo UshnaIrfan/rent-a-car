@@ -24,6 +24,7 @@ import {SellerService} from "../sellers/seller.service";
 import {adminAuthController} from "./admin-auth.controller";
 import {AuthService} from "../auth/auth.service";
 import {UsersService} from "../users/users.service";
+import {adminReviewController} from "./admin-review.controller";
 
 
 @Module({
@@ -32,7 +33,7 @@ import {UsersService} from "../users/users.service";
       store: redisStore,
       uri: process.env.REDIS_URL,
     })],
-  controllers: [adminAuthController,AdminSellerController,AdminCategoryController],
+  controllers: [adminReviewController,adminAuthController,AdminSellerController,AdminCategoryController],
   providers: [UsersService,AuthService,SellerService, clicksTypesRepository,sellerRepository, ReviewService,JwtService,likeDislikeRepository,CategoriesService,clicksTitlesRepository,CategoryRepository,UsersRepository,reviewRepository]
 })
 export class AdminModule {}

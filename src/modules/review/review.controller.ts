@@ -91,7 +91,7 @@ export class ReviewController {
          @Get('/:seller_id')
          async getReviewsWithTypes(
          @Param('seller_id') sellerId: string,
-         @Query('page') page: number = 1)
+         @Query('page') page: number = 0)
          {
            return await this.reviewService.getReviewsWithTypes(sellerId, page);
          }
