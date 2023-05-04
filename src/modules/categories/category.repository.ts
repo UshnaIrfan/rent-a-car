@@ -90,6 +90,28 @@ export class CategoryRepository {
 
 
 
+        async GetCategoryId(id: string): Promise<category|null>
+        {
+           const category = await this.categoryModel.findOne({
+           where: { id},
+           relations: ['sellers'],
+          });
+
+         if (!category)
+         {
+           throw new NotFoundException('Category not found');
+         }
+        return category;
+      }
+
+
+
+
+
+
+
+
+
        // FRONTEND APIS
        // get category by id associated sellers
        async getCategoryId(id: string): Promise<category|null>

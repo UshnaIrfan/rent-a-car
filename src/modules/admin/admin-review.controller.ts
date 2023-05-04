@@ -16,17 +16,19 @@ export class adminReviewController {
 
 
   @ApiQuery({ name: 'page', type: Number, required: true })
-  @ApiQuery({ name: 'query', required: false })
+  @ApiQuery({ name: 'reviewId', required: false })
   @ApiQuery({ name: 'sellerId', required: false })
-  @ApiQuery({ name: 'categoryId', required: false })
   @ApiQuery({ name: 'userId', required: false })
+  @ApiQuery({ name: 'message', required: false })
   @ApiQuery({ name: 'type', required: false })
+  @ApiQuery({ name: 'categoryId', required: false })
   @Get('review/search')
-  async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('sellerId') sellerId?: string,
-               @Query('userId') userId?: string,@Query('type') type?: string,
-               @Query('categoryId') categoryId?: string)
+  async search(@Query('page') page: number = 1,@Query('reviewId') reviewId?: string, @Query('sellerId') sellerId?: string,
+               @Query('userId') userId?: string,@Query('message') message?: string,
+               @Query('type') type?: string ,@Query('categoryId') categoryId?: string)
+
   {
-    return this.reviewService.search(page ,query, sellerId,userId,type,categoryId);
+        return this.reviewService.search(page ,reviewId, sellerId,userId,message ,type,categoryId);
   }
 
 

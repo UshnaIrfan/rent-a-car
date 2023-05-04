@@ -150,323 +150,81 @@ export class reviewRepository{
 
 
         //ADMIN APIS
+  //   async search(skip: number, take: number, reviewId?: string, sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+  //   {
+  //
+  //       let whereConditions = {
+  //
+  //             id:reviewId ?? undefined,
+  //             userId: userId ?? undefined,
+  //             sellerId: sellerId ?? undefined,
+  //             message: message ? Like(`%${message}%`) : undefined,
+  //             titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+  //             categoryId:categoryId ?? undefined,
+  //
+  //       };
+  //
+  //
+  //       const [result, totalCount] = await this.reviewModel.findAndCount({
+  //       where: { ...whereConditions },
+  //         skip,
+  //         take,
+  //
+  //      });
+  //
+  //      if (!result.length)
+  //      {
+  //           throw new NotFoundException('No reviews were found matching the criteria.');
+  //      }
+  //
+  //          return [result, totalCount];
+  // }
 
 
-  async search(skip: number, take: number, query?: string, sellerId?: string, userId?: string, type?: string,categoryId?:string): Promise<any>
-  {
-    let whereConditions = {};
-
-
-    if (categoryId) {
-      const categoryID = await this.categoryRepository.getCategoryId(categoryId);
-      if (!categoryID) {
-        throw new NotFoundException('category not found.');
-      }
-    }
-
-
-
-    if (categoryId && sellerId) {
-      const categoryID = await this.categoryRepository.getCategoryId(categoryId);
-      if (!categoryID) {
-        throw new NotFoundException('Category not found.');
-      }
-
-      const seller = categoryID.sellers.find(seller => seller.id === sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found in the given category.');
-      }
-
-      console.log(seller)
-    }
-
-
-
-
-
-    else if (sellerId && userId && query && type) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          message: Like(`%${query}%`),
-          userId: userId,
-          sellerId: sellerId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          message: Like(`%${query}%`),
-          userId: userId,
-          sellerId: sellerId,
-        };
-      }
-    }
-
-
-
-   else if (query && userId && type) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          message: Like(`%${query}%`),
-          userId: userId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          message: Like(`%${query}%`),
-          userId: userId,
-        };
-      }
-    }
 
 
+      async search(skip: number, take: number, reviewId?: string, sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+      {
 
-
-
-    else if (query && sellerId && type) {
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          message: Like(`%${query}%`),
-          sellerId: sellerId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          message: Like(`%${query}%`),
-          sellerId: sellerId,
-        };
-      }
-    }
-
-
-
-
-
-    else if (sellerId && userId && type) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          sellerId: sellerId,
-          userId: userId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          sellerId: sellerId,
-          userId: userId,
-        };
-      }
-    }
-
-
-
-
-
-   else if (sellerId && userId && query) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      whereConditions = {
-        sellerId: sellerId,
-        userId: userId,
-        message: Like(`%${query}%`),
-      };
-    }
-
-
-
-
-
-
-
-    else if (sellerId && userId) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      whereConditions = {
-        sellerId: sellerId,
-        userId: userId,
-      };
-    }
-
-
-
-
-
-
-    else if (query && userId) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      whereConditions = {
-        message: Like(`%${query}%`),
-        userId: userId,
-      };
-    }
-
-
-    else if (userId && type) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          userId: userId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          userId: userId,
-        };
-      }
-    }
-
-
-
-    else if (sellerId && type) {
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('seller not found.');
-      }
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          sellerId: sellerId,
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          seller: sellerId,
-        };
-      }
-    }
-
-
-    else if (query && type) {
-      if (type === 'to-love') {
-        whereConditions = {
-          titleSlug: Like(`to-love%`),
-          message: Like(`%${query}%`),
-        };
-      } else if (type === 'to-air') {
-        whereConditions = {
-          titleSlug: Like(`to-air%`),
-          message: Like(`%${query}%`),
-        };
-      }
-    }
-
-
-
-
-
-
-
-    else if (query && sellerId) {
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      whereConditions = {
-        message: Like(`%${query}%`),
-        sellerId: sellerId,
-      };
-    }
-
-
-    else if (userId) {
-      const user = await this.reviewByUserId(userId);
-      if (!user) {
-        throw new NotFoundException('User not found.');
-      }
-      whereConditions = {
-        userId: userId,
-      };
-    }
-
-
-
-    else if (sellerId) {
-      const seller = await this.reviewBySellerId(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found.');
-      }
-      whereConditions = {
-        sellerId: sellerId,
-      };
-    }
-
-
-    else if (query) {
-      whereConditions = {
-        message: Like(`%${query}%`),
-      };
-    }
-
-
-
-   else  if (type) {
-      if (type === 'to-love') {
-        whereConditions['titleSlug'] = Like(`to-love%`);
-      } else if (type === 'to-air') {
-        whereConditions['titleSlug'] = Like(`to-air%`);
-      }
-    }
-
-
-
-    const [result, totalCount] = await this.reviewModel.findAndCount({
-      where: whereConditions,
-      skip,
-      take,
-    });
-    if (!result.length) {
-      throw new NotFoundException('No reviews were found matching the criteria.');
-    }
-
-
-    return [result, totalCount];
-  }
+        let whereConditions = {
+
+          id:reviewId ?? undefined,
+          userId: userId ?? undefined,
+          sellerId: sellerId ?? undefined,
+          message: message ? Like(`%${message}%`) : undefined,
+          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+          categoryId:categoryId ?? undefined,
+
+       };
+
+        if (categoryId) {
+
+          const category = await this.categoryRepository.GetCategoryId(categoryId);
+          const sellerIds = category.sellers.map(seller => seller.id);
+          console.log(sellerIds)
+
+          // whereConditions.sellerId =  whereConditions.sellerId.search({sellerId: In([...sellerIds])})
+
+        }
+
+
+
+
+        const [result, totalCount] = await this.reviewModel.findAndCount({
+        where: { ...whereConditions },
+        skip,
+        take,
+      });
+
+       if (!result.length)
+       {
+          throw new NotFoundException('No reviews were found matching the criteria.');
+       }
+
+        return [result, totalCount];
+   }
+
+
 
 
 
