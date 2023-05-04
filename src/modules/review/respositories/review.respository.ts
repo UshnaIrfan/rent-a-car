@@ -220,9 +220,9 @@ export class reviewRepository{
 
 
         const [result, totalCount] = await this.reviewModel.findAndCount({
-        where: [{ ...whereConditions  },
-          ...sellerArr
-        ],
+        where: { ...whereConditions  },
+         // ...sellerArr
+
         skip,
         take,
         });
