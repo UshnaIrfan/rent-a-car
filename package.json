@@ -39,6 +39,7 @@
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@types/cache-manager": "^4.0.2",
+    "aws-sdk": "^2.1371.0",
     "bcrypt": "^5.1.0",
     "cache-manager": "^4.1.0",
     "cache-manager-redis-store": "^2.0.0",

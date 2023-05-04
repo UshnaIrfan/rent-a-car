@@ -16,6 +16,9 @@ export const envSchema = Joi.object({
    MAILER_HOST: Joi.string().required().description('Mailer host'),
    ADMIN_EMAIL: Joi.string().required().description('Admin email'),
    MAILER_PASSWORD: Joi.string().required().description('Mailer password'),
+   AWS_SES_REGION: Joi.string().required().description('AWS_SES_REGION'),
+   AWS_SES_ACCESS_KEY: Joi.string().required().description('AWS_SES_ACCESS_KEY'),
+   AWS_SES_KEY_SECRET: Joi.string().required().description('AWS_SES_KEY_SECRET'),
 
 });
 

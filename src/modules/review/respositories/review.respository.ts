@@ -198,24 +198,24 @@ export class reviewRepository{
        };
 
 
-        let sellerArr = [];
-
-        if (categoryId)
-        {
-          const category = await this.categoryRepository.GetCategoryId(categoryId);
-          const sellerIds = category.sellers.map(seller => seller.id);
-
-          for (const sellerId of sellerIds) {
-
-            let whereORConditions = {
-                 sellerId: sellerId,
-            };
-            sellerArr.push(whereORConditions)
-
-
-          }
-
-        }
+        // let sellerArr = [];
+        //
+        // if (categoryId)
+        // {
+        //   const category = await this.categoryRepository.GetCategoryId(categoryId);
+        //   const sellerIds = category.sellers.map(seller => seller.id);
+        //
+        //   for (const sellerId of sellerIds) {
+        //
+        //     let whereORConditions = {
+        //          sellerId: sellerId,
+        //     };
+        //     sellerArr.push(whereORConditions)
+        //
+        //
+        //   }
+        //
+        // }
 
 
 
