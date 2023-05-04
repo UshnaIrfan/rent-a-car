@@ -48,25 +48,22 @@ import * as AWS from 'aws-sdk';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          SES: new AWS.SES({
-            region: configService.get('AWS_SES_REGION'),
-            accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
-            secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
-          }),
+          // SES: new AWS.SES({
+          //   region: configService.get('AWS_SES_REGION'),
+          //   accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
+          //   secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
+          // }),
 
           host: configService.get('MAILER_HOST'),
           port: 465,
-          secure: false,
-          ignoreTLS:true,
-          requireTLS:false,
+          // secure: false,
+          // ignoreTLS:true,
+          // requireTLS:false,
           auth: {
              user: configService.get('ADMIN_EMAIL'),
              pass: configService.get('MAILER_PASSWORD'),
           },
         },
-          // defaults: {
-          //   from: '"love2Air" <ushnairfan12345@gmail.com>',
-          //  },
             preview: true,
 
         }),

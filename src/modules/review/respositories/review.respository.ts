@@ -184,12 +184,11 @@ export class reviewRepository{
 
 
 
-      async search(skip: number, take: number, reviewId?: string, sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+      async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
       {
 
         let whereConditions = {
 
-          id:reviewId ?? undefined,
           userId: userId ?? undefined,
           sellerId: sellerId ?? undefined,
           message: message ? Like(`%${message}%`) : undefined,
