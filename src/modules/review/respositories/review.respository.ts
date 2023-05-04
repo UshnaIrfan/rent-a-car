@@ -7,6 +7,7 @@ import {clicksTitlesRepository} from "./clicksTitles.repository";
 import { seller } from "../../sellers/schemas/seller.schema";
 import { category } from "../../categories/schemas/category.schema";
 import {CategoryRepository} from "../../categories/category.repository";
+import { query } from "express";
 
 
 @Injectable()
@@ -89,7 +90,7 @@ export class reviewRepository{
          }
 
           return this.reviewModel.save(review);
-   }
+    }
 
 
 
@@ -193,28 +194,38 @@ export class reviewRepository{
           sellerId: sellerId ?? undefined,
           message: message ? Like(`%${message}%`) : undefined,
           titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-          categoryId:categoryId ?? undefined,
-
+          // categoryId:categoryId ?? undefined,
        };
 
-        if (categoryId) {
 
+        let sellerArr = [];
+
+        if (categoryId)
+        {
           const category = await this.categoryRepository.GetCategoryId(categoryId);
           const sellerIds = category.sellers.map(seller => seller.id);
-          console.log(sellerIds)
 
-          // whereConditions.sellerId =  whereConditions.sellerId.search({sellerId: In([...sellerIds])})
+          for (const sellerId of sellerIds) {
+
+            let whereORConditions = {
+                 sellerId: sellerId,
+            };
+            sellerArr.push(whereORConditions)
+
+
+          }
 
         }
 
 
 
-
         const [result, totalCount] = await this.reviewModel.findAndCount({
-        where: { ...whereConditions },
+        where: [{ ...whereConditions  },
+          ...sellerArr
+        ],
         skip,
         take,
-      });
+        });
 
        if (!result.length)
        {
