@@ -18,7 +18,7 @@ export class CreateCategoryDto {
 
       @ApiProperty({ type: String, enum: status, default: status.PENDING })
       @IsString()
-      readonly approvedByAdmin: string = status.PENDING;
+       approvedByAdmin: string = status.PENDING;
 
 
 

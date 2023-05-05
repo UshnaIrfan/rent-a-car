@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'likeDislike' })
@@ -17,6 +17,16 @@ export class likeDislikeSchema{
    @ApiProperty()
    @Column({})
    reviewId: string;
+
+
+   @ApiProperty()
+   @CreateDateColumn()
+   createdAt: Date
+
+
+   @ApiProperty()
+   @UpdateDateColumn()
+   updatedDate: Date
 
 
 }

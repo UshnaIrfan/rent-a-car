@@ -134,52 +134,83 @@ export class sellerRepository{
     // }
         async search(skip: number,take:number, query?: string, categoryId?: string):Promise<[seller[], number]>
         {
-         if (categoryId)
+          if (categoryId && query)
+          {
+             const category = await this.CategoryRepository.getCategoryById(categoryId);
+             if (!category)
+             {
+                 throw new NotFoundException('Category not found.');
+             }
+
+            const [result, totalCount] = await this.sellerModel.findAndCount(
+          {
+            where: {
+                 sellerName: Like(`${query}%`),
+                 categories: { id: categoryId },
+             },
+             order: {sellerName: 'ASC' },
+             relations: ['categories'],
+             skip,
+             take,
+
+            });
+            if (!result.length)
+            {
+               throw new NotFoundException('No sellers were found in this category matching the search criteria.');
+            }
+            return [ result, totalCount];
+        }
+
+         else if (categoryId )
          {
             const category = await this.CategoryRepository.getCategoryById(categoryId);
             if (!category)
             {
-                 throw new NotFoundException('Category not found.');
+              throw new NotFoundException('Category not found.');
             }
 
-           const [result, totalCount] = await this.sellerModel.findAndCount(
-          {
-            where: {
-                 sellerName: Like(`${query}%`),
-                 categories: { id: categoryId }
-             },
-             relations: ['categories'],
-             skip,
-             take,
-            });
-           if (!result.length)
-           {
-               throw new NotFoundException('No sellers were found in this category matching the search criteria.');
-           }
-            return [ result, totalCount];
-        }
+            const [result, totalCount] = await this.sellerModel.findAndCount(
+              {
+                where: {
+                  categories: { id: categoryId },
+                },
+                order: {sellerName: 'ASC' },
+                relations: ['categories'],
+                skip,
+                take,
 
-       else if (query && !categoryId)
-       {
+              });
+             if (!result.length)
+             {
+                throw new NotFoundException('No sellers were found in this category matching the search criteria.');
+             }
+             return [ result, totalCount];
+          }
+
+
+          else if (query && !categoryId)
+          {
            const [result, totalCount] = await this.sellerModel.findAndCount(
            {
                where: { sellerName: Like(`${query}%`) },
+               order: {sellerName: 'ASC' },
                skip,
-              take ,
+               take ,
            });
           if (!result.length)
           {
               throw new NotFoundException('No sellers were found matching the search criteria.');
           }
         return [
-          result,
-          totalCount,
+           result,
+           totalCount,
         ];
      }
 
-    else
-    {
+     else
+     {
         const [result, totalCount] = await this.sellerModel.findAndCount({
+           order: {sellerName: 'ASC' },
            skip,
            take,
           relations: ['categories'],
@@ -258,7 +289,8 @@ export class sellerRepository{
                 categories: { approvedByAdmin: status.APPROVED },
                 approvedByAdmin: status.APPROVED,
                 isListing: true
-              }
+              },
+              order: {sellerName: 'ASC' }
                });
 
             return sellers;

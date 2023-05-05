@@ -23,12 +23,12 @@ export class  addSellerDto{
 
      @ApiProperty({ type: String, enum: status, default: status.PENDING })
      @IsString()
-     readonly approvedByAdmin: string = status.PENDING;
+      approvedByAdmin: string = status.PENDING;
 
 
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
-     readonly isListing: boolean;
+      isListing: boolean;
 
 
      @ApiProperty({ type: [String]})
@@ -45,5 +45,13 @@ export class  addSellerDto{
      @ApiProperty({ type: String, required: false, default: null })
      @IsOptional()
      message: string | null;
+
+
+     @ApiProperty({ type: Boolean, default: false })
+     @IsBoolean()
+     @IsNotEmpty()
+     approvedbyAdmin: boolean;
+
+
 
 }

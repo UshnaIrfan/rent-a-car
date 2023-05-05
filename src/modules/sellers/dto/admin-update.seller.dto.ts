@@ -16,11 +16,11 @@ export class adminUpdateSellerDto{
 
     @ApiProperty({ type: String })
     @IsString()
-    readonly approvedByAdmin: string;
+     approvedByAdmin: string;
 
 
     @ApiProperty({ type: Boolean, default: true })
     @IsBoolean()
-    readonly isListing: boolean;
+     isListing: boolean;
 
 }

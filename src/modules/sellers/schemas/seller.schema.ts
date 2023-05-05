@@ -2,7 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany
+  ManyToMany, CreateDateColumn, UpdateDateColumn
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
@@ -44,6 +44,15 @@ export class seller{
       @Column('bool')
       isListing: boolean;
 
+
+      @ApiProperty()
+      @CreateDateColumn()
+      createdAt: Date
+
+
+      @ApiProperty()
+      @UpdateDateColumn()
+      updatedDate: Date
 
 
      @ApiProperty({ type: () => [category] })

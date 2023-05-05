@@ -55,7 +55,7 @@
 
 
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from "../../../enums/role.enum";
 import { Prop } from "@nestjs/mongoose";
@@ -94,8 +94,18 @@ export class User {
      roles: string;
 
 
-     // @ApiProperty()
-     // @Column('bool')
-     // isActive: boolean;
+     @ApiProperty()
+     @Column('bool')
+     isActive: boolean;
+
+
+     @ApiProperty()
+     @CreateDateColumn()
+     createdAt: Date
+
+
+     @ApiProperty()
+     @UpdateDateColumn()
+     updatedDate: Date
 
 }

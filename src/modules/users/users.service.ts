@@ -98,4 +98,11 @@ export class UsersService {
 
 
 
+        async isActive(email: string,isActive:boolean): Promise<User | null>
+        {
+          return this.usersRepository.isActive(email,isActive);
+        }
+
+
+
 }

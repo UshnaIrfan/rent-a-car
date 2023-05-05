@@ -46,9 +46,10 @@ export class SignUpUserDto {
 
 
 
-     // @ApiProperty({ type: Boolean, default: true })
-     // @IsBoolean()
-     // readonly isActive: boolean;
+     @ApiProperty({ type: Boolean, default: false,required: true })
+     @IsBoolean()
+     @IsNotEmpty()
+     isActive: boolean;
 
 
 

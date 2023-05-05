@@ -5,7 +5,7 @@ export default interface signupUserInterface {
    readonly email: string;
    readonly  password: string;
    readonly roles: string;
-  // readonly  isActive: boolean;
+   readonly  isActive: boolean;
 
 
 }

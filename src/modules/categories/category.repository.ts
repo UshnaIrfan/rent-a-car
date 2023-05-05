@@ -38,6 +38,7 @@ export class CategoryRepository {
            const [result, totalCount] = await this.categoryModel.findAndCount({
            skip,
            take,
+           order: {categoryName: 'ASC' }
            });
           return [result, totalCount];
         }
@@ -139,6 +140,7 @@ export class CategoryRepository {
            where: {
              approvedByAdmin: status.APPROVED,
            },
+           order: {categoryName: 'ASC' }
          });
        }
 

@@ -26,6 +26,7 @@ import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
+import userActiveInterface from "./interfaces/user-active.interface";
 
 
 @Injectable()
@@ -84,119 +85,143 @@ export class AuthService {
 
         //FRONTEND APIS
         // Sign up
-        async signup(@Body() Signup: SignUpUserDto): Promise<User>
-        {
-            const username = await this.usersService.findUserByUsername(Signup.username);
-            if (username)
-            {
-               throw new ConflictException('Username already exists');
-            }
+    //     async signup(@Body() Signup: SignUpUserDto): Promise<User>
+    //     {
+    //         const username = await this.usersService.findUserByUsername(Signup.username);
+    //         if (username)
+    //         {
+    //            throw new ConflictException('Username already exists');
+    //         }
+    //
+    //        const email = await this.usersService.findUserByEmail(Signup.email);
+    //        if (email)
+    //        {
+    //           throw new ConflictException('Email already exists');
+    //        }
+    //
+    //       const { password } = Signup;
+    //       const newPasswords=password
+    //       const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+    //
+    //       if (!isPasswordStrongEnough)
+    //       {
+    //           throw new BadRequestException('Password is too weak');
+    //       }
+    //
+    //      const user = await this.usersService.createUser({
+    //         ...Signup,
+    //        password: await AuthService.hashPassword(password),
+    //     });
+    //
+    //    // Send welcome email to new user
+    //     await this.sendWelcomeEmail(user.username, user.email, newPasswords);
+    //     return user;
+    // }
 
-           const email = await this.usersService.findUserByEmail(Signup.email);
-           if (email)
+
+
+          // Sign up
+         async signup(@Body() Signup: SignUpUserDto)
+         {
+           const username = await this.usersService.findUserByUsername(Signup.username);
+           if (username)
            {
-              throw new ConflictException('Email already exists');
-           }
+              throw new ConflictException('Username already exists');
+          }
+
+          const email = await this.usersService.findUserByEmail(Signup.email);
+          if (email)
+          {
+             throw new ConflictException('Email already exists');
+          }
 
           const { password } = Signup;
-          const newPasswords=password
           const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
           if (!isPasswordStrongEnough)
           {
-              throw new BadRequestException('Password is too weak');
+             throw new BadRequestException('Password is too weak');
           }
 
-         const user = await this.usersService.createUser({
-            ...Signup,
-           password: await AuthService.hashPassword(password),
+          const user = await this.usersService.createUser({
+          ...Signup,
+          password: await AuthService.hashPassword(password),
         });
 
-       // Send welcome email to new user
-        await this.sendWelcomeEmail(user.username, user.email, newPasswords);
-        return user;
+
+        const Token = generateRandomToken(32);
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+        const tokenKey = `forgot-password-token:${user.email}`;
+        const tokenValue = JSON.stringify({ token: Token, expiresAt });
+        await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
+
+        const baseUrl = process.env.BASE_URL;
+        const changePasswordUrl = `${baseUrl}#/Auth/AuthController_signup`;
+
+        console.log("token" ,Token)
+
+        const queryParams = `?Token=${Token}&email=${user.email}`;
+        const activeUrl = `${changePasswordUrl}${queryParams}`;
+        const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
+        const emailBody = template({ activeUrl });
+       //  const emailBody = `Please click on the following link to registerd your account: <a href="${activeUrl}" target="_blank">${activeUrl}</a>`;
+
+        try
+        {
+            await this.sendWelcome(user.email, emailBody);
+        }
+
+        catch (e)
+        {
+             throw new BadRequestException('Failed to send email');
+        }
+        return {
+          message: 'Email sent successfully',
+      };
+
     }
 
 
 
-  // async signup(@Body() Signup: SignUpUserDto)
-  // {
-  //   const username = await this.usersService.findUserByUsername(Signup.username);
-  //   if (username)
-  //   {
-  //     throw new ConflictException('Username already exists');
-  //   }
-  //
-  //   const email = await this.usersService.findUserByEmail(Signup.email);
-  //   if (email)
-  //   {
-  //     throw new ConflictException('Email already exists');
-  //   }
-  //
-  //   const { password } = Signup;
-  //   const newPasswords=password
-  //   const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-  //
-  //   if (!isPasswordStrongEnough)
-  //   {
-  //     throw new BadRequestException('Password is too weak');
-  //   }
-  //
-  //   const user = await this.usersService.createUser({
-  //     ...Signup,
-  //     password: await AuthService.hashPassword(password),
-  //   });
-  //
-  //
-  //   const resetToken = generateRandomToken(32);
-  //   const expiresAt = new Date();
-  //   expiresAt.setMinutes(expiresAt.getMinutes() + 90);
-  //
-  //   const tokenValue = JSON.stringify({ token: resetToken, expiresAt });
-  //   await this.cacheManager.set( tokenValue, { ttl: 5400 });
-  //
-  //   const baseUrl = process.env.BASE_URL;
-  //   const isActiveUrl = `${baseUrl}#/Auth/AuthController_signup`;
-  //
-  //   console.log("token" ,resetToken)
-  //   const queryParams = `?resetToken=${resetToken}`;
-  //   const ActiveUrl = `${isActiveUrl}${queryParams}`;
-  //   // const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
-  //   // const emailBody = template({ resetUrl });
-  //    const emailBody = `Please click on the following link to verify your account: <a href="${ActiveUrl}" target="_blank">${ActiveUrl}</a>`;
-  //   try
-  //   {
-  //     await this.sendWelcome( emailBody);
-  //   }
-  //   catch (e)
-  //   {
-  //     throw new BadRequestException('Failed to send email');
-  //   }
-  //   return {
-  //     message: 'Token sent successfully',
-  //     tokenStatus: true
-  //   };
-  //
-  //
-  // }
-  //
-  //
 
+       // isActive
+      async isActive(@Body() reqBody: userActiveInterface)
+      {
+           const user = await this.usersService.findUserByEmail(reqBody.email);
+           if (!user)
+           {
+              throw new  NotFoundException('Invalid email');
+           }
 
+          const tokenKey = `forgot-password-token:${user.email}`;
+          const cachedToken = await this.cacheManager.get(tokenKey);
+          if(!cachedToken)
+          {
+            throw new UnauthorizedException('token expired');
+          }
 
+         const parsedToken = JSON.parse(<string>cachedToken);
+         if (parsedToken.token !== reqBody.token)
+         {
+             throw new UnauthorizedException('Invalid token');
+         }
 
+         try
+         {
+           let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
+           await this.sendWelcomeEmail(reqBody.email);
+           const loginResult = this.login(updatesUser);
+         //  await this.cacheManager.del(tokenKey);
+           return loginResult;
+        }
+        catch (e)
+        {
+          throw new InternalServerErrorException();
 
+       }
 
-
-
-
-
-
-
-
-
-
-
+  }
 
 
 
@@ -204,6 +229,13 @@ export class AuthService {
         //login
         async login(user: User): Promise<JwtTokensInterface>
         {
+
+          if (user.isActive==false )
+          {
+            throw new BadRequestException('User is not active');
+          }
+
+
              const payload = {
                    id: user.id,
                    name: user.name,
@@ -211,6 +243,7 @@ export class AuthService {
                    email: user.email,
                    password: user.password,
                    roles:user.roles,
+                  isActive: user.isActive,
             };
            const accessTokenRedis = this.jwtService.sign(payload);
            const accessTokenTTL = 5400;
@@ -222,7 +255,9 @@ export class AuthService {
                username: user.username,
                email: user.email,
                roles:user.roles,
+               isActive:user.isActive,
                access_token: accessTokenRedis,
+
         };
      }
 
@@ -448,16 +483,32 @@ export class AuthService {
 
 
         // sending email(signup)
-         async sendWelcomeEmail(username:string,email: string ,password:string)
-         {
-              const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-              const html = template({ username ,email,password });
-              await this.mailerService.sendMail({
-              to: email,
-              subject: 'welcome to love2air',
-              html: html,
-           });
-         }
+        //  async sendWelcomeEmail(username:string,email: string ,password:string)
+        //  {
+        //       const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
+        //       const html = template({ username ,email,password });
+        //       await this.mailerService.sendMail({
+        //       to: email,
+        //       subject: 'welcome to love2air',
+        //       html: html,
+        //    });
+        //  }
+
+
+
+     async sendWelcomeEmail(email: string )
+     {
+       const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
+       const html = template({ email });
+      await this.mailerService.sendMail({
+        to: email,
+        subject: 'welcome to love2air',
+        html: html,
+     });
+   }
+
+
+
 
 
 
@@ -500,17 +551,15 @@ export class AuthService {
 
 
 
-       //today
-  async sendWelcome( emailBody: string)
-  {
-    await this.mailerService.sendMail({
-
-      subject: 'welcome to love2air',
-      html: emailBody,
-    });
-  }
-
-
+       //register email
+      async sendWelcome(email: string, emailBody: string)
+      {
+        await this.mailerService.sendMail({
+         to: email,
+         subject: 'register ',
+         html: emailBody,
+      });
+    }
 
 
 }

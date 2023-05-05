@@ -94,6 +94,7 @@ export class UsersRepository {
            const [result, totalCount] = await this.userModel.findAndCount({
            skip,
            take,
+          order: {username: 'ASC' }
           });
           return [result, totalCount];
         }
@@ -132,26 +133,37 @@ export class UsersRepository {
 
 
 
-       async updatePassword(email: string, password: string): Promise<User| null>
-       {
-          const user = await this.userModel.findOne({ where: { email } });
-          if (!user)
-          {
-              return null
-          }
+         async updatePassword(email: string, password: string): Promise<User| null>
+         {
+            const user = await this.userModel.findOne({ where: { email } });
+            if (!user)
+            {
+                return null
+            }
              user.password = password;
              return this.userModel.save(user);
          }
 
 
-         // get all users
-        async getAllUsers(): Promise<User[]|null>
-        {
-          return this.userModel.find();
+          // get all users
+         async getAllUsers(): Promise<User[]|null>
+         {
+            return this.userModel.find();
+         }
+
+
+
+
+       async isActive(email: string, isActive: boolean): Promise<User| null>
+       {
+          const user = await this.userModel.findOne({ where: { email } });
+         if (!user)
+         {
+           return null
         }
-
-
-
+       user.isActive = isActive;
+       return this.userModel.save(user);
+    }
 
 
 

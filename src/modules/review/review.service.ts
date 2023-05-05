@@ -188,11 +188,18 @@ export class ReviewService {
    // }
          async getReviewsWithCounts(sellerId: string): Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
-            const seller = await this.sellerRepository.getSellerById(sellerId);
-            if (!seller)
-            {
-              throw new NotFoundException(`Seller not exist`);
-            }
+            // const seller = await this.sellerRepository.getSellerById(sellerId);
+            // if (!seller)
+            // {
+            //   throw new NotFoundException(`Seller not exist`);
+            // }
+
+           // approved sellers record show
+           const seller = await this.sellerRepository.getSellerId(sellerId);
+           if (!seller)
+           {
+             throw new NotFoundException(`Seller not exit `);
+           }
 
            const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
            const counts = {};
@@ -286,6 +293,12 @@ export class ReviewService {
                 throw new NotFoundException(`Seller not exist`);
             }
 
+            // approved sellers record show
+           const Seller = await this.sellerRepository.getSellerId(sellerId);
+           if (!Seller)
+           {
+             throw new NotFoundException(`Seller not exit `);
+           }
            const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
            var toAirCount = 0;
            var toLoveCount = 0;

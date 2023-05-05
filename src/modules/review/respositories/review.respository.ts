@@ -5,7 +5,7 @@ import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
 import { seller } from "../../sellers/schemas/seller.schema";
-import { category } from "../../categories/schemas/category.schema";
+import { category, status } from "../../categories/schemas/category.schema";
 import {CategoryRepository} from "../../categories/category.repository";
 import { query } from "express";
 
@@ -45,7 +45,7 @@ export class reviewRepository{
        async reviewBySellerIdALL(sellerId:string):Promise<review[]| null>
        {
           return this.reviewModel.find({
-          where: { sellerId },
+          where: { sellerId  ,approvedByAdmin: true},
          });
        }
 
@@ -57,11 +57,11 @@ export class reviewRepository{
         }
 
 
- //search by user id
-  async reviewByUserId(userId:string):Promise<review| null>
-  {
-    return this.reviewModel.findOne({ where: { userId}});
-  }
+      //search by user id
+       async reviewByUserId(userId:string):Promise<review| null>
+       {
+         return this.reviewModel.findOne({ where: { userId}});
+       }
 
 
        //update review
@@ -132,11 +132,13 @@ export class reviewRepository{
              const positiveReviews = await this.reviewModel.findOne(
            {
                 where: [{ sellerId: sellerId,  message: Not(IsNull())},
+
                    {titleId: In([
                         "44bf96b2-5476-47f5-8ff9-7336d53156a8",
                         "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
                         "df368bbf-9155-4d36-932e-c94d34e7154a"
                    ])}],
+
                  order: { createdAt: 'DESC' }
                  });
 
@@ -209,8 +211,8 @@ export class reviewRepository{
 
 
         const [result, totalCount] = await this.reviewModel.findAndCount({
-         where: { ...whereConditions, sellerId: In(sellerIds) },
-         // where: { ...whereConditions },
+      //   where: { ...whereConditions, sellerId: In(sellerIds) },
+          where: { ...whereConditions },
          skip,
          take,
         });

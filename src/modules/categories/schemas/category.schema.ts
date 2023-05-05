@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn
+} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
 
@@ -37,10 +45,19 @@ export class category{
     // @Column('bool')
     // isListing: boolean;
 
+     @ApiProperty()
+     @CreateDateColumn()
+     createdAt: Date
 
-    @ApiProperty({ type: () => [seller] })
-    @ManyToMany(() => seller, seller => seller.categories)
-    @JoinTable()
-    sellers: seller[];
+
+     @ApiProperty()
+     @UpdateDateColumn()
+     updatedDate: Date
+
+
+     @ApiProperty({ type: () => [seller] })
+     @ManyToMany(() => seller, seller => seller.categories)
+     @JoinTable()
+     sellers: seller[];
 
 }

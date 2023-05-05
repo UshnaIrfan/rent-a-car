@@ -28,9 +28,9 @@ export class CreateUserDto {
      roles: string ;
 
 
-     // @ApiProperty({ type: Boolean, default: true })
-     // @IsBoolean()
-     // readonly isActive: boolean;
+     @ApiProperty({ type: Boolean, default: false ,required: true})
+     @IsBoolean()
+     isActive: boolean;
 
 
 }

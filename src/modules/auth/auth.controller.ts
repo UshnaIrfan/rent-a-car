@@ -13,15 +13,10 @@ import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
 import { LocalAuthGuard } from "./guards/local-auth-guard";
 import { JwtAuthGuard } from "./guards/jwt-auth-guard";
-import {ForgotPasswordOtpDto} from "./dto/forgot-password-otp.dto";
-import {ForgotPasswordDto} from "./dto/forgot-password.dto";
 import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
-import { User } from "../users/schemas/user.schema";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
-import {updateUserDto} from "./dto/update-user.dto";
-import updateUserInterface from "./interfaces/update-user.interface";
-import paginationUserInterface from "./interfaces/pagination-user.interface";
+import {userActiveDto} from "./dto/user-active.dto";
 
 
 @ApiTags('Auth')
@@ -40,6 +35,15 @@ export class AuthController {
             return this.authService.signup(signUpUserDto);
         }
 
+
+        // is active
+        @ApiBody({type:userActiveDto})
+        @Patch('active')
+        async isActive(
+        @Body() userActivedto: userActiveDto)
+        {
+           return this.authService.isActive(userActivedto);
+        }
 
 
 

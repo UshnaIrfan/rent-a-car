@@ -20,6 +20,8 @@ import {UsersRepository} from "../users/users.repository";
 import { Cache } from 'cache-manager';
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
+import { ApiProperty } from "@nestjs/swagger";
+import { Column } from "typeorm";
 
 
 
@@ -246,8 +248,10 @@ export class SellerService {
            titleId: body.titleId,
            sellerId: seller.id,
            message: body.message,
-          titleSlug:typeResult.slug,
-           userId: decoded.id
+           titleSlug:typeResult.slug,
+           userId: decoded.id,
+          approvedByAdmin:body.approvedbyAdmin,
+
        };
 
         const review= await this.ReviewRepository.submitReview(reviewBody);
