@@ -189,49 +189,38 @@ export class reviewRepository{
 
         let whereConditions = {
 
-          userId: userId ?? undefined,
-          sellerId: sellerId ?? undefined,
-          message: message ? Like(`%${message}%`) : undefined,
-          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-          // categoryId:categoryId ?? undefined,
-       };
+            userId: userId ?? undefined,
+            sellerId: sellerId ?? undefined,
+            message: message ? Like(`%${message}%`) : undefined,
+            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+            // categoryId:categoryId ?? undefined,
+        };
 
 
-        // let sellerArr = [];
-        //
-        // if (categoryId)
-        // {
-        //   const category = await this.categoryRepository.GetCategoryId(categoryId);
-        //   const sellerIds = category.sellers.map(seller => seller.id);
-        //
-        //   for (const sellerId of sellerIds) {
-        //
-        //     let whereORConditions = {
-        //          sellerId: sellerId,
-        //     };
-        //     sellerArr.push(whereORConditions)
-        //
-        //
-        //   }
-        //
-        // }
+          let sellerIds=[];
+          if (categoryId)
+          {
+            const category = await this.categoryRepository.GetCategoryId(categoryId);
+            sellerIds = category.sellers.map(seller => seller.id);
+            console.log(sellerIds)
+
+          }
 
 
 
         const [result, totalCount] = await this.reviewModel.findAndCount({
-        where: { ...whereConditions  },
-         // ...sellerArr
-
-        skip,
-        take,
+         where: { ...whereConditions, sellerId: In(sellerIds) },
+         // where: { ...whereConditions },
+         skip,
+         take,
         });
 
-       if (!result.length)
-       {
-          throw new NotFoundException('No reviews were found matching the criteria.');
-       }
+        if (!result.length)
+        {
+            throw new NotFoundException('No reviews were found matching the criteria.');
+        }
 
-        return [result, totalCount];
+         return [result, totalCount];
    }
 
 

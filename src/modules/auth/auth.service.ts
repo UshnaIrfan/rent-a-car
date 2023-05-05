@@ -119,6 +119,86 @@ export class AuthService {
 
 
 
+  // async signup(@Body() Signup: SignUpUserDto)
+  // {
+  //   const username = await this.usersService.findUserByUsername(Signup.username);
+  //   if (username)
+  //   {
+  //     throw new ConflictException('Username already exists');
+  //   }
+  //
+  //   const email = await this.usersService.findUserByEmail(Signup.email);
+  //   if (email)
+  //   {
+  //     throw new ConflictException('Email already exists');
+  //   }
+  //
+  //   const { password } = Signup;
+  //   const newPasswords=password
+  //   const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+  //
+  //   if (!isPasswordStrongEnough)
+  //   {
+  //     throw new BadRequestException('Password is too weak');
+  //   }
+  //
+  //   const user = await this.usersService.createUser({
+  //     ...Signup,
+  //     password: await AuthService.hashPassword(password),
+  //   });
+  //
+  //
+  //   const resetToken = generateRandomToken(32);
+  //   const expiresAt = new Date();
+  //   expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+  //
+  //   const tokenValue = JSON.stringify({ token: resetToken, expiresAt });
+  //   await this.cacheManager.set( tokenValue, { ttl: 5400 });
+  //
+  //   const baseUrl = process.env.BASE_URL;
+  //   const isActiveUrl = `${baseUrl}#/Auth/AuthController_signup`;
+  //
+  //   console.log("token" ,resetToken)
+  //   const queryParams = `?resetToken=${resetToken}`;
+  //   const ActiveUrl = `${isActiveUrl}${queryParams}`;
+  //   // const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
+  //   // const emailBody = template({ resetUrl });
+  //    const emailBody = `Please click on the following link to verify your account: <a href="${ActiveUrl}" target="_blank">${ActiveUrl}</a>`;
+  //   try
+  //   {
+  //     await this.sendWelcome( emailBody);
+  //   }
+  //   catch (e)
+  //   {
+  //     throw new BadRequestException('Failed to send email');
+  //   }
+  //   return {
+  //     message: 'Token sent successfully',
+  //     tokenStatus: true
+  //   };
+  //
+  //
+  // }
+  //
+  //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //login
@@ -416,6 +496,20 @@ export class AuthService {
            html: html
          });
        }
+
+
+
+
+       //today
+  async sendWelcome( emailBody: string)
+  {
+    await this.mailerService.sendMail({
+
+      subject: 'welcome to love2air',
+      html: emailBody,
+    });
+  }
+
 
 
 

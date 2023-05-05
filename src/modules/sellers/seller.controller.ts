@@ -21,6 +21,8 @@ export class SellerController {
 
 
 
+
+
        // get seller by ID (associated categories)
        @Get('/id/:seller_id')
        async  getSellerByID( @Param('seller_id') id: string) :Promise<{record:seller}>

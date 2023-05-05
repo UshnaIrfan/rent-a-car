@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
 
@@ -22,12 +22,15 @@ export class CreateUserDto {
      password: string;
 
 
-     // @ApiProperty({  required: false,default:null})
-     // roles: string|null;
 
      @ApiProperty({ required: false, default: Role.L2A_USER })
      @IsOptional()
      roles: string ;
+
+
+     // @ApiProperty({ type: Boolean, default: true })
+     // @IsBoolean()
+     // readonly isActive: boolean;
 
 
 }

@@ -74,7 +74,7 @@ import * as AWS from 'aws-sdk';
 
 
 
-    // redis
+      // redis
       CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,

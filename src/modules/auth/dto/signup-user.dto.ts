@@ -4,7 +4,7 @@ import {
      IsNotEmpty, IsOptional,
      IsString,
      MaxLength,
-     MinLength, Matches
+     MinLength, Matches, IsBoolean
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
 
@@ -38,12 +38,17 @@ export class SignUpUserDto {
      })
      password: string;
 
-     // @ApiProperty({ required: false ,default:null })
-     // roles: string;
+
 
      @ApiProperty({ required: false, default: Role.L2A_USER })
      @IsOptional()
      roles: string ;
+
+
+
+     // @ApiProperty({ type: Boolean, default: true })
+     // @IsBoolean()
+     // readonly isActive: boolean;
 
 
 

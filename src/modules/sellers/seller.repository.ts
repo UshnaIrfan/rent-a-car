@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from "typeorm";
+import { In, Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status} from "./schemas/seller.schema";
@@ -237,16 +237,32 @@ export class sellerRepository{
 
 
        // get all sellers
-       async getAllSellers(): Promise<seller[]|null>
-       {
+       // async getAllSellers(): Promise<seller[]|null>
+       // {
+       //
+       //   return  this.sellerModel.find({
+       //     where: {
+       //       approvedByAdmin: status.APPROVED,
+       //       isListing:true,
+       //     },
+       //   });
+       // }
 
-         return  this.sellerModel.find({
-           where: {
-             approvedByAdmin: status.APPROVED,
-             isListing:true,
-           },
-         });
-       }
+
+
+         async getAllSellers(): Promise<seller[]>
+         {
+            const sellers = await this.sellerModel.find({
+             relations: ['categories'],
+             where: {
+                categories: { approvedByAdmin: status.APPROVED },
+                approvedByAdmin: status.APPROVED,
+                isListing: true
+              }
+               });
+
+            return sellers;
+        }
 
 
 

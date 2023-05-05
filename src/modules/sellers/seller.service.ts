@@ -177,7 +177,6 @@ export class SellerService {
 
 
 
-
         // get seller by ID (associated categories)
         async getSellerById(id:string ) :Promise<{record:seller}>
         {
