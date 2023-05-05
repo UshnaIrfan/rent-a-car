@@ -153,39 +153,7 @@ export class reviewRepository{
 
 
         //ADMIN APIS
-  //   async search(skip: number, take: number, reviewId?: string, sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-  //   {
-  //
-  //       let whereConditions = {
-  //
-  //             id:reviewId ?? undefined,
-  //             userId: userId ?? undefined,
-  //             sellerId: sellerId ?? undefined,
-  //             message: message ? Like(`%${message}%`) : undefined,
-  //             titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-  //             categoryId:categoryId ?? undefined,
-  //
-  //       };
-  //
-  //
-  //       const [result, totalCount] = await this.reviewModel.findAndCount({
-  //       where: { ...whereConditions },
-  //         skip,
-  //         take,
-  //
-  //      });
-  //
-  //      if (!result.length)
-  //      {
-  //           throw new NotFoundException('No reviews were found matching the criteria.');
-  //      }
-  //
-  //          return [result, totalCount];
-  // }
-
-
-
-
+      // review search
       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
       {
 
@@ -228,6 +196,18 @@ export class reviewRepository{
 
 
 
+  // admin update  review status
+  async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
+  {
+    const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+    if (!review)
+    {
+      return null
+    }
+    review.approvedByAdmin = approvedByAdmin;
+    return this.reviewModel.save(review);
+
+  }
 
 }
 

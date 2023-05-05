@@ -12,7 +12,6 @@ import {clicksTypes} from "./schemas/create-click-types.schema";
 import { review } from "./schemas/submit-review.schema";
 import {clicksTypesRepository} from "./respositories/clicksTypes.repository";
 import {clicksTitlesRepository} from "./respositories/clicksTitles.repository";
-import paginationInterface from "./interfaces/pagination.interface";
 import createClicksTypesInterface from "./interfaces/create-click-types.dto";
 import { clicksTitle } from "./schemas/create-clicks-titles.schema";
 import { JwtService } from '@nestjs/jwt';
@@ -23,6 +22,10 @@ import updateReviewInterface from "./interfaces/update-review.interface";
 import {seller} from "../sellers/schemas/seller.schema";
 import likeDislikeInterface from "./interfaces/like-dislike.interface";
 import {likeDislikeRepository} from "./respositories/like-dislike.repository";
+import { category } from "../categories/schemas/category.schema";
+import adminUpdateSubmitReviewInterface from "./interfaces/admin-update-submit-review.interface";
+
+
 
 @Injectable()
 export class ReviewService {
@@ -39,6 +42,8 @@ export class ReviewService {
     ){}
 
 
+
+       //FRONTEND APIS
        // create click types
        async createClicksTypes(clickReviewInterface:createClicksTypesInterface):Promise<clicksTypes>
        {
@@ -405,10 +410,10 @@ export class ReviewService {
 
 
 
-  //ADMIN APIS
-
-  async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
-  {
+     //ADMIN APIS
+     // review search
+    async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
+    {
         const pageSize = 10;
         const skip = (pageNumber - 1) * pageSize;
         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId);
@@ -417,16 +422,27 @@ export class ReviewService {
         {
            throw new NotFoundException('No records found');
         }
-    return {
-         records: result,
-         totalRecords: totalCount,
-         totalPages,
-         currentPage: pageNumber,
-     };
-  }
+        return {
+            records: result,
+            totalRecords: totalCount,
+            totalPages,
+            currentPage: pageNumber,
+       };
+   }
 
 
 
+
+      // admin update  review status
+     async adminUpdateReview(adminUpdateCategoryInterface:adminUpdateSubmitReviewInterface):Promise<{ updateAdmin: review; message: string }>
+     {
+       const updateAdmin = await this.reviewRepository.adminUpdateReview(adminUpdateCategoryInterface.reviewId,adminUpdateCategoryInterface.approvedByAdmin);
+       if (!updateAdmin)
+       {
+          throw new NotFoundException('  review not exist');
+       }
+       return { message: "review  status updated successfully",updateAdmin };
+    }
 
 
 
