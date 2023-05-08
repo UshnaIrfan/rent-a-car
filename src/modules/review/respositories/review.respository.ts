@@ -133,22 +133,22 @@ export class reviewRepository{
 
 
 
-    async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
+    async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
     {
-           const positiveReviews = await this.reviewModel.findOne(
+           const positiveReview = await this.reviewModel.findOne(
          {
-                 where: [{ sellerId: sellerId,  message: Not(IsNull()),approvedByAdmin:true},
-                 {titleId: In([
+                 where: [{ sellerId: In(sellerIds),
+                   message: Not(IsNull()),
+                   approvedByAdmin:true,
+                 titleId: In([
                       "44bf96b2-5476-47f5-8ff9-7336d53156a8",
                       "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
                       "df368bbf-9155-4d36-932e-c94d34e7154a"
-                 ])}
-              ],
-               order: { createdAt: 'DESC' }
+                 ])}],
+                 order: { createdAt: 'DESC' }
                });
 
-              console.log(positiveReviews)
-              return positiveReviews;
+              return positiveReview;
     }
 
 
@@ -156,8 +156,8 @@ export class reviewRepository{
 
 
 
-      //ADMIN APIS
-      // review search
+       //ADMIN APIS
+       // review search
         async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
         {
 

@@ -64,7 +64,6 @@ export class CategoriesController {
          @Param('category_id') categoryId: string)
          {
 
-            console.log("here")
             return  this.categoriesService.getReviewsPositive(categoryId);
          }
 
