@@ -210,6 +210,7 @@ export class AuthService {
          try
          {
            let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
+           //await this.sendWelcomeEmail(reqBody.email);
            await this.sendWelcomeEmail(reqBody.email);
            const loginResult = this.login(updatesUser);
          //  await this.cacheManager.del(tokenKey);
@@ -501,7 +502,7 @@ export class AuthService {
      async sendWelcomeEmail(email: string )
      {
        const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-       const html = template({ email });
+       const html = template({ });
       await this.mailerService.sendMail({
         to: email,
         subject: 'welcome to love2air',
