@@ -127,7 +127,7 @@ export class AuthService {
            if (username)
            {
               throw new ConflictException('Username already exists');
-          }
+           }
 
           const email = await this.usersService.findUserByEmail(Signup.email);
           if (email)
@@ -157,7 +157,7 @@ export class AuthService {
         await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
 
         const baseUrl = process.env.BASE_URL;
-        const changePasswordUrl = `${baseUrl}#/Auth/AuthController_signup`;
+        const changePasswordUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
 
         console.log("token" ,Token)
 
@@ -347,7 +347,7 @@ export class AuthService {
           await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
 
           const baseUrl = process.env.BASE_URL;
-          const changePasswordUrl = `${baseUrl}#/Auth/AuthController_changePasswordToken`;
+          const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
 
           console.log("token" ,resetToken)
           // const queryParams = `?resetToken=${resetToken}`;

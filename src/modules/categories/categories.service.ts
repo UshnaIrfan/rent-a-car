@@ -258,6 +258,7 @@ export class CategoriesService {
              throw new NotFoundException('Category not exist');
           }
 
+
          const toreview = [];
          const sellerMap = {};
          const categorySellers = [];
@@ -266,7 +267,6 @@ export class CategoriesService {
          {
 
             const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
-            console.log("latest review" ,latestPositiveReview)
             if (latestPositiveReview)
             {
               const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);

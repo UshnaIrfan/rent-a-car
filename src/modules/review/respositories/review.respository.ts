@@ -1,13 +1,11 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, IsNull, Like, Not, Raw, Repository } from "typeorm";
+import { In, IsNull, Like, Not,  Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
-import { seller } from "../../sellers/schemas/seller.schema";
-import { category, status } from "../../categories/schemas/category.schema";
 import {CategoryRepository} from "../../categories/category.repository";
-import { query } from "express";
+
 
 
 @Injectable()
@@ -116,98 +114,145 @@ export class reviewRepository{
 
 
     // latest positive review
-    //  async getLatestReviewBySellerId(sellerId: string): Promise<review |null>
-    //  {
-    //     const review = await this.reviewModel.findOne({
-    //     where: [{ sellerId: sellerId }, { message: Not(IsNull()) }],
-    //     order: { createdAt: 'DESC' }
-    //   });
-    //    console.log(review);
+    //   async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
+    //   {
+    //          const positiveReviews = await this.reviewModel.findOne(
+    //        {
+    //                where: [{ sellerId: sellerId,  message: Not(IsNull()),approvedByAdmin:true},
+    //                {titleId: In([
+    //                     "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+    //                     "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+    //                     "df368bbf-9155-4d36-932e-c94d34e7154a"
+    //                ])}
+    //             ],
+    //              order: { createdAt: 'DESC' }
+    //              });
     //
-    //   return review;
-    // }
+    //             console.log(positiveReviews)
+    //             return positiveReviews;
+    //   }
+
+
 
       async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
       {
-             const positiveReviews = await this.reviewModel.findOne(
-           {
-                where: [{ sellerId: sellerId,  message: Not(IsNull())},
+        const positiveReviews = await this.reviewModel.findOne({
+          where: {
+            sellerId,
+            message: Not(IsNull()),
+            approvedByAdmin: true,
+            titleId: In([
+              "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+              "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+              "df368bbf-9155-4d36-932e-c94d34e7154a"
+            ])
+          },
+          order: { createdAt: 'DESC' }
+         });
 
-                   {titleId: In([
-                        "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-                        "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-                        "df368bbf-9155-4d36-932e-c94d34e7154a"
-                   ])}],
-
-                 order: { createdAt: 'DESC' }
-                 });
-
-                console.log(positiveReviews)
-                return positiveReviews;
-        }
-
-
-
+        console.log(positiveReviews);
+        return positiveReviews;
+     }
 
 
 
 
-        //ADMIN APIS
+
+
+
+      //ADMIN APIS
       // review search
-      async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-      {
-
-        let whereConditions = {
-
-            userId: userId ?? undefined,
-            sellerId: sellerId ?? undefined,
-            message: message ? Like(`%${message}%`) : undefined,
-            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-            // categoryId:categoryId ?? undefined,
-        };
-
-
-          let sellerIds=[];
-          if (categoryId)
-          {
-            const category = await this.categoryRepository.GetCategoryId(categoryId);
-            sellerIds = category.sellers.map(seller => seller.id);
-            console.log(sellerIds)
-
-          }
-
-
-
-        const [result, totalCount] = await this.reviewModel.findAndCount({
-      //   where: { ...whereConditions, sellerId: In(sellerIds) },
-          where: { ...whereConditions },
-         skip,
-         take,
-        });
-
-        if (!result.length)
-        {
-            throw new NotFoundException('No reviews were found matching the criteria.');
-        }
-
-         return [result, totalCount];
-   }
-
+   //    async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+   //    {
+   //
+   //       let whereConditions = {
+   //
+   //          userId: userId ?? undefined,
+   //          sellerId: sellerId ?? undefined,
+   //          message: message ? Like(`%${message}%`) : undefined,
+   //          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+   //          // categoryId:categoryId ?? undefined,
+   //      };
+   //
+   //
+   //        let sellerIds=[];
+   //        if (categoryId)
+   //        {
+   //          const category = await this.categoryRepository.GetCategoryId(categoryId);
+   //          sellerIds = category.sellers.map(seller => seller.id);
+   //          console.log(sellerIds)
+   //
+   //        }
+   //
+   //
+   //       const [result, totalCount] = await this.reviewModel.findAndCount({
+   //         where: { ...whereConditions, sellerId: In(sellerIds) },
+   //       //  where: { ...whereConditions },
+   //         skip,
+   //         take
+   //       });
+   //
+   //      if (!result.length)
+   //      {
+   //          throw new NotFoundException('No reviews were found matching the criteria.');
+   //      }
+   //
+   //       return [result, totalCount];
+   // }
 
 
 
-  // admin update  review status
-  async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
-  {
-    const review = await this.reviewModel.findOne({ where: { id:reviewId}});
-    if (!review)
+    async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
     {
-      return null
-    }
-    review.approvedByAdmin = approvedByAdmin;
-    return this.reviewModel.save(review);
 
+      let whereConditions = {
+          userId: userId ?? undefined,
+          message: message ? Like(`%${message}%`) : undefined,
+          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+          sellerId: sellerId ? sellerId : undefined,
+
+      };
+
+
+       let sellerIds=[];
+       if (categoryId)
+       {
+         const category = await this.categoryRepository.GetCategoryId(categoryId);
+         sellerIds = category.sellers.map(seller => seller.id);
+         console.log(sellerIds)
+       }
+
+      const [result, totalCount] = await this.reviewModel.findAndCount({
+        // where:  {...whereConditions, sellerId: sellerId ? sellerId : In(sellerIds) },
+        where:  {...whereConditions, sellerId: sellerId ? sellerId : In(sellerIds),userId: userId ? userId : undefined },
+         skip,
+         take
+     });
+
+     if (!result.length)
+     {
+        throw new NotFoundException('No reviews were found matching the criteria.');
+     }
+
+       return [result, totalCount];
   }
+
+
+
+
+
+      // admin update  review status
+       async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
+       {
+          const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+          if (!review)
+          {
+             return null
+          }
+          review.approvedByAdmin = approvedByAdmin;
+          return this.reviewModel.save(review);
+
+      }
 
 }
 

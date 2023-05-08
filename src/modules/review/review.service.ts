@@ -412,8 +412,8 @@ export class ReviewService {
 
      //ADMIN APIS
      // review search
-    async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
-    {
+     async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
+     {
         const pageSize = 10;
         const skip = (pageNumber - 1) * pageSize;
         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId);

@@ -53,7 +53,7 @@ import * as AWS from 'aws-sdk';
           //   accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
           //   secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
           // }),
-
+          //
           host: configService.get('MAILER_HOST'),
           port: 465,
           // secure: false,
@@ -81,14 +81,6 @@ import * as AWS from 'aws-sdk';
     }),
 
     // Database connection
-    //   MongooseModule.forRootAsync({
-//      imports: [ConfigModule],
-//     useFactory: (configService: ConfigService) => ({
-//     uri: configService.get('MONGO_URI'),
-//   }),
-//   inject: [ConfigService],
-// }),
-
       TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
