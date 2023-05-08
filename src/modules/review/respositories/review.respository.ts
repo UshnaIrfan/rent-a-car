@@ -214,6 +214,7 @@ export class reviewRepository{
       };
 
 
+
        let sellerIds=[];
        if (categoryId)
        {
@@ -223,8 +224,7 @@ export class reviewRepository{
        }
 
       const [result, totalCount] = await this.reviewModel.findAndCount({
-        // where:  {...whereConditions, sellerId: sellerId ? sellerId : In(sellerIds) },
-        where:  {...whereConditions, sellerId: sellerId ? sellerId : In(sellerIds),userId: userId ? userId : undefined },
+        where:  [{...whereConditions}, {sellerId: sellerId ? sellerId : In(sellerIds) }],
          skip,
          take
      });
@@ -236,6 +236,8 @@ export class reviewRepository{
 
        return [result, totalCount];
   }
+
+
 
 
 

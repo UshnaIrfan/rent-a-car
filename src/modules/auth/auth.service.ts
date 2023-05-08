@@ -163,7 +163,7 @@ export class AuthService {
 
         const queryParams = `?Token=${Token}&email=${user.email}`;
         const activeUrl = `${changePasswordUrl}${queryParams}`;
-        const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
+        const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
         const emailBody = template({ activeUrl });
        //  const emailBody = `Please click on the following link to registerd your account: <a href="${activeUrl}" target="_blank">${activeUrl}</a>`;
 
@@ -356,7 +356,9 @@ export class AuthService {
           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
           const emailBody = template({ resetUrl });
          //  const emailBody = `Please click on the following link to reset your password: <a href="${resetUrl}" target="_blank">${resetUrl}</a>`;
-          try
+
+
+         try
           {
               await this.sendToken(user.email, emailBody);
           }
