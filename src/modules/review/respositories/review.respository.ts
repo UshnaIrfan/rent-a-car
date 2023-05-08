@@ -161,20 +161,28 @@ export class reviewRepository{
         async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
         {
 
-         let whereConditions = {
-            userId: userId ?? undefined,
-            message: message ? Like(`%${message}%`) : undefined,
-            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-        };
+           let whereConditions = {} as {
+             userId?: any,
+             message?: any,
+             titleSlug?: any,
+             sellerId?: any,
+          };
 
-
+          if (userId || message || type || sellerId) {
+            whereConditions = {
+              userId: userId ?? undefined,
+              message: message ? Like(`%${message}%`) : undefined,
+              titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+              sellerId: sellerId,
+            };
+          }
 
          let sellerIds=[];
          if (categoryId)
          {
             const category = await this.categoryRepository.GetCategoryId(categoryId);
             sellerIds = category.sellers.map(seller => seller.id);
-           // Todo
+
            if (sellerId && sellerIds.find(seller => seller === sellerId))
            {
               sellerIds = [sellerId];
@@ -185,15 +193,12 @@ export class reviewRepository{
             throw new NotFoundException('No reviews were found matching the criteria.');
            }
 
+           whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
         }
-
         const [result, totalCount] = await this.reviewModel.findAndCount({
-        where: [
-          {
-            ...whereConditions,
-            sellerId: categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined),
-          }
-        ],
+        where: Object.keys(whereConditions).length !== 0 ? [
+          whereConditions
+        ] : [],
          skip,
          take
        });
@@ -210,7 +215,7 @@ export class reviewRepository{
 
 
 
-      // admin update  review status
+       // admin update  review status
        async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
        {
           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
