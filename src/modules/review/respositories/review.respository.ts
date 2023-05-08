@@ -112,7 +112,6 @@ export class reviewRepository{
 
 
 
-
     // latest positive review
     //   async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
     //   {
@@ -134,26 +133,23 @@ export class reviewRepository{
 
 
 
-      async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
-      {
-        const positiveReviews = await this.reviewModel.findOne({
-          where: {
-            sellerId,
-            message: Not(IsNull()),
-            approvedByAdmin: true,
-            titleId: In([
-              "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-              "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-              "df368bbf-9155-4d36-932e-c94d34e7154a"
-            ])
-          },
-          order: { createdAt: 'DESC' }
-         });
+    async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
+    {
+           const positiveReviews = await this.reviewModel.findOne(
+         {
+                 where: [{ sellerId: sellerId,  message: Not(IsNull()),approvedByAdmin:true},
+                 {titleId: In([
+                      "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+                      "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+                      "df368bbf-9155-4d36-932e-c94d34e7154a"
+                 ])}
+              ],
+               order: { createdAt: 'DESC' }
+               });
 
-        console.log(positiveReviews);
-        return positiveReviews;
-     }
-
+              console.log(positiveReviews)
+              return positiveReviews;
+    }
 
 
 
@@ -162,82 +158,53 @@ export class reviewRepository{
 
       //ADMIN APIS
       // review search
-   //    async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-   //    {
-   //
-   //       let whereConditions = {
-   //
-   //          userId: userId ?? undefined,
-   //          sellerId: sellerId ?? undefined,
-   //          message: message ? Like(`%${message}%`) : undefined,
-   //          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-   //          // categoryId:categoryId ?? undefined,
-   //      };
-   //
-   //
-   //        let sellerIds=[];
-   //        if (categoryId)
-   //        {
-   //          const category = await this.categoryRepository.GetCategoryId(categoryId);
-   //          sellerIds = category.sellers.map(seller => seller.id);
-   //          console.log(sellerIds)
-   //
-   //        }
-   //
-   //
-   //       const [result, totalCount] = await this.reviewModel.findAndCount({
-   //         where: { ...whereConditions, sellerId: In(sellerIds) },
-   //       //  where: { ...whereConditions },
-   //         skip,
-   //         take
-   //       });
-   //
-   //      if (!result.length)
-   //      {
-   //          throw new NotFoundException('No reviews were found matching the criteria.');
-   //      }
-   //
-   //       return [result, totalCount];
-   // }
+        async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+        {
+
+         let whereConditions = {
+            userId: userId ?? undefined,
+            message: message ? Like(`%${message}%`) : undefined,
+            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+        };
 
 
 
-    async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-    {
+         let sellerIds=[];
+         if (categoryId)
+         {
+            const category = await this.categoryRepository.GetCategoryId(categoryId);
+            sellerIds = category.sellers.map(seller => seller.id);
+           // Todo
+           if (sellerId && sellerIds.find(seller => seller === sellerId))
+           {
+              sellerIds = [sellerId];
+           }
 
-      let whereConditions = {
-          userId: userId ?? undefined,
-          message: message ? Like(`%${message}%`) : undefined,
-          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-          sellerId: sellerId ? sellerId : undefined,
+           if (sellerId && !sellerIds.find(seller => seller === sellerId))
+           {
+            throw new NotFoundException('No reviews were found matching the criteria.');
+           }
 
-      };
+        }
 
-
-
-       let sellerIds=[];
-       if (categoryId)
-       {
-         const category = await this.categoryRepository.GetCategoryId(categoryId);
-         sellerIds = category.sellers.map(seller => seller.id);
-         console.log(sellerIds)
-       }
-
-      const [result, totalCount] = await this.reviewModel.findAndCount({
-        where:  [{...whereConditions}, {sellerId: sellerId ? sellerId : In(sellerIds) }],
+        const [result, totalCount] = await this.reviewModel.findAndCount({
+        where: [
+          {
+            ...whereConditions,
+            sellerId: categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined),
+          }
+        ],
          skip,
          take
-     });
+       });
 
-     if (!result.length)
-     {
-        throw new NotFoundException('No reviews were found matching the criteria.');
-     }
+       if (!result.length)
+       {
+          throw new NotFoundException('No reviews were found matching the criteria.');
+       }
 
-       return [result, totalCount];
-  }
-
-
+        return [result, totalCount];
+    }
 
 
 

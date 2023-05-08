@@ -16,6 +16,7 @@ export class adminReviewController {
 
 
      // review search
+     @ApiBearerAuth()
      @ApiQuery({ name: 'page', type: Number, required: true })
      @ApiQuery({ name: 'sellerId', required: false })
      @ApiQuery({ name: 'userId', required: false })
@@ -23,6 +24,7 @@ export class adminReviewController {
      @ApiQuery({ name: 'type', required: false })
      @ApiQuery({ name: 'categoryId', required: false })
      @Get('review/search')
+     @Roles(Role.L2A_ADMIN)
      async search(@Query('page') page: number = 1, @Query('sellerId') sellerId?: string,
                @Query('userId') userId?: string,@Query('message') message?: string,
                @Query('type') type?: string ,@Query('categoryId') categoryId?: string)

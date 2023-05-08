@@ -269,6 +269,7 @@ export class CategoriesService {
             const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
             if (latestPositiveReview)
             {
+
               const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
               const userCount = result.length;
               const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
