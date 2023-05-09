@@ -36,7 +36,7 @@ export class review{
 
 
      @ApiProperty()
-     @Column({ default: null,nullable: true})
+     @Column({ default: null,nullable: true,type: 'longtext'})
      message: string;
 
 

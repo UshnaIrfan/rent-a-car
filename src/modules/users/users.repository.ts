@@ -183,7 +183,6 @@ export class UsersRepository {
          // get all users
          async getAllUser(): Promise<User[]|null>
          {
-
             return  this.userModel.find({
             where: { isActive:true }
             });

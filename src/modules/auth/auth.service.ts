@@ -363,6 +363,7 @@ export class AuthService {
           }
           catch (e)
           {
+            console.log(e);
               throw new BadRequestException('Failed to send email');
           }
          return {
@@ -536,11 +537,11 @@ export class AuthService {
         //sending token(forgotPassword)
         async sendToken(email: string, emailBody: string)
         {
-           await this.mailerService.sendMail({
-           to: email,
-           subject: 'Reset Password',
-           html: emailBody,
-            });
+             await this.mailerService.sendMail({
+             to: email,
+             subject: 'Reset Password',
+             html: emailBody
+           });
         }
 
 

@@ -22,6 +22,7 @@ import {likeDislikeSchema} from "./modules/review/schemas/like-dislike.schema";
 import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
 
+
 @Module({
   imports: [
     AuthModule,
@@ -30,7 +31,7 @@ import * as AWS from 'aws-sdk';
     SellerModule,
     ContactUsModule,
     ReviewModule,
-
+    AdminModule,
 
 
     ConfigModule.forRoot(
@@ -48,24 +49,27 @@ import * as AWS from 'aws-sdk';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         transport: {
-          // SES: new AWS.SES({
-          //   region: configService.get('AWS_SES_REGION'),
-          //   accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
-          //   secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
-          // }),
-          //
-          host: configService.get('MAILER_HOST'),
-          port: 465,
-          // secure: false,
-          // ignoreTLS:true,
-          // requireTLS:false,
+          SES: new AWS.SES({
+            region: configService.get('AWS_SES_REGION'),
+            accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
+            secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
+          }),
+
+          host: configService.get('AWS_SES_SMTP_HOST'),
+          port: configService.get('AWS_SES_SMTP_PORT'),
+          secure: false,
+          ignoreTLS:true,
+          requireTLS:false,
           auth: {
-             user: configService.get('ADMIN_EMAIL'),
-             pass: configService.get('MAILER_PASSWORD'),
+             user: configService.get('AWS_SES_SMTP_USER_NAME'),
+             pass: configService.get('AWS_SES_SMTP_USER_PASSWORD'),
           },
         },
-            preview: true,
 
+        defaults: {
+          from: configService.get('ADMIN_EMAIL'),
+        },
+            preview: true,
         }),
 
           inject: [ConfigService],
@@ -74,13 +78,15 @@ import * as AWS from 'aws-sdk';
 
 
 
-      // redis
-      CacheModule.register({
-      store: redisStore,
-      uri: process.env.REDIS_URL,
-    }),
+         // redis
+        CacheModule.register({
+         store: redisStore,
+          uri: process.env.REDIS_URL,
+        }),
 
-    // Database connection
+
+
+       // Database connection
       TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -96,8 +102,6 @@ import * as AWS from 'aws-sdk';
       }),
       inject: [ConfigService],
     }),
-
-    AdminModule,
 
   ],
      controllers: [],
