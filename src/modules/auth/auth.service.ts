@@ -438,29 +438,12 @@ export class AuthService {
 
 
 
-        // get user by id
-         async getUserById(id: string)
-         {
-            const user = await this.usersService.findUserByID(id)
-            if (!user)
-            {
-               throw new  NotFoundException('user not found');
-            }
-
-           let result={
-              id:user.id,
-              name:user.name,
-              username:user.username,
-              email:user.email,
-              roles:user.roles,
-              createdAt:user.createdAt,
-              updatedAt:user.updatedAt
-           }
-
-            return  result;
-        }
-
-
+          // get all users
+          async getAllUser(): Promise<User[]>
+          {
+              const user = await this.usersService.getAllUser()
+              return  user;
+          }
 
 
 

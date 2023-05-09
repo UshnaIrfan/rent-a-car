@@ -18,6 +18,7 @@ import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
 import { category } from "../categories/schemas/category.schema";
+import { User } from "../users/schemas/user.schema";
 
 
 @ApiTags('Auth')
@@ -130,12 +131,12 @@ export class AuthController {
 
 
 
-        // get user by id
-        @Get('/id/:user_id')
-        async  getUserByID(@Param('user_id') id: string)
-        {
-          return this.authService.getUserById(id);
-        }
+          // get all users
+          @Get('/all_users')
+          async  getAllUser():Promise<User[]>
+          {
+              return this.authService.getAllUser();
+          }
 
 
 

@@ -2,10 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
-import updateUserInterface from "../auth/interfaces/update-user.interface";
-import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
-import { status } from "../categories/schemas/category.schema";
+
 
 
 @Injectable()
@@ -27,7 +25,7 @@ export class UsersService {
         if (result.length === 0)
         {
             throw new NotFoundException('No records found');
-         }
+        }
 
       return {
            records: result,
@@ -83,26 +81,36 @@ export class UsersService {
 
 
 
-      async updatePassword(email: string ,password:string): Promise<User | null>
-      {
+       async updatePassword(email: string ,password:string): Promise<User | null>
+       {
           return this.usersRepository.updatePassword(email,password);
-      }
+       }
 
 
 
-      async findUserByID (id:string): Promise<User | null>
-      {
+       async findUserByID (id:string): Promise<User | null>
+       {
          return this.usersRepository.findUserByID(id);
-      }
+       }
 
 
 
-
-
-        async isActive(email: string,isActive:boolean): Promise<User | null>
-        {
+       async isActive(email: string,isActive:boolean): Promise<User | null>
+       {
           return this.usersRepository.isActive(email,isActive);
-        }
+       }
+
+
+
+         async getAllUser():Promise<User[]|null>
+         {
+             const users =await this.usersRepository.getAllUser();
+             if(!users)
+             {
+               throw new NotFoundException('No user exit');
+             }
+             return  users;
+         }
 
 
 

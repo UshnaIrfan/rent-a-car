@@ -45,6 +45,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from "./schemas/user.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
+import { status } from "../categories/schemas/category.schema";
 
 
 @Injectable()
@@ -166,17 +167,30 @@ export class UsersRepository {
 
 
 
-       async isActive(email: string, isActive: boolean): Promise<User| null>
-       {
-          const user = await this.userModel.findOne({ where: { email } });
-         if (!user)
+         async isActive(email: string, isActive: boolean): Promise<User| null>
          {
-           return null
-        }
-       user.isActive = isActive;
-       return this.userModel.save(user);
-    }
+            const user = await this.userModel.findOne({ where: { email } });
+            if (!user)
+            {
+               return null
+           }
+           user.isActive = isActive;
+           return this.userModel.save(user);
+       }
 
 
 
-}
+         // get all users
+         async getAllUser(): Promise<User[]|null>
+         {
+
+            return  this.userModel.find({
+            where: { isActive:true }
+            });
+
+         }
+
+
+
+
+  }
