@@ -1,5 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+     Entity,
+     Column,
+     PrimaryGeneratedColumn,
+     BeforeInsert,
+     CreateDateColumn,
+     UpdateDateColumn,
+     ManyToMany, JoinTable, ManyToOne
+} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
+import { seller } from "../../sellers/schemas/seller.schema";
+import { User } from "../../users/schemas/user.schema";
 
 @Entity({ name: 'review' })
 export class review{
@@ -47,6 +57,13 @@ export class review{
 
      @ApiProperty()
      @UpdateDateColumn()
-     updatedDate: Date
+     updatedAt: Date
+
+
+     @ApiProperty({ type: () => [User] })
+     @ManyToOne(() => User, User => User.review)
+     @JoinTable()
+     User: User[];
+
 
 }

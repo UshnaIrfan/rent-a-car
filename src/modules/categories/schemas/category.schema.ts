@@ -52,7 +52,7 @@ export class category{
 
      @ApiProperty()
      @UpdateDateColumn()
-     updatedDate: Date
+     updatedAt: Date
 
 
      @ApiProperty({ type: () => [seller] })

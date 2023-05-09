@@ -5,6 +5,7 @@ import { User } from "./schemas/user.schema";
 import updateUserInterface from "../auth/interfaces/update-user.interface";
 import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
+import { status } from "../categories/schemas/category.schema";
 
 
 @Injectable()
@@ -49,11 +50,11 @@ export class UsersService {
 
 
 
-      // delete  user
-      async deleteUser(id:string): Promise<User|null>
-      {
-         return this.usersRepository.deleteUser(id);
-      }
+       // delete  user with review
+       async deleteUser(id:string): Promise<User|null>
+       {
+           return this.usersRepository.deleteUser(id);
+       }
 
 
 

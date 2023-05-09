@@ -250,79 +250,46 @@ export class CategoriesService {
    // }
    //
 
-       async getReviewsPositive(categoryId: string)
-       {
-          const category = await this.categoryRepository.getCategoryId(categoryId);
-          if (!category)
-          {
-             throw new NotFoundException('Category not exist');
-          }
+      //  async getReviewsPositive(categoryId: string)
+      //  {
+      //      const category = await this.categoryRepository.getCategoryId(categoryId);
+      //      if (!category)
+      //      {
+      //          throw new NotFoundException('Category not exist');
+      //      }
+      //
+      //
+      //     const sellerIds = [];
+      //     for (const seller of category.sellers)
+      //     {
+      //        sellerIds.push(seller.id);
+      //     }
+      //
+      //
+      //    const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
+      //    return latestPositiveReview;
+      //
+      // }
 
-         const toreview = [];
-         const sellerMap = {};
-         const categorySellers = [];
+        async getReviewsPositive(categoryId: string)
+        {
+           const category = await this.categoryRepository.getCategoryId(categoryId);
+           if (!category)
+           {
+              throw new NotFoundException('Category not exist');
+           }
+
+
          const sellerIds = [];
-         for (const seller of category.sellers) {
-           sellerIds.push(seller.id);
+         for (const seller of category.sellers)
+         {
+             sellerIds.push(seller.id);
          }
 
 
-         const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
+       const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
+       return latestPositiveReview;
 
-         return latestPositiveReview;
-
-    //      for (const seller of category.sellers)
-    //      {
-    //   //       if (latestPositiveReview)
-    //   //       {
-    //   //
-    //   //         const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
-    //   //         const userCount = result.length;
-    //   //         const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-    //   //
-    //   //        if (matchingSlugTitle)
-    //   //        {
-    //   //           const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
-    //   //           if (title)
-    //   //           {
-    //   //              if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
-    //   //              {
-    //   //                if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
-    //   //                {
-    //   //                    sellerMap[latestPositiveReview.id] = seller;
-    //   //                    if (!categorySellers.includes(seller))
-    //   //                    {
-    //   //                      categorySellers.push(seller );
-    //   //                    }
-    //   //
-    //   //                   toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
-    //   //                   break;
-    //   //               }
-    //   //             }
-    //   //         }
-    //   //       else
-    //   //       {
-    //   //         throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
-    //   //       }
-    //   //    }
-    //   //   else
-    //   //    {
-    //   //      throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
-    //   //   }
-    //   // }
-    //       }
-    //   const categoryObj = {
-    //      id:category.id,
-    //      categoryName: category.categoryName,
-    //      approvedByAdmin:category.approvedByAdmin,
-    //   // isListing:category.isListing
-    //  };
-    //
-    // return {
-    //    category:categoryObj,
-    //    sellers: categorySellers,
-    //    'to-review': toreview
-    //  };
   }
 
 

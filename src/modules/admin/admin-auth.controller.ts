@@ -40,7 +40,7 @@ export class adminAuthController {
 
 
 
-      //delete user
+      //delete user with review
       @ApiBearerAuth()
       @Delete('user/delete')
       @Roles(Role.L2A_ADMIN)

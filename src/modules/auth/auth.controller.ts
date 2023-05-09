@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put, Query, Patch
+  Delete, Put, Query, Patch, Param
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
@@ -17,6 +17,7 @@ import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
+import { category } from "../categories/schemas/category.schema";
 
 
 @ApiTags('Auth')
@@ -126,6 +127,16 @@ export class AuthController {
           const accessToken = req.headers.authorization.split(' ')[1];
           return this.authService.getProfile(accessToken);
         }
+
+
+
+        // get user by id
+        @Get('/id/:user_id')
+        async  getUserByID(@Param('user_id') id: string)
+        {
+          return this.authService.getUserById(id);
+        }
+
 
 
 

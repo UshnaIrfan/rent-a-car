@@ -26,6 +26,6 @@ export class contact{
 
     @ApiProperty()
     @UpdateDateColumn()
-    updatedDate: Date
+    updatedAt: Date
 
 }

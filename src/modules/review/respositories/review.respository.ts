@@ -133,31 +133,31 @@ export class reviewRepository{
 
 
 
-    async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
-    {
+        async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
+        {
            const positiveReview = await this.reviewModel.findOne(
          {
-                 where: [{ sellerId: In(sellerIds),
-                   message: Not(IsNull()),
-                   approvedByAdmin:true,
-                 titleId: In([
-                      "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-                      "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-                      "df368bbf-9155-4d36-932e-c94d34e7154a"
-                 ])}],
-                 order: { createdAt: 'DESC' }
-               });
+               where: [{ sellerId: In(sellerIds),
+                         message: Not(IsNull()),
+                         approvedByAdmin:true,
+                         titleId: In([
+                          "44bf96b2-5476-47f5-8ff9-7336d53156a8",
+                          "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
+                          "df368bbf-9155-4d36-932e-c94d34e7154a"
+                       ])}],
+                    order: { createdAt: 'DESC' }
+                });
 
-              return positiveReview;
-    }
-
-
+                return positiveReview;
+      }
 
 
 
 
-       //ADMIN APIS
-       // review search
+
+
+         //ADMIN APIS
+        // review search
         async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
         {
 
@@ -227,6 +227,20 @@ export class reviewRepository{
           return this.reviewModel.save(review);
 
       }
+
+
+
+
+       // delete review
+        async delete(reviewId:string) : Promise<review| null>
+        {
+           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+           if (!review)
+           {
+               return null
+           }
+             return await this.reviewModel.remove(review);
+       }
 
 }
 

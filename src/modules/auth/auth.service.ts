@@ -27,6 +27,7 @@ import updateUserInterface from "./interfaces/update-user.interface";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
 import userActiveInterface from "./interfaces/user-active.interface";
+import { category } from "../categories/schemas/category.schema";
 
 
 @Injectable()
@@ -66,7 +67,7 @@ export class AuthService {
 
 
 
-        //delete user
+        //delete user with review
        async deleteUser(id:string):Promise<{message: string, deletedUser:User}>
        {
           const deletedUser = await this.usersService.deleteUser(id);
@@ -75,7 +76,7 @@ export class AuthService {
              throw new NotFoundException('user not found');
           }
 
-          return { message: "user deleted successfully", deletedUser };
+          return { message: " deleted successfully", deletedUser };
        }
 
 
@@ -210,10 +211,8 @@ export class AuthService {
          try
          {
            let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
-           //await this.sendWelcomeEmail(reqBody.email);
            await this.sendWelcomeEmail(reqBody.email);
            const loginResult = this.login(updatesUser);
-         //  await this.cacheManager.del(tokenKey);
            return loginResult;
         }
         catch (e)
@@ -351,7 +350,6 @@ export class AuthService {
           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
 
           console.log("token" ,resetToken)
-          // const queryParams = `?resetToken=${resetToken}`;
           const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
           const resetUrl = `${changePasswordUrl}${queryParams}`;
           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
@@ -436,6 +434,31 @@ export class AuthService {
            }
               return  cachedToken
          }
+
+
+
+
+        // get user by id
+         async getUserById(id: string)
+         {
+            const user = await this.usersService.findUserByID(id)
+            if (!user)
+            {
+               throw new  NotFoundException('user not found');
+            }
+
+           let result={
+              id:user.id,
+              name:user.name,
+              username:user.username,
+              email:user.email,
+              roles:user.roles,
+              createdAt:user.createdAt,
+              updatedAt:user.updatedAt
+           }
+
+            return  result;
+        }
 
 
 

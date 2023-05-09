@@ -21,6 +21,6 @@ export class clicksTypes{
 
      @ApiProperty()
      @UpdateDateColumn()
-     updatedDate: Date
+     updatedAt: Date
 
 }

@@ -55,10 +55,20 @@
 
 
 
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+     Entity,
+     Column,
+     PrimaryGeneratedColumn,
+     CreateDateColumn,
+     UpdateDateColumn,
+     ManyToMany,
+     OneToMany
+} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from "../../../enums/role.enum";
 import { Prop } from "@nestjs/mongoose";
+import { category } from "../../categories/schemas/category.schema";
+import { review } from "../../review/schemas/submit-review.schema";
 
 @Entity({ name: 'users' })
 
@@ -106,6 +116,13 @@ export class User {
 
      @ApiProperty()
      @UpdateDateColumn()
-     updatedDate: Date
+     updatedAt: Date
+
+
+     @ApiProperty({ type: () => [review] })
+     @OneToMany(() => review, review => review.User, { cascade: true })
+     review: review[];
+
+
 
 }

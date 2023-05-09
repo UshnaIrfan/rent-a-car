@@ -42,7 +42,7 @@ export class clicksTitle{
 
      @ApiProperty()
      @UpdateDateColumn()
-     updatedDate: Date
+     updatedAt: Date
 
 }
 

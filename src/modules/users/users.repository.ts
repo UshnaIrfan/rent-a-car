@@ -43,14 +43,15 @@ import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schemas/user.schema';
-import { Role } from "../../enums/role.enum";
-import { seller } from "../sellers/schemas/seller.schema";
+import { User } from "./schemas/user.schema";
+import {reviewRepository} from "../review/respositories/review.respository";
 
 
 @Injectable()
 export class UsersRepository {
-  constructor(@InjectRepository(User) private userModel: Repository<User>) {}
+  constructor(@InjectRepository(User) private userModel: Repository<User>,
+              private readonly ReviewRepository:reviewRepository
+              ) {}
 
 
 
@@ -74,16 +75,27 @@ export class UsersRepository {
 
 
 
-       //delete user
-       async deleteUser(id: string): Promise<User| null>
-       {
-           const user = await this.userModel.findOne({ where: { id } });
-           if (!user)
-           {
-              return null
-           }
-           return await this.userModel.remove(user);
-      }
+        //delete user  with review
+        async deleteUser(id: string): Promise<User| null>
+        {
+
+            const user = await this.userModel.findOne({
+                where: { id  },
+                relations: ['review'],
+             });
+
+             const reviews = user.review;
+             if (reviews && reviews.length > 0)
+             {
+                for (const review of reviews)
+                {
+                    await this.ReviewRepository.delete(review.id);
+                }
+             }
+             const result = await this.userModel.remove(user);
+             return  result
+
+        }
 
 
 

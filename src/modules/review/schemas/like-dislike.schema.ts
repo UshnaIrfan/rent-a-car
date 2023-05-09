@@ -14,19 +14,19 @@ export class likeDislikeSchema{
     userId: string;
 
 
-   @ApiProperty()
-   @Column({})
-   reviewId: string;
+    @ApiProperty()
+    @Column({})
+    reviewId: string;
 
 
-   @ApiProperty()
-   @CreateDateColumn()
-   createdAt: Date
+    @ApiProperty()
+    @CreateDateColumn()
+    createdAt: Date
 
 
-   @ApiProperty()
-   @UpdateDateColumn()
-   updatedDate: Date
+    @ApiProperty()
+    @UpdateDateColumn()
+    updatedAt: Date
 
 
 }
