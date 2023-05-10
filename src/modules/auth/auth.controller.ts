@@ -153,4 +153,19 @@ export class AuthController {
         }
 
 
+
+
+        // refresh token
+        @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
+        @Get('refresh')
+        async refreshToken(@Request() req)
+        {
+           const accessToken = req.headers.authorization.split(' ')[1];
+           return  this.authService.refreshToken(req.user,accessToken)
+        }
+
+
+
+
 }

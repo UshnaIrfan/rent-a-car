@@ -454,8 +454,38 @@ export class AuthService {
 
 
 
+        // refresh token
+        async refreshToken(users: User ,accessToken:string)
+        {
 
-        // Generating new hashed password to save in database
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken || cachedToken)
+           {
+             await this.cacheManager.del(accessToken);
+             const payload = {
+               id: users.id,
+               name: users.name,
+               username: users.username,
+               email: users.email,
+               password: users.password,
+               roles: users.roles,
+               isActive: users.isActive,
+             };
+             const accessTokenRedis = this.jwtService.sign(payload);
+             const accessTokenTTL = 5400;
+             await Promise.all([
+             this.cacheManager.set(accessTokenRedis, users, { ttl: accessTokenTTL })]);
+             return {
+                 refresh_token: accessTokenRedis,
+             };
+           }
+      }
+
+
+
+
+
+       // Generating new hashed password to save in database
          private static async hashPassword(password: string): Promise<string>
          {
             const salt = await bcrypt.genSalt();
@@ -550,8 +580,8 @@ export class AuthService {
           to: email,
           subject: 'register ',
           html: emailBody,
-      });
-    }
+         });
+      }
 
 
 }

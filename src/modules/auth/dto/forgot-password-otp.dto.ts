@@ -6,5 +6,5 @@ export  class ForgotPasswordOtpDto {
     @IsNotEmpty()
     @IsString()
     @IsEmail()
-    readonly email: string = '';
+    email: string = '';
 }

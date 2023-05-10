@@ -8,12 +8,12 @@ export  class ForgotPasswordDto {
     @IsString()
     @MinLength(3)
     @MaxLength(64)
-    readonly email: string = '';
+    email: string = '';
 
 
     @ApiProperty({ type: String, required: true })
     @IsNotEmpty()
     @IsString()
-    readonly otp: string = '';
+    otp: string = '';
 
 }

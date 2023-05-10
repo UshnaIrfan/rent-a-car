@@ -6,5 +6,5 @@ export  class randomUserTokenDto {
     @IsNotEmpty()
     @IsString()
     @IsEmail()
-    readonly email: string = '';
+    email: string = '';
 }
