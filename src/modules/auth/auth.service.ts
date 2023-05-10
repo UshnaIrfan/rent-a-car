@@ -1,9 +1,9 @@
 import {
   BadRequestException, Body,
-  CACHE_MANAGER, ConflictException, ForbiddenException,
+  CACHE_MANAGER, ConflictException,
   Inject,
   Injectable, InternalServerErrorException,
-  NotAcceptableException, NotFoundException, Query, UnauthorizedException
+  NotAcceptableException, NotFoundException,  UnauthorizedException
 } from "@nestjs/common";
 import {UsersService} from "../users/users.service";
 import * as bcrypt from 'bcrypt';
@@ -11,23 +11,16 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from "../users/schemas/user.schema";
 import { Cache } from 'cache-manager';
 import {MailerService} from "@nestjs-modules/mailer";
-import { generateRandom } from "../../helpers/string.helper";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import signupUserInterface from "./interfaces/signup-user.interface";
-import forgotPasswordInterface from "./interfaces/forgot-password.interface";
 import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
-import forgotPasswordOtpInterface from "./interfaces/forgot-password-otp.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { generateRandomToken } from "../../helpers/randontoken.helper";
-import { jwtConstants } from "./constants/constants";
-import { seller } from "../sellers/schemas/seller.schema";
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
-import { SignUpUserDto } from "./dto/signup-user.dto";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
 import userActiveInterface from "./interfaces/user-active.interface";
-import { category } from "../categories/schemas/category.schema";
 
 
 @Injectable()
@@ -122,29 +115,29 @@ export class AuthService {
 
 
           // Sign up
-         async signup(@Body() Signup: SignUpUserDto)
+         async signup(@Body() Signup: signupUserInterface)
          {
-           const username = await this.usersService.findUserByUsername(Signup.username);
-           if (username)
-           {
+            const username = await this.usersService.findUserByUsername(Signup.username);
+            if (username)
+            {
               throw new ConflictException('Username already exists');
+            }
+
+           const email = await this.usersService.findUserByEmail(Signup.email);
+           if (email)
+           {
+              throw new ConflictException('Email already exists');
            }
 
-          const email = await this.usersService.findUserByEmail(Signup.email);
-          if (email)
-          {
-             throw new ConflictException('Email already exists');
-          }
+           const { password } = Signup;
+           const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
-          const { password } = Signup;
-          const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+           if (!isPasswordStrongEnough)
+           {
+              throw new BadRequestException('Password is too weak');
+           }
 
-          if (!isPasswordStrongEnough)
-          {
-             throw new BadRequestException('Password is too weak');
-          }
-
-          const user = await this.usersService.createUser({
+           const user = await this.usersService.createUser({
           ...Signup,
           password: await AuthService.hashPassword(password),
         });
@@ -208,20 +201,20 @@ export class AuthService {
              throw new UnauthorizedException('Invalid token');
          }
 
-         try
+          try
+          {
+            let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
+            await this.sendWelcomeEmail(reqBody.email);
+            const loginResult = this.login(updatesUser);
+            return loginResult;
+         }
+         catch (e)
          {
-           let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
-           await this.sendWelcomeEmail(reqBody.email);
-           const loginResult = this.login(updatesUser);
-           return loginResult;
+           throw new InternalServerErrorException();
+
         }
-        catch (e)
-        {
-          throw new InternalServerErrorException();
 
-       }
-
-  }
+   }
 
 
 
@@ -357,13 +350,12 @@ export class AuthService {
          //  const emailBody = `Please click on the following link to reset your password: <a href="${resetUrl}" target="_blank">${resetUrl}</a>`;
 
 
-         try
+          try
           {
               await this.sendToken(user.email, emailBody);
           }
           catch (e)
           {
-            console.log(e);
               throw new BadRequestException('Failed to send email');
           }
          return {
@@ -405,7 +397,7 @@ export class AuthService {
           if (!isPasswordStrongEnough)
           {
              throw new BadRequestException('Password is too weak');
-         }
+          }
 
           const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
           try
@@ -471,6 +463,8 @@ export class AuthService {
          }
 
 
+
+
         //used for validation purpose
         async validateUser(email: string, password: string): Promise<User>
         {
@@ -492,32 +486,17 @@ export class AuthService {
 
 
 
-        // sending email(signup)
-        //  async sendWelcomeEmail(username:string,email: string ,password:string)
-        //  {
-        //       const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-        //       const html = template({ username ,email,password });
-        //       await this.mailerService.sendMail({
-        //       to: email,
-        //       subject: 'welcome to love2air',
-        //       html: html,
-        //    });
-        //  }
-
-
-
-     async sendWelcomeEmail(email: string )
-     {
-       const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-       const html = template({ });
-      await this.mailerService.sendMail({
-        to: email,
-        subject: 'welcome to love2air',
-        html: html,
-     });
-   }
-
-
+        // sending email(welcome after registered)
+         async sendWelcomeEmail(email: string )
+         {
+           const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
+           const html = template({ });
+           await this.mailerService.sendMail({
+           to: email,
+           subject: 'welcome to love2air',
+           html: html,
+         });
+        }
 
 
 
@@ -534,6 +513,7 @@ export class AuthService {
 
 
 
+
         //sending token(forgotPassword)
         async sendToken(email: string, emailBody: string)
         {
@@ -543,6 +523,8 @@ export class AuthService {
              html: emailBody
            });
         }
+
+
 
 
 
@@ -561,13 +543,13 @@ export class AuthService {
 
 
 
-       //register email
-      async sendWelcome(email: string, emailBody: string)
-      {
-        await this.mailerService.sendMail({
-         to: email,
-         subject: 'register ',
-         html: emailBody,
+         //register email
+       async sendWelcome(email: string, emailBody: string)
+       {
+          await this.mailerService.sendMail({
+          to: email,
+          subject: 'register ',
+          html: emailBody,
       });
     }
 

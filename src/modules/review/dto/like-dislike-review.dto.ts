@@ -5,7 +5,6 @@ import {
 
 export class likeDislikeReviewDto{
 
-
     @ApiProperty({ type: String, required: true })
     @IsNotEmpty()
     reviewId: string;

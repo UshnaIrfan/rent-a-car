@@ -60,10 +60,20 @@ export class review{
      updatedAt: Date
 
 
+     // relation between user and review
      @ApiProperty({ type: () => [User] })
      @ManyToOne(() => User, User => User.review)
      @JoinTable()
      User: User[];
+
+
+
+
+     // relation between user and seller
+     @ApiProperty({ type: () => [seller] })
+     @ManyToOne(() => seller, seller => seller.review)
+     @JoinTable()
+     seller: seller[];
 
 
 }

@@ -1,8 +1,8 @@
 import {
   BadRequestException, CACHE_MANAGER,
   ConflictException, Inject,
-  Injectable, NotAcceptableException,
-  NotFoundException, UnauthorizedException
+  Injectable,
+  NotFoundException
 } from "@nestjs/common";
 import { Cache } from 'cache-manager';
 import {CategoryRepository} from "./category.repository";
@@ -211,9 +211,6 @@ export class CategoriesService {
              }
 
              const userCount = result.length;
-             console.log("usercount" ,userCount)
-
-
              const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
              if( !result)
              {
@@ -232,7 +229,7 @@ export class CategoriesService {
                         sellerMap[latestPositiveReview.id] = latestPositiveReview;
                         if (!categorySellers.includes(latestPositiveReview))
                          {
-                             categorySellers.push(latestPositiveReview);
+                            categorySellers.push(latestPositiveReview);
                          }
                           toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
 
@@ -258,96 +255,6 @@ export class CategoriesService {
 
 
 
-         //      async getReviewsPositive(categoryId: string)
-  //      {
-  //          const category = await this.categoryRepository.getCategoryId(categoryId);
-  //          if (!category)
-  //          {
-  //             throw new NotFoundException('Category not exist');
-  //          }
-  //
-  //
-  //         const toreview = [];
-  //         const sellerMap = {};
-  //         const categorySellers = [];
-  //
-  //        for (const seller of category.sellers)
-  //        {
-  //             console.log("seller",seller.id)
-  //             const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(seller.id);
-  //
-  //             if (latestPositiveReview)
-  //             {
-  //                const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
-  //                const userCount = result.length;
-  //                const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-  //
-  //               if (matchingSlugTitle)
-  //               {
-  //                   const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
-  //                   if (title)
-  //                   {
-  //                      if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
-  //                      {
-  //                         if (latestPositiveReview.message && latestPositiveReview.message.trim() !== '')
-  //                         {
-  //                             sellerMap[latestPositiveReview.id] = seller;
-  //                             if (!categorySellers.includes(seller))
-  //                             {
-  //                                 categorySellers.push(seller );
-  //                             }
-  //
-  //                            toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
-  //                            break;
-  //                        }
-  //                    }
-  //                 }
-  //              else
-  //              {
-  //                  throw new NotFoundException(`Title not exist with id: ${latestPositiveReview.titleId}`);
-  //              }
-  //          }
-  //        else
-  //        {
-  //           throw new NotFoundException(`Title not found with slug: ${latestPositiveReview.titleSlug}`);
-  //        }
-  //      }
-  //  }
-  //      const categoryObj = {
-  //          id:category.id,
-  //          categoryName: category.categoryName,
-  //         approvedByAdmin:category.approvedByAdmin,
-  //       // isListing:category.isListing
-  //      };
-  //
-  //    return {
-  //        category:categoryObj,
-  //        sellers: categorySellers,
-  //        'to-review': toreview
-  //     };
-  // }
-  //
-
-         //  async getReviewsPositive(categoryId: string)
-  //  {
-  //      const category = await this.categoryRepository.getCategoryId(categoryId);
-  //      if (!category)
-  //      {
-  //          throw new NotFoundException('Category not exist');
-  //      }
-  //
-  //
-  //     const sellerIds = [];
-  //     for (const seller of category.sellers)
-  //     {
-  //        sellerIds.push(seller.id);
-  //     }
-  //
-  //
-  //    const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
-  //    return latestPositiveReview;
-  //
-  // }
 
        // category by name search
   //  async search(query: string)

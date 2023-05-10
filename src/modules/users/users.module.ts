@@ -18,9 +18,7 @@ import {contact} from "../contact-us/schemas/contact-us.schema";
 
 @Module({
   imports: [
-
       TypeOrmModule.forFeature([contact,User ,review,clicksTitle,clicksTypes,category]),
-
   ],
      controllers: [UsersController],
      providers: [contactUsRepository,CategoryRepository,reviewRepository,UsersService ,UsersRepository,clicksTypesRepository,clicksTitlesRepository],

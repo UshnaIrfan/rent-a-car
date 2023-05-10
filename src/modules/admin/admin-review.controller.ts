@@ -14,7 +14,6 @@ export class adminReviewController {
 
 
 
-
      // review search
      @ApiBearerAuth()
      @ApiQuery({ name: 'page', type: Number, required: true })

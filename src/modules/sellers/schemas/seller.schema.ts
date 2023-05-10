@@ -2,10 +2,11 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToMany, CreateDateColumn, UpdateDateColumn
+  ManyToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinTable, OneToMany
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { category } from "../../categories/schemas/category.schema";
+import { review } from "../../review/schemas/submit-review.schema";
 
 export enum status {
      PENDING = 'pending',
@@ -17,26 +18,25 @@ export enum status {
 @Entity({ name: 'sellers' })
 export class seller{
 
-     @ApiProperty()
-     @PrimaryGeneratedColumn('uuid')
-     id: string;
+      @ApiProperty()
+      @PrimaryGeneratedColumn('uuid')
+      id: string;
 
-
-
-     @ApiProperty()
-     @Column({ nullable: true})
-     sellerName: string;
-
-
-     @ApiProperty()
-     @Column({unique:true , nullable: true})
-     sellerUrl: string;
 
 
       @ApiProperty()
-      @Column(
-    { type:"enum", enum: status, default: status.PENDING })
-     approvedByAdmin: string;
+      @Column({ nullable: true})
+      sellerName: string;
+
+
+      @ApiProperty()
+      @Column({unique:true , nullable: true})
+      sellerUrl: string;
+
+
+      @ApiProperty()
+      @Column({ type:"enum", enum: status, default: status.PENDING })
+      approvedByAdmin: string;
 
 
 
@@ -59,5 +59,11 @@ export class seller{
      @ManyToMany(() => category, category => category.sellers, { cascade: true })
      categories: any[];
 
+
+     // relation between user and seller
+     @ApiProperty({ type: () => [review] })
+     @OneToMany(() => review, review => review.seller)
+     @JoinTable()
+     review: review[];
 
 }

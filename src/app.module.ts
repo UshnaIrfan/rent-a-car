@@ -2,7 +2,6 @@ import { Module,CacheModule } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 import {envSchema} from "./config/schema/env.schema";
 import { ConfigModule ,ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import {AuthModule} from "./modules/auth/auth.module";
 import {UsersModule} from "./modules/users/users.module";
 import { MailerModule } from "@nestjs-modules/mailer";
@@ -25,13 +24,13 @@ import * as AWS from 'aws-sdk';
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
-    CategoriesModule,
-    SellerModule,
-    ContactUsModule,
-    ReviewModule,
-    AdminModule,
+     AuthModule,
+     UsersModule,
+     CategoriesModule,
+     SellerModule,
+     ContactUsModule,
+     ReviewModule,
+     AdminModule,
 
 
     ConfigModule.forRoot(

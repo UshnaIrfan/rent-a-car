@@ -39,12 +39,6 @@ export class category{
     approvedByAdmin: string;
 
 
-
-
-    // @ApiProperty()
-    // @Column('bool')
-    // isListing: boolean;
-
      @ApiProperty()
      @CreateDateColumn()
      createdAt: Date

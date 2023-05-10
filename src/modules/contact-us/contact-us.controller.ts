@@ -13,7 +13,7 @@ export class ContactUsController {
       @ApiBody({type:createContactUsDto})
       @Post('create')
       async create(
-      @Body() contactUsDto: createContactUsDto):Promise<{message: string, contact}>
+      @Body() contactUsDto: createContactUsDto):Promise<{message: string}>
       {
          return this.contactUsService.createContact(contactUsDto );
       }

@@ -14,21 +14,18 @@ export class likeDislikeRepository{
 
 
 
-     async createLikeDislike(reqBody:likeDislikeReviewDto): Promise<likeDislikeSchema>
+      async createLikeDislike(reqBody:likeDislikeReviewDto): Promise<likeDislikeSchema>
+      {
+         return this.likeDislikeModel.save(reqBody);
+      }
+
+
+
+
+     async getById(reviewId:string):Promise<likeDislikeSchema[]| null>
      {
-       return this.likeDislikeModel.save(reqBody);
+       return this.likeDislikeModel.find({ where: { reviewId}, });
      }
-
-
-
-
-    async getById(reviewId:string):Promise<likeDislikeSchema[]| null>
-    {
-       return this.likeDislikeModel.find({
-         where: { reviewId},
-       });
-    }
-
 
 
 

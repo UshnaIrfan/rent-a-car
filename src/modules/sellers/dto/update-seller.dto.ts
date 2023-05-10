@@ -26,16 +26,4 @@ export class updateSellerDto {
      sellerUrl: string;
 
 
-     // @ApiProperty({ type: Boolean})
-     // @IsBoolean()
-     // readonly  approvedByAdmin: boolean;
-     //
-     //
-     // @ApiProperty({ type: Boolean})
-     // @IsBoolean()
-     // readonly isListing: boolean;
-     //
-     //
-     // @ApiProperty({ type: [string]})
-     // categories: string;
 }

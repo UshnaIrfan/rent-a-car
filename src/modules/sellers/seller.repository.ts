@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status} from "./schemas/seller.schema";
-import { category } from "../categories/schemas/category.schema";
 import {CategoryRepository} from "../categories/category.repository";
+import { reviewRepository } from "../review/respositories/review.respository";
 
 @Injectable()
 export class sellerRepository{
@@ -13,6 +13,7 @@ export class sellerRepository{
     @InjectRepository(seller)
     private sellerModel: Repository<seller>,
     private readonly CategoryRepository:CategoryRepository,
+    private readonly ReviewRepository:reviewRepository
   ) {}
 
 
@@ -53,12 +54,22 @@ export class sellerRepository{
       // delete seller
       async deleteSeller(id: string): Promise<seller | null>
       {
-         const seller = await this.sellerModel.findOne({ where: { id } });
-         if (!seller)
+
+        const seller = await this.sellerModel.findOne({
+          where: { id  },
+          relations: ['review'],
+        });
+
+         const reviews = seller.review;
+         if (reviews && reviews.length > 0)
          {
-           return null
+           for (const review of reviews)
+           {
+              await this.ReviewRepository.delete(review.id);
+           }
          }
-       return await this.sellerModel.remove(seller);
+           return  await this.sellerModel.remove(seller);
+
       }
 
 
@@ -72,9 +83,9 @@ export class sellerRepository{
            skip,
            take,
           relations: ['categories'],
-       });
+          });
          return [result, totalCount];
-    }
+     }
 
 
 
@@ -95,43 +106,7 @@ export class sellerRepository{
 
 
 
-      // seller by name search
-    //   async search(query: string, categoryId?: string): Promise<seller[]|null>
-    //   {
-    //      if (categoryId)
-    //      {
-    //         const category = await this.CategoryRepository.getCategoryById(categoryId);
-    //         if (!category)
-    //         {
-    //           throw new NotFoundException('Category not found.');
-    //         }
-    //         const records = await this.sellerModel.find({
-    //         where: {
-    //            sellerName: Like(`${query}%`),
-    //            categories: { id: categoryId }
-    //           },
-    //         relations: ['categories']
-    //        });
-    //
-    //        if (!records.length)
-    //        {
-    //          throw new NotFoundException('No sellers were found in this category matching the search criteria.');
-    //        }
-    //       return records;
-    //    }
-    //    else
-    //    {
-    //      const records = await this.sellerModel.find({
-    //       where: { sellerName: Like(`${query}%`)},
-    //       });
-    //       if (!records.length)
-    //       {
-    //          throw new NotFoundException('No sellers were found matching the search criteria.');
-    //      }
-    //      return records;
-    //
-    //   }
-    // }
+      // seller search by name
         async search(skip: number,take:number, query?: string, categoryId?: string):Promise<[seller[], number]>
         {
           if (categoryId && query)
@@ -159,7 +134,7 @@ export class sellerRepository{
                throw new NotFoundException('No sellers were found in this category matching the search criteria.');
             }
             return [ result, totalCount];
-        }
+         }
 
          else if (categoryId )
          {
@@ -215,14 +190,14 @@ export class sellerRepository{
            take,
           relations: ['categories'],
         });
-      if (!result.length)
-      {
+       if (!result.length)
+       {
           throw new NotFoundException('No sellers were found matching the search criteria.');
-      }
+       }
 
       return [
-         result,
-         totalCount,
+          result,
+          totalCount,
       ];
     }
   }
@@ -256,10 +231,12 @@ export class sellerRepository{
             where: { id, approvedByAdmin: status.APPROVED ,isListing:true},
             relations: ['categories'],
           });
+          if (!seller)
+          {
+             throw new NotFoundException('seller not found');
+          }
          const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === status.APPROVED);
-
          seller.categories = approvedCategories;
-
          return seller;
        }
 
@@ -268,22 +245,9 @@ export class sellerRepository{
 
 
        // get all sellers
-       // async getAllSellers(): Promise<seller[]|null>
-       // {
-       //
-       //   return  this.sellerModel.find({
-       //     where: {
-       //       approvedByAdmin: status.APPROVED,
-       //       isListing:true,
-       //     },
-       //   });
-       // }
-
-
-
-         async getAllSellers(): Promise<seller[]>
+         async getAllSellers(): Promise<seller[]|null>
          {
-            const sellers = await this.sellerModel.find({
+             const sellers = await this.sellerModel.find({
              relations: ['categories'],
              where: {
                 categories: { approvedByAdmin: status.APPROVED },
@@ -298,15 +262,11 @@ export class sellerRepository{
 
 
 
-       //get seller ID
-       async getSellerId(id:string): Promise<seller|null>
-       {
-         return  this.sellerModel.findOne({ where: { id ,approvedByAdmin: status.APPROVED } })
-       }
-
-
-
-
+        //get seller ID
+        async getSellerId(id:string): Promise<seller|null>
+        {
+           return  this.sellerModel.findOne({ where: { id ,approvedByAdmin: status.APPROVED } })
+        }
 
 
 }

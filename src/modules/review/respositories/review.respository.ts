@@ -48,6 +48,7 @@ export class reviewRepository{
        }
 
 
+
         //search by seller id
         async reviewBySellerId(sellerId:string):Promise<review| null>
         {
@@ -55,11 +56,14 @@ export class reviewRepository{
         }
 
 
-      //search by user id
+
+       //search by user id
        async reviewByUserId(userId:string):Promise<review| null>
        {
          return this.reviewModel.findOne({ where: { userId}});
        }
+
+
 
 
        //update review
@@ -112,27 +116,7 @@ export class reviewRepository{
 
 
 
-    // latest positive review
-    //   async getLatestReviewBySellerId(sellerId: string): Promise<review | null>
-    //   {
-    //          const positiveReviews = await this.reviewModel.findOne(
-    //        {
-    //                where: [{ sellerId: sellerId,  message: Not(IsNull()),approvedByAdmin:true},
-    //                {titleId: In([
-    //                     "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-    //                     "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-    //                     "df368bbf-9155-4d36-932e-c94d34e7154a"
-    //                ])}
-    //             ],
-    //              order: { createdAt: 'DESC' }
-    //              });
-    //
-    //             console.log(positiveReviews)
-    //             return positiveReviews;
-    //   }
-
-
-
+        // latest positive revie
         async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
         {
            const positiveReview = await this.reviewModel.findOne(
@@ -241,6 +225,8 @@ export class reviewRepository{
            }
              return await this.reviewModel.remove(review);
        }
+
+
 
 }
 

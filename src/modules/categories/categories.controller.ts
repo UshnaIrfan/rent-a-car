@@ -1,20 +1,11 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
-  Delete,
-  Put,
   Query,
-  Req,
-  UseGuards,
-  HttpCode, HttpStatus
 } from "@nestjs/common";
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { category } from "./schemas/category.schema";
 
 

@@ -23,9 +23,7 @@ export class clicksTypesRepository{
        // find by individual type
         async findByType(type:string):Promise<clicksTypes| null>
         {
-          return this.clickModel.findOne({
-            where: { type},
-         });
+          return this.clickModel.findOne({ where: { type}, });
         }
 
 

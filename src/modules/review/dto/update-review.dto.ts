@@ -19,8 +19,6 @@ export class updateReviewDto {
     @ApiProperty({ type: String, required: false })
     message: string;
 
-    // @ApiProperty({ type: String, required: false, default: null })
-    // message: string | null;
 
 
 }

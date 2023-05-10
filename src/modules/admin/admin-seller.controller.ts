@@ -5,7 +5,6 @@ import { Role } from "../../enums/role.enum";
 import {SellerService} from "../sellers/seller.service";
 import { CreateSellerDto } from "../sellers/dto/create-seller.dto";
 import { seller } from "../sellers/schemas/seller.schema";
-import paginationSellerInterface from "../sellers/interfaces/pagination-seller.interface";
 import updateSellerInterface from "../sellers/interfaces/update-seller.interface";
 import {updateSellerDto} from "../sellers/dto/update-seller.dto";
 import {adminUpdateSellerDto} from "../sellers/dto/admin-update.seller.dto";
@@ -31,18 +30,6 @@ export class AdminSellerController {
 
 
 
-      // GET all sellers
-      // @ApiBearerAuth()
-      // @Get('sellers/all-sellers')
-      // @Roles(Role.L2A_ADMIN)
-      // async getReview(@Query('page') page: number = 1):Promise<paginationSellerInterface>
-      // {
-      //     return this.sellerService.getAllAdminSellers(page);
-      // }
-
-
-
-
       // update seller
       @ApiBearerAuth()
       @ApiBody({type:updateSellerDto})
@@ -56,7 +43,7 @@ export class AdminSellerController {
 
 
 
-       // delete seller
+       // delete seller with review
       @ApiBearerAuth()
       @Delete('sellers/delete')
       @Roles(Role.L2A_ADMIN)
@@ -80,16 +67,7 @@ export class AdminSellerController {
 
 
 
-      //  seller by name search
-      // @ApiBearerAuth()
-      // @ApiQuery({ name: 'query', required: true })
-      // @ApiQuery({ name: 'categoryId', required: false })
-      // @Get('sellers/search')
-      // @Roles(Role.L2A_ADMIN)
-      // async search(@Query('query') query: string, @Query('categoryId') categoryId?: string)
-      // {
-      //     return this.sellerService.search(query, categoryId);
-      // }
+      //   search seller by name
        @ApiBearerAuth()
        @ApiQuery({ name: 'page', type: Number, required: true })
        @ApiQuery({ name: 'query', required: false })
@@ -100,7 +78,6 @@ export class AdminSellerController {
        {
            return this.sellerService.search(page ,query, categoryId);
        }
-
 
 
 

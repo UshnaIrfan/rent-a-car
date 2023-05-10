@@ -24,10 +24,9 @@ export class CategoryRepository {
         // get category by name
          async getCategoryByName(categoryName:string): Promise<category | null>
          {
-            const category = await this.categoryModel.findOne(
-      { where: { categoryName}});
+            const category = await this.categoryModel.findOne({ where: { categoryName}});
             return category;
-        }
+         }
 
 
 
@@ -54,8 +53,8 @@ export class CategoryRepository {
            {
              return null
            }
-         category.categoryName = categoryName;
-         return this.categoryModel.save(category);
+          category.categoryName = categoryName;
+          return this.categoryModel.save(category);
       }
 
 
@@ -83,9 +82,9 @@ export class CategoryRepository {
            if (!category)
            {
                 return null
-          }
+           }
 
-         return await this.categoryModel.remove(category);
+          return await this.categoryModel.remove(category);
        }
 
 
@@ -93,17 +92,17 @@ export class CategoryRepository {
 
         async GetCategoryId(id: string): Promise<category|null>
         {
-           const category = await this.categoryModel.findOne({
-           where: { id},
-           relations: ['sellers'],
+            const category = await this.categoryModel.findOne({
+            where: { id},
+            relations: ['sellers'],
           });
 
-         if (!category)
-         {
-           throw new NotFoundException('Category not found');
-         }
-        return category;
-      }
+          if (!category)
+          {
+             throw new NotFoundException('Category not found');
+          }
+         return category;
+       }
 
 
 
@@ -122,8 +121,9 @@ export class CategoryRepository {
           relations: ['sellers'],
           });
 
-         if (!category) {
-           throw new NotFoundException('Category not found');
+         if (!category)
+         {
+            throw new NotFoundException('Category not found');
          }
 
          category.sellers = category.sellers.filter((seller) => seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
@@ -161,29 +161,7 @@ export class CategoryRepository {
 
 
 
-      // common seller
-      //  async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
-      //  {
-      //     const category = await this.categoryModel.findOne({
-      //     where: { id: categoryId,approvedByAdmin:status.APPROVED },
-      //     relations: ['sellers'],
-      //     });
-      //
-      //    if (!category)
-      //    {
-      //      throw new NotFoundException('Category not found');
-      //    }
-      //
-      //   const filteredSellers = category.sellers.filter(seller => seller.id !== excludeSellerId);
-      //
-      //   if (filteredSellers.length === category.sellers.length)
-      //   {
-      //      throw new NotFoundException('Seller not associated with this category');
-      //   }
-      //
-      //     category.sellers = filteredSellers;
-      //     return [category];
-      // }
+        // common seller
         async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
         {
           const category = await this.categoryModel.findOne(
@@ -196,6 +174,7 @@ export class CategoryRepository {
          {
             throw new NotFoundException('Category not found');
          }
+
 
         const filteredSellers = category.sellers.filter((seller) => seller.id !== excludeSellerId && seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
         if (filteredSellers.length === 0)
@@ -222,7 +201,6 @@ export class CategoryRepository {
        //     }
        //      return records;
        // }
-
 
 
 

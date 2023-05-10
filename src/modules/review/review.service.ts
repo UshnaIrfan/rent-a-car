@@ -22,7 +22,6 @@ import updateReviewInterface from "./interfaces/update-review.interface";
 import {seller} from "../sellers/schemas/seller.schema";
 import likeDislikeInterface from "./interfaces/like-dislike.interface";
 import {likeDislikeRepository} from "./respositories/like-dislike.repository";
-import { category } from "../categories/schemas/category.schema";
 import adminUpdateSubmitReviewInterface from "./interfaces/admin-update-submit-review.interface";
 
 
@@ -158,86 +157,48 @@ export class ReviewService {
 
 
          // balloons count
-   //      async getReviewsWithCounts(sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
-   //      {
-   //         const seller = await this.sellerRepository.getSellerById(sellerId);
-   //         if (!seller)
-   //         {
-   //            throw new NotFoundException(`Seller not exist`);
-   //         }
-   //
-   //        const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
-   //        const counts = {};
-   //
-   //        for (const review of reviews)
-   //        {
-   //          const { titleId } = review;
-   //          counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
-   //        }
-   //
-   //        const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
-   //        const titles = Object.keys(counts);
-   //
-   //        for (const title of allTitles)
-   //        {
-   //          const { id } = title;
-   //          if (!counts[id])
-   //          {
-   //              titles.push(id);
-   //              counts[id] = 0;
-   //          }
-   //      }
-   //
-   //      const result = titles.map((titleId) => ({ titleId, count: counts[titleId]}));
-   //      return { seller, result };
-   // }
          async getReviewsWithCounts(sellerId: string): Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
-            // const seller = await this.sellerRepository.getSellerById(sellerId);
-            // if (!seller)
-            // {
-            //   throw new NotFoundException(`Seller not exist`);
-            // }
 
            // approved sellers record show
-           const seller = await this.sellerRepository.getSellerId(sellerId);
-           if (!seller)
-           {
-             throw new NotFoundException(`Seller not exit `);
-           }
+            const seller = await this.sellerRepository.getSellerId(sellerId);
+            if (!seller)
+            {
+               throw new NotFoundException(`Seller not exit `);
+            }
 
            const reviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
            const counts = {};
 
-          for (const review of reviews)
-          {
+           for (const review of reviews)
+           {
              const { titleId } = review;
              counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
-          }
-
-         const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
-         const titles = Object.keys(counts);
-
-         for (const title of allTitles)
-         {
-            const { id } = title;
-            if (!counts[id])
-            {
-             titles.push(id);
-             counts[id] = 0;
            }
-        }
+
+          const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
+          const titles = Object.keys(counts);
+
+          for (const title of allTitles)
+          {
+             const { id } = title;
+             if (!counts[id])
+             {
+               titles.push(id);
+               counts[id] = 0;
+            }
+         }
 
         const result = titles.map((titleId) => ({ titleId, count: counts[titleId] }));
 
-       // Sort the result array in the same order as returned by getAllReviewsTitle
-       const allReviewsTitle = await this.clicksTitleRepository.getAllReviewsTitle();
-       result.sort((a, b) =>
-       {
-         const aIndex = allReviewsTitle.findIndex((title) => title.id === a.titleId);
-         const bIndex = allReviewsTitle.findIndex((title) => title.id === b.titleId);
-         return aIndex - bIndex;
-       });
+        // Sort the result array in the same order as returned by getAllReviewsTitle
+        const allReviewsTitle = await this.clicksTitleRepository.getAllReviewsTitle();
+        result.sort((a, b) =>
+        {
+          const aIndex = allReviewsTitle.findIndex((title) => title.id === a.titleId);
+          const bIndex = allReviewsTitle.findIndex((title) => title.id === b.titleId);
+          return aIndex - bIndex;
+        });
 
          return { seller, result };
     }
@@ -380,7 +341,7 @@ export class ReviewService {
       const totalToAirPages = Math.ceil(toAir.length / limit);
       const totalToLovePages = Math.ceil(toLove.length / limit);
 
-     return {
+      return {
         toAir: {
           data: paginatedToAirReviews.map((review) => {
             return {

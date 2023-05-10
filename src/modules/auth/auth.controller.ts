@@ -17,7 +17,6 @@ import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
 import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
-import { category } from "../categories/schemas/category.schema";
 import { User } from "../users/schemas/user.schema";
 
 
@@ -27,6 +26,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
   ) {}
+
 
         // Sign up
         @ApiBody({type:SignUpUserDto})
@@ -119,24 +119,25 @@ export class AuthController {
         }
 
 
+
         //profile get
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
         @Get('/profile')
         async getProfile(@Request() req)
         {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.authService.getProfile(accessToken);
+           const accessToken = req.headers.authorization.split(' ')[1];
+           return this.authService.getProfile(accessToken);
         }
 
 
 
           // get all users
-          @Get('/all_users')
-          async  getAllUser():Promise<User[]>
-          {
-              return this.authService.getAllUser();
-          }
+        @Get('/all_users')
+        async  getAllUser():Promise<User[]>
+        {
+           return this.authService.getAllUser();
+        }
 
 
 
@@ -147,8 +148,8 @@ export class AuthController {
         @Delete('/logout')
         async logout(@Request() req): Promise<{message:string}>
         {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.authService.logout(accessToken);
+           const accessToken = req.headers.authorization.split(' ')[1];
+           return this.authService.logout(accessToken);
         }
 
 
