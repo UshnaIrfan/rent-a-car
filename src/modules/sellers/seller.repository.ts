@@ -205,6 +205,15 @@ export class sellerRepository{
 
 
 
+
+       // get all sellers
+        async getAllSeller(): Promise<seller[]|null>
+        {
+          return  await this.sellerModel.find()
+        }
+
+
+
       //FRONTEND APIS
       // create seller with associated categories
        async sellerCategories(body:seller):Promise<seller|null>

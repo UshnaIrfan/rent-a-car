@@ -83,12 +83,12 @@ export class AdminSellerController {
 
 
 
-  // // get all sellers
-  // @Get('/sellers/:all_sellers')
-  // async  getAllSellers()
-  // {
-  //   return this.sellerService.getAllSellers();
-  // }
+        // get all sellers
+       @Get('/sellers/:all_sellers')
+       async  getAllSeller():Promise<{records:seller[]}>
+       {
+           return this.sellerService.getAllSeller();
+       }
 
 
 }

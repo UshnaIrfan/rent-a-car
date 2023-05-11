@@ -164,6 +164,22 @@ export class SellerService {
 
 
 
+
+       // get all sellers
+       async getAllSeller( ):Promise<{records:seller[]}>
+       {
+          const sellers = await this.SellerRepository.getAllSeller()
+          if(!sellers)
+          {
+            throw new  NotFoundException('sellers do not exist');
+          }
+
+           return { records: sellers};
+      }
+
+
+
+
          // FRONTEND APIS
         // get all sellers
         async getAllSellers( ):Promise<{records:seller[]}>
