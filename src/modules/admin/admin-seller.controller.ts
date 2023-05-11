@@ -84,7 +84,9 @@ export class AdminSellerController {
 
 
         // get all sellers
+       @ApiBearerAuth()
        @Get('/sellers/:all_sellers')
+       @Roles(Role.L2A_ADMIN)
        async  getAllSeller():Promise<{records:seller[]}>
        {
            return this.sellerService.getAllSeller();

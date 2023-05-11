@@ -168,7 +168,7 @@ export class AuthController {
         // refresh token
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
-        @Get('refresh')
+        @Get('/refresh/token')
         async refreshToken(@Request() req)
         {
            const accessToken = req.headers.authorization.split(' ')[1];
