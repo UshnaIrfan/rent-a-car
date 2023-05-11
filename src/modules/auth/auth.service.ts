@@ -485,7 +485,7 @@ export class AuthService {
 
 
 
-       // Generating new hashed password to save in database
+        // Generating new hashed password to save in database
          private static async hashPassword(password: string): Promise<string>
          {
             const salt = await bcrypt.genSalt();
@@ -573,7 +573,7 @@ export class AuthService {
 
 
 
-         //register email
+         // after register welcome  email
        async sendWelcome(email: string, emailBody: string)
        {
           await this.mailerService.sendMail({

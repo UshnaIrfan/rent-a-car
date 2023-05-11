@@ -74,7 +74,7 @@ export class AdminCategoryController {
       async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
       {
          return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
-     }
+      }
 
 
 }

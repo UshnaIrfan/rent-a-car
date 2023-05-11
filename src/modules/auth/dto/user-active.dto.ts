@@ -16,10 +16,9 @@ export class userActiveDto {
      email: string;
 
 
-
-    @ApiProperty({ type: boolean, required: true })
-    @IsNotEmpty()
-    isActive: boolean;
+     @ApiProperty({ type: boolean, required: true })
+     @IsNotEmpty()
+     isActive: boolean;
 
 
 }

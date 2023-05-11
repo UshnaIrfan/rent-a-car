@@ -22,7 +22,7 @@ export class submitReviewDto {
      message: string | null;
 
 
-     @ApiProperty({ type: Boolean, default: false })
+     @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
      @IsNotEmpty()
      approvedByAdmin: boolean;

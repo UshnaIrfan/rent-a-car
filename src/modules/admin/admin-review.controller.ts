@@ -25,8 +25,8 @@ export class adminReviewController {
      @Get('review/search')
      @Roles(Role.L2A_ADMIN)
      async search(@Query('page') page: number = 1, @Query('sellerId') sellerId?: string,
-               @Query('userId') userId?: string,@Query('message') message?: string,
-               @Query('type') type?: string ,@Query('categoryId') categoryId?: string)
+                  @Query('userId') userId?: string,@Query('message') message?: string,
+                  @Query('type') type?: string ,@Query('categoryId') categoryId?: string)
 
      {
           return this.reviewService.search(page , sellerId,userId,message ,type,categoryId);

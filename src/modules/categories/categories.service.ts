@@ -198,6 +198,21 @@ export class CategoriesService {
 
 
          const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
+
+          if (!latestPositiveReview) {
+           return {
+             category: {
+               id: category.id,
+               categoryName: category.categoryName,
+               approvedByAdmin: category.approvedByAdmin,
+             },
+             seller: null,
+             'to-review': [],
+           };
+         }
+
+
+
          const toreview = [];
          const sellerMap = {};
          const categorySellers = [];
@@ -226,8 +241,8 @@ export class CategoriesService {
                   if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
                   {
 
-                        sellerMap[latestPositiveReview.id] = latestPositiveReview;
-                        if (!categorySellers.includes(latestPositiveReview))
+                         sellerMap[latestPositiveReview.id] = latestPositiveReview;
+                         if (!categorySellers.includes(latestPositiveReview))
                          {
                             categorySellers.push(latestPositiveReview);
                          }
@@ -238,15 +253,19 @@ export class CategoriesService {
              }
          }
 
-         const categoryObj = {
-                    id:category.id,
-                    categoryName: category.categoryName,
-                   approvedByAdmin:category.approvedByAdmin,
-                };
+           const categoryObj = {
+               id:category.id,
+               categoryName: category.categoryName,
+               approvedByAdmin:category.approvedByAdmin,
+            };
+
+           const sellerObj = {
+                id:latestPositiveReview.sellerId,
+           };
 
               return {
                   category:categoryObj,
-                  sellers: categorySellers,
+                  seller: sellerObj,
                   'to-review': toreview
                };
     }
@@ -262,6 +281,7 @@ export class CategoriesService {
   //     const result = await this.categoryRepository.search(query);
   //     return result;
   // }
+
 
 
 
