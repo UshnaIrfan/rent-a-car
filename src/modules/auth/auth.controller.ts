@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
 import { LocalAuthGuard } from "./guards/local-auth-guard";
 import { JwtAuthGuard } from "./guards/jwt-auth-guard";
@@ -135,9 +135,18 @@ export class AuthController {
 
         // get user by id
         @Get('/:user_id')
-        async  getUserByID(@Param('user_id') userId:string):Promise<User>
+        async  getUserById(@Param('user_id') userId:string):Promise<User>
         {
-           return this.authService.getUserByID(userId);
+           return this.authService.getUserById(userId);
+        }
+
+
+
+        // get all users
+        @Get('/users/:all_users')
+        async  getAllUser():Promise<User[]>
+        {
+            return this.authService.getAllUser();
         }
 
 

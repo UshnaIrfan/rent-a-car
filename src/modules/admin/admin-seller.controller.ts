@@ -8,6 +8,7 @@ import { seller } from "../sellers/schemas/seller.schema";
 import updateSellerInterface from "../sellers/interfaces/update-seller.interface";
 import {updateSellerDto} from "../sellers/dto/update-seller.dto";
 import {adminUpdateSellerDto} from "../sellers/dto/admin-update.seller.dto";
+import { User } from "../users/schemas/user.schema";
 
 @ApiTags('admin')
 @Controller('admin')
@@ -67,7 +68,7 @@ export class AdminSellerController {
 
 
 
-      //   search seller by name
+      // search seller by name
        @ApiBearerAuth()
        @ApiQuery({ name: 'page', type: Number, required: true })
        @ApiQuery({ name: 'query', required: false })
@@ -79,6 +80,15 @@ export class AdminSellerController {
            return this.sellerService.search(page ,query, categoryId);
        }
 
+
+
+
+  // // get all sellers
+  // @Get('/sellers/:all_sellers')
+  // async  getAllSellers()
+  // {
+  //   return this.sellerService.getAllSellers();
+  // }
 
 
 }

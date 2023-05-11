@@ -3,6 +3,7 @@ import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
+import { string } from "joi";
 
 
 
@@ -102,7 +103,8 @@ export class UsersService {
 
 
 
-         async getAllUser():Promise<User[]|null>
+
+         async getAllUser():Promise<User[]>
          {
              const users =await this.usersRepository.getAllUser();
              if(!users)
@@ -112,4 +114,13 @@ export class UsersService {
              return  users;
          }
 
-}
+
+
+          // get user by id  with active status
+          async findUserById (id:string): Promise<User | null>
+          {
+              return this.usersRepository.findUserById(id);
+          }
+
+
+ }

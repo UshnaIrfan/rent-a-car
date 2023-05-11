@@ -1,6 +1,6 @@
 import { Injectable} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from "typeorm";
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from "./schemas/user.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
@@ -139,14 +139,20 @@ export class UsersRepository {
 
 
          // get all users
-         async getAllUser(): Promise<User[]|null>
+         async getAllUser()
          {
-            return  this.userModel.find({
-            where: { isActive:true }
-            });
+           return  this.userModel.find({ where: { isActive:true }});
 
          }
 
+
+
+
+          // get user by id  with active status
+         async findUserById(id: string): Promise<User|null>
+         {
+            return this.userModel.findOne({ where: { id ,isActive:true} });
+         }
 
 
 

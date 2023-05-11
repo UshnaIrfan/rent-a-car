@@ -432,9 +432,9 @@ export class AuthService {
 
 
            //get user by id
-          async getUserByID(userId:string):Promise<User>
+          async getUserById(userId:string):Promise<User>
           {
-              const user = await this.usersService.findUserByID(userId);
+              const user = await this.usersService.findUserById(userId);
               if(!user)
               {
                 throw new NotFoundException('user not found');
@@ -442,6 +442,18 @@ export class AuthService {
 
               return  user;
           }
+
+
+
+
+          // get all users
+         async getAllUser():Promise<User[]>
+         {
+              const user = await this.usersService.getAllUser();
+              return  user;
+         }
+
+
 
 
 
