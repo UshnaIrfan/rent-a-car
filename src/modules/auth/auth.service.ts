@@ -37,7 +37,7 @@ export class AuthService {
 
          // ADMIN APIS
          //get all users
-        getAllUsers(page:number):Promise<paginationUserInterface>
+        async  getAllUsers(page:number):Promise<paginationUserInterface>
         {
           return this.usersService.getAllUsers(page);
         }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {CategoriesService} from "../categories/categories.service";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
@@ -8,6 +8,7 @@ import {AuthService} from "../auth/auth.service";
 import {updateUserDto} from "../auth/dto/update-user.dto";
 import { Role } from "../../enums/role.enum";
 import { Roles } from "../../decorators/role.decorators";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 
 @ApiTags('admin')
 @Controller('admin')
