@@ -133,11 +133,11 @@ export class AuthController {
 
 
 
-          // get all users
-        @Get('/all_users')
-        async  getAllUser():Promise<User[]>
+        // get user by id
+        @Get('/:user_id')
+        async  getUserByID(@Param('user_id') userId:string):Promise<User>
         {
-           return this.authService.getAllUser();
+           return this.authService.getUserByID(userId);
         }
 
 

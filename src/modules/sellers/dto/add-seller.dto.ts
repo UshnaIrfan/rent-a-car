@@ -47,7 +47,7 @@ export class  addSellerDto{
      message: string | null;
 
 
-     @ApiProperty({ type: Boolean, default: false })
+     @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
      @IsNotEmpty()
      approvedbyAdmin: boolean;

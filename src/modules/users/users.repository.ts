@@ -96,7 +96,7 @@ export class UsersRepository {
 
 
 
-        async findUserByID(id: string): Promise<User | null>
+        async findUserByID(id: string): Promise<User|null>
         {
           return this.userModel.findOne({ where: { id }, });
         }
