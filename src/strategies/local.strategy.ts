@@ -24,14 +24,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
        }
        catch (error)
        {
-          if (error.message === 'Invalid email')
-          {
-             throw new NotFoundException('Invalid email');
-          }
-          else if (error.message === 'Invalid password')
-          {
-            throw new NotFoundException('Invalid password');
-          }
+         throw new NotFoundException('Invalid email or password');
+
        }
     }
 

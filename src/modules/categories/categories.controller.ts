@@ -12,9 +12,7 @@ import { category } from "./schemas/category.schema";
 @ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController {
-  constructor(
-    private readonly categoriesService: CategoriesService
-  ) {}
+  constructor(private readonly categoriesService: CategoriesService) {}
 
 
           // get all categories
@@ -60,12 +58,7 @@ export class CategoriesController {
 
 
 
-         // category by name search
-         // @Get()
-         // async search(@Query('query') query: string)
-         // {
-         //    return this.categoriesService.search(query);
-         // }
+
 
 
 

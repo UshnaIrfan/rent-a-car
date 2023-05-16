@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
-import {CategoriesService} from "../categories/categories.service";
+import { Controller, Get, Post, Body, Patch,Delete, Query } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
 import updateUserInterface from "../auth/interfaces/update-user.interface";
 import { User } from "../users/schemas/user.schema";
@@ -9,6 +8,7 @@ import {updateUserDto} from "../auth/dto/update-user.dto";
 import { Role } from "../../enums/role.enum";
 import { Roles } from "../../decorators/role.decorators";
 
+
 @ApiTags('admin')
 @Controller('admin')
 export class adminAuthController {
@@ -16,13 +16,14 @@ export class adminAuthController {
 
 
 
-      //get all users
+      //get all users and search by name
       @ApiBearerAuth()
-      @Get('user/all-users')
+      @ApiQuery({ name: 'username', required: false })
+      @Get('user/search')
       @Roles(Role.L2A_ADMIN)
-      async getReview(@Query('page') page: number = 1):Promise<paginationUserInterface>
+      async getReview(@Query('page') page: number = 1,@Query('username')username?: string):Promise<paginationUserInterface>
       {
-         return this.authService.getAllUsers(page);
+         return this.authService.getAllUsers(page,username);
       }
 
 

@@ -36,7 +36,7 @@ export class category{
           enum: status,
           default: status.PENDING
       })
-    approvedByAdmin: string;
+     approvedByAdmin: string;
 
 
      @ApiProperty()

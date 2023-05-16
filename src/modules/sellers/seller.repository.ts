@@ -55,7 +55,7 @@ export class sellerRepository{
       async deleteSeller(id: string): Promise<seller | null>
       {
 
-        const seller = await this.sellerModel.findOne({
+         const seller = await this.sellerModel.findOne({
           where: { id  },
           relations: ['review'],
         });
@@ -85,7 +85,7 @@ export class sellerRepository{
           relations: ['categories'],
           });
          return [result, totalCount];
-     }
+      }
 
 
 
@@ -106,7 +106,7 @@ export class sellerRepository{
 
 
 
-      // seller search by name
+       // seller search by name
         async search(skip: number,take:number, query?: string, categoryId?: string):Promise<[seller[], number]>
         {
           if (categoryId && query)

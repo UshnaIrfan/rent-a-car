@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { CreateCategoryDto } from "../categories/dto/create-category.dto";
 import { Roles } from "../../decorators/role.decorators";
 import { Role } from "../../enums/role.enum";
@@ -24,19 +24,20 @@ export class AdminCategoryController {
        @Roles(Role.L2A_ADMIN)
        async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
        {
-         return this.categoriesService.createCategory(createCategoryDto);
+           return this.categoriesService.createCategory(createCategoryDto);
        }
 
 
 
 
-       // get all categories
+       // get all categories and search by name
        @ApiBearerAuth()
-       @Get('categories/all-categories')
+       @ApiQuery({ name: 'categoryName', required: false })
+       @Get('categories/search')
        @Roles(Role.L2A_ADMIN)
-       async getReview(@Query('page') page: number = 1):Promise<paginationCategoryInterface>
+       async getReview(@Query('page') page: number = 1,@Query('categoryName') categoryName?: string):Promise<paginationCategoryInterface>
        {
-            return this.categoriesService.getAllAdminCategories(page);
+            return this.categoriesService.getAllAdminCategories(page,categoryName);
        }
 
 
@@ -49,7 +50,7 @@ export class AdminCategoryController {
        @Roles(Role.L2A_ADMIN)
        async updateCategory(@Body() updateCategoryDto: updateCategoryDto):Promise<{ message: string, updateCategory: updateCategoryInterface }>
        {
-          return this.categoriesService.updateCategory(updateCategoryDto);
+            return this.categoriesService.updateCategory(updateCategoryDto);
        }
 
 
@@ -60,7 +61,7 @@ export class AdminCategoryController {
       @Roles(Role.L2A_ADMIN)
       async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
       {
-        return this.categoriesService.deleteCategory(id);
+          return this.categoriesService.deleteCategory(id);
       }
 
 
@@ -76,5 +77,14 @@ export class AdminCategoryController {
          return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
       }
 
+
+
+
+      // // category by name search
+      // @Get()
+      // async search(@Query('query') query: string)
+      // {
+      //     return this.categoriesService.search(query);
+      // }
 
 }

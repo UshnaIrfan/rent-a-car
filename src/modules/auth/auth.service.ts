@@ -15,12 +15,13 @@ import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import signupUserInterface from "./interfaces/signup-user.interface";
 import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
-import { generateRandomToken } from "../../helpers/randontoken.helper";
+import { generateRandomToken } from "../../helpers/randomtoken.helper";
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
 import userActiveInterface from "./interfaces/user-active.interface";
+import { generateOtp } from "../../helpers/otp.helper";
 
 
 @Injectable()
@@ -36,25 +37,25 @@ export class AuthService {
 
 
          // ADMIN APIS
-         //get all users
-        getAllUsers(page:number):Promise<paginationUserInterface>
-        {
-          return this.usersService.getAllUsers(page);
-        }
+         // get all users and search by name
+         async  getAllUsers(page:number,username?:string):Promise<paginationUserInterface>
+         {
+             return this.usersService.getAllUsers(page,username);
+         }
 
 
 
 
         //update user
-       async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
-       {
+        async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
+        {
 
           const update = await this.usersService.updateUser(updateUser.id ,updateUser.name,updateUser.username,updateUser.email);
           if (!update)
           {
              throw new NotFoundException('invalid user id');
           }
-          return { message: "User updated successfully", update};
+             return { message: "User updated successfully", update};
        }
 
 
@@ -77,44 +78,8 @@ export class AuthService {
 
 
 
-        //FRONTEND APIS
-        // Sign up
-    //     async signup(@Body() Signup: SignUpUserDto): Promise<User>
-    //     {
-    //         const username = await this.usersService.findUserByUsername(Signup.username);
-    //         if (username)
-    //         {
-    //            throw new ConflictException('Username already exists');
-    //         }
-    //
-    //        const email = await this.usersService.findUserByEmail(Signup.email);
-    //        if (email)
-    //        {
-    //           throw new ConflictException('Email already exists');
-    //        }
-    //
-    //       const { password } = Signup;
-    //       const newPasswords=password
-    //       const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-    //
-    //       if (!isPasswordStrongEnough)
-    //       {
-    //           throw new BadRequestException('Password is too weak');
-    //       }
-    //
-    //      const user = await this.usersService.createUser({
-    //         ...Signup,
-    //        password: await AuthService.hashPassword(password),
-    //     });
-    //
-    //    // Send welcome email to new user
-    //     await this.sendWelcomeEmail(user.username, user.email, newPasswords);
-    //     return user;
-    // }
-
-
-
-          // Sign up
+          //FRONTEND APIS
+         // Sign up
          async signup(@Body() Signup: signupUserInterface)
          {
             const username = await this.usersService.findUserByUsername(Signup.username);
@@ -138,8 +103,8 @@ export class AuthService {
            }
 
            const user = await this.usersService.createUser({
-          ...Signup,
-          password: await AuthService.hashPassword(password),
+           ...Signup,
+           password: await AuthService.hashPassword(password),
         });
 
 
@@ -171,7 +136,7 @@ export class AuthService {
              throw new BadRequestException('Failed to send email');
         }
         return {
-          message: 'Email sent successfully',
+           message: 'Email sent successfully',
       };
 
     }
@@ -180,41 +145,81 @@ export class AuthService {
 
 
        // isActive
-      async isActive(@Body() reqBody: userActiveInterface)
-      {
-           const user = await this.usersService.findUserByEmail(reqBody.email);
-           if (!user)
+   //    async isActive(@Body() reqBody: userActiveInterface)
+   //    {
+   //         const user = await this.usersService.findUserByEmail(reqBody.email);
+   //         if (!user)
+   //         {
+   //            throw new  NotFoundException('Invalid email');
+   //         }
+   //
+   //        const tokenKey = `forgot-password-token:${user.email}`;
+   //        const cachedToken = await this.cacheManager.get(tokenKey);
+   //        if(!cachedToken)
+   //        {
+   //          throw new UnauthorizedException('token expired');
+   //        }
+   //
+   //       const parsedToken = JSON.parse(<string>cachedToken);
+   //       if (parsedToken.token !== reqBody.token)
+   //       {
+   //           throw new UnauthorizedException('Invalid token');
+   //       }
+   //
+   //        try
+   //        {
+   //          let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
+   //          await this.sendWelcomeEmail(reqBody.email);
+   //          const loginResult = this.login(updatesUser);
+   //          return loginResult;
+   //       }
+   //       catch (e)
+   //       {
+   //         throw new InternalServerErrorException();
+   //
+   //      }
+   //
+   // }
+
+
+
+        async isActive(@Body() reqBody: userActiveInterface)
+        {
+            const user = await this.usersService.findUserByEmail(reqBody.email);
+            if (!user)
+            {
+                throw new  NotFoundException('Invalid email');
+            }
+
+           const tokenKey = `forgot-password-token:${user.email}`;
+           const cachedToken = await this.cacheManager.get(tokenKey);
+           if(!cachedToken)
            {
-              throw new  NotFoundException('Invalid email');
+                throw new UnauthorizedException('token expired');
            }
 
-          const tokenKey = `forgot-password-token:${user.email}`;
-          const cachedToken = await this.cacheManager.get(tokenKey);
-          if(!cachedToken)
+          const parsedToken = JSON.parse(<string>cachedToken);
+          if (parsedToken.token !== reqBody.token)
           {
-            throw new UnauthorizedException('token expired');
+               throw new UnauthorizedException('Invalid token');
           }
-
-         const parsedToken = JSON.parse(<string>cachedToken);
-         if (parsedToken.token !== reqBody.token)
-         {
-             throw new UnauthorizedException('Invalid token');
-         }
 
           try
           {
-            let updatesUser=  await this.usersService.isActive(reqBody.email,reqBody.isActive);
-            await this.sendWelcomeEmail(reqBody.email);
-            const loginResult = this.login(updatesUser);
-            return loginResult;
-         }
+             await this.usersService.isActive(reqBody.email,reqBody.isActive);
+             await this.cacheManager.del(tokenKey);
+             await this.sendWelcomeEmail(reqBody.email);
+          }
+
          catch (e)
          {
-           throw new InternalServerErrorException();
+              throw new InternalServerErrorException();
+         }
+          return {
+            message: 'successfully created account',
+          };
 
-        }
-
-   }
+    }
 
 
 
@@ -256,75 +261,10 @@ export class AuthService {
 
 
 
-       // forget passwordOtp
-    //    async forgotPasswordOtp(
-    //          ForgotPasswordOtp:forgotPasswordOtpInterface
-    //        ): Promise<{message:string}>
-    //    {
-    //
-    //      const user = await this.usersService.findUserByEmail(ForgotPasswordOtp.email);
-    //
-    //      if (!user)
-    //       {
-    //         throw new BadRequestException('Invalid email');
-    //       }
-    //      const otp = generateRandom(6, true);
-    //      const expiresAt = new Date();
-    //      expiresAt.setMinutes(expiresAt.getMinutes() + 15);
-    //      const otpKey = `forgot-password-otp:${user.email}`;
-    //      const otpValue = JSON.stringify({ otp, expiresAt });
-    //      await this.cacheManager.set(otpKey, otpValue, { ttl: 900 });
-    //
-    //     // send the OTP to the user's email
-    //      await this.sendOtp(user.email, otp, expiresAt);
-    //      return{
-    //           message: 'OTP sent successfully'
-    //       };
-    //  }
-
-
-
-       //forgot password
-    //    async forgotPassword(
-    //      ForgotPassword: forgotPasswordInterface
-    //       ): Promise<JwtTokensInterface>
-    //   {
-    //     const user = await this.usersService.findUserByEmail(ForgotPassword.email);
-    //     if (!user)
-    //       {
-    //        throw new BadRequestException('Invalid email');
-    //       }
-    //     const otpKey = `forgot-password-otp:${user.email}`;
-    //     const cachedOtpValue = await this.cacheManager.get(otpKey);
-    //     const cachedOtp = JSON.parse(<string>cachedOtpValue);
-    //     const { otp } = cachedOtp;
-    //
-    //     if (!cachedOtpValue)
-    //      {
-    //       throw new UnauthorizedException('OTP has expired');
-    //      }
-    //
-    //     if (otp !== ForgotPassword.otp)
-    //     {
-    //      throw new BadRequestException('OTP not matched');
-    //     }
-    //
-    //    try
-    //      {
-    //      await this.cacheManager.del(`forget#${ForgotPassword.email}`);
-    //      return this.login(user);
-    //    }
-    //    catch (e)
-    //     {
-    //     throw new UnauthorizedException('OTP has been expired');
-    //     }
-    //
-    // }
-
 
 
        //email ( random token)
-       async token(randomUserToken: randomUserTokenInterface)
+       async otp(randomUserToken: randomUserTokenInterface)
        {
            const user = await this.usersService.findUserByEmail(randomUserToken.email);
            if (!user)
@@ -332,18 +272,18 @@ export class AuthService {
               throw new  NotFoundException('Invalid email');
            }
 
-          const resetToken = generateRandomToken(32);
+          const otp = generateOtp(6, true);
           const expiresAt = new Date();
           expiresAt.setMinutes(expiresAt.getMinutes() + 90);
-          const tokenKey = `forgot-password-token:${user.email}`;
-          const tokenValue = JSON.stringify({ token: resetToken, expiresAt });
-          await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
+          const otpKey = `forgot-password-token:${user.email}`;
+          const otpValue = JSON.stringify({ OTP: otp, expiresAt });
+          await this.cacheManager.set(otpKey, otpValue, { ttl: 5400 });
 
           const baseUrl = process.env.BASE_URL;
           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
 
-          console.log("token" ,resetToken)
-          const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
+          console.log("otp" ,otp)
+          const queryParams = `?resetToken=${otp}&email=${user.email}`;
           const resetUrl = `${changePasswordUrl}${queryParams}`;
           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
           const emailBody = template({ resetUrl });
@@ -358,8 +298,8 @@ export class AuthService {
           {
               throw new BadRequestException('Failed to send email');
           }
-         return {
-               message: 'Token sent successfully',
+          return {
+               message: 'otp sent successfully',
                tokenStatus: true
            };
      }
@@ -376,17 +316,17 @@ export class AuthService {
                throw new  NotFoundException('Invalid email');
             }
 
-           const tokenKey = `forgot-password-token:${user.email}`;
-           const cachedToken = await this.cacheManager.get(tokenKey);
-           if(!cachedToken)
+           const otpKey = `forgot-password-token:${user.email}`;
+           const cachedOtp = await this.cacheManager.get(otpKey);
+           if(!cachedOtp)
            {
-              throw new UnauthorizedException('token expired');
+              throw new UnauthorizedException('otp expired');
            }
 
-          const parsedToken = JSON.parse(<string>cachedToken);
-          if (parsedToken.token !== reqBody.resetToken)
+          const parsedOtp = JSON.parse(<string>cachedOtp);
+          if (parsedOtp.OTP !== reqBody.otp)
           {
-             throw new UnauthorizedException('Invalid token');
+             throw new UnauthorizedException('Invalid otp');
           }
 
           if (reqBody.newPassword !== reqBody.confirmPassword)
@@ -405,7 +345,7 @@ export class AuthService {
              await this.usersService.updatePassword(reqBody.email, hashedPassword);
              await this.sendPasswordUpdatedEmail(reqBody.email);
              const loginResult = this.login(user);
-             await this.cacheManager.del(tokenKey);
+             await this.cacheManager.del(otpKey);
              return loginResult;
          }
         catch (e)
@@ -417,7 +357,7 @@ export class AuthService {
 
 
 
-        //profile get
+         // profile get
          async getProfile(accessToken: string)
          {
            const cachedToken = await this.cacheManager.get(accessToken);
@@ -446,12 +386,12 @@ export class AuthService {
 
 
 
-          // get all users
-         async getAllUser():Promise<User[]>
-         {
+           // get all users
+          async getAllUser():Promise<User[]>
+          {
               const user = await this.usersService.getAllUser();
               return  user;
-         }
+          }
 
 
 
@@ -468,6 +408,7 @@ export class AuthService {
                await this.cacheManager.del(accessToken);
                return { message: 'Successfully logout' };
           }
+
 
 
 
@@ -502,7 +443,7 @@ export class AuthService {
 
 
 
-        // Generating new hashed password to save in database
+         // Generating new hashed password to save in migrations
          private static async hashPassword(password: string): Promise<string>
          {
             const salt = await bcrypt.genSalt();
@@ -548,18 +489,6 @@ export class AuthService {
 
 
 
-        //sending Otp(changePassword)
-        async sendOtp(email: string, otp: string, expiresAt: Date)
-        {
-            await this.mailerService.sendMail({
-            to: email,
-            subject: 'Password reset OTP',
-            text: `Your OTP for resetting your password is: ${otp}`,
-            });
-        }
-
-
-
 
         //sending token(forgotPassword)
         async sendToken(email: string, emailBody: string)
@@ -591,14 +520,60 @@ export class AuthService {
 
 
          // after register welcome  email
-       async sendWelcome(email: string, emailBody: string)
-       {
-          await this.mailerService.sendMail({
-          to: email,
-          subject: 'register ',
-          html: emailBody,
-         });
-      }
+        async sendWelcome(email: string, emailBody: string)
+        {
+           await this.mailerService.sendMail({
+           to: email,
+           subject: 'register ',
+           html: emailBody,
+          });
+       }
+
+
+
+
+
+
+
+       //verify email
+       // async verifyEmail(token: string, email: string)
+       // {
+       //   const user = await this.usersService.findUserByEmail(email);
+       //   if (!user)
+       //   {
+       //     throw new  NotFoundException('Invalid email');
+       //   }
+       //
+       //   const tokenKey = `forgot-password-token:${user.email}`;
+       //   const cachedToken = await this.cacheManager.get(tokenKey);
+       //
+       //   const parsedToken = JSON.parse(<string>cachedToken);
+       //   if (parsedToken.token !== token)
+       //   {
+       //     throw new UnauthorizedException('Invalid token');
+       //   }
+       //
+       //   if(!cachedToken )
+       //   {
+       //     throw new UnauthorizedException('token expired');
+       //   }
+       //   try
+       //   {
+       //
+       //     if (parsedToken.token == token)
+       //     {
+       //       await this.cacheManager.del(tokenKey);
+       //     }
+       //
+       //
+       //   }
+       //   catch (e)
+       //   {
+       //     throw new InternalServerErrorException();
+       //
+       //   }
+       //
+       // }
 
 
 }

@@ -22,6 +22,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
 
 
+
 @Module({
   imports: [
      AuthModule,
@@ -31,7 +32,6 @@ import * as AWS from 'aws-sdk';
      ContactUsModule,
      ReviewModule,
      AdminModule,
-
 
     ConfigModule.forRoot(
       {
@@ -78,7 +78,7 @@ import * as AWS from 'aws-sdk';
 
 
          // redis
-        CacheModule.register({
+         CacheModule.register({
          store: redisStore,
           uri: process.env.REDIS_URL,
         }),
@@ -95,9 +95,9 @@ import * as AWS from 'aws-sdk';
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        timezone: 'UTC',
-        entities: [User,category ,seller   ,contact ,review ,clicksTypes,clicksTitle,likeDislikeSchema],
+        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislikeSchema],
         synchronize: true,
+
       }),
       inject: [ConfigService],
     }),

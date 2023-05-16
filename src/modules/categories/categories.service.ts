@@ -62,12 +62,12 @@ export class CategoriesService {
 
 
 
-      //get all categories(pagination)
-      async getAllAdminCategories(pageNumber: number):Promise<paginationCategoryInterface>
+      //get all categories and search by name(pagination)
+      async getAllAdminCategories(pageNumber: number,categoryName?: string):Promise<paginationCategoryInterface>
       {
           const pageSize = 10;
           const skip = (pageNumber - 1) * pageSize;
-          const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize);
+          const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize,categoryName);
           const totalPages = Math.ceil(totalCount / pageSize);
           if (result.length === 0)
           {
@@ -78,7 +78,7 @@ export class CategoriesService {
             records: result,
             totalRecords: totalCount,
             totalPages,
-           currentPage: pageNumber,
+            currentPage: pageNumber,
          };
      }
 
@@ -132,9 +132,18 @@ export class CategoriesService {
 
 
 
+        // category by name search
+       // async search(query: string)
+       // {
+       //   const result = await this.categoryRepository.search(query);
+       //   return result;
+       // }
 
 
-         //FRONTEND APIS
+
+
+
+       //FRONTEND APIS
        // get all categories
        async getAllCategories() :Promise<{ records: category[] }>
        {
@@ -275,12 +284,6 @@ export class CategoriesService {
 
 
 
-       // category by name search
-  //  async search(query: string)
-  //  {
-  //     const result = await this.categoryRepository.search(query);
-  //     return result;
-  // }
 
 
 

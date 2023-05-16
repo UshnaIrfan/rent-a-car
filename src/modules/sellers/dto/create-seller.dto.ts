@@ -24,7 +24,7 @@ export class CreateSellerDto {
 
      @ApiProperty({ type: String, enum: status, default: status.PENDING })
      @IsString()
-      approvedByAdmin: string = status.PENDING;
+     approvedByAdmin: string = status.PENDING;
 
 
 

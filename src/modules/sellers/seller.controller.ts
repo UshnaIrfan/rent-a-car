@@ -1,9 +1,10 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, Query, Patch, Req } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Put, Delete, Query, Patch, Req, UseGuards } from "@nestjs/common";
 import { SellerService } from './seller.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 
 
 @ApiTags('Sellers')
@@ -35,6 +36,7 @@ export class SellerController {
 
        // add seller
        @ApiBearerAuth()
+       @UseGuards(JwtAuthGuard)
        @ApiBody({type:addSellerDto})
        @Post('add')
        async  add(@Body() body:addSellerDto,@Req() req):Promise<{seller: seller, review: review}>

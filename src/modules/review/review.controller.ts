@@ -5,7 +5,7 @@ import {
   Param, Patch,
   Post,
   Query,
-  Req,
+  Req, UseGuards
 } from "@nestjs/common";
 import { ReviewService } from './review.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
@@ -18,6 +18,7 @@ import { clicksTitle } from "./schemas/create-clicks-titles.schema";
 import {updateReviewDto} from "./dto/update-review.dto";
 import {seller} from "../sellers/schemas/seller.schema";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 
 
 @ApiTags('Review')
@@ -62,6 +63,7 @@ export class ReviewController {
 
          // submit review
          @ApiBearerAuth()
+         @UseGuards(JwtAuthGuard)
          @ApiBody({type:submitReviewDto})
          @Post('submit')
          async submitReview(
@@ -108,6 +110,7 @@ export class ReviewController {
 
         //like dislike submit review
         @ApiBearerAuth()
+        @UseGuards(JwtAuthGuard)
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
         async createLikeDislike(

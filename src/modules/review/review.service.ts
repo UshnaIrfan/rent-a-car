@@ -52,7 +52,7 @@ export class ReviewService {
              throw new ConflictException('already exist');
            }
 
-          try
+           try
            {
               return this.clicksTypeRepository.createClicks(clickReviewInterface);
            }
@@ -259,6 +259,7 @@ export class ReviewService {
                 throw new NotFoundException(`Seller not exist`);
             }
 
+
             // approved sellers record show
            const Seller = await this.sellerRepository.getSellerId(sellerId);
            if (!Seller)
@@ -371,7 +372,7 @@ export class ReviewService {
 
 
 
-      //ADMIN APIS
+     //ADMIN APIS
      // review search
      async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
      {
