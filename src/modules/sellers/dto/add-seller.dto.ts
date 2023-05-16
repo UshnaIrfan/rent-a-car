@@ -28,7 +28,7 @@ export class  addSellerDto{
 
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
-      isListing: boolean;
+     isListing: boolean;
 
 
      @ApiProperty({ type: [String]})

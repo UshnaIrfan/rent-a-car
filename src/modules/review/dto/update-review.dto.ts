@@ -20,5 +20,4 @@ export class updateReviewDto {
     message: string;
 
 
-
 }

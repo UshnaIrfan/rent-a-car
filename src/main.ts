@@ -20,7 +20,7 @@ async function bootstrap() {
      //       ],
      //     }, });
 
-  // const app = await NestFactory.create(AppModule, { httpsOptions });
+      // const app = await NestFactory.create(AppModule, { httpsOptions });
       const app = await NestFactory.create(AppModule, { cors: {
          credentials: true,
          origin: [
@@ -33,6 +33,7 @@ async function bootstrap() {
        app.use(bodyParser.json({ limit: '50mb' }));
        app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
+
       //Swagger connection
        const config = new DocumentBuilder()
       .setTitle('love2Air')
@@ -41,8 +42,8 @@ async function bootstrap() {
       .addTag('love2Air')
       .addBearerAuth({ in: 'header', type: 'http' })
       .build();
-      const document = SwaggerModule.createDocument(app, config);
-      SwaggerModule.setup('api', app, document);
+       const document = SwaggerModule.createDocument(app, config);
+       SwaggerModule.setup('api', app, document);
 
 
      // Server Connection

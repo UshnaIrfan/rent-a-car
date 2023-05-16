@@ -31,31 +31,45 @@ export class CategoryRepository {
 
 
 
-       // get all categories(pagination)
-        async findAndCount(skip: number, take: number): Promise<[category[], number]>
+        // get all categories and search by name( pagination)
+        async findAndCount(skip: number, take: number, categoryName?: string): Promise<[category[], number]>
         {
-           const [result, totalCount] = await this.categoryModel.findAndCount({
-           skip,
-           take,
-           order: {categoryName: 'ASC' }
+           const whereConditions: any[] = [];
+           if (categoryName)
+           {
+             whereConditions.push({
+            categoryName:Like(`%${categoryName}%`)});
+           }
+
+          const [result, totalCount] = await this.categoryModel.findAndCount({
+          where: whereConditions,
+          skip,
+          take,
+          order: { categoryName: 'ASC' },
            });
-          return [result, totalCount];
-        }
+
+          if (!result.length)
+          {
+             throw new NotFoundException('No category were found matching the criteria.');
+          }
+             return [result, totalCount];
+      }
 
 
 
 
-       // update category
+
+         // update category
         async updateCategory(id:string, categoryName:string): Promise<category | null>
         {
-           const category = await this.categoryModel.findOne({ where: { id}});
-           if (!category)
-           {
-             return null
-           }
-          category.categoryName = categoryName;
-          return this.categoryModel.save(category);
-      }
+            const category = await this.categoryModel.findOne({ where: { id}});
+            if (!category)
+            {
+              return null
+            }
+           category.categoryName = categoryName;
+           return this.categoryModel.save(category);
+       }
 
 
 
@@ -97,13 +111,26 @@ export class CategoryRepository {
             relations: ['sellers'],
           });
 
-          if (!category)
-          {
+           if (!category)
+           {
              throw new NotFoundException('Category not found');
-          }
-         return category;
+           }
+           return category;
        }
 
+
+
+      //  // category by name search
+      //  async search(query: string): Promise<category[]|null>
+      //  {
+      //     const records = await this.categoryModel.find({
+      //     where: { categoryName: Like(`${query}%`)} });
+      //     if (!records.length)
+      //     {
+      //        throw new NotFoundException('No categories were found matching the search data');
+      //     }
+      //     return records;
+      // }
 
 
 
@@ -150,10 +177,7 @@ export class CategoryRepository {
        // get category by id
         async getCategoryById(id:string): Promise<category |null>
         {
-            const category = await this.categoryModel.findOne(
-      {
-               where:{id}
-             })
+            const category = await this.categoryModel.findOne({where:{id}})
            return category;
         }
 
@@ -186,21 +210,6 @@ export class CategoryRepository {
          return [category];
     }
 
-
-
-
-        // category by name search
-       //  async search(query: string): Promise<category[]|null>
-       //  {
-       //     const records = await this.categoryModel.find({
-       //     where: { categoryName: Like(`${query}%`)} });
-       //
-       //     if (!records.length)
-       //     {
-       //       throw new NotFoundException('No categories were found matching the search data');
-       //     }
-       //      return records;
-       // }
 
 
 

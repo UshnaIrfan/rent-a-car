@@ -1,6 +1,6 @@
 export default interface changeUserPasswordInterface{
 
-   readonly resetToken: string;
+   readonly otp: string;
    readonly email: string;
    readonly newPassword: string;
    readonly  confirmPassword: string;

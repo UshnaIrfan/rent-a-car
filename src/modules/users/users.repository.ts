@@ -1,4 +1,4 @@
-import { Injectable} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from "typeorm";
 import { CreateUserDto } from './dto/create-user.dto';
@@ -59,16 +59,31 @@ export class UsersRepository {
 
 
 
-       // get all users(pagination)
-        async findAndCount(skip: number, take: number): Promise<[User[], number]>
+        // get all users and search by name (pagination)
+        async findAndCount(skip: number, take: number,username?:string): Promise<[User[], number]>
         {
-           const [result, totalCount] = await this.userModel.findAndCount({
-           skip,
-           take,
-          order: {username: 'ASC' }
+            const whereConditions: any[] = [];
+            if (username)
+            {
+               whereConditions.push({
+              username:Like(`%${username}%`)});
+            }
+
+            const [result, totalCount] = await this.userModel.findAndCount({
+            where: whereConditions,
+            skip,
+            take,
+            order: { username: 'ASC' },
           });
-          return [result, totalCount];
+
+           if (!result.length)
+           {
+              throw new NotFoundException('No user were found matching the criteria.');
+           }
+             return [result, totalCount];
         }
+
+
 
 
 

@@ -9,5 +9,10 @@ export class likeDislikeReviewDto{
     @IsNotEmpty()
     reviewId: string;
 
+
+    @ApiProperty({ type: String, required: true })
+    @IsNotEmpty()
+    type: string;
+
 }
 

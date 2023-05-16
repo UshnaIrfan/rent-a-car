@@ -1,18 +1,11 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import createContactUsInterface from "./interfaces/create-contact-us.interface";
 import {contactUsRepository} from "./contact-us.repository";
-import {MailerService} from "@nestjs-modules/mailer";
-import { ConfigService } from '@nestjs/config';
 
 
 @Injectable()
 export class ContactUsService {
-  constructor(
-    private readonly contactUsRepository:contactUsRepository,
-    private readonly mailerService: MailerService,
-    private readonly configService: ConfigService,
-
-  ) {}
+  constructor(private readonly contactUsRepository:contactUsRepository) {}
 
 
     // contact-us

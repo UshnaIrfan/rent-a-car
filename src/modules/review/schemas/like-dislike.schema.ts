@@ -1,6 +1,14 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
+export enum status {
+    LIKE = 'like',
+    DISLIKE = 'dislike',
+    REPORT = 'report'
+}
+
+
+
 @Entity({ name: 'likeDislike' })
 export class likeDislikeSchema{
 
@@ -17,6 +25,15 @@ export class likeDislikeSchema{
     @ApiProperty()
     @Column({})
     reviewId: string;
+
+
+    @ApiProperty()
+    @Column(
+      {
+          type:"enum",
+          enum: status,
+      })
+    type: string;
 
 
     @ApiProperty()

@@ -20,9 +20,6 @@ import {UsersRepository} from "../users/users.repository";
 import { Cache } from 'cache-manager';
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
-import { ApiProperty } from "@nestjs/swagger";
-import { Column } from "typeorm";
-
 
 
 @Injectable()
@@ -190,7 +187,7 @@ export class SellerService {
              throw new  NotFoundException('sellers do not exist');
            }
 
-         return { records: sellers};
+           return { records: sellers};
        }
 
 
@@ -255,28 +252,24 @@ export class SellerService {
              throw new  NotFoundException('Balloon title not found');
           }
 
-        const previousReview = await this.ReviewRepository.findReviewByUserAndSeller(decoded.id,seller.id);
-        if (previousReview)
-        {
-          throw new ConflictException('You have already submitted a review for this seller');
-        }
+         const previousReview = await this.ReviewRepository.findReviewByUserAndSeller(decoded.id,seller.id);
+         if (previousReview)
+         {
+            throw new ConflictException('You have already submitted a review for this seller');
+         }
         const reviewBody = {
-           titleId: body.titleId,
-           sellerId: seller.id,
-           message: body.message,
-           titleSlug:typeResult.slug,
-           userId: decoded.id,
-          approvedByAdmin:body.approvedbyAdmin,
+            titleId: body.titleId,
+            sellerId: seller.id,
+            message: body.message,
+            titleSlug:typeResult.slug,
+            userId: decoded.id,
+            approvedByAdmin:body.approvedbyAdmin,
 
        };
 
-        const review= await this.ReviewRepository.submitReview(reviewBody);
-        return { seller, review };
+         const review= await this.ReviewRepository.submitReview(reviewBody);
+         return { seller, review };
    }
-
-
-
-
 
 
 
