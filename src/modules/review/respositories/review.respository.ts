@@ -49,7 +49,23 @@ export class reviewRepository{
 
 
 
-        //search by seller id
+
+
+
+        async reviewId(reviewId: string): Promise<review | undefined>
+        {
+            const result = await this.reviewModel.findOne({
+            where: { id:reviewId },
+            relations: ['likeDislike'],
+            });
+            return result;
+       }
+
+
+
+
+
+       //search by seller id
         async reviewBySellerId(sellerId:string):Promise<review| null>
         {
           return this.reviewModel.findOne({ where: { sellerId }});

@@ -2,14 +2,14 @@ import {
      Entity,
      Column,
      PrimaryGeneratedColumn,
-     BeforeInsert,
      CreateDateColumn,
      UpdateDateColumn,
-     ManyToMany, JoinTable, ManyToOne
+     ManyToMany, JoinTable, ManyToOne, OneToMany, JoinColumn
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
 import { User } from "../../users/schemas/user.schema";
+import { likeDislike } from "./like-dislike.schema";
 
 @Entity({ name: 'review' })
 export class review{
@@ -74,6 +74,16 @@ export class review{
      @ManyToOne(() => seller, seller => seller.review)
      @JoinTable()
      seller: seller[];
+
+
+
+
+
+     // relation between reviews and likeDislike review table
+     @ApiProperty({ type: () => [likeDislike] })
+     @OneToMany(() => likeDislike, likeDislike => likeDislike.review)
+     @JoinTable()
+     likeDislike: likeDislike[];
 
 
 }

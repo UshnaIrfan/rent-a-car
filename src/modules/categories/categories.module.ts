@@ -13,7 +13,7 @@ import {review} from "../review/schemas/submit-review.schema";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
 import {clicksTitle} from "../review/schemas/create-clicks-titles.schema";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
-import {likeDislikeSchema} from "../review/schemas/like-dislike.schema";
+import {likeDislike} from "../review/schemas/like-dislike.schema";
 import {ReviewService} from "../review/review.service";
 import {ReviewModule} from "../review/review.module";
 import {sellerRepository} from "../sellers/seller.repository";
@@ -23,7 +23,7 @@ import {clicksTypesRepository} from "../review/respositories/clicksTypes.reposit
 
 @Module({
 
-  imports: [TypeOrmModule.forFeature([category ,clicksTypes,seller,User,review,clicksTitle,likeDislikeSchema ,ReviewModule]),
+  imports: [TypeOrmModule.forFeature([category ,clicksTypes,seller,User,review,clicksTitle,likeDislike ,ReviewModule]),
     CacheModule.register({
     store: redisStore,
     uri: process.env.REDIS_URL,

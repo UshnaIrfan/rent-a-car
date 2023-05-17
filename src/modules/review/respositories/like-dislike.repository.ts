@@ -1,21 +1,21 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {likeDislikeSchema} from "../schemas/like-dislike.schema";
+import {likeDislike} from "../schemas/like-dislike.schema";
 import {likeDislikeReviewDto} from "../dto/like-dislike-review.dto";
-import { review } from "../schemas/submit-review.schema";
 import {status} from "../schemas/like-dislike.schema";
+import { review } from "../schemas/submit-review.schema";
 
 
 @Injectable()
 export class likeDislikeRepository{
   constructor(
-    @InjectRepository(likeDislikeSchema) private likeDislikeModel: Repository<likeDislikeSchema>,
+    @InjectRepository(likeDislike) private likeDislikeModel: Repository<likeDislike>,
   ){}
 
 
 
-      async createLikeDislike(reqBody:likeDislikeReviewDto): Promise<likeDislikeSchema>
+      async createLikeDislike(reqBody:likeDislikeReviewDto): Promise<likeDislike>
       {
          return this.likeDislikeModel.save(reqBody);
       }
@@ -23,7 +23,7 @@ export class likeDislikeRepository{
 
 
 
-     async getById(reviewId:string):Promise<likeDislikeSchema[]| null>
+     async getById(reviewId:string):Promise<likeDislike[]| null>
      {
        return this.likeDislikeModel.find({ where: { reviewId}, });
      }
@@ -32,22 +32,22 @@ export class likeDislikeRepository{
 
 
 
-     // async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislikeSchema[]|null>
-     // {
-     //   return  await this.likeDislikeModel.find({ where: {   reviewId } });
-     // }
 
 
-  async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislikeSchema[]|null>
-  {
-    const reviews = await this.likeDislikeModel.find({ where: { reviewId } });
 
-    const likeCount = reviews.filter(review => review.type ===status.LIKE).length;
-    console.log(likeCount)
-    const reportCount = reviews.filter(review => review.type === status.REPORT).length;
 
-    return  reviews
-  }
+
+
+
+
+
+
+     async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislike[]|null>
+     {
+       return  await this.likeDislikeModel.find({ where: {   reviewId } });
+     }
+
+
 
 
 

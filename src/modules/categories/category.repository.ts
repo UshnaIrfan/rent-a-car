@@ -38,7 +38,7 @@ export class CategoryRepository {
            if (categoryName)
            {
              whereConditions.push({
-            categoryName:Like(`%${categoryName}%`)});
+               categoryName: Like(`${categoryName}%`)});
            }
 
           const [result, totalCount] = await this.categoryModel.findAndCount({

@@ -1,5 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    ManyToMany,
+    JoinTable, JoinColumn, ManyToOne, OneToMany
+} from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
+import { review } from "./submit-review.schema";
 
 export enum status {
     LIKE = 'like',
@@ -10,7 +19,7 @@ export enum status {
 
 
 @Entity({ name: 'likeDislike' })
-export class likeDislikeSchema{
+export class likeDislike{
 
     @ApiProperty()
     @PrimaryGeneratedColumn('uuid')
@@ -44,6 +53,17 @@ export class likeDislikeSchema{
     @ApiProperty()
     @UpdateDateColumn()
     updatedAt: Date
+
+
+
+
+    // relation between reviews and likeDislike review table
+    @ApiProperty({ type: () => [review] })
+    @ManyToOne(() => review, review => review.likeDislike)
+    review: review[];
+
+
+
 
 
 }

@@ -66,7 +66,7 @@ export class UsersRepository {
             if (username)
             {
                whereConditions.push({
-              username:Like(`%${username}%`)});
+              username: Like(`${username}%`)});
             }
 
             const [result, totalCount] = await this.userModel.findAndCount({

@@ -193,6 +193,7 @@ export class AuthService {
 
            const tokenKey = `forgot-password-token:${user.email}`;
            const cachedToken = await this.cacheManager.get(tokenKey);
+
            if(!cachedToken)
            {
                 throw new UnauthorizedException('token expired');
@@ -224,7 +225,10 @@ export class AuthService {
 
 
 
-        //login
+
+
+
+       //login
         async login(user: User): Promise<JwtTokensInterface>
         {
 

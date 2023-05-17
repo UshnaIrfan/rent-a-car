@@ -15,13 +15,13 @@ import {UsersRepository} from "../users/users.repository";
 import {User} from "../users/schemas/user.schema";
 import * as redisStore from 'cache-manager-redis-store';
 import {likeDislikeRepository} from "./respositories/like-dislike.repository";
-import {likeDislikeSchema} from "./schemas/like-dislike.schema";
+import {likeDislike} from "./schemas/like-dislike.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import {category} from "../categories/schemas/category.schema";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([category,review ,clicksTitle,clicksTypes ,seller,User,likeDislikeSchema]),
+  imports: [TypeOrmModule.forFeature([category,review ,clicksTitle,clicksTypes ,seller,User,likeDislike]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,

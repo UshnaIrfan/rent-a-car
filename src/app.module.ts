@@ -17,7 +17,7 @@ import { ReviewModule } from './modules/review/review.module';
 import {review} from "./modules/review/schemas/submit-review.schema";
 import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
 import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema";
-import {likeDislikeSchema} from "./modules/review/schemas/like-dislike.schema";
+import {likeDislike} from "./modules/review/schemas/like-dislike.schema";
 import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
 
@@ -95,7 +95,7 @@ import * as AWS from 'aws-sdk';
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislikeSchema],
+        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislike],
         synchronize: true,
 
       }),

@@ -11,7 +11,7 @@ import {review} from "../review/schemas/submit-review.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
 import {clicksTitle} from "../review/schemas/create-clicks-titles.schema";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
-import {likeDislikeSchema} from "../review/schemas/like-dislike.schema";
+import {likeDislike} from "../review/schemas/like-dislike.schema";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 import {JwtService} from "@nestjs/jwt";
 import {ReviewService} from "../review/review.service";
@@ -28,7 +28,7 @@ import {adminReviewController} from "./admin-review.controller";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ clicksTypes,seller,likeDislikeSchema,category,User,review ,clicksTitle]),
+  imports: [TypeOrmModule.forFeature([ clicksTypes,seller,likeDislike,category,User,review ,clicksTitle]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,

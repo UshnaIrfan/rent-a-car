@@ -92,7 +92,7 @@ export class ReviewController {
          @Param('seller_id') sellerId: string,
          @Query('page') page: number = 1)
          {
-           return await this.reviewService.getReviewsWithTypes(sellerId, page);
+             return await this.reviewService.getReviewsWithTypes(sellerId, page);
          }
 
 
@@ -119,6 +119,10 @@ export class ReviewController {
           const accessToken = req.headers.authorization.split(' ')[1];
           return this.reviewService.createLikeDislike(Review,accessToken);
         }
+
+
+
+
 
 
 

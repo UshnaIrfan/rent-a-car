@@ -251,6 +251,7 @@ export class ReviewService {
         //love/air  reviews
         async getReviewsWithTypes(sellerId: string, page: number = 1)
         {
+
             const toAir = [];
             const toLove = [];
             const seller = await this.reviewRepository.reviewBySellerId(sellerId);
@@ -260,52 +261,61 @@ export class ReviewService {
             }
 
 
-            // approved sellers record show
-           const Seller = await this.sellerRepository.getSellerId(sellerId);
-           if (!Seller)
-           {
-             throw new NotFoundException(`Seller not exit `);
-           }
            const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
+
+
            var toAirCount = 0;
            var toLoveCount = 0;
            for (const review of allReviews)
            {
 
-              const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(review.id);
-              const userCount = result.length;
+               const result = await this.reviewRepository.reviewId(review.id);
+               const  res=JSON.stringify(result);
 
-              const title = await this.clicksTitleRepository.findByTitle(review.titleId);
-              if (!title)
-              {
-                 throw new NotFoundException(`Title not exist`);
-              }
+               const data = {
+                  like: JSON.parse(res).likeDislike,
+                  dislike: JSON.parse(res).likeDislike,
+                  report: JSON.parse(res).likeDislike
+             };
+
+             const counts = {
+                 like: data.like.filter(record => record.type === 'like').length,
+                 dislike: data.dislike.filter(record => record.type === 'dislike').length,
+                 report: data.like.filter(record => record.type === 'report').length,
+             };
 
 
-            const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
-            if (!matchingSlugTitle)
-            {
-                throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
-            }
-
-
-         if (title.type === matchingSlugTitle.type)
-         {
-            if (title.slug === matchingSlugTitle.slug)
-            {
-              if (title.type === 'to-air')
-              {
-                 if ( review.message && review.message.trim() !== '')
-                 {
-                    toAir.push({ ...review, Helpful:userCount});
-                    toAirCount++;
-                 }
-              }
-             else if (title.type === 'to-love')
+             const title = await this.clicksTitleRepository.findByTitle(review.titleId);
+             if (!title)
              {
+                throw new NotFoundException(`Title not exist`);
+             }
+
+
+             const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
+             if (!matchingSlugTitle)
+             {
+               throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+             }
+
+
+          if (title.type === matchingSlugTitle.type)
+          {
+             if (title.slug === matchingSlugTitle.slug)
+             {
+               if (title.type === 'to-air')
+               {
+                  if ( review.message && review.message.trim() !== '')
+                  {
+                    toAir.push({ ...review,result:counts});
+                    toAirCount++;
+                  }
+               }
+              else if (title.type === 'to-love')
+              {
                  if (review.message && review.message.trim() !== '' )
                  {
-                    toLove.push({ ...review, Best_Awards:userCount});
+                    toLove.push({ ...review,result:counts});
                     toLoveCount++;
                  }
              }
@@ -316,7 +326,7 @@ export class ReviewService {
              {
                 if (review.message && review.message.trim() !== '' )
                 {
-                   toAir.push({ ...review, Helpful:userCount});
+                   toAir.push({ ...review,result:counts});
                    toAirCount++;
                }
             }
@@ -324,7 +334,7 @@ export class ReviewService {
             {
                if ( review.message && review.message.trim() !== '')
                {
-                  toLove.push({ ...review, Best_Awards:userCount});
+                  toLove.push({ ...review,result:counts});
                   toLoveCount++;
                }
            }
@@ -372,6 +382,9 @@ export class ReviewService {
 
 
 
+
+
+
      //ADMIN APIS
      // review search
      async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
@@ -405,6 +418,13 @@ export class ReviewService {
        }
        return { message: "review  status updated successfully",updateAdmin };
     }
+
+
+
+
+
+
+
 
 
 
