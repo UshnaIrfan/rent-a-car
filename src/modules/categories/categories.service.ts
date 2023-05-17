@@ -228,15 +228,26 @@ export class CategoriesService {
 
          if (latestPositiveReview)
          {
-             const result = await this.likeDislikeRepository.getAllReviewsCountByReviewId(latestPositiveReview.id);
-             if( !result)
-             {
-               throw new NotFoundException('not found ');
-             }
 
-             const userCount = result.length;
+              const result = await this.reviewRepository.reviewId(latestPositiveReview.id);
+              const  res=JSON.stringify(result);
+
+              const data = {
+                  like: JSON.parse(res).likeDislike,
+                  dislike: JSON.parse(res).likeDislike,
+                  report: JSON.parse(res).likeDislike
+              };
+
+
+              const counts = {
+                  like: data.like.filter(record => record.type === 'like').length,
+                  dislike: data.dislike.filter(record => record.type === 'dislike').length,
+                  report: data.like.filter(record => record.type === 'report').length,
+            };
+
+
              const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-             if( !result)
+             if( !matchingSlugTitle)
              {
                  throw new NotFoundException('not found ');
              }
@@ -255,7 +266,7 @@ export class CategoriesService {
                          {
                             categorySellers.push(latestPositiveReview);
                          }
-                          toreview.push({ ...latestPositiveReview, Best_Awards:userCount});
+                          toreview.push({ ...latestPositiveReview, result:counts});
 
                   }
                }
