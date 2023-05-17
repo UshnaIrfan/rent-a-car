@@ -158,64 +158,120 @@ export class reviewRepository{
 
          //ADMIN APIS
         // review search
-        async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-        {
+    //     async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+    //     {
+    //
+    //        let whereConditions = {} as {
+    //          userId?: any,
+    //          message?: any,
+    //          titleSlug?: any,
+    //          sellerId?: any,
+    //       };
+    //
+    //       if (userId || message || type || sellerId) {
+    //         whereConditions = {
+    //           userId: userId ?? undefined,
+    //           message: message ? Like(`%${message}%`) : undefined,
+    //           titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+    //           sellerId: sellerId,
+    //         };
+    //       }
+    //
+    //      let sellerIds=[];
+    //      if (categoryId)
+    //      {
+    //         const category = await this.categoryRepository.GetCategoryId(categoryId);
+    //         sellerIds = category.sellers.map(seller => seller.id);
+    //
+    //        if (sellerId && sellerIds.find(seller => seller === sellerId))
+    //        {
+    //           sellerIds = [sellerId];
+    //        }
+    //
+    //        if (sellerId && !sellerIds.find(seller => seller === sellerId))
+    //        {
+    //         throw new NotFoundException('No reviews were found matching the criteria.');
+    //        }
+    //
+    //        whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
+    //     }
+    //
+    //     const [result, totalCount] = await this.reviewModel.findAndCount({
+    //     where: Object.keys(whereConditions).length !== 0 ? [
+    //       whereConditions
+    //     ] : [],
+    //      skip,
+    //      take
+    //    });
+    //
+    //    if (!result.length)
+    //    {
+    //       throw new NotFoundException('No reviews were found matching the criteria.');
+    //    }
+    //
+    //     return [result, totalCount];
+    // }
 
-           let whereConditions = {} as {
-             userId?: any,
-             message?: any,
-             titleSlug?: any,
-             sellerId?: any,
+      async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+      {
+
+         let whereConditions = {} as {
+           userId?: any,
+           message?: any,
+           titleSlug?: any,
+           sellerId?: any,
+        };
+
+        if (userId || message || type || sellerId) {
+          whereConditions = {
+            userId: userId ?? undefined,
+            message: message ? Like(`%${message}%`) : undefined,
+            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+            sellerId: sellerId,
           };
+        }
 
-          if (userId || message || type || sellerId) {
-            whereConditions = {
-              userId: userId ?? undefined,
-              message: message ? Like(`%${message}%`) : undefined,
-              titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-              sellerId: sellerId,
-            };
+       let sellerIds=[];
+       if (categoryId)
+       {
+          const category = await this.categoryRepository.GetCategoryId(categoryId);
+          sellerIds = category.sellers.map(seller => seller.id);
+
+          if (sellerId && sellerIds.find(seller => seller === sellerId))
+          {
+              sellerIds = [sellerId];
           }
 
-         let sellerIds=[];
-         if (categoryId)
+         if (sellerId && !sellerIds.find(seller => seller === sellerId))
          {
-            const category = await this.categoryRepository.GetCategoryId(categoryId);
-            sellerIds = category.sellers.map(seller => seller.id);
-
-           if (sellerId && sellerIds.find(seller => seller === sellerId))
-           {
-              sellerIds = [sellerId];
-           }
-
-           if (sellerId && !sellerIds.find(seller => seller === sellerId))
-           {
             throw new NotFoundException('No reviews were found matching the criteria.');
-           }
+         }
 
-           whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
-        }
-        const [result, totalCount] = await this.reviewModel.findAndCount({
+         whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
+      }
+
+       const [result, totalCount] = await this.reviewModel.findAndCount({
         where: Object.keys(whereConditions).length !== 0 ? [
-          whereConditions
+        whereConditions
         ] : [],
-         skip,
-         take
-       });
+        relations: ['likeDislike'],
+        skip,
+        take
+      });
 
-       if (!result.length)
-       {
+      if (!result.length)
+      {
           throw new NotFoundException('No reviews were found matching the criteria.');
-       }
+      }
 
-        return [result, totalCount];
-    }
-
-
+       return [result, totalCount];
+   }
 
 
 
-       // admin update  review status
+
+
+      // admin update  review status
        async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
        {
           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
