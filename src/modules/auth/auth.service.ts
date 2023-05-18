@@ -82,14 +82,41 @@ export class AuthService {
          // Sign up
          async signup(@Body() Signup: signupUserInterface)
          {
+             const User = await this.usersService.findUserByEmail(Signup.email);
+             if ( User && Signup.isActive == false)
+             {
+               const Token = generateRandomToken(32);
+               const expiresAt = new Date();
+               expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+               const tokenKey = `forgot-password-token:${User.email}`;
+               const tokenValue = JSON.stringify({ token: Token, expiresAt ,active: false });
+               await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
+
+               const baseUrl = process.env.BASE_URL;
+               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
+
+               console.log("token" ,Token)
+
+               const queryParams = `?Token=${Token}&email=${User.email}`;
+               const activeUrl = `${ActiveUrl}${queryParams}`;
+               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
+               const emailBody = template({ activeUrl });
+               await this.sendWelcome(User.email, emailBody);
+               return {
+                 message :"Email already  exit. Please click the link to verify your account"
+               }
+
+             }
+
+
             const username = await this.usersService.findUserByUsername(Signup.username);
             if (username)
             {
               throw new ConflictException('Username already exists');
             }
 
-           const email = await this.usersService.findUserByEmail(Signup.email);
-           if (email)
+           const Email = await this.usersService.findUserByEmail(Signup.email);
+           if (Email)
            {
               throw new ConflictException('Email already exists');
            }
@@ -112,23 +139,21 @@ export class AuthService {
         const expiresAt = new Date();
         expiresAt.setMinutes(expiresAt.getMinutes() + 90);
         const tokenKey = `forgot-password-token:${user.email}`;
-        const tokenValue = JSON.stringify({ token: Token, expiresAt });
+        const tokenValue = JSON.stringify({ token: Token, expiresAt ,active: false });
         await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
 
         const baseUrl = process.env.BASE_URL;
-        const changePasswordUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
+        const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
 
         console.log("token" ,Token)
 
         const queryParams = `?Token=${Token}&email=${user.email}`;
-        const activeUrl = `${changePasswordUrl}${queryParams}`;
+        const activeUrl = `${ActiveUrl}${queryParams}`;
         const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
         const emailBody = template({ activeUrl });
-       //  const emailBody = `Please click on the following link to registerd your account: <a href="${activeUrl}" target="_blank">${activeUrl}</a>`;
-
         try
         {
-            await this.sendWelcome(user.email, emailBody);
+              await this.sendWelcome(user.email, emailBody);
         }
 
         catch (e)
@@ -140,6 +165,7 @@ export class AuthService {
       };
 
     }
+
 
 
 
@@ -181,44 +207,52 @@ export class AuthService {
    //
    // }
 
+       async isActive(@Body() reqBody: userActiveInterface)
+       {
+             const user = await this.usersService.findUserByEmail(reqBody.email);
+             if (!user)
+             {
+                 throw new NotFoundException('Invalid email');
+             }
+
+            const tokenKey = `forgot-password-token:${user.email}`;
+            const cachedToken = await this.cacheManager.get(tokenKey);
 
 
-        async isActive(@Body() reqBody: userActiveInterface)
-        {
-            const user = await this.usersService.findUserByEmail(reqBody.email);
-            if (!user)
+            if (!cachedToken)
             {
-                throw new  NotFoundException('Invalid email');
+               throw new UnauthorizedException('Token expired');
             }
 
-           const tokenKey = `forgot-password-token:${user.email}`;
-           const cachedToken = await this.cacheManager.get(tokenKey);
-
-           if(!cachedToken)
+           const parsedToken = JSON.parse(<string>cachedToken);
+           if (parsedToken.token !== reqBody.token)
            {
-                throw new UnauthorizedException('token expired');
+             throw new UnauthorizedException('Invalid token');
            }
 
-          const parsedToken = JSON.parse(<string>cachedToken);
-          if (parsedToken.token !== reqBody.token)
-          {
-               throw new UnauthorizedException('Invalid token');
-          }
+           if (parsedToken.active === true)
+           {
+              throw new UnauthorizedException('Email already verify please login.');
+           }
 
-          try
-          {
-             await this.usersService.isActive(reqBody.email,reqBody.isActive);
-             await this.cacheManager.del(tokenKey);
-             await this.sendWelcomeEmail(reqBody.email);
-          }
-
-         catch (e)
-         {
-              throw new InternalServerErrorException();
+           try
+           {
+             if (parsedToken.active === false)
+             {
+                  parsedToken.active = true;
+                 const updatedTokenValue = JSON.stringify(parsedToken);
+                 await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
+                 await this.usersService.isActive(reqBody.email,reqBody.isActive);
+                 await this.sendWelcomeEmail(reqBody.email);
+                 return {
+                        message: 'Successfully created account',
+                };
+             }
          }
-          return {
-            message: 'successfully created account',
-          };
+        catch (e)
+        {
+           throw new InternalServerErrorException();
+        }
 
     }
 
@@ -228,7 +262,7 @@ export class AuthService {
 
 
 
-       //login
+        //login
         async login(user: User): Promise<JwtTokensInterface>
         {
 
