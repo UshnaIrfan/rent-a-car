@@ -82,8 +82,9 @@ export class AuthService {
          // Sign up
          async signup(@Body() Signup: signupUserInterface)
          {
+
              const User = await this.usersService.findUserByEmail(Signup.email);
-             if ( User && Signup.isActive == false)
+             if (  User && User.isActive == false)
              {
                const Token = generateRandomToken(32);
                const expiresAt = new Date();
@@ -102,67 +103,70 @@ export class AuthService {
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
                const emailBody = template({ activeUrl });
                await this.sendWelcome(User.email, emailBody);
-               return {
-                 message :"Email already  exit. Please click the link to verify your account"
+               throw new ConflictException('You are already created this account. Please click the link to verify your account');
+
+             }
+             else {
+
+               const username = await this.usersService.findUserByUsername(Signup.username);
+               if (username)
+               {
+                 throw new ConflictException('Username already exists');
                }
+
+               const Email = await this.usersService.findUserByEmail(Signup.email);
+               if (Email)
+               {
+                 throw new ConflictException('Email already exists');
+               }
+
+               const { password } = Signup;
+               const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+
+               if (!isPasswordStrongEnough)
+               {
+                 throw new BadRequestException('Password is too weak');
+               }
+
+               const user = await this.usersService.createUser({
+                 ...Signup,
+                 password: await AuthService.hashPassword(password),
+               });
+
+
+               const Token = generateRandomToken(32);
+               const expiresAt = new Date();
+               expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+               const tokenKey = `forgot-password-token:${user.email}`;
+               const tokenValue = JSON.stringify({ token: Token, expiresAt ,active: false });
+               await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
+
+               const baseUrl = process.env.BASE_URL;
+               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
+
+               console.log("token" ,Token)
+
+               const queryParams = `?Token=${Token}&email=${user.email}`;
+               const activeUrl = `${ActiveUrl}${queryParams}`;
+               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
+               const emailBody = template({ activeUrl });
+               try
+               {
+                 await this.sendWelcome(user.email, emailBody);
+               }
+
+               catch (e)
+               {
+                 throw new BadRequestException('Failed to send email');
+               }
+               return {
+                 message: 'Email sent successfully',
+               };
+
 
              }
 
 
-            const username = await this.usersService.findUserByUsername(Signup.username);
-            if (username)
-            {
-              throw new ConflictException('Username already exists');
-            }
-
-           const Email = await this.usersService.findUserByEmail(Signup.email);
-           if (Email)
-           {
-              throw new ConflictException('Email already exists');
-           }
-
-           const { password } = Signup;
-           const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-
-           if (!isPasswordStrongEnough)
-           {
-              throw new BadRequestException('Password is too weak');
-           }
-
-           const user = await this.usersService.createUser({
-           ...Signup,
-           password: await AuthService.hashPassword(password),
-        });
-
-
-        const Token = generateRandomToken(32);
-        const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 90);
-        const tokenKey = `forgot-password-token:${user.email}`;
-        const tokenValue = JSON.stringify({ token: Token, expiresAt ,active: false });
-        await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
-
-        const baseUrl = process.env.BASE_URL;
-        const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
-
-        console.log("token" ,Token)
-
-        const queryParams = `?Token=${Token}&email=${user.email}`;
-        const activeUrl = `${ActiveUrl}${queryParams}`;
-        const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
-        const emailBody = template({ activeUrl });
-        try
-        {
-              await this.sendWelcome(user.email, emailBody);
-        }
-
-        catch (e)
-        {
-             throw new BadRequestException('Failed to send email');
-        }
-        return {
-           message: 'Email sent successfully',
-      };
 
     }
 
@@ -232,7 +236,7 @@ export class AuthService {
 
            if (parsedToken.active === true)
            {
-              throw new UnauthorizedException('Email already verify please login.');
+             throw new ConflictException('You are already logged in. Please log in');
            }
 
            try
