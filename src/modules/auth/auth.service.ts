@@ -267,7 +267,7 @@ export class AuthService {
 
 
 
-       //email ( random token)
+       //email (otp)
        async otp(randomUserToken: randomUserTokenInterface)
        {
            const user = await this.usersService.findUserByEmail(randomUserToken.email);
@@ -278,10 +278,10 @@ export class AuthService {
 
           const otp = generateOtp(6, true);
           const expiresAt = new Date();
-          expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+          expiresAt.setHours(expiresAt.getHours() + 24);
           const otpKey = `forgot-password-token:${user.email}`;
           const otpValue = JSON.stringify({ OTP: otp, expiresAt });
-          await this.cacheManager.set(otpKey, otpValue, { ttl: 5400 });
+          await this.cacheManager.set(otpKey, otpValue, { ttl: 86400 });
 
           const baseUrl = process.env.BASE_URL;
           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;

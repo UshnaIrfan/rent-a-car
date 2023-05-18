@@ -62,7 +62,7 @@ export class AuthController {
 
 
 
-        //email ( random token)
+        //email (otp)
         @ApiBody({type:randomUserTokenDto})
         @Post('forgotPassword/otp')
         async otp(

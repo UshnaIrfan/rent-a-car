@@ -60,7 +60,7 @@ export class seller{
      categories: any[];
 
 
-     // relation between user and seller
+     // relation between review and seller
      @ApiProperty({ type: () => [review] })
      @OneToMany(() => review, review => review.seller)
      @JoinTable()
