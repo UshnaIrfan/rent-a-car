@@ -97,7 +97,7 @@ export class AuthService {
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
                const emailBody = template({ activeUrl });
                await this.sendWelcome(User.email, emailBody);
-               throw new ConflictException('You are already created this account. Please click the link to verify your account');
+               throw new ConflictException('You are already created this account. Resend email please verify your account.');
 
              }
              else {
@@ -266,10 +266,10 @@ export class AuthService {
            }
           const resetToken = generateRandomToken(32);
           const expiresAt = new Date();
-          expiresAt.setMinutes(expiresAt.getMinutes() + 90);
+           expiresAt.setHours(expiresAt.getHours() + 24);
           const tokenKey = `forgot-password-token:${user.email}`;
           const tokenValue = JSON.stringify({ token: resetToken, expiresAt });
-          await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
+           await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
           const baseUrl = process.env.BASE_URL;
           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
           console.log("token" ,resetToken)
