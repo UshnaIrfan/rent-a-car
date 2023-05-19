@@ -1,6 +1,6 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Not, Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
 import {status} from "./schemas/category.schema";
@@ -143,7 +143,7 @@ export class CategoryRepository {
        // get category by id associated sellers
        async getCategoryId(id: string): Promise<category|null>
        {
-         const category = await this.categoryModel.findOne({
+          const category = await this.categoryModel.findOne({
           where: { id ,approvedByAdmin:status.APPROVED },
           relations: ['sellers'],
           });
@@ -163,12 +163,8 @@ export class CategoryRepository {
       // get all categories
        async getAllCategories(): Promise<category[] |null>
        {
-         return  this.categoryModel.find({
-           where: {
-             approvedByAdmin: status.APPROVED,
-           },
-           order: {categoryName: 'ASC' }
-         });
+            return  this.categoryModel.find({ where: { approvedByAdmin: status.APPROVED, },
+            order: {categoryName: 'ASC' } });
        }
 
 
@@ -178,7 +174,7 @@ export class CategoryRepository {
         async getCategoryById(id:string): Promise<category |null>
         {
             const category = await this.categoryModel.findOne({where:{id}})
-           return category;
+            return category;
         }
 
 
@@ -209,8 +205,6 @@ export class CategoryRepository {
          category.sellers = filteredSellers;
          return [category];
     }
-
-
 
 
 

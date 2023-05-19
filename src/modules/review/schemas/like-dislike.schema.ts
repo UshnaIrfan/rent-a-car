@@ -4,8 +4,7 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToMany,
-    JoinTable, JoinColumn, ManyToOne, OneToMany
+     ManyToOne,
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { review } from "./submit-review.schema";
@@ -61,9 +60,6 @@ export class likeDislike{
     @ApiProperty({ type: () => [review] })
     @ManyToOne(() => review, review => review.likeDislike)
     review: review[];
-
-
-
 
 
 }

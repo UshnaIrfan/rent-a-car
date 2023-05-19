@@ -35,7 +35,7 @@ export class clicksTitlesRepository{
 
 
 
-      // find by individual title  id
+        // find by individual title  id
         async findByTitle(id:string):Promise<clicksTitle| null>
         {
             return this.clickTypesModel.findOne({ where: { id }});
@@ -49,7 +49,6 @@ export class clicksTitlesRepository{
        {
          return this.clickTypesModel.findOne({ where: { slug }, });
        }
-
 
 
   }

@@ -19,29 +19,35 @@ export class UsersRepository {
        //update user
        async updateUser(id:string, name:string,username:string,email:string): Promise<User | null>
        {
-         const user = await this.userModel.findOne({ where: { id}});
-         if (!user)
-         {
-               return null
-         }
+          const user = await this.userModel.findOne({ where: { id}});
+          if (!user)
+          {
+                return null
+          }
 
-         user.name = name;
-         user.username = username;
-         user.email = email;
-         return this.userModel.save(user);
+          user.name = name;
+          user.username = username;
+          user.email = email;
+          return this.userModel.save(user);
        }
 
 
 
 
-        //delete user  with review
+        //delete user with review with likeAndDislike
         async deleteUser(id: string): Promise<User| null>
         {
+          const User = await this.userModel.findOne({ where: { id  }});
+          if(!User)
+          {
+            throw new NotFoundException('user not found');
+          }
 
             const user = await this.userModel.findOne({
                 where: { id  },
                 relations: ['review'],
              });
+
 
              const reviews = user.review;
              if (reviews && reviews.length > 0)
@@ -113,7 +119,7 @@ export class UsersRepository {
 
         async findUserByID(id: string): Promise<User|null>
         {
-          return this.userModel.findOne({ where: { id }, });
+            return this.userModel.findOne({ where: { id }, });
         }
 
 
@@ -134,7 +140,7 @@ export class UsersRepository {
           // get all users
          async getAllUsers(): Promise<User[]|null>
          {
-            return this.userModel.find();
+             return this.userModel.find();
          }
 
 
@@ -146,7 +152,7 @@ export class UsersRepository {
             if (!user)
             {
                return null
-           }
+            }
            user.isActive = isActive;
            return this.userModel.save(user);
        }
@@ -156,8 +162,7 @@ export class UsersRepository {
          // get all users
          async getAllUser()
          {
-           return  this.userModel.find({ where: { isActive:true }});
-
+             return  this.userModel.find({ where: { isActive:true }});
          }
 
 
@@ -166,9 +171,8 @@ export class UsersRepository {
           // get user by id  with active status
          async findUserById(id: string): Promise<User|null>
          {
-            return this.userModel.findOne({ where: { id ,isActive:true} });
+              return this.userModel.findOne({ where: { id ,isActive:true} });
          }
-
 
 
   }

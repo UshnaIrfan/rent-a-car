@@ -19,12 +19,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
      {
        try
        {
-        const user = await this.authService.validateUser(email, password);
-        return user;
+          const user = await this.authService.validateUser(email, password);
+          return user;
        }
        catch (error)
        {
-         throw new NotFoundException('Invalid email or password');
+           throw new NotFoundException('Invalid email or password');
 
        }
     }

@@ -5,14 +5,15 @@ import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
 import {CategoryRepository} from "../../categories/category.repository";
-
+import {likeDislikeRepository} from "./like-dislike.repository";
 
 
 @Injectable()
 export class reviewRepository{
   constructor(@InjectRepository(review) private reviewModel: Repository<review>,
               private  readonly  titleRepository:clicksTitlesRepository,
-              private  readonly  categoryRepository:CategoryRepository
+              private  readonly  categoryRepository:CategoryRepository,
+              private  readonly  likeDislikeRepository:likeDislikeRepository
   ){}
 
 
@@ -46,7 +47,6 @@ export class reviewRepository{
           where: { sellerId  ,approvedByAdmin: true},
          });
        }
-
 
 
 
@@ -287,19 +287,33 @@ export class reviewRepository{
 
 
 
-       // delete review
-        async delete(reviewId:string) : Promise<review| null>
-        {
-           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
-           if (!review)
+          //delete user with review with likeAndDislike
+         async delete(reviewId: string): Promise<review | null>
+         {
+             const review = await this.reviewModel.findOne({
+                  where: { id: reviewId },
+                  relations: ['likeDislike'],
+             });
+
+            if (!review)
+            {
+                return null;
+            }
+
+           const likeDislikes = review.likeDislike;
+
+           if (likeDislikes && likeDislikes.length > 0)
            {
-               return null
+              for (const likeDislike of likeDislikes)
+              {
+                  await this.likeDislikeRepository.delete(likeDislike.id);
+               }
            }
-             return await this.reviewModel.remove(review);
+
+                 return await this.reviewModel.remove(review);
        }
 
 
-
-}
+ }
 
 

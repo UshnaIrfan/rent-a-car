@@ -37,7 +37,6 @@ export class ReviewService {
     private jwtService: JwtService,
     private readonly likeDislikeRepository:likeDislikeRepository,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-
     ){}
 
 
@@ -202,7 +201,6 @@ export class ReviewService {
 
          return { seller, result };
     }
-
 
 
 
@@ -383,8 +381,6 @@ export class ReviewService {
 
 
 
-
-
      //ADMIN APIS
      // review search
      async search(pageNumber: number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string)
@@ -411,21 +407,13 @@ export class ReviewService {
       // admin update  review status
      async adminUpdateReview(adminUpdateCategoryInterface:adminUpdateSubmitReviewInterface):Promise<{ updateAdmin: review; message: string }>
      {
-       const updateAdmin = await this.reviewRepository.adminUpdateReview(adminUpdateCategoryInterface.reviewId,adminUpdateCategoryInterface.approvedByAdmin);
-       if (!updateAdmin)
-       {
-          throw new NotFoundException('  review not exist');
-       }
-       return { message: "review  status updated successfully",updateAdmin };
+        const updateAdmin = await this.reviewRepository.adminUpdateReview(adminUpdateCategoryInterface.reviewId,adminUpdateCategoryInterface.approvedByAdmin);
+        if (!updateAdmin)
+        {
+            throw new NotFoundException('  review not exist');
+        }
+         return { message: "review  status updated successfully",updateAdmin };
     }
-
-
-
-
-
-
-
-
 
 
 }

@@ -8,4 +8,5 @@ export  class randomUserTokenDto {
     @IsString()
     @IsEmail()
     email: string = '';
+
 }

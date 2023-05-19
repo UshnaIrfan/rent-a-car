@@ -15,11 +15,13 @@ import {clicksTypesRepository} from "../review/respositories/clicksTypes.reposit
 import {clicksTypes} from "../review/schemas/create-click-types.schema";
 import {category} from "../categories/schemas/category.schema";
 import {CategoryRepository} from "../categories/category.repository";
+import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
+import {likeDislike} from "../review/schemas/like-dislike.schema";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([contact,User ,review,clicksTypes,clicksTitle,category])],
+  imports: [TypeOrmModule.forFeature([likeDislike,contact,User ,review,clicksTypes,clicksTitle,category])],
   controllers: [ContactUsController],
-  providers: [CategoryRepository,clicksTitlesRepository,clicksTypesRepository,JwtService,ContactUsService ,contactUsRepository,UsersRepository,reviewRepository]
+  providers: [likeDislikeRepository,CategoryRepository,clicksTitlesRepository,clicksTypesRepository,JwtService,ContactUsService ,contactUsRepository,UsersRepository,reviewRepository]
 })
 export class ContactUsModule {}

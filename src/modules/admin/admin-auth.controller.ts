@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch,Delete, Query } from "@nestjs/common";
+import { Controller, Get, Body, Patch,Delete, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
 import updateUserInterface from "../auth/interfaces/update-user.interface";
@@ -7,7 +7,6 @@ import {AuthService} from "../auth/auth.service";
 import {updateUserDto} from "../auth/dto/update-user.dto";
 import { Role } from "../../enums/role.enum";
 import { Roles } from "../../decorators/role.decorators";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 
 
 @ApiTags('admin')
@@ -42,11 +41,11 @@ export class adminAuthController {
 
 
 
-      //delete user with review
+      //delete user with review with likeAndDislike
       @ApiBearerAuth()
       @Delete('user/delete')
       @Roles(Role.L2A_ADMIN)
-      async deleteUser(@Query('id') id:string):Promise<{message: string, deletedUser: User}>
+      async deleteUser(@Query('id') id:string):Promise<{message: string}>
       {
          return this.authService.deleteUser(id);
       }

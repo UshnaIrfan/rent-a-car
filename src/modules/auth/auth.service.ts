@@ -61,17 +61,12 @@ export class AuthService {
 
 
 
-        //delete user with review
-       async deleteUser(id:string):Promise<{message: string, deletedUser:User}>
-       {
-          const deletedUser = await this.usersService.deleteUser(id);
-          if (!deletedUser)
-          {
-             throw new NotFoundException('user not found');
-          }
-
-          return { message: " deleted successfully", deletedUser };
-       }
+         //delete user with review with likeAndDislike
+         async deleteUser(id:string):Promise<{message: string}>
+         {
+            await this.usersService.deleteUser(id);
+            return { message: " deleted successfully" };
+        }
 
 
 
@@ -173,7 +168,6 @@ export class AuthService {
 
 
 
-
        // isActive
    //    async isActive(@Body() reqBody: userActiveInterface)
    //    {
@@ -270,11 +264,10 @@ export class AuthService {
         async login(user: User): Promise<JwtTokensInterface>
         {
 
-          if (user.isActive==false )
-          {
-            throw new BadRequestException('User is not active');
-          }
-
+            if (user.isActive==false )
+            {
+                throw new BadRequestException('User is not active');
+            }
 
              const payload = {
                    id: user.id,
@@ -334,7 +327,7 @@ export class AuthService {
 
           try
           {
-              await this.sendToken(user.email, emailBody);
+              await this.sendOtp(user.email, emailBody);
           }
           catch (e)
           {
@@ -345,6 +338,7 @@ export class AuthService {
                tokenStatus: true
            };
      }
+
 
 
 
@@ -402,12 +396,13 @@ export class AuthService {
          // profile get
          async getProfile(accessToken: string)
          {
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
-              throw new UnauthorizedException('Token expired');
-           }
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken)
+            {
+               throw new UnauthorizedException('Token expired');
+            }
               return  cachedToken
+
          }
 
 
@@ -419,7 +414,7 @@ export class AuthService {
               const user = await this.usersService.findUserById(userId);
               if(!user)
               {
-                throw new NotFoundException('user not found');
+                  throw new NotFoundException('user not found');
               }
 
               return  user;
@@ -485,12 +480,13 @@ export class AuthService {
 
 
 
-         // Generating new hashed password to save in migrations
+         // Generating hashed password
          private static async hashPassword(password: string): Promise<string>
          {
             const salt = await bcrypt.genSalt();
             return bcrypt.hash(password, salt);
          }
+
 
 
 
@@ -501,17 +497,18 @@ export class AuthService {
             const user = await this.usersService.findUserByEmail(email);
             if (!user)
             {
-               throw new  NotFoundException('Invalid email');
+                throw new  NotFoundException('Invalid email');
             }
             const passwordValid = await bcrypt.compare(password, user.password);
             if (!passwordValid)
             {
-               throw new  NotFoundException('Invalid password');
+                throw new  NotFoundException('Invalid password');
             }
 
-               return user;
+             return user;
 
         }
+
 
 
 
@@ -532,8 +529,8 @@ export class AuthService {
 
 
 
-        //sending token(forgotPassword)
-        async sendToken(email: string, emailBody: string)
+        //sending Otp(forgotPassword)
+        async sendOtp(email: string, emailBody: string)
         {
              await this.mailerService.sendMail({
              to: email,
@@ -546,7 +543,7 @@ export class AuthService {
 
 
 
-       //sending password change email
+       //sending email (updated password)
        async sendPasswordUpdatedEmail(email: string)
        {
           const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
@@ -572,50 +569,6 @@ export class AuthService {
        }
 
 
-
-
-
-
-
-       //verify email
-       // async verifyEmail(token: string, email: string)
-       // {
-       //   const user = await this.usersService.findUserByEmail(email);
-       //   if (!user)
-       //   {
-       //     throw new  NotFoundException('Invalid email');
-       //   }
-       //
-       //   const tokenKey = `forgot-password-token:${user.email}`;
-       //   const cachedToken = await this.cacheManager.get(tokenKey);
-       //
-       //   const parsedToken = JSON.parse(<string>cachedToken);
-       //   if (parsedToken.token !== token)
-       //   {
-       //     throw new UnauthorizedException('Invalid token');
-       //   }
-       //
-       //   if(!cachedToken )
-       //   {
-       //     throw new UnauthorizedException('token expired');
-       //   }
-       //   try
-       //   {
-       //
-       //     if (parsedToken.token == token)
-       //     {
-       //       await this.cacheManager.del(tokenKey);
-       //     }
-       //
-       //
-       //   }
-       //   catch (e)
-       //   {
-       //     throw new InternalServerErrorException();
-       //
-       //   }
-       //
-       // }
 
 
 }

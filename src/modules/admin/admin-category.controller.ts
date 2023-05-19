@@ -74,7 +74,7 @@ export class AdminCategoryController {
       @Roles(Role.L2A_ADMIN)
       async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
       {
-         return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
+          return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
       }
 
 

@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put, Patch, Param, Query
+  Delete, Put, Patch, Param
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
@@ -79,7 +79,7 @@ export class AuthController {
         async changePasswordToken(
         @Body() reqBody: ChangeUserPasswordDto)
         {
-          return this.authService.Password(reqBody);
+            return this.authService.Password(reqBody);
         }
 
 
@@ -137,20 +137,6 @@ export class AuthController {
            const accessToken = req.headers.authorization.split(' ')[1];
            return  this.authService.refreshToken(req.user,accessToken)
         }
-
-
-
-
-
-
-        //verify email
-      //  @Get('/verify_email')
-      //  async verifyEmail(
-      //      @Param('token') token: string,
-      //      @Query('email') email: string)
-      // {
-      //     return this.authService.verifyEmail(token,email);
-      // }
 
 
 

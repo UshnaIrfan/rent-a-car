@@ -17,18 +17,18 @@ export class sellerRepository{
   ) {}
 
 
-      //ADMIN APIS
-      // create seller
-      async createSeller(body: CreateSellerDto):Promise<seller|null>
-      {
-         const seller = await this.sellerModel.create();
-         seller.sellerName = body.sellerName;
-         seller.sellerUrl = body.sellerUrl;
-         seller.approvedByAdmin = body.approvedByAdmin;
-         seller.isListing = body.isListing;
-         await this.sellerModel.save(seller);
-         return seller
-     }
+       //ADMIN APIS
+       // create seller
+       async createSeller(body: CreateSellerDto):Promise<seller|null>
+       {
+           const seller = await this.sellerModel.create();
+           seller.sellerName = body.sellerName;
+           seller.sellerUrl = body.sellerUrl;
+           seller.approvedByAdmin = body.approvedByAdmin;
+           seller.isListing = body.isListing;
+           await this.sellerModel.save(seller);
+           return seller
+      }
 
 
 
@@ -63,12 +63,12 @@ export class sellerRepository{
          const reviews = seller.review;
          if (reviews && reviews.length > 0)
          {
-           for (const review of reviews)
-           {
-              await this.ReviewRepository.delete(review.id);
-           }
+            for (const review of reviews)
+            {
+               await this.ReviewRepository.delete(review.id);
+            }
          }
-           return  await this.sellerModel.remove(seller);
+            return  await this.sellerModel.remove(seller);
 
       }
 
@@ -82,10 +82,11 @@ export class sellerRepository{
            const [result, totalCount] = await this.sellerModel.findAndCount({
            skip,
            take,
-          relations: ['categories'],
+           relations: ['categories'],
           });
-         return [result, totalCount];
+          return [result, totalCount];
       }
+
 
 
 
@@ -103,6 +104,8 @@ export class sellerRepository{
          seller.isListing = isListing;
          return this.sellerModel.save(seller);
       }
+
+
 
 
 
@@ -192,15 +195,15 @@ export class sellerRepository{
         });
        if (!result.length)
        {
-          throw new NotFoundException('No sellers were found matching the search criteria.');
+            throw new NotFoundException('No sellers were found matching the search criteria.');
        }
 
       return [
-          result,
-          totalCount,
-      ];
-    }
-  }
+           result,
+           totalCount,
+       ];
+     }
+   }
 
 
 
@@ -253,7 +256,7 @@ export class sellerRepository{
 
 
 
-       // get all sellers
+        // get all sellers
          async getAllSellers(): Promise<seller[]|null>
          {
              const sellers = await this.sellerModel.find({

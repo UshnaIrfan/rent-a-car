@@ -31,17 +31,6 @@ export class likeDislikeRepository{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
      async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislike[]|null>
      {
        return  await this.likeDislikeModel.find({ where: {   reviewId } });
@@ -49,6 +38,16 @@ export class likeDislikeRepository{
 
 
 
+      //delete user with review with likeAndDislike
+      async delete(reviewId:string) : Promise<likeDislike | undefined>
+      {
+          const review = await this.likeDislikeModel.findOne({ where: { id:reviewId}});
+          if (!review)
+          {
+               return null
+          }
+          return await this.likeDislikeModel.remove(review);
+      }
 
 
 }

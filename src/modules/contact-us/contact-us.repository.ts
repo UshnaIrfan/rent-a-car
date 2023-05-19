@@ -15,7 +15,7 @@ export class contactUsRepository{
       // contact-us
       async createContact(contactUs: createContactUsDto): Promise<contact| null>
       {
-         return this.contactModel.save(contactUs);
+          return this.contactModel.save(contactUs);
       }
 
 }

@@ -30,7 +30,7 @@ export class UsersService {
                records: result,
                totalRecords: totalCount,
                totalPages,
-              currentPage: pageNumber,
+               currentPage: pageNumber,
           };
        }
 
@@ -45,7 +45,8 @@ export class UsersService {
 
 
 
-            // delete  user with review
+
+            //delete user with review with likeAndDislike
             async deleteUser(id:string): Promise<User|null>
             {
                return this.usersRepository.deleteUser(id);
@@ -85,12 +86,6 @@ export class UsersService {
 
 
 
-          async findUserByID (id:string): Promise<User | null>
-          {
-             return this.usersRepository.findUserByID(id);
-          }
-
-
 
           async isActive(email: string,isActive:boolean): Promise<User | null>
           {
@@ -105,7 +100,7 @@ export class UsersService {
              const users =await this.usersRepository.getAllUser();
              if(!users)
              {
-               throw new NotFoundException('No user exit');
+                 throw new NotFoundException('No user exit');
              }
              return  users;
          }

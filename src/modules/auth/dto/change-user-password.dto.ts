@@ -34,8 +34,7 @@ export class ChangeUserPasswordDto {
         message: 'Password is too weak',
     })
 
-    confirmPassword: string;
-
+   confirmPassword: string;
 
 
 }

@@ -52,5 +52,4 @@ export class SignUpUserDto {
      isActive: boolean;
 
 
-
 }

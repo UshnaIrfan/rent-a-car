@@ -14,14 +14,16 @@ import {category} from "../categories/schemas/category.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import {contactUsRepository} from "../contact-us/contact-us.repository";
 import {contact} from "../contact-us/schemas/contact-us.schema";
+import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
+import {likeDislike} from "../review/schemas/like-dislike.schema";
 
 
 @Module({
   imports: [
-      TypeOrmModule.forFeature([contact,User ,review,clicksTitle,clicksTypes,category]),
+      TypeOrmModule.forFeature([likeDislike,contact,User ,review,clicksTitle,clicksTypes,category]),
   ],
      controllers: [UsersController],
-     providers: [contactUsRepository,CategoryRepository,reviewRepository,UsersService ,UsersRepository,clicksTypesRepository,clicksTitlesRepository],
+     providers: [ likeDislikeRepository,contactUsRepository,CategoryRepository,reviewRepository,UsersService ,UsersRepository,clicksTypesRepository,clicksTitlesRepository],
      exports: [UsersRepository, UsersService],
 })
 export class UsersModule {}

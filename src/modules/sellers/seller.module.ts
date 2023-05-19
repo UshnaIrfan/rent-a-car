@@ -16,18 +16,20 @@ import {UsersRepository} from "../users/users.repository";
 import {User} from "../users/schemas/user.schema";
 import { JwtService } from '@nestjs/jwt';
 import * as redisStore from 'cache-manager-redis-store';
+import {likeDislike} from "../review/schemas/like-dislike.schema";
+import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([seller,category,review,clicksTypes,clicksTitle ,User]),
+    TypeOrmModule.forFeature([likeDislike,seller,category,review,clicksTypes,clicksTitle ,User]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     }),
   ],
    controllers: [SellerController],
-   providers: [JwtService,SellerService ,sellerRepository, CategoryRepository,reviewRepository,clicksTypesRepository,clicksTitlesRepository,UsersRepository],
+   providers: [ likeDislikeRepository,JwtService,SellerService ,sellerRepository, CategoryRepository,reviewRepository,clicksTypesRepository,clicksTitlesRepository,UsersRepository],
 
 })
 export class SellerModule {}

@@ -32,5 +32,4 @@ export class updateUserDto {
      @IsNotEmpty()
      email: string;
 
-
 }

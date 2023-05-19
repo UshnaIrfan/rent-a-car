@@ -4,7 +4,7 @@ import {
      PrimaryGeneratedColumn,
      CreateDateColumn,
      UpdateDateColumn,
-     ManyToMany, JoinTable, ManyToOne, OneToMany, JoinColumn
+    JoinTable, ManyToOne, OneToMany,
 } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
@@ -74,7 +74,6 @@ export class review{
      @ManyToOne(() => seller, seller => seller.review)
      @JoinTable()
      seller: seller[];
-
 
 
 
