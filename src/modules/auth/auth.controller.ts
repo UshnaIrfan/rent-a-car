@@ -18,6 +18,7 @@ import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
 import { User } from "../users/schemas/user.schema";
+import {changeUserPasswordTokenVerificationDto} from "./dto/change-user-password-token-verification.dto";
 
 
 @ApiTags('Auth')
@@ -62,14 +63,23 @@ export class AuthController {
 
 
 
-        //email (otp)
+        //email (token)
         @ApiBody({type:randomUserTokenDto})
-        @Post('forgotPassword/otp')
-        async otp(
-        @Body() randomUserToken: randomUserTokenDto)
+        @Post('forgotPassword/token')
+        async token(@Body() randomUserToken: randomUserTokenDto)
         {
-          return this.authService.otp(randomUserToken);
+             return this.authService.token(randomUserToken);
         }
+
+
+
+       //change user password token verification
+       @ApiBody({type:changeUserPasswordTokenVerificationDto})
+       @Post('changePassword/token_verification')
+       async tokenVerification(@Body() body: changeUserPasswordTokenVerificationDto)
+       {
+            return this.authService.tokenVerification(body);
+       }
 
 
 

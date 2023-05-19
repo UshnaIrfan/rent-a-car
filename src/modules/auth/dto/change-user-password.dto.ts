@@ -4,9 +4,8 @@ import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "cl
 export class ChangeUserPasswordDto {
 
     @ApiProperty({ type: String, required: true })
-    @IsEmail()
     @IsNotEmpty()
-    otp: string;
+    token: string;
 
     @ApiProperty({ type: String, required: true })
     @IsEmail()
