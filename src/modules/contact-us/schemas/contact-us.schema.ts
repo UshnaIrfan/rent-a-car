@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity({ name: 'contact-us' })
+@Entity({ name: 'contact_us' })
 export class contact{
 
     @ApiProperty()

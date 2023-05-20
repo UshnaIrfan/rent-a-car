@@ -259,24 +259,24 @@ export class AuthService {
          //email (token)
          async token(randomUserToken: randomUserTokenInterface)
          {
-           const user = await this.usersService.findUserByEmail(randomUserToken.email);
-           if (!user)
-           {
+            const user = await this.usersService.findUserByEmail(randomUserToken.email);
+            if (!user)
+            {
                throw new  NotFoundException('Invalid email');
-           }
-          const resetToken = generateRandomToken(32);
-          const expiresAt = new Date();
-          expiresAt.setHours(expiresAt.getHours() + 24);
-          const tokenKey = `forgot-password-token:${user.email}`;
-          const tokenValue = JSON.stringify({ token: resetToken, expiresAt,active: false });
-          await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
-          const baseUrl = process.env.BASE_URL;
-          const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
-          console.log("token" ,resetToken)
-          const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
-          const resetUrl = `${changePasswordUrl}${queryParams}`;
-          const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
-          const emailBody = template({ resetUrl });
+            }
+           const resetToken = generateRandomToken(32);
+           const expiresAt = new Date();
+           expiresAt.setHours(expiresAt.getHours() + 24);
+           const tokenKey = `forgot-password-token:${user.email}`;
+           const tokenValue = JSON.stringify({ token: resetToken, expiresAt,active: false });
+           await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
+           const baseUrl = process.env.BASE_URL;
+           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
+           console.log("token" ,resetToken)
+           const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
+           const resetUrl = `${changePasswordUrl}${queryParams}`;
+           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
+           const emailBody = template({ resetUrl });
            try
            {
                await this.sendToken(user.email, emailBody);
@@ -327,9 +327,9 @@ export class AuthService {
           }
 
           return {
-            statusCode: 200,
-            message: 'Token is active and valid',
-            tokenStatus: true
+             statusCode: 200,
+             message: 'Token is active and valid',
+             tokenStatus: true
           };
 
         }
@@ -338,31 +338,37 @@ export class AuthService {
 
 
         // change password
-        async Password(@Body() reqBody: changeUserPasswordInterface) {
-          const user = await this.usersService.findUserByEmail(reqBody.email);
-          if (!user) {
-            throw new NotFoundException('Invalid email');
-          }
+        async Password(@Body() reqBody: changeUserPasswordInterface)
+        {
+             const user = await this.usersService.findUserByEmail(reqBody.email);
+             if (!user)
+             {
+                 throw new NotFoundException('Invalid email');
+             }
 
-          const tokenKey = `forgot-password-token:${user.email}`;
-          const cachedToken = await this.cacheManager.get(tokenKey);
-          if (!cachedToken) {
-            throw new UnauthorizedException('token expired');
-          }
+            const tokenKey = `forgot-password-token:${user.email}`;
+            const cachedToken = await this.cacheManager.get(tokenKey);
+            if (!cachedToken)
+            {
+               throw new UnauthorizedException('token expired');
+            }
 
-          const parsedToken = JSON.parse(<string>cachedToken);
-          console.log(cachedToken)
-          if (parsedToken.token !== reqBody.token) {
-            throw new UnauthorizedException('Invalid token');
-          }
+           const parsedToken = JSON.parse(<string>cachedToken);
+           console.log(cachedToken)
+           if (parsedToken.token !== reqBody.token)
+           {
+              throw new UnauthorizedException('Invalid token');
+           }
 
-          if (reqBody.newPassword !== reqBody.confirmPassword) {
-            throw new NotAcceptableException('Passwords do not match');
-          }
+           if (reqBody.newPassword !== reqBody.confirmPassword)
+           {
+              throw new NotAcceptableException('Passwords do not match');
+           }
 
           const isPasswordStrongEnough = reqBody.newPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
-          if (!isPasswordStrongEnough) {
-            throw new BadRequestException('Password is too weak');
+          if (!isPasswordStrongEnough)
+          {
+              throw new BadRequestException('Password is too weak');
           }
 
           const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);

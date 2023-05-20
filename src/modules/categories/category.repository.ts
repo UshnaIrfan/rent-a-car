@@ -53,6 +53,7 @@ export class CategoryRepository {
              throw new NotFoundException('No category were found matching the criteria.');
           }
              return [result, totalCount];
+
       }
 
 
@@ -187,7 +188,7 @@ export class CategoryRepository {
           const category = await this.categoryModel.findOne(
          {
             where: { id: categoryId, approvedByAdmin: status.APPROVED },
-           relations: ['sellers'],
+            relations: ['sellers'],
           });
 
          if (!category)

@@ -11,17 +11,17 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({
       usernameField: 'email',
       passwordField: 'password',
-
     });
   }
 
+
      async validate(email: string, password: string): Promise< User>
      {
-       try
-       {
-          const user = await this.authService.validateUser(email, password);
-          return user;
-       }
+        try
+        {
+            const user = await this.authService.validateUser(email, password);
+            return user;
+        }
        catch (error)
        {
            throw new NotFoundException('Invalid email or password');
