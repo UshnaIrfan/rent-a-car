@@ -90,13 +90,13 @@ export class CategoriesService {
       async updateCategory(updateCategory:updateCategoryInterface):Promise<{ message: string, updateCategory: updateCategoryInterface }>
       {
 
-        const update = await this.categoryRepository.updateCategory(updateCategory.id, updateCategory.categoryName);
-        if (!update)
-        {
-           throw new NotFoundException('Category not exist');
-        }
+         const update = await this.categoryRepository.updateCategory(updateCategory.id, updateCategory.categoryName);
+         if (!update)
+         {
+             throw new NotFoundException('Category not exist');
+         }
 
-       return { message: "Category updated successfully", updateCategory };
+          return { message: "Category updated successfully", updateCategory };
       }
 
 
@@ -112,7 +112,7 @@ export class CategoriesService {
            throw new NotFoundException('Category not exist');
          }
 
-       return { message: "Category deleted successfully", deletedCategory };
+          return { message: "Category deleted successfully", deletedCategory };
      }
 
 
@@ -126,7 +126,7 @@ export class CategoriesService {
            {
                throw new NotFoundException('Category not exist');
            }
-           return { message: "Category status updated successfully",updateAdmin };
+            return { message: "Category status updated successfully",updateAdmin };
       }
 
 

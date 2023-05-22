@@ -121,7 +121,17 @@ export class CategoryRepository {
 
 
 
-      //  // category by name search
+
+        // get categorybyId
+        async getCategorybyId(id:string): Promise<category |null>
+        {
+            const category = await this.categoryModel.findOne({where:{id,approvedByAdmin:status.APPROVED}})
+            return category;
+        }
+
+
+
+  //  // category by name search
       //  async search(query: string): Promise<category[]|null>
       //  {
       //     const records = await this.categoryModel.find({
@@ -179,12 +189,6 @@ export class CategoryRepository {
         }
 
 
-//
-     async getCategorybyId(id:string): Promise<category |null>
-     {
-          const category = await this.categoryModel.findOne({where:{id,approvedByAdmin:status.APPROVED}})
-          return category;
-    }
 
 
 

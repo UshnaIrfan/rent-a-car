@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
-import {status} from "./schemas/seller.schema";
+import {status as sellerStatus } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import { reviewRepository } from "../review/respositories/review.respository";
+import {status as categoryStatus } from "../categories/schemas/category.schema";
 
 @Injectable()
 export class sellerRepository{
@@ -188,10 +189,13 @@ export class sellerRepository{
    //   else
    //   {
    //      const [result, totalCount] = await this.sellerModel.findAndCount({
+   //
    //         order: {sellerName: 'ASC' },
    //         skip,
    //         take,
    //        relations: ['categories'],
+   //        where: { categories: { approvedByAdmin: categoryStatus.APPROVED } },
+   //
    //      });
    //     if (!result.length)
    //     {
@@ -204,69 +208,70 @@ export class sellerRepository{
    //     ];
    //   }
    // }
-   //
+
 
         async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
         {
             let whereConditions = {} as {
-              sellerName?: any,
-              categories?: { id: string },
+               sellerName?: any,
+               categories?: { id: string },
            };
 
 
            if (query && categoryId)
            {
+               const category = await this.CategoryRepository.getCategorybyId(categoryId);
+               if (!category)
+               {
+                  throw new NotFoundException('Category not found.');
+               }
+
+             whereConditions = {
+                sellerName: Like(`${query}%`),
+                categories: { id: categoryId },
+             };
+           }
+
+          else if (categoryId)
+          {
               const category = await this.CategoryRepository.getCategorybyId(categoryId);
               if (!category)
               {
-                 throw new NotFoundException('Category not found.');
+                throw new NotFoundException('Category not found.');
               }
 
-             whereConditions = {
-               sellerName: Like(`${query}%`),
-               categories: { id: categoryId },
-           };
+              whereConditions = {
+                categories: { id: categoryId },
+            };
+         }
+         else if (query)
+         {
+                whereConditions = {
+                  sellerName: Like(`${query}%`),
+            };
          }
 
-         else if (categoryId)
+
+         const [result, totalCount] = await this.sellerModel.findAndCount({
+         where: Object.keys(whereConditions).length !== 0 ? [{ ...whereConditions, approvedByAdmin: categoryStatus.APPROVED }]
+         : { approvedByAdmin: categoryStatus.APPROVED },
+         order: { sellerName: 'ASC' }, relations: ['categories'],
+            skip,
+            take,
+          });
+
+
+         if (!result.length)
          {
-             const category = await this.CategoryRepository.getCategorybyId(categoryId);
-             if (!category)
-             {
-                throw new NotFoundException('Category not found.');
-             }
-
-           whereConditions = {
-             categories: { id: categoryId },
-          };
-        }
-        else if (query)
-        {
-             whereConditions = {
-               sellerName: Like(`${query}%`),
-          };
-        }
-
-       const [result, totalCount] = await this.sellerModel.findAndCount({
-       where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
-       order: { sellerName: 'ASC' },
-       relations: ['categories'],
-       skip,
-       take,
-      });
-
-       if (!result.length)
-       {
            throw new NotFoundException('No sellers were found matching the search criteria.');
-       }
+         }
+
          return [result, totalCount];
    }
 
 
 
-
-
-        // get all sellers
+       // get all sellers
         async getAllSeller(): Promise<seller[]|null>
         {
           return  await this.sellerModel.find()
@@ -295,16 +300,17 @@ export class sellerRepository{
        // get seller by ID (associated categories)
        async getSellerById(id: string): Promise<seller|null>
        {
+
          const seller = await  this.sellerModel.findOne(
           {
-            where: { id, approvedByAdmin: status.APPROVED ,isListing:true},
+            where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
             relations: ['categories'],
           });
           if (!seller)
           {
              throw new NotFoundException('seller not found');
           }
-         const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === status.APPROVED);
+         const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === sellerStatus.APPROVED);
          seller.categories = approvedCategories;
          return seller;
        }
@@ -319,14 +325,15 @@ export class sellerRepository{
              const sellers = await this.sellerModel.find({
              relations: ['categories'],
              where: {
-                categories: { approvedByAdmin: status.APPROVED },
-                approvedByAdmin: status.APPROVED,
+                categories: { approvedByAdmin: sellerStatus.APPROVED },
+                approvedByAdmin: sellerStatus.APPROVED,
                 isListing: true
               },
               order: {sellerName: 'ASC' }
                });
 
-            return sellers;
+           return sellers;
+
         }
 
 
@@ -334,7 +341,8 @@ export class sellerRepository{
         //get seller ID
         async getSellerId(id:string): Promise<seller|null>
         {
-           return  this.sellerModel.findOne({ where: { id ,approvedByAdmin: status.APPROVED } })
+
+           return  this.sellerModel.findOne({ where: { id ,approvedByAdmin:sellerStatus.APPROVED } })
         }
 
 
