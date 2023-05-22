@@ -212,60 +212,207 @@ export class reviewRepository{
     //     return [result, totalCount];
     // }
 
-      async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
-      {
+   //    async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
+   //    {
+   //
+   //       let whereConditions = {} as {
+   //         userId?: any,
+   //         message?: any,
+   //         titleSlug?: any,
+   //         sellerId?: any,
+   //      };
+   //
+   //      if (userId || message || type || sellerId) {
+   //        whereConditions = {
+   //          userId: userId ?? undefined,
+   //          message: message ? Like(`%${message}%`) : undefined,
+   //          titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+   //          sellerId: sellerId,
+   //        };
+   //      }
+   //
+   //     let sellerIds=[];
+   //     if (categoryId)
+   //     {
+   //        const category = await this.categoryRepository.GetCategoryId(categoryId);
+   //        sellerIds = category.sellers.map(seller => seller.id);
+   //
+   //        if (sellerId && sellerIds.find(seller => seller === sellerId))
+   //        {
+   //            sellerIds = [sellerId];
+   //        }
+   //
+   //       if (sellerId && !sellerIds.find(seller => seller === sellerId))
+   //       {
+   //          throw new NotFoundException('No reviews were found matching the criteria.');
+   //       }
+   //
+   //       whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
+   //    }
+   //
+   //     const [result, totalCount] = await this.reviewModel.findAndCount({
+   //      where: Object.keys(whereConditions).length !== 0 ? [
+   //      whereConditions
+   //      ] : [],
+   //      relations: ['likeDislike'],
+   //      skip,
+   //      take
+   //    });
+   //
+   //    if (!result.length)
+   //    {
+   //        throw new NotFoundException('No reviews were found matching the criteria.');
+   //    }
+   //
+   //     return [result, totalCount];
+   // }
 
-         let whereConditions = {} as {
-           userId?: any,
-           message?: any,
-           titleSlug?: any,
-           sellerId?: any,
-        };
 
-        if (userId || message || type || sellerId) {
-          whereConditions = {
-            userId: userId ?? undefined,
-            message: message ? Like(`%${message}%`) : undefined,
-            titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-            sellerId: sellerId,
-          };
-        }
+  //   async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string): Promise<any>
+  //   {
+  //
+  //     let whereConditions = {} as {
+  //       userId?: any,
+  //       message?: any,
+  //       titleSlug?: any,
+  //       sellerId?: any,
+  //     };
+  //
+  //    if (userId || message || type || sellerId) {
+  //      whereConditions = {
+  //         userId: userId ?? undefined,
+  //         message: message ? Like(`%${message}%`) : undefined,
+  //         titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+  //         sellerId: sellerId,
+  //       };
+  //   }
+  //
+  //    let sellerIds=[];
+  //    if (categoryId)
+  //    {
+  //       const category = await this.categoryRepository.GetCategoryId(categoryId);
+  //       sellerIds = category.sellers.map(seller => seller.id);
+  //
+  //      if (sellerId && sellerIds.find(seller => seller === sellerId))
+  //      {
+  //         sellerIds = [sellerId];
+  //      }
+  //
+  //      if (sellerId && !sellerIds.find(seller => seller === sellerId))
+  //      {
+  //         throw new NotFoundException('No reviews were found matching the criteria.');
+  //      }
+  //
+  //        whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
+  //    }
+  //
+  //   const [result, totalCount] = await this.reviewModel.findAndCount({
+  //       where: Object.keys(whereConditions).length !== 0 ? [
+  //       whereConditions
+  //     ] : [],
+  //     relations: ['likeDislike'],
+  //     skip,
+  //     take
+  //   });
+  //
+  //     if (!result.length)
+  //    {
+  //       throw new NotFoundException('No reviews were found matching the criteria.');
+  //     }
+  //
+  //      return [result, totalCount];
+  // }
 
-       let sellerIds=[];
-       if (categoryId)
+
+       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string): Promise<any>
        {
-          const category = await this.categoryRepository.GetCategoryId(categoryId);
-          sellerIds = category.sellers.map(seller => seller.id);
+           let whereConditions = {} as {
+              userId?: any,
+              message?: any,
+              titleSlug?: any,
+              sellerId?: any,
+           };
 
-          if (sellerId && sellerIds.find(seller => seller === sellerId))
+          if (userId || message || type || sellerId)
           {
-              sellerIds = [sellerId];
-          }
-
-         if (sellerId && !sellerIds.find(seller => seller === sellerId))
-         {
-            throw new NotFoundException('No reviews were found matching the criteria.');
+             whereConditions = {
+               userId: userId ?? undefined,
+               message: message ? Like(`%${message}%`) : undefined,
+               titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+               sellerId: sellerId,
+             };
          }
 
-         whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
-      }
+        let sellerIds=[];
+        if (categoryId)
+        {
+            const category = await this.categoryRepository.GetCategoryId(categoryId);
+            sellerIds = category.sellers.map(seller => seller.id);
+
+            if (sellerId && sellerIds.find(seller => seller === sellerId))
+            {
+                sellerIds = [sellerId];
+            }
+
+           if (sellerId && !sellerIds.find(seller => seller === sellerId))
+           {
+             throw new NotFoundException('No reviews were found matching the criteria.');
+           }
+
+            whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
+       }
 
        const [result, totalCount] = await this.reviewModel.findAndCount({
-        where: Object.keys(whereConditions).length !== 0 ? [
-        whereConditions
+           where: Object.keys(whereConditions).length !== 0 ? [
+           whereConditions
         ] : [],
-        relations: ['likeDislike'],
-        skip,
-        take
-      });
+          relations: ['likeDislike'],
+          skip,
+          take,
+       });
 
       if (!result.length)
       {
           throw new NotFoundException('No reviews were found matching the criteria.');
       }
 
-       return [result, totalCount];
-   }
+
+      const reviewArray = result.map(review =>
+      {
+         const likeCount = review.likeDislike.filter(result => result.type === 'like').length;
+         const dislikeCount = review.likeDislike.filter(result => result.type === 'dislike').length;
+        const reportCount = review.likeDislike.filter(result => result.type === 'report').length;
+        return {
+        ...review,
+          count: {
+            likeCount,
+            dislikeCount,
+            reportCount
+         }
+       };
+       });
+
+
+      if (orderType === 'like' || orderType === 'dislike' || orderType === 'report') {
+        const countPropertyMap = {
+          like: 'likeCount',
+          dislike: 'dislikeCount',
+          report: 'reportCount'
+        };
+
+        if (orderBy === 'ascending')
+        {
+          reviewArray.sort((a, b) => b.count[countPropertyMap[orderType]] - a.count[countPropertyMap[orderType]]);
+        }
+        else if (orderBy === 'descending')
+        {
+          reviewArray.sort((a, b) => a.count[countPropertyMap[orderType]] - b.count[countPropertyMap[orderType]]);
+        }
+      }
+
+       return [reviewArray, totalCount];
+  }
+
 
 
 
