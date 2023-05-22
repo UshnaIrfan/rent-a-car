@@ -33,10 +33,13 @@ export class AdminCategoryController {
        // get all categories and search by name
        @ApiBearerAuth()
        @ApiQuery({ name: 'categoryName', required: false })
-       @Get('categories/search')
+     //  @Get('categories/search')adminUserSearch
+       @Get('adminCategories')
        @Roles(Role.L2A_ADMIN)
        async getReview(@Query('page') page: number = 1,@Query('categoryName') categoryName?: string):Promise<paginationCategoryInterface>
        {
+
+            console.log("category")
             return this.categoriesService.getAllAdminCategories(page,categoryName);
        }
 

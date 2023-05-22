@@ -49,8 +49,7 @@ export class adminReviewController {
                @Query('orderBy') orderBy?: string,@Query('orderType') orderType?: string)
 
   {
-
-    return this.reviewService.search(page , sellerId,userId,message ,type,categoryId ,orderType,orderBy);
+       return this.reviewService.search(page , sellerId,userId,message ,type,categoryId ,orderType,orderBy);
   }
 
 

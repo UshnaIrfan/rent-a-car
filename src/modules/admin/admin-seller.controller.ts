@@ -73,10 +73,13 @@ export class AdminSellerController {
         @ApiQuery({ name: 'page', type: Number, required: true })
         @ApiQuery({ name: 'query', required: false })
         @ApiQuery({ name: 'categoryId', required: false })
-        @Get('sellers/search')
+        // @Get('sellers/search')
+        @Get('adminSeller')
         @Roles(Role.L2A_ADMIN)
         async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
         {
+
+              console.log("adminseller")
             return this.sellerService.search(page ,query, categoryId);
         }
 
@@ -85,10 +88,12 @@ export class AdminSellerController {
 
          // get all sellers
         @ApiBearerAuth()
-        @Get('/sellers/:all_sellers')
+        // @Get('/sellers/:all_sellers')
+        @Get('adminSellers/:all_sellers')
         @Roles(Role.L2A_ADMIN)
         async  getAllSeller():Promise<{records:seller[]}>
         {
+              console.log("adminall")
            return this.sellerService.getAllSeller();
         }
 
