@@ -135,12 +135,6 @@ export class SellerService {
 
 
        // seller by name search
-      // async search(query: string,categoryId?: string)
-      // {
-      //   const result = await this.SellerRepository.search(query,categoryId);
-      //   return result;
-      // }
-
      async search(pageNumber: number, query?: string, categoryId?: string)
      {
          const pageSize = 10;

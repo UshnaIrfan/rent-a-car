@@ -174,11 +174,17 @@ export class CategoryRepository {
        // get category by id
         async getCategoryById(id:string): Promise<category |null>
         {
-            const category = await this.categoryModel.findOne({where:{id}})
+            const category = await this.categoryModel.findOne({where:{id }})
             return category;
         }
 
 
+//
+     async getCategorybyId(id:string): Promise<category |null>
+     {
+          const category = await this.categoryModel.findOne({where:{id,approvedByAdmin:status.APPROVED}})
+          return category;
+    }
 
 
 
