@@ -253,12 +253,14 @@ export class sellerRepository{
 
 
          const [result, totalCount] = await this.sellerModel.findAndCount({
-         where: Object.keys(whereConditions).length !== 0 ? [{ ...whereConditions, approvedByAdmin: categoryStatus.APPROVED }]
-         : { approvedByAdmin: categoryStatus.APPROVED },
-         order: { sellerName: 'ASC' }, relations: ['categories'],
-            skip,
-            take,
-          });
+             where: Object.keys(whereConditions).length !== 0
+               ? [{ ...whereConditions, categories: { approvedByAdmin: categoryStatus.APPROVED } }]
+               : { categories: { approvedByAdmin: categoryStatus.APPROVED} },
+             order: { sellerName: 'ASC' },
+             relations: ['categories'],
+             skip,
+             take,
+           });
 
 
          if (!result.length)
@@ -267,7 +269,8 @@ export class sellerRepository{
          }
 
          return [result, totalCount];
-   }
+
+    }
 
 
 
