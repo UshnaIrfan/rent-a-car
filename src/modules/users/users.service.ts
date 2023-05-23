@@ -3,6 +3,7 @@ import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
+import { category } from "../categories/schemas/category.schema";
 
 
 @Injectable()
@@ -16,23 +17,23 @@ export class UsersService {
           // get all users and search by name (pagination)
           async getAllUsers(pageNumber: number,username?:string):Promise<paginationUserInterface>
           {
-            const pageSize = 10;
-            const skip = (pageNumber - 1) * pageSize;
-            const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
-            const totalPages = Math.ceil(totalCount / pageSize);
+               const pageSize = 10;
+               const skip = (pageNumber - 1) * pageSize;
+               const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
+               const totalPages = Math.ceil(totalCount / pageSize);
 
-            if (result.length === 0)
-            {
-               throw new NotFoundException('No records found');
-            }
+               if (result.length === 0)
+               {
+                    throw new NotFoundException('No records found');
+               }
 
-         return {
-               records: result,
-               totalRecords: totalCount,
-               totalPages,
-               currentPage: pageNumber,
-          };
-       }
+              return {
+                  records: result,
+                  totalRecords: totalCount,
+                  totalPages,
+                  currentPage: pageNumber,
+              };
+        }
 
 
 
@@ -42,6 +43,14 @@ export class UsersService {
             {
                 return this.usersRepository.updateUser(id,name,username,email);
             }
+
+
+
+           // admin user update status
+           async  adminUpdateUserStatus (userId:string, status:string):Promise<User | null>
+           {
+                return this.usersRepository.adminUpdateUserStatus(userId,status);
+           }
 
 
 

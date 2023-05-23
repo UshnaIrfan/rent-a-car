@@ -33,19 +33,35 @@ export class UsersRepository {
 
 
 
+        // admin user update status
+        async adminUpdateUserStatus(userId:string,status:string):Promise<User | null>
+        {
+            const user = await this.userModel.findOne({ where: { id:userId}});
+            if (!user)
+            {
+                return null
+            }
+             user.status=status;
+             return this.userModel.save(user);
+       }
+
+
+
+
+
 
         //delete user with review with likeAndDislike
         async deleteUser(id: string): Promise<User| null>
         {
-          const User = await this.userModel.findOne({ where: { id  }});
-          if(!User)
-          {
-              throw new NotFoundException('user not found');
-          }
-          if (User.roles !== 'l2a_user')
-          {
-              throw new NotFoundException('You cannot delete an admin user.');
-          }
+            const User = await this.userModel.findOne({ where: { id  }});
+            if(!User)
+            {
+                 throw new NotFoundException('user not found');
+            }
+            if (User.roles !== 'l2a_user')
+            {
+                throw new NotFoundException('You cannot delete an admin user.');
+           }
 
             const user = await this.userModel.findOne({
                 where: { id  },

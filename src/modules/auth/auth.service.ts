@@ -21,9 +21,8 @@ import * as fs from 'fs';
 import updateUserInterface from "./interfaces/update-user.interface";
 import paginationUserInterface from "./interfaces/pagination-user.interface";
 import userActiveInterface from "./interfaces/user-active.interface";
-import { generateOtp } from "../../helpers/otp.helper";
 import changeUserPasswordTokenVerificationInterface from "./interfaces/change-user-password-token-verification.interface";
-
+import adminUpdateUserInterface from "./interfaces/admin-update.user.interface";
 
 @Injectable()
 export class AuthService {
@@ -47,7 +46,7 @@ export class AuthService {
 
 
 
-        //update user
+        //  admin user update
         async updateUser(updateUser:updateUserInterface):Promise<{ message: string, update:updateUserInterface}>
         {
 
@@ -62,7 +61,24 @@ export class AuthService {
 
 
 
-         //delete user with review with likeAndDislike
+
+        // admin user update status
+         async adminUpdateUserStatus (adminUpdateStatus:adminUpdateUserInterface):Promise<{ update: User; message: string }>
+         {
+             const update = await this.usersService.adminUpdateUserStatus(adminUpdateStatus.userId, adminUpdateStatus.status);
+             if (!update)
+             {
+                 throw new NotFoundException('invalid user id');
+             }
+              return { message: "User status updated successfully",update};
+        }
+
+
+
+
+
+
+        //delete user with review with likeAndDislike
          async deleteUser(id:string):Promise<{message: string}>
          {
             await this.usersService.deleteUser(id);
