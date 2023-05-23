@@ -5,6 +5,7 @@ export  class LoginUserDto {
      @ApiProperty({ type: String, required: true })
      email: string;
 
+
      @ApiProperty({ type: String, required: true })
      password: string;
 

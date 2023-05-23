@@ -9,8 +9,15 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { review } from "../../review/schemas/submit-review.schema";
 
-@Entity({ name: 'users' })
 
+export enum status {
+     ACTIVE= 'active',
+     INACTIVE = 'inactive',
+     BLOCKED = 'blocked'
+}
+
+
+@Entity({ name: 'users' })
 export class User {
 
 
@@ -33,6 +40,7 @@ export class User {
      @Column({ unique: true })
      email: string;
 
+
      @ApiProperty()
      @Column({ unique: true })
      password: string;
@@ -44,9 +52,14 @@ export class User {
      roles: string;
 
 
+     // @ApiProperty()
+     // @Column('bool')
+     // isActive: boolean;
+
+
      @ApiProperty()
-     @Column('bool')
-     isActive: boolean;
+     @Column({ type:"enum", enum: status, default: status.INACTIVE })
+     status: string;
 
 
      @ApiProperty()

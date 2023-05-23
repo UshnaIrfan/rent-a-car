@@ -91,9 +91,9 @@ export class UsersService {
 
 
 
-          async isActive(email: string,isActive:boolean): Promise<User | null>
+          async isActive(email: string,status:string): Promise<User | null>
           {
-             return this.usersRepository.isActive(email,isActive);
+             return this.usersRepository.isActive(email,status);
           }
 
 

@@ -80,7 +80,8 @@ export class AuthService {
          {
 
              const User = await this.usersService.findUserByEmail(Signup.email);
-             if (  User && User.isActive == false)
+             // if (  User && User.isActive == false)
+             if (  User && User.status == 'inactive')
              {
                const Token = generateRandomToken(32);
                const expiresAt = new Date();
@@ -201,7 +202,7 @@ export class AuthService {
                  parsedToken.active = true;
                  const updatedTokenValue = JSON.stringify(parsedToken);
                  await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-                 await this.usersService.isActive(reqBody.email,reqBody.isActive);
+                 await this.usersService.isActive(reqBody.email,reqBody.status);
                  await this.sendWelcomeEmail(reqBody.email);
                  return {
                         message: 'Successfully created account',
@@ -224,11 +225,16 @@ export class AuthService {
         async login(user: User): Promise<JwtTokensInterface>
         {
 
-            if (user.isActive==false )
+            // if (user.isActive==false )
+            if (user.status == 'inactive')
             {
                 throw new BadRequestException('User is not active');
             }
 
+            if (user.status == 'blocked')
+            {
+               throw new BadRequestException('Your account has been blocked');
+            }
              const payload = {
                    id: user.id,
                    name: user.name,
@@ -236,7 +242,8 @@ export class AuthService {
                    email: user.email,
                    password: user.password,
                    roles:user.roles,
-                  isActive: user.isActive,
+                   status: user.status,
+                  //isActive: user.isActive,
             };
            const accessTokenRedis = this.jwtService.sign(payload);
            const accessTokenTTL = 5400;
@@ -248,7 +255,8 @@ export class AuthService {
                username: user.username,
                email: user.email,
                roles:user.roles,
-               isActive:user.isActive,
+             //isActive: user.isActive,
+               status: user.status,
                access_token: accessTokenRedis,
 
         };
@@ -300,32 +308,32 @@ export class AuthService {
         //change user password token verification
         async tokenVerification(@Body() reqBody: changeUserPasswordTokenVerificationInterface)
         {
-          const user = await this.usersService.findUserByEmail(reqBody.email);
-          if (!user)
-          {
-            throw new  NotFoundException('Invalid email');
-          }
+            const user = await this.usersService.findUserByEmail(reqBody.email);
+            if (!user)
+            {
+               throw new  NotFoundException('Invalid email');
+            }
 
-          const tokenKey = `forgot-password-token:${user.email}`;
+            const tokenKey = `forgot-password-token:${user.email}`;
 
-          const cachedToken = await this.cacheManager.get(tokenKey);
-          console.log("before" ,cachedToken)
+           const cachedToken = await this.cacheManager.get(tokenKey);
+           console.log("before" ,cachedToken)
 
-          if(!cachedToken)
-          {
-            throw new UnauthorizedException('token expired');
-          }
+           if(!cachedToken)
+           {
+               throw new UnauthorizedException('token expired');
+           }
 
-          const parsedToken = JSON.parse(<string>cachedToken);
-          if (parsedToken.token !== reqBody.token)
-          {
-            throw new UnauthorizedException('Invalid token');
-          }
-          else
-          {
-            parsedToken.active = true;
-            const updatedTokenValue = JSON.stringify(parsedToken);
-           await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
+           const parsedToken = JSON.parse(<string>cachedToken);
+           if (parsedToken.token !== reqBody.token)
+           {
+               throw new UnauthorizedException('Invalid token');
+           }
+           else
+           {
+             parsedToken.active = true;
+             const updatedTokenValue = JSON.stringify(parsedToken);
+             await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
           }
 
           return {
@@ -464,7 +472,8 @@ export class AuthService {
                email: users.email,
                password: users.password,
                roles: users.roles,
-               isActive: users.isActive,
+               status:users.status,
+               // isActive: users.isActive,
              };
              const accessTokenRedis = this.jwtService.sign(payload);
              const accessTokenTTL = 5400;

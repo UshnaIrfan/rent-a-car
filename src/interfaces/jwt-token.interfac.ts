@@ -6,6 +6,7 @@ export default interface JwtTokensInterface {
    readonly email: string;
    readonly roles:string;
    readonly  access_token: string;
-   readonly  isActive: boolean;
+   readonly  status: string;
+ //  readonly  isActive: boolean;
 
 }

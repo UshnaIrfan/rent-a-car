@@ -7,6 +7,7 @@ import {
      MinLength, Matches, IsBoolean
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
+import {status} from "../../users/schemas/user.schema";
 
 export class SignUpUserDto {
 
@@ -46,10 +47,17 @@ export class SignUpUserDto {
 
 
 
-     @ApiProperty({ type: Boolean, default: false,required: true })
-     @IsBoolean()
+     // @ApiProperty({ type: Boolean, default: false,required: true })
+     // @IsBoolean()
+     // @IsNotEmpty()
+     // isActive: boolean;
+
+
+
+     @ApiProperty({ type: String, enum: status, default: status.INACTIVE })
+     @IsString()
      @IsNotEmpty()
-     isActive: boolean;
+     status: string = status.INACTIVE;
 
 
 }

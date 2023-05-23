@@ -150,14 +150,15 @@ export class UsersRepository {
 
 
 
-         async isActive(email: string, isActive: boolean): Promise<User| null>
+         async isActive(email: string, status: string): Promise<User| null>
          {
             const user = await this.userModel.findOne({ where: { email } });
             if (!user)
             {
                return null
             }
-           user.isActive = isActive;
+        //  user.isActive = isActive;
+           user.status = 'active';
            return this.userModel.save(user);
        }
 
@@ -166,7 +167,8 @@ export class UsersRepository {
          // get all users
          async getAllUser()
          {
-             return  this.userModel.find({ where: { isActive:true }});
+             // return  this.userModel.find({ where: { isActive:true }});
+           return  this.userModel.find({ where: { status:'active' }});
          }
 
 
@@ -175,7 +177,8 @@ export class UsersRepository {
           // get user by id  with active status
          async findUserById(id: string): Promise<User|null>
          {
-              return this.userModel.findOne({ where: { id ,isActive:true} });
+              // return this.userModel.findOne({ where: { id ,isActive:true} });
+           return this.userModel.findOne({ where: { id ,status:'active'} });
          }
 
 
