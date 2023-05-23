@@ -17,10 +17,10 @@ export class adminAuthController {
 
 
       //get all users and search by name
-      @ApiBearerAuth()
+     // @ApiBearerAuth()
       @ApiQuery({ name: 'username', required: false })
       @Get('/search/:user')
-      @Roles(Role.L2A_ADMIN)
+    //  @Roles(Role.L2A_ADMIN)
       async getReview(@Query('page') page: number = 1,@Query('username')username?: string):Promise<paginationUserInterface>
       {
 
