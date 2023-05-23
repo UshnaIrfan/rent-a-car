@@ -122,28 +122,12 @@ export class CategoryRepository {
 
 
 
-        // get categorybyId
+        // get category byId
         async getCategorybyId(id:string): Promise<category |null>
         {
             const category = await this.categoryModel.findOne({where:{id,approvedByAdmin:status.APPROVED}})
             return category;
         }
-
-
-
-  //  // category by name search
-      //  async search(query: string): Promise<category[]|null>
-      //  {
-      //     const records = await this.categoryModel.find({
-      //     where: { categoryName: Like(`${query}%`)} });
-      //     if (!records.length)
-      //     {
-      //        throw new NotFoundException('No categories were found matching the search data');
-      //     }
-      //     return records;
-      // }
-
-
 
 
 

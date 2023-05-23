@@ -15,47 +15,30 @@ export class adminReviewController {
 
 
      // review search
-     // @ApiBearerAuth()
-     // @ApiQuery({ name: 'page', type: Number, required: true })
-     // @ApiQuery({ name: 'sellerId', required: false })
-     // @ApiQuery({ name: 'userId', required: false })
-     // @ApiQuery({ name: 'message', required: false })
-     // @ApiQuery({ name: 'type', required: false })
-     // @ApiQuery({ name: 'categoryId', required: false })
-     // @Get('review/search')
-     // @Roles(Role.L2A_ADMIN)
-     // async search(@Query('page') page: number = 1, @Query('sellerId') sellerId?: string,
-     //              @Query('userId') userId?: string,@Query('message') message?: string,
-     //              @Query('type') type?: string ,@Query('categoryId') categoryId?: string)
-     //
-     // {
-     //      return this.reviewService.search(page , sellerId,userId,message ,type,categoryId);
-     // }
-
-  @ApiBearerAuth()
-  @ApiQuery({ name: 'page', type: Number, required: true })
-  @ApiQuery({ name: 'sellerId', required: false })
-  @ApiQuery({ name: 'userId', required: false })
-  @ApiQuery({ name: 'message', required: false })
-  @ApiQuery({ name: 'type', required: false })
-  @ApiQuery({ name: 'categoryId', required: false })
-  @ApiQuery({ name: 'orderType', required: false })
-  @ApiQuery({ name: 'orderBy', required: false })
-  @Get(':review/search')
-  @Roles(Role.L2A_ADMIN)
-  async search(@Query('page') page: number = 1, @Query('sellerId') sellerId?: string,
+      @ApiBearerAuth()
+      @ApiQuery({ name: 'page', type: Number, required: true })
+      @ApiQuery({ name: 'sellerId', required: false })
+      @ApiQuery({ name: 'userId', required: false })
+      @ApiQuery({ name: 'message', required: false })
+      @ApiQuery({ name: 'type', required: false })
+      @ApiQuery({ name: 'categoryId', required: false })
+      @ApiQuery({ name: 'orderType', required: false })
+      @ApiQuery({ name: 'orderBy', required: false })
+      @Get(':review/search')
+      @Roles(Role.L2A_ADMIN)
+      async search(@Query('page') page: number = 1, @Query('sellerId') sellerId?: string,
                @Query('userId') userId?: string,@Query('message') message?: string,
                @Query('type') type?: string ,@Query('categoryId') categoryId?: string,
                @Query('orderBy') orderBy?: string,@Query('orderType') orderType?: string)
 
-  {
-       return this.reviewService.search(page , sellerId,userId,message ,type,categoryId ,orderType,orderBy);
-  }
+     {
+          return this.reviewService.search(page , sellerId,userId,message ,type,categoryId ,orderType,orderBy);
+     }
 
 
 
 
-  // admin update  review status
+      // admin update  review status
       @ApiBearerAuth()
       @ApiBody({type:adminUpdateSubmitReviewDto})
       @Patch('review/update/status')

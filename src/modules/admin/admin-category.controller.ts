@@ -33,8 +33,7 @@ export class AdminCategoryController {
        // get all categories and search by name
        @ApiBearerAuth()
        @ApiQuery({ name: 'categoryName', required: false })
-     //  @Get('categories/search')adminUserSearch
-       @Get('adminCategories')
+       @Get('/category_search')
        @Roles(Role.L2A_ADMIN)
        async getReview(@Query('page') page: number = 1,@Query('categoryName') categoryName?: string):Promise<paginationCategoryInterface>
        {
@@ -83,11 +82,6 @@ export class AdminCategoryController {
 
 
 
-      // // category by name search
-      // @Get()
-      // async search(@Query('query') query: string)
-      // {
-      //     return this.categoriesService.search(query);
-      // }
+
 
 }

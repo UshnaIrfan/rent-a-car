@@ -132,15 +132,6 @@ export class CategoriesService {
 
 
 
-        // category by name search
-       // async search(query: string)
-       // {
-       //   const result = await this.categoryRepository.search(query);
-       //   return result;
-       // }
-
-
-
 
 
        //FRONTEND APIS
