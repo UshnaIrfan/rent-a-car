@@ -7,6 +7,7 @@ export default interface JwtTokensInterface {
    readonly roles:string;
    readonly  access_token: string;
    readonly  status: string;
+   readonly  blockStatus: string;
  //  readonly  isActive: boolean;
 
 }

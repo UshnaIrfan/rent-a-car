@@ -2,6 +2,7 @@ import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from "class-vali
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
 import {status} from "../schemas/user.schema";
+import {blockStatus} from "../schemas/user.schema";
 
 export class CreateUserDto {
 
@@ -41,6 +42,13 @@ export class CreateUserDto {
      @IsString()
      @IsNotEmpty()
      status: string = status.INACTIVE;
+
+
+
+     @ApiProperty({ type: String, enum: status, default: blockStatus.UNBLOCK })
+     @IsString()
+     @IsNotEmpty()
+     blockStatus: string = blockStatus.UNBLOCK;
 
 
 }

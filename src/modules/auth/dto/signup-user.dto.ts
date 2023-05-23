@@ -8,6 +8,7 @@ import {
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
 import {status} from "../../users/schemas/user.schema";
+import {blockStatus} from "../../users/schemas/user.schema";
 
 export class SignUpUserDto {
 
@@ -58,6 +59,13 @@ export class SignUpUserDto {
      @IsString()
      @IsNotEmpty()
      status: string = status.INACTIVE;
+
+
+
+     @ApiProperty({ type: String, enum: status, default: blockStatus.UNBLOCK })
+     @IsString()
+     @IsNotEmpty()
+     blockStatus: string = blockStatus.UNBLOCK;
 
 
 }

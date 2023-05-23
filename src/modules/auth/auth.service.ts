@@ -23,6 +23,8 @@ import paginationUserInterface from "./interfaces/pagination-user.interface";
 import userActiveInterface from "./interfaces/user-active.interface";
 import changeUserPasswordTokenVerificationInterface from "./interfaces/change-user-password-token-verification.interface";
 import adminUpdateUserInterface from "./interfaces/admin-update.user.interface";
+import { adminUpdateBlockStatusUserDto } from "./dto/admin-update-block-status.user.dto";
+
 
 @Injectable()
 export class AuthService {
@@ -75,6 +77,17 @@ export class AuthService {
 
 
 
+
+       // admin user update  block status
+       async adminUpdateUserBlockStatus (adminUpdateBlockStatus:adminUpdateBlockStatusUserDto):Promise<{ update: User; message: string }>
+       {
+          const update = await this.usersService.adminUpdateUserBlockStatus(adminUpdateBlockStatus.userId, adminUpdateBlockStatus.blockStatus);
+          if (!update)
+          {
+               throw new NotFoundException('invalid user id');
+          }
+            return { message: "User blocked status updated successfully",update};
+      }
 
 
 
@@ -247,7 +260,7 @@ export class AuthService {
                 throw new BadRequestException('User is not active');
             }
 
-            if (user.status == 'blocked')
+            if (user.blockStatus == 'block')
             {
                throw new BadRequestException('Your account has been blocked');
             }
@@ -259,6 +272,7 @@ export class AuthService {
                    password: user.password,
                    roles:user.roles,
                    status: user.status,
+                   blockStatus:user.blockStatus,
                   //isActive: user.isActive,
             };
            const accessTokenRedis = this.jwtService.sign(payload);
@@ -273,7 +287,9 @@ export class AuthService {
                roles:user.roles,
              //isActive: user.isActive,
                status: user.status,
+               blockStatus:user.blockStatus,
                access_token: accessTokenRedis,
+
 
         };
      }

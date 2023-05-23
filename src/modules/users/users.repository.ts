@@ -48,6 +48,19 @@ export class UsersRepository {
 
 
 
+        // admin user update  block status
+        async adminUpdateUserBlockStatus(userId:string,blockStatus:string):Promise<User | null>
+        {
+           const user = await this.userModel.findOne({ where: { id:userId}});
+           if (!user)
+           {
+                return null
+           }
+               user.blockStatus=blockStatus;
+               return this.userModel.save(user);
+        }
+
+
 
 
         //delete user with review with likeAndDislike

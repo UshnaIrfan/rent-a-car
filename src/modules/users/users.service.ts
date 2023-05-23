@@ -54,6 +54,14 @@ export class UsersService {
 
 
 
+          // admin user update  block status
+          async adminUpdateUserBlockStatus (userId:string, blockStatus:string):Promise<User | null>
+          {
+               return this.usersRepository.adminUpdateUserBlockStatus(userId,blockStatus);
+          }
+
+
+
 
             //delete user with review with likeAndDislike
             async deleteUser(id:string): Promise<User|null>

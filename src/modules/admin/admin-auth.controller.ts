@@ -7,8 +7,7 @@ import {updateUserDto} from "../auth/dto/update-user.dto";
 import { Role } from "../../enums/role.enum";
 import { Roles } from "../../decorators/role.decorators";
 import {adminUpdateUserDto} from "../auth/dto/admin-update.user";
-import adminUpdateUserInterface from "../auth/interfaces/admin-update.user.interface";
-
+import { adminUpdateBlockStatusUserDto, } from "../auth/dto/admin-update-block-status.user.dto";
 
 @ApiTags('admin')
 @Controller('admin')
@@ -54,6 +53,20 @@ export class adminAuthController {
        {
             return this.authService.adminUpdateUserStatus(body);
        }
+
+
+
+    // admin user update block status
+     @ApiBearerAuth()
+     @ApiBody({type:adminUpdateBlockStatusUserDto})
+     @Patch('user/update/block/status')
+     @Roles(Role.L2A_ADMIN)
+     async adminUpdateUserBlockStatus(@Body() body:adminUpdateBlockStatusUserDto)
+     {
+        return this.authService.adminUpdateUserBlockStatus(body);
+     }
+
+
 
 
 

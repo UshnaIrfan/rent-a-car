@@ -13,7 +13,12 @@ import { review } from "../../review/schemas/submit-review.schema";
 export enum status {
      ACTIVE= 'active',
      INACTIVE = 'inactive',
-     BLOCKED = 'blocked'
+}
+
+
+export enum blockStatus {
+     BLOCK= 'block',
+     UNBLOCK = 'unblock',
 }
 
 
@@ -60,6 +65,12 @@ export class User {
      @ApiProperty()
      @Column({ type:"enum", enum: status, default: status.INACTIVE })
      status: string;
+
+
+
+     @ApiProperty()
+     @Column({ type:"enum", enum: blockStatus, default: blockStatus.UNBLOCK })
+     blockStatus: string;
 
 
      @ApiProperty()
