@@ -66,7 +66,9 @@ export class AuthService {
          async deleteUser(id:string):Promise<{message: string}>
          {
             await this.usersService.deleteUser(id);
-            return { message: " deleted successfully" };
+            return {
+              message: " deleted successfully"
+            };
          }
 
 

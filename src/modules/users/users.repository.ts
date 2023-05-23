@@ -40,7 +40,11 @@ export class UsersRepository {
           const User = await this.userModel.findOne({ where: { id  }});
           if(!User)
           {
-            throw new NotFoundException('user not found');
+              throw new NotFoundException('user not found');
+          }
+          if (User.roles !== 'l2a_user')
+          {
+              throw new NotFoundException('You cannot delete an admin user.');
           }
 
             const user = await this.userModel.findOne({
