@@ -111,166 +111,166 @@ export class sellerRepository{
 
 
        // seller search by name
-   //      async search(skip: number,take:number, query?: string, categoryId?: string):Promise<[seller[], number]>
-   //      {
-   //        if (categoryId && query)
-   //        {
-   //           const category = await this.CategoryRepository.getCategorybyId(categoryId);
-   //           if (!category)
-   //           {
-   //               throw new NotFoundException('Category not found.');
-   //           }
-   //
-   //          const [result, totalCount] = await this.sellerModel.findAndCount(
-   //        {
-   //          where: {
-   //               sellerName: Like(`${query}%`),
-   //               categories: { id: categoryId },
-   //           },
-   //           order: {sellerName: 'ASC' },
-   //           relations: ['categories'],
-   //           skip,
-   //           take,
-   //
-   //          });
-   //          if (!result.length)
-   //          {
-   //             throw new NotFoundException('No sellers were found in this category matching the search criteria.');
-   //          }
-   //          return [ result, totalCount];
-   //       }
-   //
-   //       else if (categoryId )
-   //       {
-   //          const category = await this.CategoryRepository.getCategorybyId(categoryId);
-   //          if (!category)
-   //          {
-   //            throw new NotFoundException('Category not found.');
-   //          }
-   //
-   //          const [result, totalCount] = await this.sellerModel.findAndCount(
-   //            {
-   //              where: {
-   //                categories: { id: categoryId },
-   //              },
-   //              order: {sellerName: 'ASC' },
-   //              relations: ['categories'],
-   //              skip,
-   //              take,
-   //
-   //            });
-   //           if (!result.length)
-   //           {
-   //              throw new NotFoundException('No sellers were found in this category matching the search criteria.');
-   //           }
-   //           return [ result, totalCount];
-   //        }
-   //
-   //
-   //        else if (query && !categoryId)
-   //        {
-   //         const [result, totalCount] = await this.sellerModel.findAndCount(
-   //         {
-   //             where: { sellerName: Like(`${query}%`) },
-   //             order: {sellerName: 'ASC' },
-   //             skip,
-   //             take ,
-   //         });
-   //        if (!result.length)
-   //        {
-   //            throw new NotFoundException('No sellers were found matching the search criteria.');
-   //        }
-   //      return [
-   //         result,
-   //         totalCount,
-   //      ];
-   //   }
-   //
-   //   else
-   //   {
-   //      const [result, totalCount] = await this.sellerModel.findAndCount({
-   //
-   //         order: {sellerName: 'ASC' },
-   //         skip,
-   //         take,
-   //        relations: ['categories'],
-   //        where: { categories: { approvedByAdmin: categoryStatus.APPROVED } },
-   //
-   //      });
-   //     if (!result.length)
-   //     {
-   //          throw new NotFoundException('No sellers were found matching the search criteria.');
-   //     }
-   //
-   //    return [
-   //         result,
-   //         totalCount,
-   //     ];
-   //   }
-   // }
-
-
-        async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
+        async search(skip: number,take:number, query?: string, categoryId?: string):Promise<[seller[], number]>
         {
-            let whereConditions = {} as {
-               sellerName?: any,
-               categories?: { id: string },
-           };
-
-
-           if (query && categoryId)
-           {
-               const category = await this.CategoryRepository.getCategorybyId(categoryId);
-               if (!category)
-               {
-                  throw new NotFoundException('Category not found.');
-               }
-
-             whereConditions = {
-                sellerName: Like(`${query}%`),
-                categories: { id: categoryId },
-             };
-           }
-
-          else if (categoryId)
+          if (categoryId && query)
           {
-              const category = await this.CategoryRepository.getCategorybyId(categoryId);
-              if (!category)
-              {
-                throw new NotFoundException('Category not found.');
-              }
+             const category = await this.CategoryRepository.getCategorybyId(categoryId);
+             if (!category)
+             {
+                 throw new NotFoundException('Category not found.');
+             }
 
-              whereConditions = {
-                categories: { id: categoryId },
-            };
-         }
-         else if (query)
-         {
-                whereConditions = {
-                  sellerName: Like(`${query}%`),
-            };
-         }
-
-
-         const [result, totalCount] = await this.sellerModel.findAndCount({
-             where: Object.keys(whereConditions).length !== 0
-               ? [{ ...whereConditions, categories: { approvedByAdmin: categoryStatus.APPROVED } }]
-               : { categories: { approvedByAdmin: categoryStatus.APPROVED} },
-             order: { sellerName: 'ASC' },
+            const [result, totalCount] = await this.sellerModel.findAndCount(
+          {
+            where: {
+                 sellerName: Like(`${query}%`),
+                 categories: { id: categoryId },
+             },
+             order: {sellerName: 'ASC' },
              relations: ['categories'],
              skip,
              take,
-           });
 
-
-         if (!result.length)
-         {
-           throw new NotFoundException('No sellers were found matching the search criteria.');
+            });
+            if (!result.length)
+            {
+               throw new NotFoundException('No sellers were found in this category matching the search criteria.');
+            }
+            return [ result, totalCount];
          }
 
-         return [result, totalCount];
+         else if (categoryId )
+         {
+            const category = await this.CategoryRepository.getCategorybyId(categoryId);
+            if (!category)
+            {
+              throw new NotFoundException('Category not found.');
+            }
 
-    }
+            const [result, totalCount] = await this.sellerModel.findAndCount(
+              {
+                where: {
+                  categories: { id: categoryId },
+                },
+                order: {sellerName: 'ASC' },
+                relations: ['categories'],
+                skip,
+                take,
+
+              });
+             if (!result.length)
+             {
+                throw new NotFoundException('No sellers were found in this category matching the search criteria.');
+             }
+             return [ result, totalCount];
+          }
+
+
+          else if (query && !categoryId)
+          {
+           const [result, totalCount] = await this.sellerModel.findAndCount(
+           {
+               where: { sellerName: Like(`${query}%`) },
+               order: {sellerName: 'ASC' },
+               skip,
+               take ,
+           });
+          if (!result.length)
+          {
+              throw new NotFoundException('No sellers were found matching the search criteria.');
+          }
+        return [
+           result,
+           totalCount,
+        ];
+     }
+
+     else
+     {
+        const [result, totalCount] = await this.sellerModel.findAndCount({
+
+           order: {sellerName: 'ASC' },
+           skip,
+           take,
+          relations: ['categories'],
+          where: { categories: { approvedByAdmin: categoryStatus.APPROVED } },
+
+        });
+       if (!result.length)
+       {
+            throw new NotFoundException('No sellers were found matching the search criteria.');
+       }
+
+      return [
+           result,
+           totalCount,
+       ];
+     }
+   }
+
+
+    //     async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
+    //     {
+    //         let whereConditions = {} as {
+    //            sellerName?: any,
+    //            categories?: { id: string },
+    //        };
+    //
+    //
+    //        if (query && categoryId)
+    //        {
+    //            const category = await this.CategoryRepository.getCategorybyId(categoryId);
+    //            if (!category)
+    //            {
+    //               throw new NotFoundException('Category not found.');
+    //            }
+    //
+    //          whereConditions = {
+    //             sellerName: Like(`${query}%`),
+    //             categories: { id: categoryId },
+    //          };
+    //        }
+    //
+    //       else if (categoryId)
+    //       {
+    //           const category = await this.CategoryRepository.getCategorybyId(categoryId);
+    //           if (!category)
+    //           {
+    //             throw new NotFoundException('Category not found.');
+    //           }
+    //
+    //           whereConditions = {
+    //             categories: { id: categoryId },
+    //         };
+    //      }
+    //      else if (query)
+    //      {
+    //             whereConditions = {
+    //               sellerName: Like(`${query}%`),
+    //         };
+    //      }
+    //
+    //
+    //      const [result, totalCount] = await this.sellerModel.findAndCount({
+    //          where: Object.keys(whereConditions).length !== 0
+    //            ? [{ ...whereConditions, categories: { approvedByAdmin: categoryStatus.APPROVED } }]
+    //            : { categories: { approvedByAdmin: categoryStatus.APPROVED} },
+    //          order: { sellerName: 'ASC' },
+    //          relations: ['categories'],
+    //          skip,
+    //          take,
+    //        });
+    //
+    //
+    //      if (!result.length)
+    //      {
+    //        throw new NotFoundException('No sellers were found matching the search criteria.');
+    //      }
+    //
+    //      return [result, totalCount];
+    //
+    // }
 
 
 
