@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
@@ -68,6 +68,23 @@ export class CategoryRepository {
             {
               return null
             }
+
+
+
+          // Check if the new category name is the same as the existing name
+          if (category.categoryName === categoryName)
+          {
+               throw new ConflictException('Category name must be different from the existing name');
+
+          }
+
+          // Check if the new category name already exists in the database
+          const existingCategory = await this.categoryModel.findOne({ where: { categoryName } });
+          if (existingCategory && existingCategory.id !== category.id)
+          {
+               throw new ConflictException('Category  name already exists. Please enter a unique name');
+          }
+
            category.categoryName = categoryName;
            return this.categoryModel.save(category);
        }

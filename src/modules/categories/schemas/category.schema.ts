@@ -25,7 +25,7 @@ export class category{
 
 
     @ApiProperty()
-    @Column()
+    @Column({unique:true , nullable: true})
     categoryName: string;
 
 
