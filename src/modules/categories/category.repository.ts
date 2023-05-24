@@ -74,7 +74,7 @@ export class CategoryRepository {
           // Check if the new category name is the same as the existing name
           if (category.categoryName === categoryName)
           {
-               throw new ConflictException('Category name must be different from the existing name');
+                throw new ConflictException('Category name must be different from the existing name');
 
           }
 
@@ -82,7 +82,7 @@ export class CategoryRepository {
           const existingCategory = await this.categoryModel.findOne({ where: { categoryName } });
           if (existingCategory && existingCategory.id !== category.id)
           {
-               throw new ConflictException('Category  name already exists. Please enter a unique name');
+                throw new ConflictException('Category  name already exists. Please enter a unique name');
           }
 
            category.categoryName = categoryName;
