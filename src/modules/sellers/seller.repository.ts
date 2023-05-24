@@ -173,6 +173,7 @@ export class sellerRepository{
            {
                where: { sellerName: Like(`${query}%`) },
                order: {sellerName: 'ASC' },
+               relations: ['categories'],
                skip,
                take ,
            });
