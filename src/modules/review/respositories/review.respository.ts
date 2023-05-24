@@ -132,25 +132,24 @@ export class reviewRepository{
 
 
 
-        // latest positive revie
-        async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
-        {
-           const positiveReview = await this.reviewModel.findOne(
+        // latest positive review
+         async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
          {
-               where: [{ sellerId: In(sellerIds),
-                         message: Not(IsNull()),
-                         approvedByAdmin:true,
-                         titleId: In([
-                          "44bf96b2-5476-47f5-8ff9-7336d53156a8",
-                          "55ed7b45-0a6b-4c4b-92ff-ad78be13e31a",
-                          "df368bbf-9155-4d36-932e-c94d34e7154a"
-                       ])}],
-                    order: { createdAt: 'DESC' }
-                });
-
+             const positiveReview = await this.reviewModel.findOne(
+       {
+                 where: [{ sellerId: In(sellerIds),
+                 message: Not(IsNull()),
+                 approvedByAdmin:true,
+                 titleId: In([
+                   "1e138627-7c02-4ecb-a078-6f3619d02e80",
+                   "284cf41a-c203-4f6b-9bf6-2d55f068a4ea",
+                   "503df360-6b0c-4112-8a63-5c02400d65ca"
+               ])}],
+                relations: ['likeDislike'],
+                order: { createdAt: 'DESC' }
+              });
                 return positiveReview;
-      }
-
+        }
 
 
 

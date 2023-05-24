@@ -183,104 +183,46 @@ export class CategoriesService {
        async getReviewsPositive(categoryId: string)
        {
 
-          const category = await this.categoryRepository.getCategoryId(categoryId);
-          if (!category)
+           const category = await this.categoryRepository.getCategoryId(categoryId);
+           if (!category)
+           {
+               throw new NotFoundException('Category not exist');
+           }
+
+
+          const sellerIds = [];
+          for (const seller of category.sellers)
           {
-             throw new NotFoundException('Category not exist');
+               sellerIds.push(seller.id);
           }
 
 
-         const sellerIds = [];
-         for (const seller of category.sellers)
-         {
-             sellerIds.push(seller.id);
-         }
-
-
          const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
-
-          if (!latestPositiveReview) {
+         if (!latestPositiveReview)
+         {
            return {
              category: {
                id: category.id,
                categoryName: category.categoryName,
                approvedByAdmin: category.approvedByAdmin,
              },
-             seller: null,
              'to-review': [],
            };
          }
 
-
-
-         const toreview = [];
-         const sellerMap = {};
-         const categorySellers = [];
-
          if (latestPositiveReview)
          {
-
-              const result = await this.reviewRepository.reviewId(latestPositiveReview.id);
-              const  res=JSON.stringify(result);
-
-              const data = {
-                  like: JSON.parse(res).likeDislike,
-                  dislike: JSON.parse(res).likeDislike,
-                  report: JSON.parse(res).likeDislike
-              };
-
-
-              const counts = {
-                  like: data.like.filter(record => record.type === 'like').length,
-                  dislike: data.dislike.filter(record => record.type === 'dislike').length,
-                  report: data.like.filter(record => record.type === 'report').length,
-            };
-
-
-             const matchingSlugTitle = await this.clickTitlesRepository.findBySlug(latestPositiveReview.titleSlug);
-             if( !matchingSlugTitle)
-             {
-                 throw new NotFoundException('not found ');
-             }
-
-
-             if (matchingSlugTitle)
-             {
-               const title = await this.clickTitlesRepository.findByTitle(latestPositiveReview.titleId);
-                if (title)
-                {
-                  if (title.type === 'to-love' && matchingSlugTitle.type === 'to-love')
-                  {
-
-                         sellerMap[latestPositiveReview.id] = latestPositiveReview;
-                         if (!categorySellers.includes(latestPositiveReview))
-                         {
-                            categorySellers.push(latestPositiveReview);
-                         }
-                          toreview.push({ ...latestPositiveReview, result:counts});
-
-                  }
-               }
-             }
+           return {
+             category: {
+               id: category.id,
+               categoryName: category.categoryName,
+               approvedByAdmin: category.approvedByAdmin,
+             },
+            'to-review': latestPositiveReview
+           };
          }
 
-           const categoryObj = {
-               id:category.id,
-               categoryName: category.categoryName,
-               approvedByAdmin:category.approvedByAdmin,
-            };
-
-           const sellerObj = {
-                id:latestPositiveReview.sellerId,
-           };
-
-              return {
-                  category:categoryObj,
-                  seller: sellerObj,
-                  'to-review': toreview
-               };
     }
-
 
 
 }
