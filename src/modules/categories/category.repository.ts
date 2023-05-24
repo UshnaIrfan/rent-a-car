@@ -16,6 +16,7 @@ export class CategoryRepository {
          // create category
          async createCategory(category: CreateCategoryDto):Promise<category | null>
          {
+
              return this.categoryModel.save(category);
          }
 
@@ -131,7 +132,7 @@ export class CategoryRepository {
 
            if (!category)
            {
-             throw new NotFoundException('Category not found');
+                throw new NotFoundException('Category not found');
            }
            return category;
        }

@@ -91,13 +91,12 @@ export class SellerService {
        // update seller
       async updateSeller(updateSeller:updateSellerInterface):Promise<{ message: string, update:updateSellerInterface}>
       {
-
-         const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
-         if (!update)
-         {
-           throw new NotFoundException('seller not found');
-        }
-        return { message: "seller updated successfully", update};
+          const update = await this.SellerRepository.updateSeller(updateSeller.id, updateSeller.sellerName,updateSeller.sellerUrl);
+          if (!update)
+          {
+             throw new NotFoundException('seller not found');
+          }
+          return { message: "seller updated successfully", update};
      }
 
 
