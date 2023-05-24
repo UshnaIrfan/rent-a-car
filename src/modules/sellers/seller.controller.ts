@@ -5,6 +5,8 @@ import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
+import { BlockRoles } from "../../decorators/block.decorators";
+import { BlockRole } from "../../enums/block.enum";
 
 
 @ApiTags('Sellers')
@@ -36,9 +38,9 @@ export class SellerController {
 
        // add seller
        @ApiBearerAuth()
-       @UseGuards(JwtAuthGuard)
        @ApiBody({type:addSellerDto})
        @Post('add')
+       @BlockRoles(BlockRole.UNBLOCK)
        async  add(@Body() body:addSellerDto,@Req() req):Promise<{seller: seller, review: review}>
        {
           const accessToken = req.headers.authorization.split(' ')[1];

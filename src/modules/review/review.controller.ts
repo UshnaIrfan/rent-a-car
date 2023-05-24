@@ -65,7 +65,6 @@ export class ReviewController {
 
          // submit review
          @ApiBearerAuth()
-        // @UseGuards(JwtAuthGuard)
          @ApiBody({type:submitReviewDto})
          @Post('submit')
          @BlockRoles(BlockRole.UNBLOCK)
@@ -113,9 +112,9 @@ export class ReviewController {
 
         //like dislike submit review
         @ApiBearerAuth()
-        @UseGuards(JwtAuthGuard)
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
+        @BlockRoles(BlockRole.UNBLOCK)
         async createLikeDislike(
         @Body() Review:likeDislikeReviewDto,@Req() req)
         {
