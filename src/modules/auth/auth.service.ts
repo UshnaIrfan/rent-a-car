@@ -234,7 +234,7 @@ export class AuthService {
                  await this.usersService.isActive(reqBody.email,reqBody.status);
                  await this.sendWelcomeEmail(reqBody.email);
                  return {
-                        message: 'Successfully created account',
+                        message: 'Token verified successfully',
                 };
              }
          }

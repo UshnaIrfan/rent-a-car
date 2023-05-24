@@ -65,10 +65,10 @@ export class ReviewController {
 
          // submit review
          @ApiBearerAuth()
-         @UseGuards(JwtAuthGuard)
+        // @UseGuards(JwtAuthGuard)
          @ApiBody({type:submitReviewDto})
          @Post('submit')
-       //  @BlockRoles(BlockRole.UNBLOCK)
+         @BlockRoles(BlockRole.UNBLOCK)
          async submitReview(
          @Body() submitReview:submitReviewDto,@Req() req): Promise<review>
          {

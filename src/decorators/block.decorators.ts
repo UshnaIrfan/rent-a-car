@@ -8,6 +8,6 @@ export const ROLES_KEY = 'roles';
 
 export const BlockRoles = (...roles: BlockRole[]) => applyDecorators(
   SetMetadata(ROLES_KEY, roles),
-  UseGuards( BlockGuard)
+  UseGuards(JwtAuthGuard, BlockGuard)
 
 );
