@@ -19,6 +19,8 @@ import {updateReviewDto} from "./dto/update-review.dto";
 import {seller} from "../sellers/schemas/seller.schema";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
+import {BlockRoles} from "../../decorators/block.decorators";
+import {BlockRole} from "../../enums/block.enum";
 
 
 @ApiTags('Review')
@@ -66,6 +68,7 @@ export class ReviewController {
          @UseGuards(JwtAuthGuard)
          @ApiBody({type:submitReviewDto})
          @Post('submit')
+       //  @BlockRoles(BlockRole.UNBLOCK)
          async submitReview(
          @Body() submitReview:submitReviewDto,@Req() req): Promise<review>
          {

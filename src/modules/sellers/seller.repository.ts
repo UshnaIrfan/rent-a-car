@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
@@ -42,6 +42,20 @@ export class sellerRepository{
          {
            return null
          }
+
+        // Check if the new seller url is the same as the existing seller url
+        if (seller.sellerUrl === sellerUrl)
+        {
+          throw new ConflictException('seller url must be different from the existing seller url');
+
+        }
+
+        // Check if the new seller url already exists in the database
+        const existingSeller = await this.sellerModel.findOne({ where: { sellerUrl } });
+        if (existingSeller && existingSeller.id !== seller.id)
+        {
+          throw new ConflictException('seller url already exists. Please enter a unique url');
+        }
 
           seller.sellerName = sellerName;
           seller.sellerUrl = sellerUrl;
