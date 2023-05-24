@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from '@nestjs/core';
 import { BlockRole } from '../enums/block.enum';
 
@@ -25,7 +25,7 @@ export class BlockGuard implements CanActivate {
          // Check if the user is blocked
         if (user.blockStatus=='block')
         {
-             throw new ForbiddenException('Your account has been blocked');
+             throw new UnauthorizedException('Your account has been blocked');
         }
 
             return true;

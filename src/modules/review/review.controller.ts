@@ -100,7 +100,9 @@ export class ReviewController {
 
 
          //update review
+         @ApiBearerAuth()
          @Patch('update')
+         @BlockRoles(BlockRole.UNBLOCK)
          async updateReview(
          @Body() updateReviewDto:updateReviewDto)
          {
