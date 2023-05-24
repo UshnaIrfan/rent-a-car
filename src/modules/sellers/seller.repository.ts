@@ -35,38 +35,58 @@ export class sellerRepository{
 
 
       // update seller
-      async updateSeller(id:string, sellerName:string,sellerUrl:string): Promise<seller | null>
-      {
-         const seller = await this.sellerModel.findOne({ where: { id}});
-         if (!seller)
-         {
-           return null
-         }
+      // async updateSeller(id:string, sellerName:string,sellerUrl:string): Promise<seller | null>
+      // {
+      //    const seller = await this.sellerModel.findOne({ where: { id}});
+      //    if (!seller)
+      //    {
+      //      return null
+      //    }
+      //
+      //   // Check if the new seller url is the same as the existing seller url
+      //   if (seller.sellerUrl === sellerUrl)
+      //   {
+      //     throw new ConflictException('seller url must be different from the existing seller url');
+      //
+      //   }
+      //
+      //   // Check if the new seller url already exists in the database
+      //   const existingSeller = await this.sellerModel.findOne({ where: { sellerUrl } });
+      //   if (existingSeller && existingSeller.id !== seller.id)
+      //   {
+      //     throw new ConflictException('seller url already exists. Please enter a unique url');
+      //   }
+      //
+      //     seller.sellerName = sellerName;
+      //     seller.sellerUrl = sellerUrl;
+      //     return this.sellerModel.save(seller);
+      // }
 
-        // Check if the new seller url is the same as the existing seller url
-        if (seller.sellerUrl === sellerUrl)
-        {
-          throw new ConflictException('seller url must be different from the existing seller url');
+     async updateSeller(id: string, sellerName: string, sellerUrl: string): Promise<seller | null>
+     {
+        const seller = await this.sellerModel.findOne({ where: { id } });
+        if (!seller) {
+      return null;
+       }
 
-        }
+    const isUrlChanged = seller.sellerUrl !== sellerUrl;
 
-        // Check if the new seller url already exists in the database
-        const existingSeller = await this.sellerModel.findOne({ where: { sellerUrl } });
-        if (existingSeller && existingSeller.id !== seller.id)
-        {
-          throw new ConflictException('seller url already exists. Please enter a unique url');
-        }
-
-          seller.sellerName = sellerName;
-          seller.sellerUrl = sellerUrl;
-          return this.sellerModel.save(seller);
+    if (isUrlChanged) {
+      const existingSeller = await this.sellerModel.findOne({ where: { sellerUrl } });
+      if (existingSeller && existingSeller.id !== seller.id) {
+        throw new ConflictException('Seller URL already exists. Please enter a unique URL');
       }
+    }
+
+    seller.sellerName = sellerName;
+    seller.sellerUrl = sellerUrl;
+    return this.sellerModel.save(seller);
+  }
 
 
 
 
-
-      // delete seller
+  // delete seller
       async deleteSeller(id: string): Promise<seller | null>
       {
 
