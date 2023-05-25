@@ -136,8 +136,7 @@ export class SellerService {
        // seller by name search
      async search(pageNumber: number,pageSize?:number, query?: string, categoryId?: string)
      {
-         // const pageSize = 10;
-         // var pageSize = pageSize || 10;
+
          const skip = (pageNumber - 1) * pageSize;
          const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId);
          const totalPages = Math.ceil(totalCount / pageSize);

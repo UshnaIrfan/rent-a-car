@@ -1,17 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from "class-validator";
-export class adminUpdateBlockStatusUserDto {
+export class adminUpdateContactStatusDto {
 
 
   @ApiProperty({ type: String, required: true })
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  contactId: string;
 
 
 
   @ApiProperty({ type: String })
   @IsString()
-  blockStatus: string;
+  status: string;
 
 }

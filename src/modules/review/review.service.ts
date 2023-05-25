@@ -385,7 +385,7 @@ export class ReviewService {
      // review search
      async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string)
      {
-       // const pageSize = 10;
+
         const skip = (pageNumber - 1) * pageSize;
         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy);
         const totalPages = Math.ceil(totalCount / pageSize);
