@@ -178,10 +178,12 @@ export class AuthService {
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
                const emailBody = template({ activeUrl });
                console.log("here",process.env.ADMIN_EMAIL)
+
                try
                {
                  await this.sendWelcome(user.email, emailBody);
                  await this.sendAdminEmail(process.env.ADMIN_EMAIL, user);
+               //  await this.sendAdminEmail(process.env.ADMIN_EMAIL, user);
                }
 
                catch (e)
@@ -615,26 +617,41 @@ export class AuthService {
 
 
        // sending admin email
-       async sendAdminEmail(email: string, user: any)
-       {
-           const emailBody = `A new user has signed up:\n\nName: ${user.username}\nEmail: ${user.email}`;
-           try
-           {
-               await this.mailerService.sendMail({
-               to: email,
-               subject: 'New User Signup',
-                text: emailBody,
-           });
+     //   async sendAdminEmail(email: string, user: any)
+     //   {
+     //       const emailBody = `A new user has signed up:\n\nName: ${user.username}\nEmail: ${user.email}`;
+     //       try
+     //       {
+     //           await this.mailerService.sendMail({
+     //           to: email,
+     //           subject: 'New User Signup',
+     //            text: emailBody,
+     //       });
+     //
+     //      console.log('Admin email sent successfully');
+     //      }
+     //      catch (error)
+     //      {
+     //             console.error('Failed to send admin email', error);
+     //
+     //      }
+     // }
 
-          console.log('Admin email sent successfully');
-          }
-          catch (error)
-          {
-                 console.error('Failed to send admin email', error);
 
-          }
-     }
 
+
+  async sendAdminEmail(email: string, user: any)
+  {
+
+    const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'));
+    const html = template({ email, name: user.name, userEmail: user.email });
+    console.log(user.name)
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'New User Signup',
+      html: html
+    });
+  }
 
 
 }
