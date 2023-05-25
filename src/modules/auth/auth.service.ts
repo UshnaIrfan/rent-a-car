@@ -186,8 +186,11 @@ export class AuthService {
                //  await this.sendAdminEmail(process.env.ADMIN_EMAIL, user);
                }
 
+
                catch (e)
                {
+
+                 console.log(e)
                  throw new BadRequestException('Failed to send email');
                }
                return {
