@@ -35,10 +35,10 @@ export class ContactUsService {
 
 
           //get all contactus users
-       async getAllContactUsUsers(pageNumber: number):Promise<paginationContactInterface>
+       async getAllContactUsUsers(pageNumber: number,pageSize?:number):Promise<paginationContactInterface>
        {
-          //const pageSize = 10;
-           var pageSize = pageSize || 10;
+           //const pageSize = 10;
+           // var pageSize = pageSize || 10;
            const skip = (pageNumber - 1) * pageSize;
            const [result, totalCount] = await this.contactUsRepository.findAndCount(skip, pageSize);
            const totalPages = Math.ceil(totalCount / pageSize);

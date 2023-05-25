@@ -18,14 +18,16 @@ export class adminAuthController {
 
       //get all users and search by name
       @ApiBearerAuth()
+      @ApiQuery({ name: 'page', type: Number, required: true })
+      @ApiQuery({ name: 'pageSize', type: Number, required:false})
       @ApiQuery({ name: 'username', required: false })
       @Get('/search/:user')
       @Roles(Role.L2A_ADMIN)
-      async getReview(@Query('page') page: number = 1,@Query('username')username?: string):Promise<paginationUserInterface>
+      async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
       {
 
           console.log("user ")
-          return this.authService.getAllUsers(page,username);
+          return this.authService.getAllUsers(page,pageSize,username);
       }
 
 

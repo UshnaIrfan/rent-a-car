@@ -71,15 +71,16 @@ export class AdminSellerController {
         // search seller by name
         @ApiBearerAuth()
         @ApiQuery({ name: 'page', type: Number, required: true })
+        @ApiQuery({ name: 'pageSize', type: Number, required:false})
         @ApiQuery({ name: 'query', required: false })
         @ApiQuery({ name: 'categoryId', required: false })
         @Get('Seller_search')
         @Roles(Role.L2A_ADMIN)
-        async search(@Query('page') page: number = 1,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
+        async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
         {
 
               console.log("adminseller")
-            return this.sellerService.search(page ,query, categoryId);
+            return this.sellerService.search(page ,pageSize,query, categoryId);
         }
 
 

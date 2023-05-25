@@ -63,9 +63,9 @@ export class CategoriesService {
 
 
       //get all categories and search by name(pagination)
-      async getAllAdminCategories(pageNumber: number,categoryName?: string):Promise<paginationCategoryInterface>
+      async getAllAdminCategories(pageNumber: number,pageSize?:number,categoryName?: string):Promise<paginationCategoryInterface>
       {
-          const pageSize = 10;
+         // const pageSize = 10;
           const skip = (pageNumber - 1) * pageSize;
           const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize,categoryName);
           const totalPages = Math.ceil(totalCount / pageSize);

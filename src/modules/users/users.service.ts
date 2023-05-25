@@ -15,9 +15,9 @@ export class UsersService {
 
            //ADMIN APIS
           // get all users and search by name (pagination)
-          async getAllUsers(pageNumber: number,username?:string):Promise<paginationUserInterface>
+          async getAllUsers(pageNumber: number,pageSize?:number,username?:string):Promise<paginationUserInterface>
           {
-               const pageSize = 10;
+              // const pageSize = 10;
                const skip = (pageNumber - 1) * pageSize;
                const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
                const totalPages = Math.ceil(totalCount / pageSize);

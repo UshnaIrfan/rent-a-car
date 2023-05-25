@@ -40,9 +40,9 @@ export class AuthService {
 
          // ADMIN APIS
          // get all users and search by name
-         async  getAllUsers(page:number,username?:string):Promise<paginationUserInterface>
+         async  getAllUsers(page:number,pageSize?:number,username?:string):Promise<paginationUserInterface>
          {
-             return this.usersService.getAllUsers(page,username);
+             return this.usersService.getAllUsers(page,pageSize,username);
          }
 
 
