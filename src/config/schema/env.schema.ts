@@ -12,7 +12,7 @@ export const envSchema = Joi.object({
     DATABASE_NAME: Joi.string().required().description('Database name'),
     DATABASE_PORT:Joi.string().required().description('Database Port'),
     REDIS_URL: Joi.string().required().description('Redis URL'),
-    ADMIN_EMAIL: Joi.string().required().description('Admin email'),
+    SMTP_EMAIL: Joi.string().required().description('SMTP email'),
     MAILER_PASSWORD: Joi.string().required().description('Mailer password'),
     AWS_SES_REGION: Joi.string().required().description('AWS_SES_REGION'),
     AWS_SES_ACCESS_KEY: Joi.string().required().description('AWS_SES_ACCESS_KEY'),
@@ -21,7 +21,9 @@ export const envSchema = Joi.object({
     AWS_SES_SMTP_PORT : Joi.string().required().description('AWS_SES_SMTP_PORT'),
     AWS_SES_SMTP_USER_NAME: Joi.string().required().description('AWS_SES_SMTP_USER_NAME'),
     AWS_SES_SMTP_USER_PASSWORD: Joi.string().required().description('AWS_SES_SMTP_USER_PASSWORD'),
+
 });
+
 
 
 

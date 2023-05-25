@@ -1,6 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from '@nestjs/swagger';
 
+export enum status {
+    INREVIEW = 'inreview',
+    COMPLETE = 'complete',
+    PENDING = 'pending'
+}
+
+
 @Entity({ name: 'contact_us' })
 export class contact{
 
@@ -17,6 +24,12 @@ export class contact{
     @ApiProperty()
     @Column()
     message: string;
+
+
+
+    @ApiProperty()
+    @Column({ type:"enum", enum: status, default: status.PENDING })
+    status: string;
 
 
     @ApiProperty()

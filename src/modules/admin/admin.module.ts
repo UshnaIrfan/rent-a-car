@@ -25,15 +25,19 @@ import {adminAuthController} from "./admin-auth.controller";
 import {AuthService} from "../auth/auth.service";
 import {UsersService} from "../users/users.service";
 import {adminReviewController} from "./admin-review.controller";
+import {adminContactController} from "./admin-contact.controller";
+import {contact} from "../contact-us/schemas/contact-us.schema";
+import {contactUsRepository} from "../contact-us/contact-us.repository";
+import {ContactUsService} from "../contact-us/contact-us.service";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ clicksTypes,seller,likeDislike,category,User,review ,clicksTitle]),
+  imports: [TypeOrmModule.forFeature([ contact,clicksTypes,seller,likeDislike,category,User,review ,clicksTitle]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     })],
-  controllers: [adminReviewController,adminAuthController,AdminSellerController,AdminCategoryController],
-  providers: [UsersService,AuthService,SellerService, clicksTypesRepository,sellerRepository, ReviewService,JwtService,likeDislikeRepository,CategoriesService,clicksTitlesRepository,CategoryRepository,UsersRepository,reviewRepository]
+  controllers: [adminContactController,adminReviewController,adminAuthController,AdminSellerController,AdminCategoryController],
+  providers: [ContactUsService, contactUsRepository,UsersService,AuthService,SellerService, clicksTypesRepository,sellerRepository, ReviewService,JwtService,likeDislikeRepository,CategoriesService,clicksTitlesRepository,CategoryRepository,UsersRepository,reviewRepository]
 })
 export class AdminModule {}

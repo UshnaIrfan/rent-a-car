@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
-  IsNotEmpty,
+  IsNotEmpty, IsString
 } from "class-validator";
+import {status} from "../schemas/contact-us.schema";
 
 export class createContactUsDto {
 
@@ -15,5 +16,10 @@ export class createContactUsDto {
     @ApiProperty({ type: String, required: true  })
     @IsNotEmpty()
     message: string;
+
+
+    @ApiProperty({ type: String, enum: status, default: status.PENDING })
+    @IsString()
+    status: string = status.PENDING;
 
 }

@@ -66,7 +66,7 @@ import * as AWS from 'aws-sdk';
         },
 
         defaults: {
-          from: configService.get('ADMIN_EMAIL'),
+          from: configService.get('SMTP_EMAIL'),
         },
             preview: true,
         }),
