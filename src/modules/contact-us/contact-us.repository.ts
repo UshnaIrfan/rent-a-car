@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import {createContactUsDto} from "./dto/create-contact-us.dto";
 import {contact} from "./schemas/contact-us.schema";
 
@@ -23,9 +23,14 @@ export class contactUsRepository{
 
         // ADMIN API
         //get all contactus users
-        async findAndCount(skip: number, take: number): Promise<[contact[], number]>
+        async findAndCount(skip: number, take: number,email?: string): Promise<[contact[], number]>
         {
-            const whereConditions: any[] = [];
+             const whereConditions: any[] = [];
+             if (email)
+             {
+                 whereConditions.push({
+                 email: Like(`${email}%`)});
+             }
             const [result, totalCount] = await this.contactModel.findAndCount({
                where: whereConditions,
                skip,

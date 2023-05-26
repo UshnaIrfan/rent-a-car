@@ -36,12 +36,12 @@ export class ContactUsService {
 
         // ADMIN API
         //get all contactus users
-       async getAllContactUsUsers(pageNumber: number,pageSize?:number):Promise<paginationContactInterface>
+       async getAllContactUsUsers(pageNumber: number,pageSize?:number,email?: string):Promise<paginationContactInterface>
        {
            //const pageSize = 10;
            // var pageSize = pageSize || 10;
            const skip = (pageNumber - 1) * pageSize;
-           const [result, totalCount] = await this.contactUsRepository.findAndCount(skip, pageSize);
+           const [result, totalCount] = await this.contactUsRepository.findAndCount(skip, pageSize,email);
            const totalPages = Math.ceil(totalCount / pageSize);
 
            if (result.length === 0)
