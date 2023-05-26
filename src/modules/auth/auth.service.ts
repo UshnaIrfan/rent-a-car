@@ -109,7 +109,6 @@ export class AuthService {
          {
 
              const User = await this.usersService.findUserByEmail(Signup.email);
-             // if (  User && User.isActive == false)
              if (  User && User.status == 'inactive')
              {
                const Token = generateRandomToken(32);
@@ -133,29 +132,30 @@ export class AuthService {
                throw new ConflictException('You are already created this account. Resend email please verify your account.');
 
              }
-             else {
+             else
+             {
 
-               const username = await this.usersService.findUserByUsername(Signup.username);
-               if (username)
-               {
-                 throw new ConflictException('Username already exists');
-               }
+                 const username = await this.usersService.findUserByUsername(Signup.username);
+                 if (username)
+                 {
+                    throw new ConflictException('Username already exists');
+                 }
 
-               const Email = await this.usersService.findUserByEmail(Signup.email);
-               if (Email)
-               {
-                 throw new ConflictException('Email already exists');
-               }
+                const Email = await this.usersService.findUserByEmail(Signup.email);
+                if (Email)
+                {
+                    throw new ConflictException('Email already exists');
+                }
 
-               const { password } = Signup;
-               const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
+                const { password } = Signup;
+                const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
-               if (!isPasswordStrongEnough)
-               {
-                 throw new BadRequestException('Password is too weak');
-               }
+                if (!isPasswordStrongEnough)
+                {
+                   throw new BadRequestException('Password is too weak');
+                }
 
-               const user = await this.usersService.createUser({
+                const user = await this.usersService.createUser({
                  ...Signup,
                  password: await AuthService.hashPassword(password),
                });
@@ -189,13 +189,12 @@ export class AuthService {
                catch (e)
                {
 
-                 console.log(e)
-                 throw new BadRequestException('Failed to send email');
+                   throw new BadRequestException('Failed to send email');
                }
-               return {
-                 message: 'Email sent successfully',
-               };
 
+               return {
+                      message: 'Email sent successfully',
+                };
              }
       }
 
@@ -484,13 +483,15 @@ export class AuthService {
           //logout
           async logout(accessToken: string) :Promise<{message:string}>
           {
-             const cachedToken = await this.cacheManager.get(accessToken);
-             if (!cachedToken)
-             {
-                throw new NotFoundException('Token expired');
-             }
-               await this.cacheManager.del(accessToken);
-               return { message: 'Successfully logout' };
+                const cachedToken = await this.cacheManager.get(accessToken);
+                if (!cachedToken)
+                {
+                   throw new NotFoundException('Token expired');
+                }
+                await this.cacheManager.del(accessToken);
+                return {
+                   message: 'Successfully logout'
+               };
           }
 
 
@@ -554,7 +555,6 @@ export class AuthService {
             }
 
              return user;
-
         }
 
 
@@ -564,13 +564,13 @@ export class AuthService {
         // sending email(welcome after registered)
          async sendWelcomeEmail(email: string )
          {
-           const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-           const html = template({ });
-           await this.mailerService.sendMail({
-           to: email,
-           subject: 'welcome to love2air',
-           html: html,
-         });
+             const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
+             const html = template({ });
+             await this.mailerService.sendMail({
+             to: email,
+             subject: 'You are in!',
+             html: html,
+           });
         }
 
 
@@ -582,7 +582,7 @@ export class AuthService {
         {
              await this.mailerService.sendMail({
              to: email,
-             subject: 'Reset Password',
+             subject: 'Need a Reset?',
              html: emailBody
            });
         }
@@ -594,12 +594,12 @@ export class AuthService {
        //sending email (updated password)
        async sendPasswordUpdatedEmail(email: string)
        {
-          const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
-          const html = template({email});
-          await this.mailerService.sendMail({
-           to: email,
-           subject: 'Password Updated',
-           html: html
+             const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
+             const html = template({email});
+             await this.mailerService.sendMail({
+             to: email,
+             subject: 'Success: Your password has been reset!',
+             html: html
          });
        }
 
@@ -609,10 +609,10 @@ export class AuthService {
          // after register welcome  email
         async sendWelcome(email: string, emailBody: string)
         {
-           await this.mailerService.sendMail({
-           to: email,
-           subject: 'register ',
-           html: emailBody,
+            await this.mailerService.sendMail({
+            to: email,
+            subject: 'Please verify your recent signup!',
+            html: emailBody,
           });
        }
 
@@ -625,9 +625,9 @@ export class AuthService {
              const html = template({ email, name: user.name, userEmail: user.email });
              await this.mailerService.sendMail({
              to: email,
-             subject: 'New User Signup',
+             subject: 'New Signup',
              html: html
-                });
+             });
          }
 
 
