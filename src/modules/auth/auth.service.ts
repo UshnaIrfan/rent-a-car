@@ -242,8 +242,9 @@ export class AuthService {
                  parsedToken.active = true;
                  const updatedTokenValue = JSON.stringify(parsedToken);
                  await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-                 await this.usersService.isActive(reqBody.email,reqBody.status);
-                 await this.sendWelcomeEmail(reqBody.email);
+                 const user  = await this.usersService.isActive(reqBody.email,reqBody.status);
+                 const  Username= user.name
+                 await this.sendWelcomeEmail(reqBody.email,Username);
                  return {
                         message: 'Token verified successfully',
                 };
@@ -569,10 +570,10 @@ export class AuthService {
 
 
         // sending email(welcome after registered)
-         async sendWelcomeEmail(email: string )
+         async sendWelcomeEmail(email: string ,Username:string)
          {
              const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'));
-             const html = template({ });
+             const html = template({ username:Username});
              await this.mailerService.sendMail({
              to: email,
              subject: 'You are in!',
