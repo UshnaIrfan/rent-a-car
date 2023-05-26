@@ -111,6 +111,7 @@ export class AuthService {
              const User = await this.usersService.findUserByEmail(Signup.email);
              if (  User && User.status == 'inactive')
              {
+               var  Name=User.name;
                const Token = generateRandomToken(32);
                const expiresAt = new Date();
                expiresAt.setMinutes(expiresAt.getMinutes() + 90);
@@ -125,7 +126,7 @@ export class AuthService {
                const queryParams = `?Token=${Token}&email=${User.email}`;
                const activeUrl = `${ActiveUrl}${queryParams}`;
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
-               const emailBody = template({ activeUrl });
+               const emailBody = template({ activeUrl,username:Name });
 
                await this.sendWelcome(User.email, emailBody);
 
@@ -140,6 +141,8 @@ export class AuthService {
                  {
                     throw new ConflictException('Username already exists');
                  }
+
+
 
                 const Email = await this.usersService.findUserByEmail(Signup.email);
                 if (Email)
@@ -160,6 +163,8 @@ export class AuthService {
                  password: await AuthService.hashPassword(password),
                });
 
+                const Name= user.name;
+
 
                const Token = generateRandomToken(32);
                const expiresAt = new Date();
@@ -176,7 +181,7 @@ export class AuthService {
                const queryParams = `?Token=${Token}&email=${user.email}`;
                const activeUrl = `${ActiveUrl}${queryParams}`;
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
-               const emailBody = template({ activeUrl });
+               const emailBody = template({ activeUrl,username:Name});
                console.log("here",process.env.ADMIN_EMAIL)
 
                try
@@ -308,10 +313,12 @@ export class AuthService {
          async token(randomUserToken: randomUserTokenInterface)
          {
             const user = await this.usersService.findUserByEmail(randomUserToken.email);
+
             if (!user)
             {
                throw new  NotFoundException('Invalid email');
             }
+            const Username=user.name;
            const resetToken = generateRandomToken(32);
            const expiresAt = new Date();
            expiresAt.setHours(expiresAt.getHours() + 24);
@@ -324,7 +331,7 @@ export class AuthService {
            const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
            const resetUrl = `${changePasswordUrl}${queryParams}`;
            const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'));
-           const emailBody = template({ resetUrl });
+           const emailBody = template({ resetUrl,username:Username});
            try
            {
                await this.sendToken(user.email, emailBody);
@@ -424,7 +431,7 @@ export class AuthService {
           if (parsedToken.active == true)
           {
               await this.usersService.updatePassword(reqBody.email, hashedPassword);
-              await this.sendPasswordUpdatedEmail(reqBody.email);
+              await this.sendPasswordUpdatedEmail(reqBody.email,user.name);
               const loginResult = this.login(user);
               await this.cacheManager.del(tokenKey);
               return loginResult;
@@ -592,10 +599,10 @@ export class AuthService {
 
 
        //sending email (updated password)
-       async sendPasswordUpdatedEmail(email: string)
+       async sendPasswordUpdatedEmail(email: string,name:string)
        {
              const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
-             const html = template({email});
+             const html = template({email,username:name});
              await this.mailerService.sendMail({
              to: email,
              subject: 'Success: Your password has been reset!',

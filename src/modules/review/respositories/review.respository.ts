@@ -253,8 +253,8 @@ export class reviewRepository{
              where: Object.keys(whereConditions).length !== 0 ? [
              whereConditions] : [],
              relations: ['likeDislike'],
-             skip,
-             take,
+             // skip,
+             // take,
          });
 
         if (!result.length)
@@ -304,8 +304,8 @@ export class reviewRepository{
            reviewArray.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
        }
 
-
-          return [reviewArray, totalCount];
+        const paginatedResults = reviewArray.slice(skip, skip + take);
+        return [paginatedResults, totalCount];
    }
 
 
