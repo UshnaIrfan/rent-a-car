@@ -210,7 +210,7 @@ export class reviewRepository{
     //
     //     return [result, totalCount];
     // }
-       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string): Promise<any>
+       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,dateBy?:string): Promise<any>
        {
            let whereConditions = {} as {
               userId?: any,
@@ -279,9 +279,9 @@ export class reviewRepository{
 
       if (orderType === 'like' || orderType === 'dislike' || orderType === 'report') {
         const countPropertyMap = {
-          like: 'likeCount',
-          dislike: 'dislikeCount',
-          report: 'reportCount'
+           like: 'likeCount',
+           dislike: 'dislikeCount',
+           report: 'reportCount'
         };
 
         if (orderBy === 'ascending')
@@ -294,8 +294,20 @@ export class reviewRepository{
         }
       }
 
-       return [reviewArray, totalCount];
-  }
+       // date by
+       else  if (dateBy === 'ascending')
+       {
+           reviewArray.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+       }
+       else if (dateBy === 'descending')
+       {
+           reviewArray.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+       }
+
+
+          return [reviewArray, totalCount];
+   }
+
 
 
 

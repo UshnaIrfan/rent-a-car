@@ -25,15 +25,17 @@ export class adminReviewController {
       @ApiQuery({ name: 'categoryId', required: false })
       @ApiQuery({ name: 'orderType', required: false })
       @ApiQuery({ name: 'orderBy', required: false })
+      @ApiQuery({ name: 'dateBy', required: false })
       @Get(':review/search')
       @Roles(Role.L2A_ADMIN)
       async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10, @Query('sellerId') sellerId?: string,
                @Query('userId') userId?: string,@Query('message') message?: string,
                @Query('type') type?: string ,@Query('categoryId') categoryId?: string,
-               @Query('orderBy') orderBy?: string,@Query('orderType') orderType?: string)
+               @Query('orderBy') orderBy?: string,@Query('orderType') orderType?: string,
+               @Query('orderBy') dateBy?: string   )
 
      {
-          return this.reviewService.search(page ,pageSize, sellerId,userId,message ,type,categoryId ,orderType,orderBy);
+          return this.reviewService.search(page ,pageSize, sellerId,userId,message ,type,categoryId ,orderType,orderBy,dateBy);
      }
 
 

@@ -383,11 +383,11 @@ export class ReviewService {
 
      //ADMIN APIS
      // review search
-     async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string)
+     async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,dateBy?:string)
      {
 
         const skip = (pageNumber - 1) * pageSize;
-        const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy);
+        const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,dateBy);
         const totalPages = Math.ceil(totalCount / pageSize);
         if (result.length === 0)
         {
