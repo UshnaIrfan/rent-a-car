@@ -29,6 +29,7 @@
 ## Installation
 
 ```bash
+# install all packages
 $ npm install
 ```
 
@@ -44,6 +45,34 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Running the migration
+
+```bash
+# To create a new migration, use the following command
+$ npm run typeorm:generate-migration --name=filename
+
+
+#This command will generate a new migration file in the `migrations/migrations` directory, allowing you to define the schema changes for the specified table.
+npm run typeorm:create-migration --name=schemaname
+
+# To run a migration, use the following command
+$ npm run typeorm:run-migrations
+
+# To revert a migration, use the following command
+$ npm run typeorm:revert-migration
+```
+
+
+
+## swagger backend path
+
+```bash
+# swagger backend path
+https://www.lovetoair.com:5000/api
+
+```
+
 
 ## Test
 

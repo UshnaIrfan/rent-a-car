@@ -210,7 +210,7 @@ export class reviewRepository{
     //
     //     return [result, totalCount];
     // }
-       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,dateBy?:string): Promise<any>
+       async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,startDate?:string,endDate?:string): Promise<any>
        {
            let whereConditions = {} as {
               userId?: any,
@@ -262,6 +262,8 @@ export class reviewRepository{
              throw new NotFoundException('No reviews were found matching the criteria.');
         }
 
+
+
        const reviewArray = result.map(review =>
        {
           const likeCount = review.likeDislike.filter(result => result.type === 'like').length;
@@ -284,25 +286,29 @@ export class reviewRepository{
            report: 'reportCount'
         };
 
-        if (orderBy === 'ascending')
-        {
-          reviewArray.sort((a, b) => b.count[countPropertyMap[orderType]] - a.count[countPropertyMap[orderType]]);
-        }
-        else if (orderBy === 'descending')
-        {
-          reviewArray.sort((a, b) => a.count[countPropertyMap[orderType]] - b.count[countPropertyMap[orderType]]);
-        }
+          if (orderBy === 'ascending')
+          {
+             reviewArray.sort((a, b) => b.count[countPropertyMap[orderType]] - a.count[countPropertyMap[orderType]]);
+          }
+          else if (orderBy === 'descending')
+          {
+             reviewArray.sort((a, b) => a.count[countPropertyMap[orderType]] - b.count[countPropertyMap[orderType]]);
+          }
       }
 
-       // date by
-       else  if (dateBy === 'ascending')
-       {
-           reviewArray.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-       }
-       else if (dateBy === 'descending')
-       {
-           reviewArray.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-       }
+
+       // // date by
+       //   if (startDate && endDate)
+       //   {
+       //        const start = new Date(startDate);
+       //        const end = new Date() ? new Date(endDate) ;
+       //        reviewArray.sort(function compare(a, b) {
+       //         var dateA = new Date(a.createdAt);
+       //         var dateB = new Date(b.createdAt);
+       //         return dateA - dateB;
+       //       });
+       //     }
+
 
         const paginatedResults = reviewArray.slice(skip, skip + take);
         return [paginatedResults, totalCount];
