@@ -174,6 +174,49 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       //Beauty, Cosmetics and Skincare
       { sellerName: 'Sephora', sellerUrl: 'http://sephora.com/', isListing: true },
 
+
+
+      { sellerName: 'Party Slate', sellerUrl: 'http://partyslate.com', isListing: true },
+      { sellerName: 'Here Comes the Guide', sellerUrl: 'http://herecomestheguide.com', isListing: true },
+      { sellerName: 'Wedding Spot', sellerUrl: 'http://wedding-spot.com', isListing: true },
+      { sellerName: 'Eventective', sellerUrl: 'http://eventective.com', isListing: true },
+      { sellerName: 'Eventup	marketing.', sellerUrl: 'http://eventup.com', isListing: true },
+      { sellerName: 'Giggster', sellerUrl: 'http://giggster.com', isListing: true },
+      { sellerName: 'WeddingWire', sellerUrl: 'http://weddingwire.com', isListing: true },
+      { sellerName: 'Zola', sellerUrl: 'http://zola.com', isListing: true },
+      { sellerName: 'Carats & Cake', sellerUrl: 'http://caratsandcake.com', isListing: true },
+
+
+
+      { sellerName: 'Drizly', sellerUrl: 'http://drizly.com', isListing: true },
+      { sellerName: 'Naked Wines', sellerUrl: 'http://nakedwines.com', isListing: true },
+      { sellerName: 'Totalwine.com', sellerUrl: 'http://totalwine.com', isListing: true },
+      { sellerName: 'Wine.com', sellerUrl: 'http://wine.com', isListing: true },
+      { sellerName: 'BevMo!', sellerUrl: 'http://bevmo.com', isListing: true },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ];
 
 
