@@ -173,8 +173,8 @@ export class AuthService {
                const tokenValue = JSON.stringify({ token: Token, expiresAt ,active: false });
                await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
 
-               const baseUrl = process.env.BASE_URL;
-               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
+               const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+               const ActiveUrl = `${FRONTEND_APP_URL}/login#/Auth/AuthController_isActive`;
 
                console.log("token" ,Token)
 
@@ -326,8 +326,8 @@ export class AuthService {
            const tokenKey = `forgot-password-token:${user.email}`;
            const tokenValue = JSON.stringify({ token: resetToken, expiresAt,active: false });
            await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
-           const baseUrl = process.env.BASE_URL;
-           const changePasswordUrl = `${baseUrl}/change-password/#/Auth/AuthController_changePasswordToken`;
+           const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+           const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
            console.log("token" ,resetToken)
            const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
            const resetUrl = `${changePasswordUrl}${queryParams}`;

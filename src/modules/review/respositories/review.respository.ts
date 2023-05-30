@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, IsNull, Like, Not,  Repository } from "typeorm";
+import { Between, In, IsNull, Like, Not, Repository } from "typeorm";
 import {review} from "../schemas/submit-review.schema";
 import {submitReviewDto} from "../dto/submit-review.dto";
 import {clicksTitlesRepository} from "./clicksTitles.repository";
@@ -248,7 +248,9 @@ export class reviewRepository{
             whereConditions.sellerId = categoryId ? In(sellerIds) : (sellerId ? sellerId : undefined)
        }
 
-          const [result, totalCount] = await this.reviewModel.findAndCount(
+
+
+         const [result, totalCount] = await this.reviewModel.findAndCount(
          {
              where: Object.keys(whereConditions).length !== 0 ? [
              whereConditions] : [],
@@ -279,6 +281,7 @@ export class reviewRepository{
          };
        });
 
+
       if (orderType === 'like' || orderType === 'dislike' || orderType === 'report') {
         const countPropertyMap = {
            like: 'likeCount',
@@ -297,21 +300,43 @@ export class reviewRepository{
       }
 
 
-       // // date by
-       //   if (startDate && endDate)
-       //   {
-       //        const start = new Date(startDate);
-       //        const end = new Date() ? new Date(endDate) ;
-       //        reviewArray.sort(function compare(a, b) {
-       //         var dateA = new Date(a.createdAt);
-       //         var dateB = new Date(b.createdAt);
-       //         return dateA - dateB;
-       //       });
-       //     }
+         // date by
+         if (startDate)
+         {
+
+              var start = startDate;
+              var end = new Date();
+              console.log(start)
+              console.log(end)
 
 
-        const paginatedResults = reviewArray.slice(skip, skip + take);
-        return [paginatedResults, totalCount];
+
+          // reviewArray.sort(function compare(a,b) {
+
+
+
+
+
+             // Ascending order
+             if (orderBy === 'ascending') {
+            // return dateA - dateB;
+             }
+
+
+             // Descending order
+             if (orderBy === 'descending') {
+              // return dateB - dateA;
+             }
+
+             //  Default to ascending order
+             //  return dateA - dateB;
+         //  });
+        }
+
+
+
+         const paginatedResults = reviewArray.slice(skip, skip + take);
+         return [paginatedResults, totalCount];
    }
 
 
