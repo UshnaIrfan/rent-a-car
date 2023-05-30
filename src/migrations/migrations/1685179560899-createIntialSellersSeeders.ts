@@ -176,6 +176,63 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
 
+     // Music Streaming
+
+
+
+      //Vacation Packages
+      { sellerName: 'Virgin Voyages', sellerUrl: 'http://virginvoyages.com/', isListing: true },
+      { sellerName: 'Sandals', sellerUrl: 'http://sandals.com/', isListing: true },
+      { sellerName: 'Travelocity', sellerUrl: 'http://travelocity.com/', isListing: true },
+      { sellerName: 'Expedia', sellerUrl: 'http://expedia.com/all-inclusive', isListing: true },
+      { sellerName: 'Funjet', sellerUrl: 'http://funjet.com/', isListing: true },
+
+
+
+
+      //Vacation Rentals
+      { sellerName: 'Vrbo', sellerUrl: 'http://vrbo.com/', isListing: true },
+      { sellerName: 'Airbnb', sellerUrl: 'http://airbnb.com/', isListing: true },
+      { sellerName: 'HomeToGo', sellerUrl: 'http://hometogo.com/', isListing: true },
+      { sellerName: 'FlipKey', sellerUrl: 'http://flipkey.com/', isListing: true },
+      { sellerName: 'Vacasa', sellerUrl: 'http://vacasa.com/', isListing: true },
+
+
+
+      //Veterinarians, Pet Insurance and Pet Care
+      { sellerName: 'BetterVet', sellerUrl: 'http://bettervet.com/', isListing: true },
+      { sellerName: 'Vetster', sellerUrl: 'http://vetster.com/', isListing: true },
+      { sellerName: 'Nationwide', sellerUrl: 'http://petinsurance.com/', isListing: true },
+      { sellerName: 'VCA Hospitals', sellerUrl: 'http://vcahospitals.com/', isListing: true },
+      { sellerName: 'MetLife Pet Insurance', sellerUrl: 'http://metlifepetinsurance.com/', isListing: true },
+      { sellerName: 'Spot Pet Insurance', sellerUrl: 'http://spotpetins.com/', isListing: true },
+      { sellerName: 'The Humane Society', sellerUrl: 'http://humanesociety.org/', isListing: true },
+
+
+
+
+
+      //Video Games
+      { sellerName: 'Sony', sellerUrl: 'http://playstation.com/', isListing: true },
+      { sellerName: 'Microsoft', sellerUrl: 'http://microsoft.com/', isListing: true },
+      { sellerName: 'Nintendo', sellerUrl: 'http://nintendo.com/', isListing: true },
+      { sellerName: 'Activision Blizzard', sellerUrl: 'http://activisionblizzard.com/', isListing: true },
+      { sellerName: 'Electronic Arts', sellerUrl: 'http://ea.com/', isListing: true },
+      { sellerName: 'Epic Games', sellerUrl: 'http://store.epicgames.com/', isListing: true },
+
+
+
+
+       //Wine
+      { sellerName: 'Drizly', sellerUrl: 'http://drizly.com', isListing: true },
+      { sellerName: 'Naked Wines', sellerUrl: 'http://nakedwines.com', isListing: true },
+      { sellerName: 'Totalwine.com', sellerUrl: 'http://totalwine.com', isListing: true },
+      { sellerName: 'Wine.com', sellerUrl: 'http://wine.com', isListing: true },
+      { sellerName: 'BevMo!', sellerUrl: 'http://bevmo.com', isListing: true },
+
+
+
+      //Weddings and Parties
       { sellerName: 'Party Slate', sellerUrl: 'http://partyslate.com', isListing: true },
       { sellerName: 'Here Comes the Guide', sellerUrl: 'http://herecomestheguide.com', isListing: true },
       { sellerName: 'Wedding Spot', sellerUrl: 'http://wedding-spot.com', isListing: true },
@@ -185,36 +242,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'WeddingWire', sellerUrl: 'http://weddingwire.com', isListing: true },
       { sellerName: 'Zola', sellerUrl: 'http://zola.com', isListing: true },
       { sellerName: 'Carats & Cake', sellerUrl: 'http://caratsandcake.com', isListing: true },
-
-
-
-      { sellerName: 'Drizly', sellerUrl: 'http://drizly.com', isListing: true },
-      { sellerName: 'Naked Wines', sellerUrl: 'http://nakedwines.com', isListing: true },
-      { sellerName: 'Totalwine.com', sellerUrl: 'http://totalwine.com', isListing: true },
-      { sellerName: 'Wine.com', sellerUrl: 'http://wine.com', isListing: true },
-      { sellerName: 'BevMo!', sellerUrl: 'http://bevmo.com', isListing: true },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     ];

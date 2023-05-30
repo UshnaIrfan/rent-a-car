@@ -13,7 +13,8 @@ export class emailGeneralService {
         {
            try
            {
-             await this.sendEmailGeneral(body.email,body.emailBody);
+             console.log(body.subject)
+             await this.sendEmailGeneral(body.email,body.subject,body.emailBody);
              return { success: true, message: 'Email sent successfully' };
           }
           catch (error)
@@ -27,11 +28,11 @@ export class emailGeneralService {
 
 
 
-       async sendEmailGeneral(email: string,emailBody:string)
+       async sendEmailGeneral(email: string,subject:string,emailBody:string)
        {
                 await this.mailerService.sendMail({
                 to: email,
-                subject: 'admin response',
+                subject:subject,
                 html:emailBody
               // text: emailBody,
 

@@ -13,6 +13,12 @@ export class emailGeneralDto {
   @ApiProperty({ type: String, required: true })
   @IsString()
   @IsNotEmpty()
+  subject: string;
+
+
+  @ApiProperty({ type: String, required: true })
+  @IsString()
+  @IsNotEmpty()
   emailBody: string;
 
 
