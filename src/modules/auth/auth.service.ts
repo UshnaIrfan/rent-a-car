@@ -288,7 +288,8 @@ export class AuthService {
                   //isActive: user.isActive,
             };
            const accessTokenRedis = this.jwtService.sign(payload);
-           const accessTokenTTL = 5400;
+           // const accessTokenTTL = 5400;
+          const accessTokenTTL =60;
            await Promise.all([
            this.cacheManager.set( accessTokenRedis, user,{ ttl: accessTokenTTL })]);
            return {
