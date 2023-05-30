@@ -20,7 +20,7 @@ import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema"
 import {likeDislike} from "./modules/review/schemas/like-dislike.schema";
 import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
-
+import {emailGeneralModule} from "./modules/email-general/email-general.module";
 
 
 @Module({
@@ -32,6 +32,7 @@ import * as AWS from 'aws-sdk';
      ContactUsModule,
      ReviewModule,
      AdminModule,
+     emailGeneralModule,
 
     ConfigModule.forRoot(
       {

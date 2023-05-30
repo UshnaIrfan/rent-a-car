@@ -182,7 +182,7 @@ export class AuthService {
                const activeUrl = `${ActiveUrl}${queryParams}`;
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
                const emailBody = template({ activeUrl,username:Name});
-               console.log("here",process.env.ADMIN_EMAIL)
+               console.log(emailBody)
 
                try
                {
@@ -637,6 +637,9 @@ export class AuthService {
              html: html
              });
          }
+
+
+
 
 
 }

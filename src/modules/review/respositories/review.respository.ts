@@ -254,6 +254,7 @@ export class reviewRepository{
          {
              where: Object.keys(whereConditions).length !== 0 ? [
              whereConditions] : [],
+             order: { createdAt: 'ASC' },
              relations: ['likeDislike'],
              // skip,
              // take,
@@ -309,27 +310,17 @@ export class reviewRepository{
               console.log(start)
               console.log(end)
 
-
-
-          // reviewArray.sort(function compare(a,b) {
-
-
-
-
-
+            // reviewArray.sort(function compare(a,b) {
              // Ascending order
              if (orderBy === 'ascending') {
             // return dateA - dateB;
              }
-
 
              // Descending order
              if (orderBy === 'descending') {
               // return dateB - dateA;
              }
 
-             //  Default to ascending order
-             //  return dateA - dateB;
          //  });
         }
 
