@@ -201,7 +201,7 @@ export class SellerService {
 
 
        // add seller
-      async addSeller(body:addSellerInterface,accessToken: string):Promise<{seller: seller, review: review}>
+      async addSeller(body:addSellerInterface,accessToken: string):Promise<any>
       {
           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
           const user = await this.usersRepository.findUserByID(decoded.id)
@@ -238,6 +238,12 @@ export class SellerService {
 
 
           await this.SellerRepository.sellerCategories(seller);
+
+          if(body.titleId==null)
+          {
+            return { seller};
+          }
+
 
           const typeResult = await this.clicksTitleRepository.findByTitle(body.titleId);
           if(!typeResult)
