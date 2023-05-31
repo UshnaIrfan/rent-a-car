@@ -21,7 +21,6 @@ export class createIntialCategoriesSeeders1685179560898 implements MigrationInte
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Banks')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Beauty, Cosmetics and Skincare')");
 
-
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Bedding and Bath ')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Supercenter Stores')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Books')");
@@ -84,6 +83,7 @@ export class createIntialCategoriesSeeders1685179560898 implements MigrationInte
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Ride Hail and Car Sharing')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Restaurants')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Shipping')");
+    await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Outdoor Recreation, Sporting and Camping')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Shoes')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Storage')");
     await queryRunner.query("INSERT INTO categories (categoryName) VALUES('Therapy')");

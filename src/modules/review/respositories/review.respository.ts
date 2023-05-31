@@ -300,32 +300,6 @@ export class reviewRepository{
           }
       }
 
-
-         // date by
-         if (startDate)
-         {
-
-              var start = startDate;
-              var end = new Date();
-              console.log(start)
-              console.log(end)
-
-            // reviewArray.sort(function compare(a,b) {
-             // Ascending order
-             if (orderBy === 'ascending') {
-            // return dateA - dateB;
-             }
-
-             // Descending order
-             if (orderBy === 'descending') {
-              // return dateB - dateA;
-             }
-
-         //  });
-        }
-
-
-
          const paginatedResults = reviewArray.slice(skip, skip + take);
          return [paginatedResults, totalCount];
    }
