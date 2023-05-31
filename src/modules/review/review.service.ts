@@ -387,15 +387,18 @@ export class ReviewService {
      {
 
 
-       console.log(pageSize)
+         console.log(pageSize)
         const skip = (pageNumber - 1) * pageSize;
         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,startDate,endDate);
+        console.log(result)
+
         const totalPages = Math.ceil(totalCount / pageSize);
         if (result.length === 0)
         {
            throw new NotFoundException('No records found');
         }
-     //  const paginatedResults = result.slice(skip, skip + pageSize);
+
+
         return {
             records:result,
             totalRecords: totalCount,
