@@ -395,9 +395,9 @@ export class ReviewService {
         {
            throw new NotFoundException('No records found');
         }
-       const paginatedResults = result.slice(skip, skip + pageSize);
+     //  const paginatedResults = result.slice(skip, skip + pageSize);
         return {
-            records:paginatedResults,
+            records:result,
             totalRecords: totalCount,
             totalPages,
             currentPage: pageNumber,

@@ -300,7 +300,7 @@ export class reviewRepository{
           }
       }
 
-         const paginatedResults = reviewArray.slice(skip, skip + take);
+         const paginatedResults = reviewArray.slice(skip, take);
          return [paginatedResults, totalCount];
    }
 
