@@ -265,7 +265,7 @@ export class reviewRepository{
    //           throw new NotFoundException('No reviews were found matching the criteria.');
    //      }
    //
-   //
+
    //
    //     const reviewArray = result.map(review =>
    //     {
@@ -303,19 +303,8 @@ export class reviewRepository{
    //       const paginatedResults = reviewArray.slice(skip, skip+take);
    //       return [paginatedResults, totalCount];
    // }
-  async search(
-    skip: number,
-    take: number,
-    sellerId?: string,
-    userId?: string,
-    message?: string,
-    type?: string,
-    categoryId?: string,
-    orderType?: string,
-    orderBy?: string,
-    startDate?: string,
-    endDate?: string
-  ): Promise<any> {
+
+  async search(skip: number, take: number, sellerId?: string, userId?: string, message?: string, type?: string, categoryId?: string, orderType?: string, orderBy?: string, startDate?: string, endDate?: string): Promise<any> {
     let whereConditions = {} as {
       userId?: any,
       message?: any,
@@ -357,7 +346,7 @@ export class reviewRepository{
       };
 
       orderOptions = {
-        [countPropertyMap[orderType]]: orderBy === 'ascending' ? 'ASC' : 'DESC',
+        [countPropertyMap[orderType]]: orderBy === 'ascending' ? 'ascending' : 'descending',
       };
     } else {
       orderOptions = { createdAt: 'ASC' };
