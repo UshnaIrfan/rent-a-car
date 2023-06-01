@@ -494,7 +494,7 @@ export class AuthService {
     const html = template({ username: Username });
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Your are in!',
+      subject: `You're are in!`,
       html: html,
     });
   }
