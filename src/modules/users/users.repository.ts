@@ -135,8 +135,17 @@ export class UsersRepository {
 
 
 
+        // today
+  async GetUser()
+  {
+    return this.userModel.find();
+  }
 
-        //FRONTEND APIS
+
+
+
+
+  //FRONTEND APIS
         async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(createUserDto);

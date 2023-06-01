@@ -70,7 +70,12 @@ export class UsersService {
             }
 
 
-
+  //today
+  async GetUser()
+  {
+     const  result=await this.usersRepository.GetUser();
+     return result
+  }
 
 
 

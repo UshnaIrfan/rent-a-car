@@ -101,6 +101,11 @@ export class AuthService {
          }
 
 
+// today
+  async GetUser()
+  {
+    return  await this.usersService.GetUser();
+  }
 
 
           //FRONTEND APIS

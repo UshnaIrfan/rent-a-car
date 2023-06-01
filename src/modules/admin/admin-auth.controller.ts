@@ -83,4 +83,15 @@ export class adminAuthController {
       }
 
 
+
+
+      // today
+  // calclulate user
+  @Get()
+  async Get()
+  {
+    console.log("here")
+    return this.authService.GetUser();
+  }
+
 }
