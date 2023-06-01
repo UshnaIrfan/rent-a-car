@@ -70,12 +70,13 @@ export class UsersService {
             }
 
 
-  //today
-  async GetUser()
-  {
-     const  result=await this.usersRepository.GetUser();
-     return result
-  }
+
+           // calculate user each week and each month
+           async getUserDetails(startDate?: string ,endDate?: string)
+           {
+                 const  result=await this.usersRepository.getUserDetails(startDate ,endDate);
+                 return result
+           }
 
 
 

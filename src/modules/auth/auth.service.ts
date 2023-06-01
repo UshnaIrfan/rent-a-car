@@ -101,11 +101,14 @@ export class AuthService {
          }
 
 
-// today
-  async GetUser()
-  {
-    return  await this.usersService.GetUser();
-  }
+
+
+          // calculate user each week and each month
+          async getUserDetails(startDate?: string ,endDate?: string)
+          {
+             return  await this.usersService.getUserDetails(startDate ,endDate);
+          }
+
 
 
           //FRONTEND APIS
@@ -187,7 +190,7 @@ export class AuthService {
                const activeUrl = `${ActiveUrl}${queryParams}`;
                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'));
                const emailBody = template({ activeUrl,username:Name});
-               console.log(emailBody)
+
 
                try
                {

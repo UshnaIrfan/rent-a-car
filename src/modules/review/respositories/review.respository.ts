@@ -311,15 +311,14 @@ export class reviewRepository{
              whereConditions] : [],
             // order: { createdAt: 'ASC' },
              relations: ['likeDislike'],
-              skip,
-              take,
+               // skip,
+               // take,
          });
 
         if (!result.length)
         {
              throw new NotFoundException('No reviews were found matching the criteria.');
         }
-
 
 
 
@@ -339,25 +338,25 @@ export class reviewRepository{
        });
 
 
-      if (orderType === 'like' || orderType === 'dislike' || orderType === 'report') {
-        const countPropertyMap = {
-           like: 'likeCount',
-           dislike: 'dislikeCount',
-           report: 'reportCount'
-        };
+      // if (orderType === 'like' || orderType === 'dislike' || orderType === 'report') {
+      //   const countPropertyMap = {
+      //      like: 'likeCount',
+      //      dislike: 'dislikeCount',
+      //      report: 'reportCount'
+      //   };
+      //
+      //     if (orderBy === 'ascending')
+      //     {
+      //        reviewArray.sort((a, b) => b.count[countPropertyMap[orderType]] - a.count[countPropertyMap[orderType]]);
+      //     }
+      //     else if (orderBy === 'descending')
+      //     {
+      //        reviewArray.sort((a, b) => a.count[countPropertyMap[orderType]] - b.count[countPropertyMap[orderType]]);
+      //     }
+      // }
 
-          if (orderBy === 'ascending')
-          {
-             reviewArray.sort((a, b) => b.count[countPropertyMap[orderType]] - a.count[countPropertyMap[orderType]]);
-          }
-          else if (orderBy === 'descending')
-          {
-             reviewArray.sort((a, b) => a.count[countPropertyMap[orderType]] - b.count[countPropertyMap[orderType]]);
-          }
-      }
-
-       const paginatedResults = reviewArray.slice(skip,skip +take);
-        return [paginatedResults, totalCount];
+       const paginatedResults = reviewArray.slice(skip,take);
+       return [paginatedResults, totalCount];
    }
 
 

@@ -85,13 +85,16 @@ export class adminAuthController {
 
 
 
-      // today
-  // calclulate user
-  @Get()
-  async Get()
-  {
-    console.log("here")
-    return this.authService.GetUser();
-  }
+
+      // calculate user each week and each month
+        @ApiQuery({ name: 'startDate', required: false })
+        @ApiQuery({ name: 'endDate', required: false })
+      //  @Get("/user/details")
+        @Get()
+        async getUserDetails(  @Query('startDate') startDate?: string ,@Query('endDate') endDate?: string,)
+        {
+              console.log("here")
+             return this.authService.getUserDetails(startDate ,endDate);
+        }
 
 }

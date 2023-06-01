@@ -4,6 +4,7 @@ import { Like, Repository } from "typeorm";
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from "./schemas/user.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
+import * as moment from "moment";
 
 
 @Injectable()
@@ -135,17 +136,36 @@ export class UsersRepository {
 
 
 
-        // today
-  async GetUser()
-  {
-    return this.userModel.find();
-  }
+          // calculate user each week and each month
+          async getUserDetails(startDate?: string ,endDate?: string)
+          {
+
+            let query = {};
+            if (startDate && endDate) {
+
+              const start = moment(startDate, 'YYYY-MM-DD').startOf('week').toDate();
+              const end = moment(endDate, 'YYYY-MM-DD').endOf('week').toDate();
+              console.log("start" ,start)
+              console.log("end" ,end)
+                 query = {
+                 createdAt: {
+                  $gte: start,
+                  $lte: end,
+                },
+              };
+
+              return this.userModel.find(query);
+            }
+
+              return this.userModel.find();
+
+     }
 
 
 
 
 
-  //FRONTEND APIS
+         //FRONTEND APIS
         async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(createUserDto);
