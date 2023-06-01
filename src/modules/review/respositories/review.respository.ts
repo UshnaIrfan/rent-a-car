@@ -141,9 +141,9 @@ export class reviewRepository{
                  message: Not(IsNull()),
                  approvedByAdmin:true,
                  titleId: In([
-                   "679222b4-fcb4-11ed-a793-f859717be1ac",
-                   "679ad26f-fcb4-11ed-a793-f859717be1ac",
-                   "67aeb75e-fcb4-11ed-a793-f859717be1ac"
+                   "cf428702-d7e3-4445-b2c4-704c20b46770",
+                   "dd10d9c9-4766-440b-925f-77f2e2b8f828",
+                   "e752306b-0c33-4c1e-a238-070250f37d72"
                ])}],
                 relations: ['likeDislike'],
                 order: { createdAt: 'DESC' }

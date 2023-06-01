@@ -93,7 +93,8 @@ export class adminAuthController {
         @Get()
         async getUserDetails(  @Query('startDate') startDate?: string ,@Query('endDate') endDate?: string,)
         {
-              console.log("here")
+              console.log(new Date(Date.now()).toLocaleString())
+
              return this.authService.getUserDetails(startDate ,endDate);
         }
 

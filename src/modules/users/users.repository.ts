@@ -149,15 +149,17 @@ export class UsersRepository {
               console.log("end" ,end)
                  query = {
                  createdAt: {
-                  $gte: start,
-                  $lte: end,
+                   $gte: start,
+                   $lte: end,
                 },
               };
 
-              return this.userModel.find(query);
+              return this.userModel.find({
+                where:query
+              });
             }
 
-              return this.userModel.find();
+             // return this.userModel.find();
 
      }
 
