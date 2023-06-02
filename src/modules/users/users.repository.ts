@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from "typeorm";
+import { Between, Like, Repository } from "typeorm";
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from "./schemas/user.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
@@ -136,38 +136,72 @@ export class UsersRepository {
 
 
 
-          // calculate user each week and each month
-          async getUserDetails(startDate?: string ,endDate?: string)
+     //      // calculate user each week and each month
+     //      async getUserDetails(startDate?: string ,endDate?: string)
+     //      {
+     //
+     //        let query = {};
+     //        if (startDate && endDate) {
+     //
+     //          const start = moment(startDate, 'YYYY-MM-DD').startOf('week').toDate();
+     //          const end = moment(endDate, 'YYYY-MM-DD').endOf('week').toDate();
+     //          console.log("start" ,start)
+     //          console.log("end" ,end)
+     //             query = {
+     //             createdAt: {
+     //               $gte: start,
+     //               $lte: end,
+     //            },
+     //          };
+     //
+     //          return this.userModel.find({
+     //            where:query
+     //          });
+     //        }
+     //
+     //         // return this.userModel.find();
+     //
+     // }
+
+          async getUserDetails(startDate?: string, endDate?: string)
           {
-
             let query = {};
-            if (startDate && endDate) {
+            const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
+            const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
+            query = {
+              createdAt: Between(start, end)
+            };
 
-              const start = moment(startDate, 'YYYY-MM-DD').startOf('week').toDate();
-              const end = moment(endDate, 'YYYY-MM-DD').endOf('week').toDate();
-              console.log("start" ,start)
-              console.log("end" ,end)
-                 query = {
-                 createdAt: {
-                   $gte: start,
-                   $lte: end,
-                },
-              };
+            const users = await this.userModel.find({ where: query });
 
-              return this.userModel.find({
-                where:query
-              });
+            const result = {};
+            const currentDate = moment(start);
+            const lastDate = moment(end);
+
+            while (currentDate.isSameOrBefore(lastDate))
+            {
+              const formattedDate = currentDate.format('YYYY-MM-DD');
+              result[formattedDate] = 0;
+
+              for (const user of users)
+              {
+                const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+                if (userDate === formattedDate)
+                {
+                  result[formattedDate]++;
+                }
+              }
+
+              currentDate.add(1, 'day');
             }
 
-             // return this.userModel.find();
-
-     }
-
+            return result;
+          }
 
 
 
 
-         //FRONTEND APIS
+  //FRONTEND APIS
         async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(createUserDto);

@@ -87,14 +87,12 @@ export class adminAuthController {
 
 
       // calculate user each week and each month
+         @ApiBearerAuth()
         @ApiQuery({ name: 'startDate', required: false })
         @ApiQuery({ name: 'endDate', required: false })
-      //  @Get("/user/details")
-        @Get()
+        @Get("/user/details/count")
         async getUserDetails(  @Query('startDate') startDate?: string ,@Query('endDate') endDate?: string,)
         {
-              console.log(new Date(Date.now()).toLocaleString())
-
              return this.authService.getUserDetails(startDate ,endDate);
         }
 
