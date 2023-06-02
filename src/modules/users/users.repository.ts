@@ -136,7 +136,7 @@ export class UsersRepository {
 
 
 
-     //      // calculate user each week and each month
+          //      // calculate user each week and each month
      //      async getUserDetails(startDate?: string ,endDate?: string)
      //      {
      //
@@ -163,45 +163,96 @@ export class UsersRepository {
      //
      // }
 
-          async getUserDetails(startDate?: string, endDate?: string)
-          {
-            let query = {};
-            const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
-            const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
-            query = {
-              createdAt: Between(start, end)
+          // async getUserDetails(startDate?: string, endDate?: string)
+          // {
+          //   let query = {};
+          //   const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
+          //   const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
+          //   query = {
+          //     createdAt: Between(start, end)
+          //   };
+          //
+          //   const users = await this.userModel.find({ where: query });
+          //
+          //   const result = {};
+          //   const currentDate = moment(start);
+          //   const lastDate = moment(end);
+          //
+          //   while (currentDate.isSameOrBefore(lastDate))
+          //   {
+          //     const formattedDate = currentDate.format('YYYY-MM-DD');
+          //     result[formattedDate] = 0;
+          //
+          //     for (const user of users)
+          //     {
+          //       const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+          //       if (userDate === formattedDate)
+          //       {
+          //         result[formattedDate]++;
+          //       }
+          //     }
+          //
+          //     currentDate.add(1, 'day');
+          //   }
+          //
+          //   return result;
+          // }
+
+        async getUserDetails(startDate?: string, endDate?: string)
+        {
+             let query = {};
+             const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
+             const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
+             query = {
+                createdAt: Between(start, end)
             };
 
             const users = await this.userModel.find({ where: query });
-
             const result = {};
             const currentDate = moment(start);
             const lastDate = moment(end);
+            let totalCount = 0;
+
+            for (const user of users)
+            {
+                totalCount++;
+            }
 
             while (currentDate.isSameOrBefore(lastDate))
             {
               const formattedDate = currentDate.format('YYYY-MM-DD');
-              result[formattedDate] = 0;
+              let countPerDay = 0;
 
               for (const user of users)
               {
-                const userDate = moment(user.createdAt).format('YYYY-MM-DD');
-                if (userDate === formattedDate)
-                {
-                  result[formattedDate]++;
-                }
+                  const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+                  if (userDate === formattedDate)
+                  {
+                     countPerDay++;
+                  }
               }
+
+              const percentage = (countPerDay / totalCount) * 100;
+              const Percentage=parseFloat(percentage.toFixed(2))
+
+            //  console.log(percentage)
+
+              result[formattedDate] = { user: countPerDay, percentage:Percentage};
 
               currentDate.add(1, 'day');
             }
 
-            return result;
-          }
+             return result;
+    }
 
 
 
 
-  //FRONTEND APIS
+
+
+
+
+       //FRONTEND APIS
         async createUser(createUserDto: CreateUserDto): Promise<User | null>
         {
            return this.userModel.save(createUserDto);
