@@ -121,6 +121,7 @@ export class AuthService {
         // Sign up
       async signup(@Body() Signup: signupUserInterface)
       {
+
           const User = await this.usersService.findUserByEmail(Signup.email);
           if (User && User.status == 'inactive')
           {
@@ -140,11 +141,12 @@ export class AuthService {
               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
 
               console.log('token', Token);
-              const contact_us= process.env.CONTACT_US
+              const contact_us_url= process.env.CONTACT_US
+              const privacy_policy_url= process.env.PRIVACY_POLICY
               const queryParams = `?Token=${Token}&email=${User.email}`;
               const activeUrl = `${ActiveUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-              const emailBody = template({ activeUrl, username: Name, baseUrl });
+              const emailBody = template({ activeUrl, username: Name, baseUrl, contact_us_url,privacy_policy_url});
 
               await this.sendVerificationEmail(User.email, emailBody);
 
@@ -204,7 +206,7 @@ export class AuthService {
             try
             {
               await this.sendVerificationEmail(user.email, emailBody);
-              await this.sendAdminEmail(process.env.ADMIN_EMAIL, user);
+              await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url);
             }
             catch (e)
             {
@@ -254,12 +256,11 @@ export class AuthService {
                     parsedToken.active = true;
                     const updatedTokenValue = JSON.stringify(parsedToken);
                     await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-                    const user = await this.usersService.isActive(
-                      reqBody.email,
-                      reqBody.status,
-                    );
+                    const user = await this.usersService.isActive(reqBody.email, reqBody.status,);
                     const Username = user.name;
-                    await this.sendWelcomeEmail(reqBody.email, Username);
+                    const contact_us_url= process.env.CONTACT_US
+                    const privacy_policy_url= process.env.PRIVACY_POLICY
+                    await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url);
                     return { message: 'Token verified successfully' };
                   }
               }
@@ -333,6 +334,8 @@ export class AuthService {
             expiresAt,
             active: false,
           });
+          const contact_us_url= process.env.CONTACT_US
+          const privacy_policy_url= process.env.PRIVACY_POLICY
           await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
           const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
           const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
@@ -340,7 +343,7 @@ export class AuthService {
           const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
           const resetUrl = `${changePasswordUrl}${queryParams}`;
           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
-          const emailBody = template({ resetUrl, username: Username });
+          const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url });
           try
           {
             await this.sendToken(user.email, emailBody);
@@ -435,8 +438,10 @@ export class AuthService {
 
             if (parsedToken.active == true)
             {
+              const contact_us_url= process.env.CONTACT_US
+              const privacy_policy_url= process.env.PRIVACY_POLICY
               await this.usersService.updatePassword(reqBody.email, hashedPassword);
-              await this.sendPasswordUpdatedEmail(reqBody.email, user.name);
+              await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url);
               const loginResult = this.login(user);
               await this.cacheManager.del(tokenKey);
               return loginResult;
@@ -536,10 +541,10 @@ export class AuthService {
 
 
         // sending email(welcome after registered)
-        async sendWelcomeEmail(email: string, Username: string)
+        async sendWelcomeEmail(email: string, Username: string,contact_us_url:string,privacy_policy_url:string)
         {
             const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
-            const html = template({ username: Username });
+            const html = template({ username: Username,contact_us_url,privacy_policy_url });
             await this.mailerService.sendMail({
               to: email,
               subject: `You're in!`,
@@ -593,10 +598,10 @@ export class AuthService {
 
 
         //sending email (updated password)
-        async sendPasswordUpdatedEmail(email: string, name: string)
+        async sendPasswordUpdatedEmail(email: string, name: string,contact_us_url:string,privacy_policy_url:string)
         {
           const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
-          const html = template({ email, username: name });
+          const html = template({ email, username: name,contact_us_url,privacy_policy_url });
           await this.mailerService.sendMail({
             to: email,
             subject: 'Success: Your password has been reset!',
@@ -607,11 +612,10 @@ export class AuthService {
 
 
         // sending admin email
-        async sendAdminEmail(email: string, user: any) {
-          const template = handlebars.compile(
-            fs.readFileSync('src/templates/adminEmail.html', 'utf8'),
-          );
-          const html = template({ email, name: user.name, userEmail: user.email });
+        async sendAdminEmail(email: string, user: any,contact_us_url:string,privacy_policy_url:string)
+        {
+          const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
+          const html = template({ email, name: user.name, userEmail: user.email ,contact_us_url,privacy_policy_url});
           await this.mailerService.sendMail({
             to: email,
             subject: 'New Signup',
