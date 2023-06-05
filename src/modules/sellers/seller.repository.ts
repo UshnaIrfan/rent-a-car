@@ -393,7 +393,6 @@ export class sellerRepository{
             {
                 const result = await this.CategoryRepository.getCategoryId( categories.id);
                 console.log("here",result)
-
                 const categorySellers = result.sellers.filter((seller) => seller.id !== id);
                 results.push({ categories, sellers: categorySellers});
 
