@@ -272,4 +272,15 @@ export class SellerService {
 
 
 
+
+        // unique seller show
+        async getUniqueSeller(seller_Id: string)
+        {
+              const result = await this.SellerRepository.getUniqueSeller( seller_Id);
+              return  result
+        }
+
+
+
+
 }

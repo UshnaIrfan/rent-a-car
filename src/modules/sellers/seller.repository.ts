@@ -6,7 +6,7 @@ import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status as sellerStatus } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import { reviewRepository } from "../review/respositories/review.respository";
-import {status as categoryStatus } from "../categories/schemas/category.schema";
+import { category, status, status as categoryStatus } from "../categories/schemas/category.schema";
 
 @Injectable()
 export class sellerRepository{
@@ -347,7 +347,7 @@ export class sellerRepository{
              where: {
                 categories: { approvedByAdmin: sellerStatus.APPROVED },
                 approvedByAdmin: sellerStatus.APPROVED,
-                isListing: true
+                isListing: true,
               },
               order: {sellerName: 'ASC' }
                });
@@ -363,6 +363,44 @@ export class sellerRepository{
         {
 
            return  this.sellerModel.findOne({ where: { id ,approvedByAdmin:sellerStatus.APPROVED } })
+        }
+
+
+
+
+
+        // unique seller show
+        async getUniqueSeller(id:string): Promise<any>
+        {
+           const seller = await  this.sellerModel.findOne({
+             where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
+             relations: ['categories']
+            });
+            if (!seller)
+            {
+                 throw new NotFoundException('seller not found');
+            }
+            console.log("here")
+            const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === sellerStatus.APPROVED);
+            if (approvedCategories.length === 0)
+            {
+                console.log("here1")
+                throw new NotFoundException('no category against the seller id');
+            }
+            seller.categories = approvedCategories;
+            const results = [];
+            for(const categories of approvedCategories)
+            {
+                const result = await this.CategoryRepository.getCategoryId( categories.id);
+                console.log("here",result)
+
+                const categorySellers = result.sellers.filter((seller) => seller.id !== id);
+                results.push({ categories, sellers: categorySellers});
+
+            }
+
+            return  results
+
         }
 
 

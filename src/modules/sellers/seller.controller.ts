@@ -49,4 +49,13 @@ export class SellerController {
 
 
 
+
+        // unique seller show
+        @Get('other/seller_id')
+        async getUniqueSeller(@Query('excludeSeller') excludeSellerId: string)
+        {
+             return this.sellerService.getUniqueSeller(excludeSellerId);
+        }
+
+
 }
