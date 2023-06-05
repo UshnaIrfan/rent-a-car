@@ -601,7 +601,7 @@ export class AuthService {
         async sendPasswordUpdatedEmail(email: string, name: string,contact_us_url:string,privacy_policy_url:string)
         {
           const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
-          const html = template({ email, username: name,contact_us_url,privacy_policy_url });
+          const html = template({ email, username: name,contact_us_url,privacy_policy_url});
           await this.mailerService.sendMail({
             to: email,
             subject: 'Success: Your password has been reset!',
