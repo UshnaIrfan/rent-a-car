@@ -140,6 +140,7 @@ export class AuthService {
               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
 
               console.log('token', Token);
+              const contact_us= process.env.CONTACT_US
               const queryParams = `?Token=${Token}&email=${User.email}`;
               const activeUrl = `${ActiveUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
@@ -193,12 +194,12 @@ export class AuthService {
 
             console.log('token', Token);
 
+            const contact_us_url= process.env.CONTACT_US
+            const privacy_policy_url= process.env.PRIVACY_POLICY
             const queryParams = `?Token=${Token}&email=${user.email}`;
             const activeUrl = `${ActiveUrl}${queryParams}`;
-            const template = handlebars.compile(
-              fs.readFileSync('src/templates/signUp.html', 'utf8'),
-            );
-            const emailBody = template({ activeUrl, username: Name });
+            const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
+            const emailBody = template({ activeUrl, username: Name,contact_us_url,privacy_policy_url});
 
             try
             {
