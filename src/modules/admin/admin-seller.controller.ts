@@ -93,7 +93,7 @@ export class AdminSellerController {
         async  getAllSeller():Promise<{records:seller[]}>
         {
               console.log("adminallseller")
-           return this.sellerService.getAllSeller();
+             return this.sellerService.getAllSeller();
         }
 
 

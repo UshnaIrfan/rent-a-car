@@ -383,28 +383,28 @@ export class ReviewService {
 
      //ADMIN APIS
      // review search
-     async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string)
+     async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,startDate?:string,endDate?:string)
      {
 
 
          console.log(pageSize)
          const skip = (pageNumber - 1) * pageSize;
-         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy);
+         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,startDate,endDate);
 
 
-        const totalPages = Math.ceil(totalCount / pageSize);
-        if (result.length === 0)
-        {
-           throw new NotFoundException('No records found');
-        }
+          const totalPages = Math.ceil(totalCount / pageSize);
+          if (result.length === 0)
+          {
+             throw new NotFoundException('No records found');
+          }
 
 
-        return {
-            records:result,
-            totalRecords: totalCount,
-            totalPages,
-            currentPage: pageNumber,
-       };
+          return {
+              records:result,
+              totalRecords: totalCount,
+              totalPages,
+              currentPage: pageNumber,
+         };
    }
 
 
