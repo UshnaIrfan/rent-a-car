@@ -372,27 +372,25 @@ export class sellerRepository{
         // unique seller show
         async getUniqueSeller(id:string): Promise<any>
         {
-           const seller = await  this.sellerModel.findOne({
+             const seller = await  this.sellerModel.findOne({
              where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
              relations: ['categories']
-            });
+             });
             if (!seller)
             {
                  throw new NotFoundException('seller not found');
             }
-            console.log("here")
+
             const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === sellerStatus.APPROVED);
             if (approvedCategories.length === 0)
             {
-                console.log("here1")
-                throw new NotFoundException('no category against the seller id');
+                throw new NotFoundException('no category  exit against the seller id');
             }
             seller.categories = approvedCategories;
             const results = [];
             for(const categories of approvedCategories)
             {
                 const result = await this.CategoryRepository.getCategoryId( categories.id);
-                console.log("here",result)
                 const categorySellers = result.sellers.filter((seller) => seller.id !== id);
                 results.push({ categories, sellers: categorySellers});
 
