@@ -142,9 +142,9 @@ export class reviewRepository{
                  message: Not(IsNull()),
                  approvedByAdmin:true,
                  titleId: In([
-                   "3f85f312-dad6-455a-ba7e-4a9b1c0351ee",
-                   "735dad78-40b4-4e76-ae34-9589d2611aff",
-                   "dfe6c7ae-4263-404d-b88e-9b21c6fe4b97"
+                   "04977f8a-93ec-4363-b90e-a03378665c21",
+                   "d915aab8-2be7-4d37-96b4-c7e391c4d7ee",
+                   "f3817214-d0dc-472d-b869-7c71ae52387b"
                ])}],
                 relations: ['likeDislike'],
                 order: { createdAt: 'DESC' }
@@ -154,9 +154,7 @@ export class reviewRepository{
 
 
 
-
-
-         //ADMIN APIS
+      //ADMIN APIS
         // review search
     //     async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
     //     {
