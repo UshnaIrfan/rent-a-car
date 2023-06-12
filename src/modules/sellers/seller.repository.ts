@@ -395,7 +395,6 @@ export class sellerRepository{
                 results.push({ categories, sellers: categorySellers});
 
             }
-
             return  results
 
         }
