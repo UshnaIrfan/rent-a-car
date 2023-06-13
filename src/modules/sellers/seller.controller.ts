@@ -1,10 +1,9 @@
 import { Controller, Post, Body, Get, Param, Put, Delete, Query, Patch, Req, UseGuards } from "@nestjs/common";
 import { SellerService } from './seller.service';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 import { BlockRoles } from "../../decorators/block.decorators";
 import { BlockRole } from "../../enums/block.enum";
 
