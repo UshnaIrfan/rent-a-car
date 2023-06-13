@@ -352,16 +352,18 @@ export class sellerRepository{
               order: {sellerName: 'ASC' },
              });
 
-             const uniqueSellerNames: string[] = [];
+           const uniqueSellerNames: string[] = [];
+           const uniqueSellers: seller[] = [];
 
-             for (const seller of sellers)
-             {
-               if (!uniqueSellerNames.includes(seller.sellerName))
-               {
-                   uniqueSellerNames.push(seller.sellerName);
-               }
+           for (const seller of sellers) {
+             if (!uniqueSellerNames.includes(seller.sellerName)) {
+               uniqueSellerNames.push(seller.sellerName);
+               uniqueSellers.push(seller);
              }
-            return sellers;
+           }
+
+           return uniqueSellers;
+           // return sellers;
 
         }
 
