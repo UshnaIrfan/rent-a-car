@@ -261,7 +261,7 @@ export class AuthService {
                     const contact_us_url= process.env.CONTACT_US
                     const privacy_policy_url= process.env.PRIVACY_POLICY
                     await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url);
-                    return { message: 'Token verified successfully' };
+                    return { message: 'Your account has been successfully created. Please login here' };
                   }
               }
               catch (e)
@@ -370,7 +370,6 @@ export class AuthService {
             }
 
             const tokenKey = `forgot-password-token:${user.email}`;
-
             const cachedToken = await this.cacheManager.get(tokenKey);
             console.log('before', cachedToken);
 
@@ -438,17 +437,17 @@ export class AuthService {
 
             if (parsedToken.active == true)
             {
-              const contact_us_url= process.env.CONTACT_US
-              const privacy_policy_url= process.env.PRIVACY_POLICY
-              await this.usersService.updatePassword(reqBody.email, hashedPassword);
-              await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url);
-              const loginResult = this.login(user);
-              await this.cacheManager.del(tokenKey);
-              return loginResult;
+                const contact_us_url= process.env.CONTACT_US
+                const privacy_policy_url= process.env.PRIVACY_POLICY
+                await this.usersService.updatePassword(reqBody.email, hashedPassword);
+                await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url);
+                const loginResult = this.login(user);
+                await this.cacheManager.del(tokenKey);
+                return loginResult;
             }
             else
             {
-              throw new UnauthorizedException('plz firstly active token and then  password changed',);
+               throw new UnauthorizedException('plz firstly active token and then  password changed',);
             }
       }
 
@@ -490,16 +489,16 @@ export class AuthService {
 
 
        //logout
-      async logout(accessToken: string): Promise<{ message: string }>
-      {
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-            throw new NotFoundException('Token expired');
-          }
-          await this.cacheManager.del(accessToken);
-          return { message: 'Successfully logout' };
-      }
+        async logout(accessToken: string): Promise<{ message: string }>
+        {
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken)
+            {
+              throw new NotFoundException('Token expired');
+            }
+            await this.cacheManager.del(accessToken);
+            return { message: 'Successfully logout' };
+        }
 
 
 

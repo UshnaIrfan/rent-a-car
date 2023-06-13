@@ -15,122 +15,113 @@ export class UsersService {
 
            //ADMIN APIS
           // get all users and search by name (pagination)
-          async getAllUsers(pageNumber: number,pageSize?:number,username?:string):Promise<paginationUserInterface>
-          {
+            async getAllUsers(pageNumber: number,pageSize?:number,username?:string):Promise<paginationUserInterface>
+            {
 
-               const skip = (pageNumber - 1) * pageSize;
-               const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
-               const totalPages = Math.ceil(totalCount / pageSize);
+                 const skip = (pageNumber - 1) * pageSize;
+                 const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
+                 const totalPages = Math.ceil(totalCount / pageSize);
 
-               if (result.length === 0)
-               {
-                    throw new NotFoundException('No records found');
-               }
-
-              return {
-                  records: result,
-                  totalRecords: totalCount,
-                  totalPages,
-                  currentPage: pageNumber,
-              };
-        }
-
-
+                 if (result.length === 0)
+                 {
+                      throw new NotFoundException('No records found');
+                 }
+                return {
+                    records: result,
+                    totalRecords: totalCount,
+                    totalPages,
+                    currentPage: pageNumber,
+                };
+          }
 
 
              // update user
-            async  updateUser (id:string, name:string,username:string,email:string)
-            {
-                return this.usersRepository.updateUser(id,name,username,email);
-            }
-
-
-
-           // admin user update status
-           async  adminUpdateUserStatus (userId:string, status:string):Promise<User | null>
-           {
-                return this.usersRepository.adminUpdateUserStatus(userId,status);
-           }
-
-
-
-          // admin user update  block status
-          async adminUpdateUserBlockStatus (userId:string, blockStatus:string):Promise<User | null>
-          {
-               return this.usersRepository.adminUpdateUserBlockStatus(userId,blockStatus);
-          }
-
-
-
-
-            //delete user with review with likeAndDislike
-            async deleteUser(id:string): Promise<User|null>
-            {
-               return this.usersRepository.deleteUser(id);
-            }
-
-
-
-           // calculate user each week and each month
-           async getUserDetails(startDate?: string ,endDate?: string)
-           {
-                 const  result=await this.usersRepository.getUserDetails(startDate ,endDate);
-                 return result
-           }
-
-
-
-
-
-            //FRONTEND APIS
-            async findUserByUsername(username: string): Promise<User | null>
-            {
-               return this.usersRepository.findUserByUsername(username);
-            }
-
-
-
-
-            async findUserByEmail(email: string): Promise<User | null>
-            {
-               return this.usersRepository.findUserByEmail(email);
-            }
-
-
-
-           async createUser(user: CreateUserDto): Promise<User | null>
-           {
-               return this.usersRepository.createUser(user);
-           }
-
-
-
-
-           async updatePassword(email: string ,password:string): Promise<User | null>
-           {
-              return this.usersRepository.updatePassword(email,password);
-           }
-
-
-
-
-          async isActive(email: string,status:string): Promise<User | null>
-          {
-             return this.usersRepository.isActive(email,status);
-          }
-
-
-
-
-         async getAllUser():Promise<User[]>
-         {
-             const users =await this.usersRepository.getAllUser();
-             if(!users)
+             async  updateUser (id:string, name:string,username:string,email:string)
              {
-                 throw new NotFoundException('No user exit');
+                 return this.usersRepository.updateUser(id,name,username,email);
              }
-             return  users;
-         }
+
+
+
+             // admin user update status
+             async  adminUpdateUserStatus (userId:string, status:string):Promise<User | null>
+             {
+                return this.usersRepository.adminUpdateUserStatus(userId,status);
+             }
+
+
+
+              // admin user update  block status
+              async adminUpdateUserBlockStatus (userId:string, blockStatus:string):Promise<User | null>
+              {
+                 return this.usersRepository.adminUpdateUserBlockStatus(userId,blockStatus);
+              }
+
+
+
+              //delete user with review with likeAndDislike
+              async deleteUser(id:string): Promise<User|null>
+              {
+                 return this.usersRepository.deleteUser(id);
+              }
+
+
+
+             // calculate user each week and each month
+             async getUserDetails(startDate?: string ,endDate?: string)
+             {
+                   const  result=await this.usersRepository.getUserDetails(startDate ,endDate);
+                   return result
+             }
+
+
+
+
+             //FRONTEND APIS
+              async findUserByUsername(username: string): Promise<User | null>
+              {
+                 return this.usersRepository.findUserByUsername(username);
+              }
+
+
+
+              async findUserByEmail(email: string): Promise<User | null>
+              {
+                 return this.usersRepository.findUserByEmail(email);
+              }
+
+
+
+             async createUser(user: CreateUserDto): Promise<User | null>
+             {
+                 return this.usersRepository.createUser(user);
+             }
+
+
+
+             async updatePassword(email: string ,password:string): Promise<User | null>
+             {
+                return this.usersRepository.updatePassword(email,password);
+             }
+
+
+
+            async isActive(email: string,status:string): Promise<User | null>
+            {
+               return this.usersRepository.isActive(email,status);
+            }
+
+
+
+           async getAllUser():Promise<User[]>
+           {
+               const users =await this.usersRepository.getAllUser();
+               if(!users)
+               {
+                   throw new NotFoundException('No user exit');
+               }
+               return  users;
+           }
 
 
 

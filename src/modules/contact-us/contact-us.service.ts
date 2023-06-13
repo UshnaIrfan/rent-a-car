@@ -26,9 +26,8 @@ export class ContactUsService {
          catch (error)
          {
               throw new InternalServerErrorException('Failed to send your message. Please try again later');
-          }
+         }
      }
-
 
 
 
@@ -48,7 +47,6 @@ export class ContactUsService {
            {
                 throw new NotFoundException('No records found');
            }
-
            return {
                records: result,
                totalRecords: totalCount,
@@ -69,7 +67,6 @@ export class ContactUsService {
               {
                    throw new NotFoundException('invalid id');
               }
-
              return { message: "contact us status updated successfully", update};
        }
 

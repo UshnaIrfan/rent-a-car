@@ -43,7 +43,6 @@ export class sellerRepository{
               return null
           }
 
-
          if (seller.sellerUrl === sellerUrl)
          {
               seller.sellerName = sellerName;
@@ -292,49 +291,48 @@ export class sellerRepository{
 
 
        // get all sellers
-        async getAllSeller(): Promise<seller[]|null>
-        {
-          return  await this.sellerModel.find()
-        }
-
-
-
-      //FRONTEND APIS
-      // create seller with associated categories
-       async sellerCategories(body:seller):Promise<seller|null>
-       {
-         return this.sellerModel.save(body);
-       }
-
-
-
-
-       // get seller by url
-       async getSellerUrl(sellerUrl:string): Promise<seller|null>
-       {
-           return  this.sellerModel.findOne({ where: { sellerUrl }})
-       }
-
-
-
-       // get seller by ID (associated categories)
-       async getSellerById(id: string): Promise<seller|null>
-       {
-
-         const seller = await  this.sellerModel.findOne(
+          async getAllSeller(): Promise<seller[]|null>
           {
-            where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
-            relations: ['categories'],
-          });
-          if (!seller)
-          {
-             throw new NotFoundException('seller not found');
+            return  await this.sellerModel.find()
           }
-         const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === sellerStatus.APPROVED);
-         seller.categories = approvedCategories;
-         return seller;
-       }
 
+
+
+        //FRONTEND APIS
+        // create seller with associated categories
+         async sellerCategories(body:seller):Promise<seller|null>
+         {
+           return this.sellerModel.save(body);
+         }
+
+
+
+
+         // get seller by url
+         async getSellerUrl(sellerUrl:string): Promise<seller|null>
+         {
+             return  this.sellerModel.findOne({ where: { sellerUrl }})
+         }
+
+
+
+         // get seller by ID (associated categories)
+         async getSellerById(id: string): Promise<seller|null>
+         {
+
+           const seller = await  this.sellerModel.findOne(
+            {
+              where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
+              relations: ['categories'],
+            });
+            if (!seller)
+            {
+               throw new NotFoundException('seller not found');
+            }
+           const approvedCategories = seller.categories.filter(category => category.approvedByAdmin === sellerStatus.APPROVED);
+           seller.categories = approvedCategories;
+           return seller;
+         }
 
 
 
@@ -362,10 +360,8 @@ export class sellerRepository{
                  uniqueSellers.push(seller);
                }
              }
-
-           return uniqueSellers;
+            return uniqueSellers;
            // return sellers;
-
         }
 
 
@@ -373,10 +369,8 @@ export class sellerRepository{
         //get seller ID
         async getSellerId(id:string): Promise<seller|null>
         {
-
-           return  this.sellerModel.findOne({ where: { id ,approvedByAdmin:sellerStatus.APPROVED } })
+            return  this.sellerModel.findOne({ where: { id ,approvedByAdmin:sellerStatus.APPROVED } })
         }
-
 
 
 
@@ -405,10 +399,8 @@ export class sellerRepository{
                 const result = await this.CategoryRepository.getCategoryId( categories.id);
                 const categorySellers = result.sellers.filter((seller) => seller.id !== id);
                 results.push({ categories, sellers: categorySellers});
-
             }
             return  results
-
         }
 
 

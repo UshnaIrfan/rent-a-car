@@ -42,9 +42,7 @@ export class CategoriesService {
           if (categoryName)
           {
              throw new ConflictException(' category already exists');
-
           }
-
 
          try
          {
@@ -138,15 +136,13 @@ export class CategoriesService {
        // get all categories
        async getAllCategories() :Promise<{ records: category[] }>
        {
-         const categories = await this.categoryRepository.getAllCategories()
-         if (!categories)
-         {
-            throw new  NotFoundException('Categories not exist');
-         }
-
-         return { records: categories};
-        }
-
+           const categories = await this.categoryRepository.getAllCategories()
+           if (!categories)
+           {
+              throw new  NotFoundException('Categories not exist');
+           }
+           return { records: categories};
+       }
 
 
 
@@ -162,7 +158,6 @@ export class CategoriesService {
 
            return { records: category};
        }
-
 
 
 
@@ -189,13 +184,11 @@ export class CategoriesService {
                throw new NotFoundException('Category not exist');
            }
 
-
           const sellerIds = [];
           for (const seller of category.sellers)
           {
                sellerIds.push(seller.id);
           }
-
 
          const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
          if (!latestPositiveReview)
@@ -221,10 +214,7 @@ export class CategoriesService {
             'to-review': latestPositiveReview
            };
          }
-
     }
-
-
 
 
 

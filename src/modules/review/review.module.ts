@@ -20,7 +20,6 @@ import {CategoryRepository} from "../categories/category.repository";
 import {category} from "../categories/schemas/category.schema";
 
 
-
 @Module({
   imports: [TypeOrmModule.forFeature([category,review ,clicksTitle,clicksTypes ,seller,User,likeDislike]),
     CacheModule.register({
