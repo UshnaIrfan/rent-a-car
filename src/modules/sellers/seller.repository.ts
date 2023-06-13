@@ -353,16 +353,18 @@ export class sellerRepository{
              });
 
              const uniqueSellerNames: string[] = [];
+             const uniqueSellers: seller[] = [];
 
              for (const seller of sellers)
              {
-               if (!uniqueSellerNames.includes(seller.sellerName))
-               {
-                   uniqueSellerNames.push(seller.sellerName);
+               if (!uniqueSellerNames.includes(seller.sellerName)) {
+                 uniqueSellerNames.push(seller.sellerName);
+                 uniqueSellers.push(seller);
                }
              }
-           //  return  uniqueSellerNames
-            return sellers;
+
+           return uniqueSellers;
+           // return sellers;
 
         }
 
