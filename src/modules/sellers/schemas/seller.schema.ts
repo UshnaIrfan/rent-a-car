@@ -25,7 +25,7 @@ export class seller{
 
 
       @ApiProperty()
-      @Column({ nullable: true})
+      @Column({ unique:true,nullable: true})
       sellerName: string;
 
 

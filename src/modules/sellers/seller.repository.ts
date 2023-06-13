@@ -315,6 +315,12 @@ export class sellerRepository{
          }
 
 
+          // get seller by url
+          async getSellerName(sellerName:string): Promise<seller|null>
+          {
+            return  this.sellerModel.findOne({ where: { sellerName }})
+          }
+
 
          // get seller by ID (associated categories)
          async getSellerById(id: string): Promise<seller|null>
@@ -350,18 +356,7 @@ export class sellerRepository{
               order: {sellerName: 'ASC' },
              });
 
-             const uniqueSellerNames: string[] = [];
-             const uniqueSellers: seller[] = [];
-
-             for (const seller of sellers)
-             {
-               if (!uniqueSellerNames.includes(seller.sellerName)) {
-                 uniqueSellerNames.push(seller.sellerName);
-                 uniqueSellers.push(seller);
-               }
-             }
-            return uniqueSellers;
-           // return sellers;
+             return sellers;
         }
 
 

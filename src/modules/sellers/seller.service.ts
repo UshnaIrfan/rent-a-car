@@ -41,6 +41,13 @@ export class SellerService {
          // create seller
          async createseller(body: createSellerInterface):Promise<{record:seller}>
          {
+
+            const sellerName = await this.SellerRepository.getSellerName(body.sellerUrl)
+            if (sellerName)
+            {
+               throw new ConflictException('seller Name already exists');
+
+            }
             const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
             if (Url)
             {
@@ -211,11 +218,18 @@ export class SellerService {
              throw new UnauthorizedException('token expired');
           }
 
+          const sellerName = await this.SellerRepository.getSellerName(body.sellerName)
+          if (sellerName)
+          {
+            throw new ConflictException('Seller Name already exists');
+          }
+
           const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)
           if (sellerUrl)
           {
             throw new ConflictException('Seller Url already exists');
           }
+
 
           const seller = await this.SellerRepository.createSeller(body);
           seller.categories = [];

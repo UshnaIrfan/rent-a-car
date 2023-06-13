@@ -163,46 +163,13 @@ export class UsersRepository {
      //
      // }
 
-          // async getUserDetails(startDate?: string, endDate?: string)
-          // {
-          //   let query = {};
-          //   const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
-          //   const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
-          //   query = {
-          //     createdAt: Between(start, end)
-          //   };
-          //
-          //   const users = await this.userModel.find({ where: query });
-          //
-          //   const result = {};
-          //   const currentDate = moment(start);
-          //   const lastDate = moment(end);
-          //
-          //   while (currentDate.isSameOrBefore(lastDate))
-          //   {
-          //     const formattedDate = currentDate.format('YYYY-MM-DD');
-          //     result[formattedDate] = 0;
-          //
-          //     for (const user of users)
-          //     {
-          //       const userDate = moment(user.createdAt).format('YYYY-MM-DD');
-          //       if (userDate === formattedDate)
-          //       {
-          //         result[formattedDate]++;
-          //       }
-          //     }
-          //
-          //     currentDate.add(1, 'day');
-          //   }
-          //
-          //   return result;
-          // }
-
         async getUserDetails(startDate?: string, endDate?: string)
         {
              let query = {};
-             const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
-             const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
+             const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
+             const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
+           //  const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
+           // const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
              query = {
                 createdAt: Between(start, end)
             };
