@@ -52,5 +52,10 @@ export class  addSellerDto{
      @IsNotEmpty()
      approvedbyAdmin: boolean;
 
+     @ApiProperty({ type: Boolean, default: false })
+     @IsBoolean()
+     @IsNotEmpty()
+     bestWriter: boolean;
+
 
 }

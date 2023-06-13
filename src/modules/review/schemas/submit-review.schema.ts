@@ -49,6 +49,10 @@ export class review{
      @Column('bool')
      approvedByAdmin: boolean;
 
+     @ApiProperty()
+     @Column('bool')
+     bestWriter: boolean;
+
 
      @ApiProperty()
      @CreateDateColumn()

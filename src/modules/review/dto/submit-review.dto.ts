@@ -28,5 +28,11 @@ export class submitReviewDto {
      approvedByAdmin: boolean;
 
 
+     @ApiProperty({ type: Boolean, default: false })
+     @IsBoolean()
+     @IsNotEmpty()
+     bestWriter: boolean;
+
+
 }
 

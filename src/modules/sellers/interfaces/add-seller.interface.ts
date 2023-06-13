@@ -8,5 +8,6 @@ export default interface  addSellerInterface{
     readonly   titleId: string;
     readonly   message: string;
     readonly  approvedbyAdmin: boolean;
+    readonly  bestWriter: boolean;
 
 }

@@ -273,6 +273,7 @@ export class SellerService {
             titleSlug:typeResult.slug,
             userId: decoded.id,
             approvedByAdmin:body.approvedbyAdmin,
+            bestWriter:body.bestWriter,
 
        };
 
