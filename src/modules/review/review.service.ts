@@ -261,7 +261,6 @@ export class ReviewService {
 
            const allReviews = await this.reviewRepository.reviewBySellerIdALL(sellerId);
 
-
            var toAirCount = 0;
            var toLoveCount = 0;
            for (const review of allReviews)

@@ -1,6 +1,8 @@
 import { Body, CACHE_MANAGER, ConflictException, Inject, Injectable } from "@nestjs/common";
 import emailGeneralInterface from "./interface/email-general.interface";
 import {MailerService} from "@nestjs-modules/mailer";
+import * as handlebars from 'handlebars';
+import * as fs from 'fs';
 
 @Injectable()
 export class emailGeneralService {
@@ -13,7 +15,6 @@ export class emailGeneralService {
         {
            try
            {
-             console.log(body.subject)
              await this.sendEmailGeneral(body.email,body.subject,body.emailBody);
              return { success: true, message: 'Email sent successfully' };
           }

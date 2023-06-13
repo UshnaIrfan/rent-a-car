@@ -349,10 +349,19 @@ export class sellerRepository{
                 approvedByAdmin: sellerStatus.APPROVED,
                 isListing: true,
               },
-              order: {sellerName: 'ASC' }
-               });
+              order: {sellerName: 'ASC' },
+             });
 
-           return sellers;
+             const uniqueSellerNames: string[] = [];
+
+             for (const seller of sellers)
+             {
+               if (!uniqueSellerNames.includes(seller.sellerName))
+               {
+                   uniqueSellerNames.push(seller.sellerName);
+               }
+             }
+            return sellers;
 
         }
 
