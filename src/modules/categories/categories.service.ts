@@ -177,43 +177,46 @@ export class CategoriesService {
         //  latest positive review
        async getReviewsPositive(categoryId: string)
        {
+             var review_exit= false;
+             const category = await this.categoryRepository.getCategoryId(categoryId);
+             if (!category)
+             {
+                 throw new NotFoundException('Category not exist');
+             }
 
-           const category = await this.categoryRepository.getCategoryId(categoryId);
-           if (!category)
-           {
-               throw new NotFoundException('Category not exist');
+             const sellerIds = [];
+             for (const seller of category.sellers)
+             {
+                   sellerIds.push(seller.id);
+             }
+
+            const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
+            if (!latestPositiveReview)
+            {
+               return {
+                 category: {
+                   id: category.id,
+                   categoryName: category.categoryName,
+                   approvedByAdmin: category.approvedByAdmin,
+                 },
+                 'review_exit':review_exit,
+                 'to-review': latestPositiveReview,
+               };
            }
 
-          const sellerIds = [];
-          for (const seller of category.sellers)
-          {
-               sellerIds.push(seller.id);
-          }
-
-         const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
-         if (!latestPositiveReview)
-         {
-           return {
-             category: {
-               id: category.id,
-               categoryName: category.categoryName,
-               approvedByAdmin: category.approvedByAdmin,
-             },
-             'to-review': [],
-           };
-         }
-
-         if (latestPositiveReview)
-         {
-           return {
-             category: {
-               id: category.id,
-               categoryName: category.categoryName,
-               approvedByAdmin: category.approvedByAdmin,
-             },
-            'to-review': latestPositiveReview
-           };
-         }
+           if (latestPositiveReview)
+           {
+               review_exit=true
+               return {
+                 category: {
+                   id: category.id,
+                   categoryName: category.categoryName,
+                   approvedByAdmin: category.approvedByAdmin,
+                 },
+                 'review_exit':review_exit,
+                'to-review': latestPositiveReview
+               };
+           }
     }
 
 

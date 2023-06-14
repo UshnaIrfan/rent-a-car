@@ -51,8 +51,7 @@ export class CategoriesController {
          @Get('/:category_id')
          async getReviewsPositive(@Param('category_id') categoryId: string)
          {
-
-            return  this.categoriesService.getReviewsPositive(categoryId);
+             return  this.categoriesService.getReviewsPositive(categoryId);
          }
 
 
