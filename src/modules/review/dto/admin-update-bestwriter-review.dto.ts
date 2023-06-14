@@ -16,4 +16,16 @@ export class adminUpdateBestwriterReviewDto{
     @ApiProperty({ type:boolean })
     bestWriter:boolean;
 
+
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsNotEmpty()
+    subject: string;
+
+
+    @ApiProperty({ type: String, required: true })
+    @IsString()
+    @IsNotEmpty()
+    emailBody: string;
+
 }

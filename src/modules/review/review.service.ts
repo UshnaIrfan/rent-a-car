@@ -424,9 +424,9 @@ export class ReviewService {
 
 
        // admin update best writer status
-        async adminUpdateBestWriter(adminUpdateBestwriterReviewInterface:adminUpdateBestwriterReviewInterface):Promise<any>
+        async adminUpdateBestWriter(body:adminUpdateBestwriterReviewInterface):Promise<any>
         {
-            const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(adminUpdateBestwriterReviewInterface.reviewId,adminUpdateBestwriterReviewInterface.bestWriter);
+            const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(body.reviewId,body.bestWriter);
             if (!updateAdmin)
             {
               throw new NotFoundException('review not exist');
@@ -442,7 +442,7 @@ export class ReviewService {
              }
              try
              {
-                 await this.bestRewardEmail(User.email, User.username);
+                 await this.bestRewardEmail(User.email,body.subject,body.emailBody);
                  const allUsers = await this.usersRepository.getAll();
 
                  for (const currentUser of allUsers)
@@ -466,14 +466,12 @@ export class ReviewService {
 
 
         //sending email (best Reward)
-        async  bestRewardEmail(email: string, name: string)
+        async  bestRewardEmail(email: string, subject: string,emailBody:string)
         {
-            const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
-            const html = template({ email, username: name});
             await this.mailerService.sendMail({
               to: email,
-              subject: 'Best award!',
-              html: html,
+              subject: subject,
+              html: emailBody,
             });
         }
 
