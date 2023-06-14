@@ -21,6 +21,7 @@ import {likeDislike} from "./modules/review/schemas/like-dislike.schema";
 import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
 import {emailGeneralModule} from "./modules/email-general/email-general.module";
+//import { MailchipModule } from './modules/mailchip/mailchip.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import {emailGeneralModule} from "./modules/email-general/email-general.module";
      ReviewModule,
      AdminModule,
      emailGeneralModule,
+   // MailchipModule,
 
     ConfigModule.forRoot(
       {
@@ -102,6 +104,8 @@ import {emailGeneralModule} from "./modules/email-general/email-general.module";
       }),
       inject: [ConfigService],
     }),
+
+
 
   ],
      controllers: [],

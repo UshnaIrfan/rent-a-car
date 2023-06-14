@@ -480,7 +480,7 @@ export class ReviewService {
        //best Reward Announcement Email
        bestRewardAnnouncementEmail(email: string, name: string)
        {
-            const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'));
+            const template = handlebars.compile(fs.readFileSync('src/templates/bestAwardAnnouncement.html', 'utf8'));
             const html = template({ email, username: name});
             return  this.mailerService.sendMail({
               to: email,
