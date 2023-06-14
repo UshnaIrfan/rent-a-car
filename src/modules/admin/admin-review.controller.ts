@@ -4,7 +4,7 @@ import {ReviewService} from "../review/review.service";
 import { Roles } from "../../decorators/role.decorators";
 import { Role } from "../../enums/role.enum";
 import {adminUpdateSubmitReviewDto} from "../review/dto/admin-update-submit-review.dto";
-
+import {adminUpdateBestwriterReviewDto} from "../review/dto/admin-update-bestwriter-review.dto";
 
 @ApiTags('admin')
 @Controller('admin')
@@ -53,5 +53,16 @@ export class adminReviewController {
       }
 
 
+
+
+      // admin update best writer status
+      @ApiBearerAuth()
+      @ApiBody({type:adminUpdateBestwriterReviewDto})
+      @Patch('review/update/bestWriter/status')
+      @Roles(Role.L2A_ADMIN)
+      async adminUpdateBestWriter(@Body() adminUpdateBestwriterReviewdto:adminUpdateBestwriterReviewDto)
+      {
+          return this.reviewService.adminUpdateBestWriter(adminUpdateBestwriterReviewdto);
+      }
 
 }

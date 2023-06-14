@@ -331,10 +331,23 @@ export class reviewRepository{
           }
           review.approvedByAdmin = approvedByAdmin;
           return this.reviewModel.save(review);
-
       }
 
 
+
+
+        // admin update best writer status
+        async adminUpdateBestWriter(reviewId:string, bestWriter:boolean) : Promise<review| null>
+        {
+           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+           if (!review)
+           {
+              return null
+           }
+          review.bestWriter = bestWriter;
+          return this.reviewModel.save(review);
+
+        }
 
 
           //delete user with review with likeAndDislike

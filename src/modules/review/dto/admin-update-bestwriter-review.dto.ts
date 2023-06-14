@@ -4,8 +4,7 @@ import {
   IsString
 } from "class-validator";
 import { boolean } from "joi";
-export class adminUpdateSubmitReviewDto {
-
+export class adminUpdateBestwriterReviewDto{
 
     @ApiProperty({ type: String, required: true })
     @IsString()
@@ -14,7 +13,7 @@ export class adminUpdateSubmitReviewDto {
 
 
 
-    @ApiProperty({ type: boolean })
-    approvedByAdmin:boolean;
+    @ApiProperty({ type:boolean })
+    bestWriter:boolean;
 
 }

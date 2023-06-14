@@ -214,7 +214,11 @@ export class UsersRepository {
 
 
 
-
+        // get all users (l2_users)
+        async getAll()
+        {
+            return  this.userModel.find({ where: { status:'active',roles:'l2a_user'}});
+        }
 
 
 
@@ -278,18 +282,16 @@ export class UsersRepository {
             {
                return null
             }
-        //  user.isActive = isActive;
            user.status = 'active';
            return this.userModel.save(user);
-       }
+        }
 
 
 
          // get all users
          async getAllUser()
          {
-             // return  this.userModel.find({ where: { isActive:true }});
-           return  this.userModel.find({ where: { status:'active' }});
+            return  this.userModel.find({ where: { status:'active' }});
          }
 
 
@@ -298,9 +300,10 @@ export class UsersRepository {
           // get user by id  with active status
          async findUserById(id: string): Promise<User|null>
          {
-              // return this.userModel.findOne({ where: { id ,isActive:true} });
-           return this.userModel.findOne({ where: { id ,status:'active'} });
+            return this.userModel.findOne({ where: { id ,status:'active'} });
          }
+
+
 
 
   }
