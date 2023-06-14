@@ -26,8 +26,10 @@ export class adminAuthController {
       async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
       {
 
-          console.log("user ")
-          return this.authService.getAllUsers(page,pageSize,username);
+          console.log("user")
+           return  this.authService.getAllUsers(page,pageSize,username);
+
+
       }
 
 
@@ -88,13 +90,13 @@ export class adminAuthController {
 
       // calculate user each week and each month
         @ApiBearerAuth()
-        @ApiQuery({ name: 'startDate', required: false })
-        @ApiQuery({ name: 'endDate', required: false })
+        @ApiQuery({ name: 'month', required: false })
+        @ApiQuery({ name: 'week', required: false })
         @Get("/user/details/count")
         @Roles(Role.L2A_ADMIN)
-        async getUserDetails(  @Query('startDate') startDate?: string ,@Query('endDate') endDate?: string,)
+        async getUserDetails(  @Query('month') month?: string ,@Query('week')week?: string,)
         {
-             return this.authService.getUserDetails(startDate ,endDate);
+             return this.authService.getUserDetails(month ,week);
         }
 
 }

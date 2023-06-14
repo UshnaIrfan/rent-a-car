@@ -110,9 +110,9 @@ export class AuthService {
 
 
         // calculate user each week and each month
-        async getUserDetails(startDate?: string, endDate?: string)
+        async getUserDetails(month?: string, week ?: string)
         {
-          return await this.usersService.getUserDetails(startDate, endDate);
+            return await this.usersService.getUserDetails(month,week);
         }
 
 

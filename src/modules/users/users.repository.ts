@@ -136,85 +136,112 @@ export class UsersRepository {
 
 
 
-          //      // calculate user each week and each month
-     //      async getUserDetails(startDate?: string ,endDate?: string)
-     //      {
-     //
-     //        let query = {};
-     //        if (startDate && endDate) {
-     //
-     //          const start = moment(startDate, 'YYYY-MM-DD').startOf('week').toDate();
-     //          const end = moment(endDate, 'YYYY-MM-DD').endOf('week').toDate();
-     //          console.log("start" ,start)
-     //          console.log("end" ,end)
-     //             query = {
-     //             createdAt: {
-     //               $gte: start,
-     //               $lte: end,
-     //            },
-     //          };
-     //
-     //          return this.userModel.find({
-     //            where:query
-     //          });
-     //        }
-     //
-     //         // return this.userModel.find();
-     //
-     // }
 
-        async getUserDetails(startDate?: string, endDate?: string)
-        {
-             let query = {};
-             const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
-             const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
-           //  const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
-           // const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
-             query = {
-                createdAt: Between(start, end)
-            };
-
-            const users = await this.userModel.find({ where: query });
-            const result = {};
-            const currentDate = moment(start);
-            const lastDate = moment(end);
-            let totalCount = 0;
-
-            for (const user of users)
-            {
-                totalCount++;
-            }
-
-            while (currentDate.isSameOrBefore(lastDate))
-            {
-              const formattedDate = currentDate.format('YYYY-MM-DD');
-              let countPerDay = 0;
-
-              for (const user of users)
+    //     async getUserDetails(startDate?: string, endDate?: string)
+    //     {
+    //          let query = {};
+    //          const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
+    //          const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
+    //        //  const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
+    //        // const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
+    //          query = {
+    //             createdAt: Between(start, end)
+    //         };
+    //
+    //         const users = await this.userModel.find({ where: query });
+    //         const result = {};
+    //         const currentDate = moment(start);
+    //         const lastDate = moment(end);
+    //         let totalCount = 0;
+    //
+    //         for (const user of users)
+    //         {
+    //             totalCount++;
+    //         }
+    //
+    //         while (currentDate.isSameOrBefore(lastDate))
+    //         {
+    //           const formattedDate = currentDate.format('YYYY-MM-DD');
+    //           let countPerDay = 0;
+    //
+    //           for (const user of users)
+    //           {
+    //               const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+    //               if (userDate === formattedDate)
+    //               {
+    //                  countPerDay++;
+    //               }
+    //           }
+    //
+    //           const percentage = (countPerDay / totalCount) * 100;
+    //           const Percentage=parseFloat(percentage.toFixed(2))
+    //
+    //           result[formattedDate] = { user: countPerDay, percentage:Percentage};
+    //
+    //           currentDate.add(1, 'day');
+    //         }
+    //
+    //          return result;
+    // }
+         async getUserDetails(month?: string, week?: string)
+         {
+              let query = {};
+              let start;
+              let end;
+              if (month)
               {
-                  const userDate = moment(user.createdAt).format('YYYY-MM-DD');
-                  if (userDate === formattedDate)
-                  {
-                     countPerDay++;
-                  }
+                 start = moment(month, 'YYYY-MM-DD').subtract(1, 'month').toDate();
+                 end = moment(month, 'YYYY-MM-DD').toDate();
               }
+              else if (week)
+              {
+                 start = moment(week, 'YYYY-MM-DD').subtract(6, 'days').toDate();
+                 end = moment(week, 'YYYY-MM-DD').toDate();
+              }
+              else
+              {
+                 start = moment().startOf('month').toDate();
+                 end = moment().toDate();
+              }
+               query = { createdAt: Between(start, end) };
+               const users = await this.userModel.find({ where: query });
+               const result = {};
+               const currentDate = moment(start);
+               const lastDate = moment(end);
+               let totalCount = 0;
 
-              const percentage = (countPerDay / totalCount) * 100;
-              const Percentage=parseFloat(percentage.toFixed(2))
+               for (const user of users)
+               {
+                   totalCount++;
+               }
 
-            //  console.log(percentage)
+               while (currentDate.isSameOrBefore(lastDate))
+               {
+                 const formattedDate = currentDate.format('YYYY-MM-DD');
+                 let countPerDay = 0;
 
-              result[formattedDate] = { user: countPerDay, percentage:Percentage};
+                 for (const user of users)
+                 {
+                   const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+                   if (userDate === formattedDate)
+                   {
+                     countPerDay++;
+                   }
+                 }
 
-              currentDate.add(1, 'day');
-            }
+                 const percentage = (countPerDay / totalCount) * 100;
+                 const Percentage=parseFloat(percentage.toFixed(2))
+                 result[formattedDate] = { user: countPerDay, percentage:Percentage};
+                 currentDate.add(1, 'day');
+               }
 
-             return result;
-    }
+               return result;
+      }
 
 
 
-        // get all users (l2_users)
+
+     // get all users (l2_users)
         async getAll()
         {
             return  this.userModel.find({ where: { status:'active',roles:'l2a_user'}});
