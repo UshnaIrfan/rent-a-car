@@ -199,7 +199,7 @@ export class CategoriesService {
                    categoryName: category.categoryName,
                    approvedByAdmin: category.approvedByAdmin,
                  },
-                 'review_exit':review_exit,
+                 'review-exit':review_exit,
                  'to-review': latestPositiveReview,
                };
            }
@@ -213,8 +213,8 @@ export class CategoriesService {
                    categoryName: category.categoryName,
                    approvedByAdmin: category.approvedByAdmin,
                  },
-                 'review_exit':review_exit,
-                'to-review': latestPositiveReview
+                 'review-exit':review_exit,
+                 'to-review': latestPositiveReview
                };
            }
     }
