@@ -24,14 +24,16 @@ export class MailchipService {
       // get mail chip ( sending email)
        async getMailChip()
        {
+
             let mailChip = await this.MailchipRepository.getMailChip();
             try
             {
-                 for (const mailChipUser of mailChip)
+                 for (const mailChipUsers of mailChip)
                  {
-                    this. mailChipUser(mailChipUser.email);
+
+                    this.mailChipUser(mailChipUsers.email);
                  }
-                 return { success: true, message: 'Emails sent successfully' };
+                 return { success: true, message: 'Emails sent successfully'};
             }
             catch(error)
             {
@@ -42,7 +44,9 @@ export class MailchipService {
 
 
 
-       //  Reward Announcement Email
+
+
+      //  Reward Announcement Email
         async mailChipUser(email: string)
         {
             const template = handlebars.compile(fs.readFileSync('src/templates/mailchipEmail.html', 'utf8'));
