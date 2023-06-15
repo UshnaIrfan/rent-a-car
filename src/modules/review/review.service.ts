@@ -449,7 +449,8 @@ export class ReviewService {
                  {
                     if (currentUser.id !== User.id)
                     {
-                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username);
+                      console.log(User)
+                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username,User.username);
                     }
                  }
                  return { success: true, message: 'Emails sent successfully' };
@@ -478,10 +479,10 @@ export class ReviewService {
 
 
        //best Reward Announcement Email
-       async  bestRewardAnnouncementEmail(email: string, name: string)
+       async  bestRewardAnnouncementEmail(email: string, name: string,username:string)
        {
             const template = handlebars.compile(fs.readFileSync('src/templates/bestAwardAnnouncement.html', 'utf8'));
-            const html = template({ email, username: name});
+            const html = template({ email, name: name,username:username});
             return  this.mailerService.sendMail({
               to: email,
               subject: 'Best award Announcement!',
