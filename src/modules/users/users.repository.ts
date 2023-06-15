@@ -181,7 +181,9 @@ export class UsersRepository {
               currentDate.add(1, 'day');
             }
 
-             return result;
+          result['totalCount'] = totalCount;
+
+          return result;
     }
 
 
