@@ -90,13 +90,13 @@ export class adminAuthController {
 
       // calculate user each week and each month
         @ApiBearerAuth()
-        @ApiQuery({ name: 'month', required: false })
-        @ApiQuery({ name: 'week', required: false })
+        @ApiQuery({ name: 'start', required: false })
+        @ApiQuery({ name: 'end', required: false })
         @Get("/user/details/count")
         @Roles(Role.L2A_ADMIN)
-        async getUserDetails(  @Query('month') month?: string ,@Query('week')week?: string,)
+        async getUserDetails(  @Query('start') start?: string ,@Query('end')end?: string,)
         {
-             return this.authService.getUserDetails(month ,week);
+             return this.authService.getUserDetails(start ,end);
         }
 
 }
