@@ -176,7 +176,7 @@ export class UsersRepository {
               const percentage = (countPerDay / totalCount) * 100;
               const Percentage=parseFloat(percentage.toFixed(2))
 
-              result[formattedDate] = { user: countPerDay, percentage:Percentage};
+              result[formattedDate] = { count: countPerDay, percentage:Percentage};
 
               currentDate.add(1, 'day');
             }
