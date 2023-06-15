@@ -1,34 +1,30 @@
-// import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-// import { MailchipService } from './mailchip.service';
-// import { CreateMailchipDto } from './dto/create-mailchip.dto';
-// import { UpdateMailchipDto } from './dto/update-mailchip.dto';
-//
-// @Controller('mailchip')
-// export class MailchipController {
-//   constructor(private readonly mailchipService: MailchipService) {}
-//
-//   @Post()
-//   create(@Body() createMailchipDto: CreateMailchipDto) {
-//     return this.mailchipService.create(createMailchipDto);
-//   }
-//
-//   @Get()
-//   findAll() {
-//     return this.mailchipService.findAll();
-//   }
-//
-//   @Get(':id')
-//   findOne(@Param('id') id: string) {
-//     return this.mailchipService.findOne(+id);
-//   }
-//
-//   @Patch(':id')
-//   update(@Param('id') id: string, @Body() updateMailchipDto: UpdateMailchipDto) {
-//     return this.mailchipService.update(+id, updateMailchipDto);
-//   }
-//
-//   @Delete(':id')
-//   remove(@Param('id') id: string) {
-//     return this.mailchipService.remove(+id);
-//   }
-// }
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { MailchipService } from './mailchip.service';
+import {MailchipDto} from "./dto/create-mailchip.dto";
+import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { mailChip } from "./schemas/mailchip.schema";
+
+
+@ApiTags('mail-chip')
+@Controller('mail-chip')
+export class MailchipController {
+  constructor(private readonly mailchipService: MailchipService) {}
+
+
+        // mail chip
+        @ApiBody({type:MailchipDto})
+        @Post('create')
+        async createMailChip(@Body() createMailChip:MailchipDto): Promise<mailChip>
+        {
+            return this.mailchipService.createMailChip(createMailChip );
+        }
+
+
+
+        //  get mail chip ( sending email)
+        @Get('user/email')
+        async getMailChip()
+        {
+            return this.mailchipService.getMailChip();
+        }
+}

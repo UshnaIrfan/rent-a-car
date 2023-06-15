@@ -21,8 +21,8 @@ import {likeDislike} from "./modules/review/schemas/like-dislike.schema";
 import { AdminModule } from './modules/admin/admin.module';
 import * as AWS from 'aws-sdk';
 import {emailGeneralModule} from "./modules/email-general/email-general.module";
-//import { MailchipModule } from './modules/mailchip/mailchip.module';
-
+import { MailchipModule } from './modules/mailchip/mailchip.module';
+import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import {emailGeneralModule} from "./modules/email-general/email-general.module";
      ReviewModule,
      AdminModule,
      emailGeneralModule,
-   // MailchipModule,
+     MailchipModule,
 
     ConfigModule.forRoot(
       {
@@ -98,7 +98,7 @@ import {emailGeneralModule} from "./modules/email-general/email-general.module";
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
-        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislike],
+        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislike,mailChip],
         synchronize: true,
 
       }),

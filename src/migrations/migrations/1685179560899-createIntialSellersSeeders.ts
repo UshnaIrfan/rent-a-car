@@ -895,7 +895,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Mercari', sellerUrl: 'https://mercari.com', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'Ruby Lane', sellerUrl: 'https://rubylane.com', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'Shopgoodwill.com', sellerUrl: 'https://shopgoodwill.com', isListing: true,categoryName: 'Marketplaces'},
-      { sellerName: 'Sideline Swap', sellerUrl: 'https://sidelineswap.com', isListing: true,categoryName: 'Marketplaces'},
+      { sellerName: 'Sileline Swap', sellerUrl: 'https://sidelineswap.com', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'The Real Real', sellerUrl: 'https://therealreal.com', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'Vestiaire Collective', sellerUrl: 'https://vestiairecollective.com', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'Rakuten', sellerUrl: 'https://rakuten.com', isListing: true,categoryName: 'Marketplaces'},
@@ -1047,7 +1047,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'TGI Fridays', sellerUrl: 'https://tgifridays.com', isListing: true,categoryName: 'Restaurants'},
       { sellerName: "Applebee's", sellerUrl: 'https://applebees.com', isListing: true,categoryName: 'Restaurants'},
       { sellerName: 'Olive Garden', sellerUrl: 'https://olivegarden.com', isListing: true,categoryName: 'Restaurants'},
-      { sellerName: 'Chili', sellerUrl: 'https://chilis.com', isListing: true,categoryName: 'Restaurants'},
+      { sellerName: 'Chilis', sellerUrl: 'https://chilis.com', isListing: true,categoryName: 'Restaurants'},
       { sellerName: 'Red Lobster', sellerUrl: 'https://redlobster.com', isListing: true,categoryName: 'Restaurants'},
       { sellerName: 'Ruby Tuesday', sellerUrl: 'https://rubytuesday.com', isListing: true,categoryName: 'Restaurants'},
       { sellerName: "Houlihan's", sellerUrl: 'https://houlihans.com', isListing: true,categoryName: 'Restaurants'},
@@ -1146,7 +1146,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
      // Music Streaming
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', isListing: true,categoryName: 'Music Streaming'},
-      { sellerName: 'Apple Music', sellerUrl: 'https://music.apple.com', isListing: true,categoryName: 'Music Streaming'},
+      { sellerName: 'Apple', sellerUrl: 'https://apple.com', isListing: true,categoryName: 'Music Streaming'},
       { sellerName: 'Deezer', sellerUrl: 'https://deezer.com', isListing: true,categoryName: 'Music Streaming'},
       { sellerName: 'MixCloud', sellerUrl: 'https://mixcloud.com', isListing: true,categoryName: 'Music Streaming'},
       { sellerName: 'Pandora', sellerUrl: 'https://pandora.com', isListing: true,categoryName: 'Music Streaming'},
