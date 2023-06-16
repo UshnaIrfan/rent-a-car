@@ -426,15 +426,22 @@ export class ReviewService {
        // admin update best writer status
         async adminUpdateBestWriter(body:adminUpdateBestwriterReviewInterface):Promise<any>
         {
+
             const logo_l2a=process.env.LOGO_L2A
-            const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(body.reviewId,body.bestWriter);
-            if (!updateAdmin)
+            const update = await this.reviewRepository.reviewById(body.reviewId);
+            if (!update)
             {
               throw new NotFoundException('review not exist');
             }
+            if(update.bestWriter==true)
+            {
+              return { message: 'Reward already given.' };
 
-           if(updateAdmin)
-           {
+            }
+
+            const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(body.reviewId,body.bestWriter);
+            if(updateAdmin)
+            {
 
              let User = await this.usersRepository.findUserByID(updateAdmin.userId);
              if (!User)
