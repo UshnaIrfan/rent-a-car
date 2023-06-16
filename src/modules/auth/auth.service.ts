@@ -141,12 +141,13 @@ export class AuthService {
               const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
 
               console.log('token', Token);
+              const logo_l2a=process.env.LOGO_L2A
               const contact_us_url= process.env.CONTACT_US
               const privacy_policy_url= process.env.PRIVACY_POLICY
               const queryParams = `?Token=${Token}&email=${User.email}`;
               const activeUrl = `${ActiveUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-              const emailBody = template({ activeUrl, username: Name, baseUrl, contact_us_url,privacy_policy_url});
+              const emailBody = template({ activeUrl, username: Name, baseUrl, contact_us_url,privacy_policy_url,logo_l2a});
 
               await this.sendVerificationEmail(User.email, emailBody);
 
@@ -195,18 +196,18 @@ export class AuthService {
             const ActiveUrl = `${FRONTEND_APP_URL}/login#/Auth/AuthController_isActive`;
 
             console.log('token', Token);
-
+            const logo_l2a=process.env.LOGO_L2A
             const contact_us_url= process.env.CONTACT_US
             const privacy_policy_url= process.env.PRIVACY_POLICY
             const queryParams = `?Token=${Token}&email=${user.email}`;
             const activeUrl = `${ActiveUrl}${queryParams}`;
             const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-            const emailBody = template({ activeUrl, username: Name,contact_us_url,privacy_policy_url});
+            const emailBody = template({ activeUrl, username: Name,contact_us_url,privacy_policy_url,logo_l2a});
 
             try
             {
               await this.sendVerificationEmail(user.email, emailBody);
-              await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url);
+              await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url,logo_l2a);
             }
             catch (e)
             {
@@ -258,9 +259,10 @@ export class AuthService {
                     await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
                     const user = await this.usersService.isActive(reqBody.email, reqBody.status,);
                     const Username = user.name;
+                    const logo_l2a=process.env.LOGO_L2A
                     const contact_us_url= process.env.CONTACT_US
                     const privacy_policy_url= process.env.PRIVACY_POLICY
-                    await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url);
+                    await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url,logo_l2a);
                     return { message: 'Your account has been successfully created. Please login here' };
                   }
               }
@@ -334,6 +336,7 @@ export class AuthService {
             expiresAt,
             active: false,
           });
+          const logo_l2a=process.env.LOGO_L2A
           const contact_us_url= process.env.CONTACT_US
           const privacy_policy_url= process.env.PRIVACY_POLICY
           await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
@@ -343,7 +346,7 @@ export class AuthService {
           const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
           const resetUrl = `${changePasswordUrl}${queryParams}`;
           const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
-          const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url });
+          const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a });
           try
           {
             await this.sendToken(user.email, emailBody);
@@ -437,10 +440,11 @@ export class AuthService {
 
             if (parsedToken.active == true)
             {
+                const logo_l2a=process.env.LOGO_L2A
                 const contact_us_url= process.env.CONTACT_US
                 const privacy_policy_url= process.env.PRIVACY_POLICY
                 await this.usersService.updatePassword(reqBody.email, hashedPassword);
-                await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url);
+                await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url,logo_l2a);
                 const loginResult = this.login(user);
                 await this.cacheManager.del(tokenKey);
                 return loginResult;
@@ -540,10 +544,10 @@ export class AuthService {
 
 
         // sending email(welcome after registered)
-        async sendWelcomeEmail(email: string, Username: string,contact_us_url:string,privacy_policy_url:string)
+        async sendWelcomeEmail(email: string, Username: string,contact_us_url:string,privacy_policy_url:string,logo_l2a:String)
         {
             const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
-            const html = template({ username: Username,contact_us_url,privacy_policy_url });
+            const html = template({ username: Username,contact_us_url,privacy_policy_url ,logo_l2a});
             await this.mailerService.sendMail({
               to: email,
               subject: `You're in!`,
@@ -597,10 +601,10 @@ export class AuthService {
 
 
         //sending email (updated password)
-        async sendPasswordUpdatedEmail(email: string, name: string,contact_us_url:string,privacy_policy_url:string)
+        async sendPasswordUpdatedEmail(email: string, name: string,contact_us_url:string,privacy_policy_url:string,logo_l2a:string)
         {
           const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
-          const html = template({ email, username: name,contact_us_url,privacy_policy_url});
+          const html = template({ email, username: name,contact_us_url,privacy_policy_url,logo_l2a});
           await this.mailerService.sendMail({
             to: email,
             subject: 'Success: Your password has been reset!',
@@ -611,10 +615,10 @@ export class AuthService {
 
 
         // sending admin email
-        async sendAdminEmail(email: string, user: any,contact_us_url:string,privacy_policy_url:string)
+        async sendAdminEmail(email: string, user: any,contact_us_url:string,privacy_policy_url:string,logo_l2a:string)
         {
           const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
-          const html = template({ email, name: user.name, userEmail: user.email ,contact_us_url,privacy_policy_url});
+          const html = template({ email, name: user.name, userEmail: user.email ,contact_us_url,privacy_policy_url,logo_l2a});
           await this.mailerService.sendMail({
             to: email,
             subject: 'New Signup',

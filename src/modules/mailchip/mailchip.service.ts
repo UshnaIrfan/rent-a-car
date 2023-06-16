@@ -24,14 +24,14 @@ export class MailchipService {
       // get mail chip ( sending email)
        async getMailChip()
        {
-
+            const logo_l2a=process.env.LOGO_L2A
             let mailChip = await this.MailchipRepository.getMailChip();
             try
             {
                  for (const mailChipUsers of mailChip)
                  {
 
-                    this.mailChipUser(mailChipUsers.email);
+                    this.mailChipUser(mailChipUsers.email,logo_l2a);
                  }
                  return { success: true, message: 'Emails sent successfully'};
             }
@@ -47,10 +47,10 @@ export class MailchipService {
 
 
       //  Reward Announcement Email
-        async mailChipUser(email: string)
+        async mailChipUser(email: string,logo_l2a:string)
         {
             const template = handlebars.compile(fs.readFileSync('src/templates/mailchipEmail.html', 'utf8'));
-            const html = template({});
+            const html = template({logo_l2a});
             return  this.mailerService.sendMail({
               to: email,
               subject: 'mail-chip user',

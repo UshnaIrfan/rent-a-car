@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MailchipController } from './mailchip.controller';
+import {MailchipController} from "../admin/admin-mailchip.controller";
 import { MailchipService } from './mailchip.service';
 
 describe('MailchipController', () => {

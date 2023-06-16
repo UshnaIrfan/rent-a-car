@@ -426,6 +426,7 @@ export class ReviewService {
        // admin update best writer status
         async adminUpdateBestWriter(body:adminUpdateBestwriterReviewInterface):Promise<any>
         {
+            const logo_l2a=process.env.LOGO_L2A
             const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(body.reviewId,body.bestWriter);
             if (!updateAdmin)
             {
@@ -450,7 +451,7 @@ export class ReviewService {
                     if (currentUser.id !== User.id)
                     {
                       console.log(User)
-                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username,User.username);
+                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username,User.username,logo_l2a);
                     }
                  }
                  return { success: true, message: 'Emails sent successfully' };
@@ -479,10 +480,10 @@ export class ReviewService {
 
 
        //best Reward Announcement Email
-       async  bestRewardAnnouncementEmail(email: string, name: string,username:string)
+       async  bestRewardAnnouncementEmail(email: string, name: string,username:string,logo_l2a:string)
        {
             const template = handlebars.compile(fs.readFileSync('src/templates/bestAwardAnnouncement.html', 'utf8'));
-            const html = template({ email, name: name,username:username});
+            const html = template({ email, name: name,username:username,logo_l2a});
             return  this.mailerService.sendMail({
               to: email,
               subject: 'Best award Announcement!',
