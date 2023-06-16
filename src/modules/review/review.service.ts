@@ -51,7 +51,7 @@ export class ReviewService {
            const click = await this.clicksTypeRepository.findByType(clickReviewInterface.type);
            if (click)
            {
-             throw new ConflictException('already exist');
+              throw new ConflictException('already exist');
            }
 
            try
@@ -60,7 +60,7 @@ export class ReviewService {
            }
            catch (error)
            {
-             throw new BadRequestException('Failed to create clicks review');
+              throw new BadRequestException('Failed to create clicks review');
            }
        }
 
@@ -115,42 +115,43 @@ export class ReviewService {
         // submit review
         async submitReview(createReviewInterface:submitReviewInterface,accessToken: string): Promise<review>
         {
-           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-           const user = await this.usersRepository.findUserByID(decoded.id)
-           if(!user)
-           {
+            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+            const user = await this.usersRepository.findUserByID(decoded.id)
+            if(!user)
+            {
                throw new  NotFoundException('invalid user')
-           }
-           const cachedToken = await this.cacheManager.get(accessToken);
-           if (!cachedToken)
-           {
+            }
+
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken)
+            {
                throw new UnauthorizedException('Token expired');
+            }
+
+           const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
+           if(!seller)
+           {
+              throw new  NotFoundException('seller not exist')
            }
 
-          const seller=  await this.sellerRepository.getSellerId(createReviewInterface.sellerId);
-          if(!seller)
+           const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
+           if (!title)
+           {
+              throw new  NotFoundException('Balloon title not exist')
+           }
+
+
+          const previousReview = await this.reviewRepository.findReviewByUserAndSeller(decoded.id, createReviewInterface.sellerId);
+          if (previousReview)
           {
-              throw new  NotFoundException('seller not exist')
+              throw new ConflictException('You have already submitted a review for this seller');
           }
-
-         const title=  await this.clicksTitleRepository.findByTitle(createReviewInterface.titleId);
-         if (!title)
-         {
-             throw new  NotFoundException('Balloon title not exist')
-         }
-
-
-         const previousReview = await this.reviewRepository.findReviewByUserAndSeller(decoded.id, createReviewInterface.sellerId);
-         if (previousReview)
-         {
-            throw new ConflictException('You have already submitted a review for this seller');
-         }
 
 
          const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
-          ...createReviewInterface,
-           userId: decoded.id,
-           titleSlug:title.slug
+            ...createReviewInterface,
+             userId: decoded.id,
+             titleSlug:title.slug
         };
 
           return this.reviewRepository.submitReview(reviewData);
@@ -173,8 +174,8 @@ export class ReviewService {
 
            for (const review of reviews)
            {
-             const { titleId } = review;
-             counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
+               const { titleId } = review;
+               counts[titleId] = counts[titleId] ? counts[titleId] + 1 : 1;
            }
 
           const allTitles = await this.clicksTitleRepository.getAllReviewsTitle();
@@ -187,18 +188,17 @@ export class ReviewService {
              {
                titles.push(id);
                counts[id] = 0;
-            }
+             }
          }
 
         const result = titles.map((titleId) => ({ titleId, count: counts[titleId] }));
-
         // Sort the result array in the same order as returned by getAllReviewsTitle
         const allReviewsTitle = await this.clicksTitleRepository.getAllReviewsTitle();
         result.sort((a, b) =>
         {
-          const aIndex = allReviewsTitle.findIndex((title) => title.id === a.titleId);
-          const bIndex = allReviewsTitle.findIndex((title) => title.id === b.titleId);
-          return aIndex - bIndex;
+            const aIndex = allReviewsTitle.findIndex((title) => title.id === a.titleId);
+            const bIndex = allReviewsTitle.findIndex((title) => title.id === b.titleId);
+            return aIndex - bIndex;
         });
 
          return { seller, result };
@@ -210,8 +210,8 @@ export class ReviewService {
       //update review
        async  updateReview(updateReviewInterface:updateReviewInterface)
        {
-          const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
-          return { message: "updated successfully" ,updateReview};
+            const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
+            return { message: "updated successfully" ,updateReview};
        }
 
 
@@ -219,29 +219,28 @@ export class ReviewService {
        //like dislike submit review
        async createLikeDislike(likeDislikeInterface: likeDislikeInterface,accessToken:string)
        {
-          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
-          const user = await this.usersRepository.findUserByID(decoded.id)
-          if(!user)
-          {
-             throw new  NotFoundException('invalid user')
-          }
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-             throw new UnauthorizedException('Token expired');
-          }
+            const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+            const user = await this.usersRepository.findUserByID(decoded.id)
+            if(!user)
+            {
+                throw new  NotFoundException('invalid user')
+            }
+            const cachedToken = await this.cacheManager.get(accessToken);
+            if (!cachedToken)
+            {
+                throw new UnauthorizedException('Token expired');
+            }
 
-          const review = await this.reviewRepository.reviewById(likeDislikeInterface.reviewId);
-          if (!review)
-          {
-            throw new NotFoundException('invalid review id');
-          }
-         const likedislike = {
-           ...likeDislikeInterface,
-           userId: decoded.id,
-
-         };
-          return  await this.likeDislikeRepository.createLikeDislike(likedislike);
+            const review = await this.reviewRepository.reviewById(likeDislikeInterface.reviewId);
+            if (!review)
+            {
+               throw new NotFoundException('invalid review id');
+            }
+           const likedislike = {
+               ...likeDislikeInterface,
+               userId: decoded.id,
+           };
+            return  await this.likeDislikeRepository.createLikeDislike(likedislike);
        }
 
 
@@ -270,7 +269,6 @@ export class ReviewService {
 
                  const result = await this.reviewRepository.reviewId(review.id);
                  const  res=JSON.stringify(result);
-
                  const data = {
                     like: JSON.parse(res).likeDislike,
                     dislike: JSON.parse(res).likeDislike,
@@ -288,14 +286,14 @@ export class ReviewService {
                const title = await this.clicksTitleRepository.findByTitle(review.titleId);
                if (!title)
                {
-                  throw new NotFoundException(`Title not exist`);
+                   throw new NotFoundException(`Title not exist`);
                }
 
 
                const matchingSlugTitle = await this.clicksTitleRepository.findBySlug(review.titleSlug);
                if (!matchingSlugTitle)
                {
-                 throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
+                  throw new NotFoundException(`Title not found with slug: ${review.titleSlug}`);
                }
 
 
@@ -343,7 +341,6 @@ export class ReviewService {
       }
 
 
-
         const limit = 3;
         const offset = (page - 1) * limit;
         const paginatedToAirReviews = toAir.slice(offset, offset + limit);
@@ -382,28 +379,26 @@ export class ReviewService {
 
 
 
-     //ADMIN APIS
-     // review search
-     async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,startDate?:string,endDate?:string)
-     {
-         console.log(pageSize)
-         const skip = (pageNumber - 1) * pageSize;
-         const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,startDate,endDate);
+       //ADMIN APIS
+       // review search
+       async search(pageNumber: number,pageSize?:number, sellerId?: string ,userId?:string,message?:string,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,startDate?:string,endDate?:string)
+       {
 
+            const skip = (pageNumber - 1) * pageSize;
+            const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,startDate,endDate);
 
-          const totalPages = Math.ceil(totalCount / pageSize);
-          if (result.length === 0)
-          {
-             throw new NotFoundException('No records found');
-          }
-
-          return {
-              records:result,
-              totalRecords: totalCount,
-              totalPages,
-              currentPage: pageNumber,
-         };
-   }
+            const totalPages = Math.ceil(totalCount / pageSize);
+            if (result.length === 0)
+            {
+               throw new NotFoundException('No records found');
+            }
+            return {
+                records:result,
+                totalRecords: totalCount,
+                totalPages,
+                currentPage: pageNumber,
+           };
+      }
 
 
 
@@ -412,13 +407,13 @@ export class ReviewService {
        // admin update  review status
        async adminUpdateReview(adminUpdateCategoryInterface:adminUpdateSubmitReviewInterface):Promise<{ updateAdmin: review; message: string }>
        {
-          const updateAdmin = await this.reviewRepository.adminUpdateReview(adminUpdateCategoryInterface.reviewId,adminUpdateCategoryInterface.approvedByAdmin);
-          if (!updateAdmin)
-          {
-              throw new NotFoundException('  review not exist');
-          }
-           return { message: "review  status updated successfully",updateAdmin };
-      }
+            const updateAdmin = await this.reviewRepository.adminUpdateReview(adminUpdateCategoryInterface.reviewId,adminUpdateCategoryInterface.approvedByAdmin);
+            if (!updateAdmin)
+            {
+                throw new NotFoundException('  review not exist');
+            }
+             return { message: "review  status updated successfully",updateAdmin };
+       }
 
 
 
@@ -426,17 +421,17 @@ export class ReviewService {
        // admin update best writer status
         async adminUpdateBestWriter(body:adminUpdateBestwriterReviewInterface):Promise<any>
         {
-
+            const contact_us_url= process.env.CONTACT_US
+            const privacy_policy_url= process.env.PRIVACY_POLICY
             const logo_l2a=process.env.LOGO_L2A
             const update = await this.reviewRepository.reviewById(body.reviewId);
             if (!update)
             {
-              throw new NotFoundException('review not exist');
+               throw new NotFoundException('review not exist');
             }
             if(update.bestWriter==true)
             {
-              return { message: 'Reward already given.' };
-
+               return { message: 'Reward already given.' };
             }
 
             const updateAdmin = await this.reviewRepository.adminUpdateBestWriter(body.reviewId,body.bestWriter);
@@ -458,7 +453,7 @@ export class ReviewService {
                     if (currentUser.id !== User.id)
                     {
                       console.log(User)
-                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username,User.username,logo_l2a);
+                      this.bestRewardAnnouncementEmail(currentUser.email, currentUser.username,User.username,contact_us_url,privacy_policy_url,logo_l2a);
                     }
                  }
                  return { success: true, message: 'Emails sent successfully' };
@@ -467,9 +462,7 @@ export class ReviewService {
              {
                  return { success: false, message: 'Failed to send emails' };
              }
-
           }
-
         }
 
 
@@ -477,7 +470,7 @@ export class ReviewService {
         //sending email (best Reward)
         async  bestRewardEmail(email: string, subject: string,emailBody:string)
         {
-            await this.mailerService.sendMail({
+              await this.mailerService.sendMail({
               to: email,
               subject: subject,
               html: emailBody,
@@ -487,16 +480,15 @@ export class ReviewService {
 
 
        //best Reward Announcement Email
-       async  bestRewardAnnouncementEmail(email: string, name: string,username:string,logo_l2a:string)
+       async  bestRewardAnnouncementEmail(email: string, name: string,username:string,contact_us_url:string,privacy_policy_url:string,logo_l2a:string)
        {
             const template = handlebars.compile(fs.readFileSync('src/templates/bestAwardAnnouncement.html', 'utf8'));
-            const html = template({ email, name: name,username:username,logo_l2a});
+            const html = template({ email, name: name,username:username,contact_us_url,privacy_policy_url,logo_l2a});
             return  this.mailerService.sendMail({
               to: email,
               subject: 'Best award Announcement!',
               html: html,
             });
       }
-
 
 }

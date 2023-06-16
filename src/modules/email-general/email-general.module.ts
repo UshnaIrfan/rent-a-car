@@ -4,8 +4,6 @@ import * as redisStore from "cache-manager-redis-store";
 import {emailGeneralController} from "./email-general.controller";
 import {emailGeneralService} from "./email-general.service";
 
-
-
 @Module({
   imports: [TypeOrmModule.forFeature([]),
     CacheModule.register({

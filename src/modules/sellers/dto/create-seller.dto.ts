@@ -21,17 +21,14 @@ export class CreateSellerDto {
      sellerUrl: string;
 
 
-
      @ApiProperty({ type: String, enum: status, default: status.PENDING })
      @IsString()
      approvedByAdmin: string = status.PENDING;
 
 
-
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
      readonly isListing: boolean;
-
 
 
      @ApiProperty({ type: [String]})

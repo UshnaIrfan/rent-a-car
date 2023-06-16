@@ -27,17 +27,14 @@ export class emailGeneralService {
 
 
 
-
        async sendEmailGeneral(email: string,subject:string,emailBody:string)
        {
-                await this.mailerService.sendMail({
-                to: email,
-                subject:subject,
-                html:emailBody
-              // text: emailBody,
-
-        });
-     }
+            await this.mailerService.sendMail({
+            to: email,
+            subject:subject,
+            html:emailBody
+           });
+      }
 
 
 }

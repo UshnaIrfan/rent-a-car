@@ -79,7 +79,6 @@ import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
 
 
 
-
          // redis
          CacheModule.register({
          store: redisStore,
@@ -100,12 +99,9 @@ import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
         database: configService.get('DATABASE_NAME'),
         entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislike,mailChip],
         synchronize: true,
-
       }),
-      inject: [ConfigService],
+        inject: [ConfigService],
     }),
-
-
 
   ],
      controllers: [],

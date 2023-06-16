@@ -124,9 +124,9 @@ export class reviewRepository{
 
        async findReviewByUserAndSeller(userId: string, sellerId: string): Promise<review>
        {
-          const review = await this.reviewModel.findOne({
-          where: { userId, sellerId}});
-          return review;
+            const review = await this.reviewModel.findOne({
+            where: { userId, sellerId}});
+            return review;
        }
 
 
@@ -213,19 +213,20 @@ export class reviewRepository{
        async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string,orderType?:string,orderBy?:string,startDate?:string,endDate?:string): Promise<any>
        {
            let whereConditions = {} as {
-             userId?: any,
-             message?: any,
-             titleSlug?: any,
-             sellerId?: any,
-             createdAt?:any
+               userId?: any,
+               message?: any,
+               titleSlug?: any,
+               sellerId?: any,
+               createdAt?:any
            };
 
-           if (userId || message || type || sellerId) {
-             whereConditions = {
-               userId: userId ?? undefined,
-               message: message ? Like(`%${message}%`) : undefined,
-               titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
-               sellerId: sellerId,
+           if (userId || message || type || sellerId)
+           {
+               whereConditions = {
+                 userId: userId ?? undefined,
+                 message: message ? Like(`%${message}%`) : undefined,
+                 titleSlug: type === 'to-love' || type === 'to-air' ? Like(`${type}%`) : undefined,
+                 sellerId: sellerId,
              };
            }
 
@@ -263,10 +264,8 @@ export class reviewRepository{
          {
                    where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [] ,
                    order: {
-                     createdAt: orderBy === 'descending' || orderBy === 'ascending' ? 'DESC' : 'ASC',
-                     // createdAt: orderBy === 'descending' ? 'DESC' : 'ASC'
-                   },
-                   relations: ['likeDislike'],
+                     createdAt: orderBy === 'descending' || orderBy === 'ascending' ? 'DESC' : 'ASC'},
+                     relations: ['likeDislike'],
           });
 
 
@@ -288,7 +287,7 @@ export class reviewRepository{
 
          if (orderType === 'like' || orderType === 'dislike' || orderType === 'report')
          {
-             const countPropertyMap = {
+              const countPropertyMap = {
                like: 'likeCount',
                dislike: 'dislikeCount',
                report: 'reportCount'
@@ -324,13 +323,13 @@ export class reviewRepository{
       // admin update  review status
        async adminUpdateReview(reviewId:string, approvedByAdmin:boolean) : Promise<review| null>
        {
-          const review = await this.reviewModel.findOne({ where: { id:reviewId}});
-          if (!review)
-          {
-             return null
-          }
-          review.approvedByAdmin = approvedByAdmin;
-          return this.reviewModel.save(review);
+            const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+            if (!review)
+            {
+               return null
+            }
+            review.approvedByAdmin = approvedByAdmin;
+            return this.reviewModel.save(review);
       }
 
 
@@ -339,22 +338,20 @@ export class reviewRepository{
         // admin update best writer status
         async adminUpdateBestWriter(reviewId:string, bestWriter:boolean) : Promise<review| null>
         {
-           const review = await this.reviewModel.findOne({ where: { id:reviewId}});
-           if (!review)
-           {
-              return null
-           }
-          review.bestWriter = bestWriter;
-          return this.reviewModel.save(review);
-
+             const review = await this.reviewModel.findOne({ where: { id:reviewId}});
+             if (!review)
+             {
+                return null
+             }
+            review.bestWriter = bestWriter;
+            return this.reviewModel.save(review);
         }
 
 
           //delete user with review with likeAndDislike
          async delete(reviewId: string): Promise<review | null>
          {
-             const review = await this.reviewModel.findOne({
-                  where: { id: reviewId },
+             const review = await this.reviewModel.findOne({ where: { id: reviewId },
                   relations: ['likeDislike'],
              });
 
@@ -370,12 +367,11 @@ export class reviewRepository{
               for (const likeDislike of likeDislikes)
               {
                   await this.likeDislikeRepository.delete(likeDislike.id);
-               }
+              }
            }
 
-                 return await this.reviewModel.remove(review);
+            return await this.reviewModel.remove(review);
        }
-
 
  }
 

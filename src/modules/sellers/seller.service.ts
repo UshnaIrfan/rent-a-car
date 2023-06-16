@@ -10,7 +10,6 @@ import {CategoryRepository} from "../categories/category.repository";
 import {sellerRepository} from "./seller.repository";
 import addSellerInterface from "./interfaces/add-seller.interface";
 import {reviewRepository} from "../review/respositories/review.respository";
-import { review } from "../review/schemas/submit-review.schema";
 import updateSellerInterface from "./interfaces/update-seller.interface";
 import createSellerInterface from "./interfaces/create-seller.interface";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
@@ -25,15 +24,14 @@ import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interfa
 @Injectable()
 export class SellerService {
   constructor(
-      private readonly CategoryRepository:CategoryRepository,
-      private readonly SellerRepository:sellerRepository,
-      private readonly ReviewRepository:reviewRepository,
-      private readonly clicksTitleRepository:clicksTitlesRepository,
-      private readonly usersRepository:UsersRepository,
-      private jwtService: JwtService,
-      @Inject(CACHE_MANAGER) private cacheManager: Cache
+        private readonly CategoryRepository:CategoryRepository,
+        private readonly SellerRepository:sellerRepository,
+        private readonly ReviewRepository:reviewRepository,
+        private readonly clicksTitleRepository:clicksTitlesRepository,
+        private readonly usersRepository:UsersRepository,
+        private jwtService: JwtService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) {}
-
 
 
 
@@ -59,12 +57,12 @@ export class SellerService {
             const categoriesIDs = body.categories;
             for (const categoryID of categoriesIDs)
             {
-              const category = await this.CategoryRepository.getCategoryById(categoryID);
-              if (!category)
-              {
-                throw new NotFoundException('Category does not exist');
-              }
-              seller.categories.push(category);
+                const category = await this.CategoryRepository.getCategoryById(categoryID);
+                if (!category)
+                {
+                   throw new NotFoundException('Category does not exist');
+                }
+                seller.categories.push(category);
            }
 
            await this.SellerRepository.sellerCategories(seller);
@@ -86,11 +84,11 @@ export class SellerService {
                throw new NotFoundException('No records found');
             }
 
-         return {
-            records: result,
-            totalRecords: totalCount,
-            totalPages,
-            currentPage: pageNumber,
+            return {
+              records: result,
+              totalRecords: totalCount,
+              totalPages,
+              currentPage: pageNumber,
          };
     }
 
@@ -112,13 +110,12 @@ export class SellerService {
         // delete seller
         async deleteSeller(id:string):Promise<{message: string, deletedSeller: seller}>
         {
-
-          const deletedSeller = await this.SellerRepository.deleteSeller(id);
-          if (!deletedSeller)
-          {
-             throw new NotFoundException('seller not found');
-          }
-          return { message: "seller deleted successfully", deletedSeller };
+            const deletedSeller = await this.SellerRepository.deleteSeller(id);
+            if (!deletedSeller)
+            {
+               throw new NotFoundException('seller not found');
+            }
+            return { message: "seller deleted successfully", deletedSeller };
        }
 
 
@@ -127,12 +124,12 @@ export class SellerService {
         //admin update seller status
         async  adminUpdateSeller (adminUpdateSellerInterface:adminUpdateSellerInterface):Promise<{ update: updateSellerInterface; message: string }>
         {
-           const update = await this.SellerRepository.adminUpdateSeller(adminUpdateSellerInterface.sellerId, adminUpdateSellerInterface.approvedByAdmin,adminUpdateSellerInterface.isListing);
-           if (!update)
-           {
-               throw new NotFoundException('seller not found');
-           }
-           return { message: "seller updated successfully", update};
+             const update = await this.SellerRepository.adminUpdateSeller(adminUpdateSellerInterface.sellerId, adminUpdateSellerInterface.approvedByAdmin,adminUpdateSellerInterface.isListing);
+             if (!update)
+             {
+                 throw new NotFoundException('seller not found');
+             }
+             return { message: "seller updated successfully", update};
        }
 
 
@@ -180,7 +177,7 @@ export class SellerService {
            const sellers = await this.SellerRepository.getAllSellers()
            if(!sellers)
            {
-             throw new  NotFoundException('sellers do not exist');
+              throw new  NotFoundException('sellers do not exist');
            }
 
            return { records: sellers};
@@ -194,7 +191,7 @@ export class SellerService {
            const seller = await this.SellerRepository.getSellerById(id)
            if(!seller)
            {
-              throw new  NotFoundException('seller with  the given ID not found');
+               throw new  NotFoundException('seller with  the given ID not found');
            }
 
             return { record: seller };
@@ -230,10 +227,8 @@ export class SellerService {
             throw new ConflictException('Seller Url already exists');
           }
 
-
           const seller = await this.SellerRepository.createSeller(body);
           seller.categories = [];
-
 
           const categoriesIDs = body.categories;
           for (const categoryID of categoriesIDs)
@@ -245,7 +240,6 @@ export class SellerService {
              }
               seller.categories.push(category);
           }
-
 
           await this.SellerRepository.sellerCategories(seller);
 
@@ -266,15 +260,14 @@ export class SellerService {
          {
             throw new ConflictException('You have already submitted a review for this seller');
          }
-        const reviewBody = {
-            titleId: body.titleId,
-            sellerId: seller.id,
-            message: body.message,
-            titleSlug:typeResult.slug,
-            userId: decoded.id,
-            approvedByAdmin:body.approvedbyAdmin,
-            bestWriter:body.bestWriter,
-
+         const reviewBody = {
+              titleId: body.titleId,
+              sellerId: seller.id,
+              message: body.message,
+              titleSlug:typeResult.slug,
+              userId: decoded.id,
+              approvedByAdmin:body.approvedbyAdmin,
+              bestWriter:body.bestWriter,
        };
 
          const review= await this.ReviewRepository.submitReview(reviewBody);

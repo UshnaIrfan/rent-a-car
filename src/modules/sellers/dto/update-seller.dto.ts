@@ -19,11 +19,9 @@ export class updateSellerDto {
      sellerName: string;
 
 
-
      @ApiProperty({ type: String, required: true })
      @IsString()
      @IsNotEmpty()
      sellerUrl: string;
-
 
 }

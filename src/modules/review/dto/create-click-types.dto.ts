@@ -9,5 +9,4 @@ export class createClicksTypesDto {
     @IsNotEmpty()
     type: string;
 
-
 }

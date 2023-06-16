@@ -43,13 +43,11 @@ export class clicksTitlesRepository{
 
 
 
-
        //find by slug
        async findBySlug(slug:string):Promise<clicksTitle| null>
        {
          return this.clickTypesModel.findOne({ where: { slug }, });
        }
-
 
 
 

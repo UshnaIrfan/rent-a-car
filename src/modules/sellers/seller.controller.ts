@@ -24,29 +24,26 @@ export class SellerController {
 
 
 
-
-       // get seller by ID (associated categories)
-       @Get('/id/:seller_id')
-       async  getSellerByID( @Param('seller_id') id: string) :Promise<{record:seller}>
-       {
-          return this.sellerService.getSellerById(id);
-       }
-
+        // get seller by ID (associated categories)
+        @Get('/id/:seller_id')
+        async  getSellerByID( @Param('seller_id') id: string) :Promise<{record:seller}>
+        {
+            return this.sellerService.getSellerById(id);
+        }
 
 
 
-       // add seller
-       @ApiBearerAuth()
-       @ApiBody({type:addSellerDto})
-       @Post('add')
-       @BlockRoles(BlockRole.UNBLOCK)
-       async  add(@Body() body:addSellerDto,@Req() req):Promise<{seller: seller, review: review}>
-       {
-          const accessToken = req.headers.authorization.split(' ')[1];
-          return this.sellerService.addSeller(body,accessToken);
-       }
 
-
+        // add seller
+        @ApiBearerAuth()
+        @ApiBody({type:addSellerDto})
+        @Post('add')
+        @BlockRoles(BlockRole.UNBLOCK)
+        async  add(@Body() body:addSellerDto,@Req() req):Promise<{seller: seller, review: review}>
+        {
+           const accessToken = req.headers.authorization.split(' ')[1];
+           return this.sellerService.addSeller(body,accessToken);
+        }
 
 
         // unique seller show

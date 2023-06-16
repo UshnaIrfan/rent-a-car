@@ -20,7 +20,7 @@ export class MailchipController {
       @Roles(Role.L2A_ADMIN)
       async createMailChip(@Body() createMailChip:MailchipDto): Promise<mailChip>
       {
-        return this.mailchipService.createMailChip(createMailChip );
+          return this.mailchipService.createMailChip(createMailChip );
       }
 
 
@@ -31,6 +31,6 @@ export class MailchipController {
       @Roles(Role.L2A_ADMIN)
       async getMailChip()
       {
-        return this.mailchipService.getMailChip();
+          return this.mailchipService.getMailChip();
       }
 }

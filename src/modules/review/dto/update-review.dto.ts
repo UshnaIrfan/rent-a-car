@@ -19,5 +19,4 @@ export class updateReviewDto {
     @ApiProperty({ type: String, required: false })
     message: string;
 
-
 }

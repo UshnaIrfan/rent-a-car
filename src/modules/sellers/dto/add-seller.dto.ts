@@ -57,5 +57,4 @@ export class  addSellerDto{
      @IsNotEmpty()
      bestWriter: boolean;
 
-
 }

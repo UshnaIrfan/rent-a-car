@@ -5,7 +5,7 @@ import {
   Param, Patch,
   Post,
   Query,
-  Req, UseGuards
+  Req
 } from "@nestjs/common";
 import { ReviewService } from './review.service';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
@@ -35,7 +35,7 @@ export class ReviewController {
          async createClicksTypes(
          @Body() clicksReview:createClicksTypesDto):Promise<clicksTypes>
          {
-           return this.reviewService.createClicksTypes(clicksReview);
+            return this.reviewService.createClicksTypes(clicksReview);
          }
 
 
@@ -81,7 +81,7 @@ export class ReviewController {
          @Get('/count/:seller_id')
          async getReviewsWithCounts(@Param('seller_id') sellerId: string):Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
-            return  await this.reviewService.getReviewsWithCounts(sellerId);
+             return  await this.reviewService.getReviewsWithCounts(sellerId);
          }
 
 
