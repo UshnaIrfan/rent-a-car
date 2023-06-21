@@ -57,11 +57,6 @@ export class User {
      roles: string;
 
 
-     // @ApiProperty()
-     // @Column('bool')
-     // isActive: boolean;
-
-
      @ApiProperty()
      @Column({ type:"enum", enum: status, default: status.INACTIVE })
      status: string;

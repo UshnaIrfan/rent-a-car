@@ -9,7 +9,6 @@ export class  changeUserPasswordTokenVerificationDto {
      email: string;
 
 
-
     @ApiProperty({ type: String, required: true })
     @IsNotEmpty()
     token: string;

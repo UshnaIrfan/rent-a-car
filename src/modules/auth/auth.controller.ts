@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put, Patch, Param
+  Delete, Put, Patch, Param, HttpCode, HttpStatus
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
@@ -109,7 +109,7 @@ export class AuthController {
         @Get('/:user_id')
         async  getUserById(@Param('user_id') userId:string):Promise<User>
         {
-           return this.authService.getUserById(userId);
+            return this.authService.getUserById(userId);
         }
 
 
@@ -146,7 +146,6 @@ export class AuthController {
            const accessToken = req.headers.authorization.split(' ')[1];
            return  this.authService.refreshToken(req.user,accessToken)
         }
-
 
 
 }

@@ -25,11 +25,8 @@ export class adminAuthController {
       @Roles(Role.L2A_ADMIN)
       async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
       {
-
-          console.log("user")
+            console.log("user")
            return  this.authService.getAllUsers(page,pageSize,username);
-
-
       }
 
 

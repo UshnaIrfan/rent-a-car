@@ -32,11 +32,6 @@ export class CreateUserDto {
      roles: string ;
 
 
-     // @ApiProperty({ type: Boolean, default: false ,required: true})
-     // @IsBoolean()
-     // isActive: boolean;
-
-
 
      @ApiProperty({ type: String, enum: status, default: status.INACTIVE })
      @IsString()

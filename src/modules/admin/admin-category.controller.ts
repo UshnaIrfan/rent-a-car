@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { CreateCategoryDto } from "../categories/dto/create-category.dto";
 import { Roles } from "../../decorators/role.decorators";
 import { Role } from "../../enums/role.enum";
@@ -72,6 +72,7 @@ export class AdminCategoryController {
 
 
       // admin update category status
+      @ApiOperation({ summary: "Update category status" })
       @ApiBearerAuth()
       @ApiBody({type:adminUpdateCategoryDto})
       @Patch('categories/update/status')
@@ -80,9 +81,6 @@ export class AdminCategoryController {
       {
           return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
       }
-
-
-
 
 
 

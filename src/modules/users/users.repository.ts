@@ -20,16 +20,16 @@ export class UsersRepository {
        //update user
        async updateUser(id:string, name:string,username:string,email:string): Promise<User | null>
        {
-          const user = await this.userModel.findOne({ where: { id}});
-          if (!user)
-          {
-                return null
-          }
+            const user = await this.userModel.findOne({ where: { id}});
+            if (!user)
+            {
+                  return null
+            }
 
-          user.name = name;
-          user.username = username;
-          user.email = email;
-          return this.userModel.save(user);
+            user.name = name;
+            user.username = username;
+            user.email = email;
+            return this.userModel.save(user);
        }
 
 

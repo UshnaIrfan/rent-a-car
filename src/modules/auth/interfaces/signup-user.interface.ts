@@ -7,6 +7,5 @@ export default interface signupUserInterface {
    readonly roles: string;
    readonly status: string;
    readonly blockStatus: string;
-  // readonly  isActive: boolean;
 
 }

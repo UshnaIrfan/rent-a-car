@@ -7,6 +7,7 @@ import {status as sellerStatus } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import { reviewRepository } from "../review/respositories/review.respository";
 import { category, status, status as categoryStatus } from "../categories/schemas/category.schema";
+import { User } from "../users/schemas/user.schema";
 
 @Injectable()
 export class sellerRepository{
@@ -224,69 +225,6 @@ export class sellerRepository{
        ];
      }
    }
-
-
-    //     async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
-    //     {
-    //         let whereConditions = {} as {
-    //            sellerName?: any,
-    //            categories?: { id: string },
-    //        };
-    //
-    //
-    //        if (query && categoryId)
-    //        {
-    //            const category = await this.CategoryRepository.getCategorybyId(categoryId);
-    //            if (!category)
-    //            {
-    //               throw new NotFoundException('Category not found.');
-    //            }
-    //
-    //          whereConditions = {
-    //             sellerName: Like(`${query}%`),
-    //             categories: { id: categoryId },
-    //          };
-    //        }
-    //
-    //       else if (categoryId)
-    //       {
-    //           const category = await this.CategoryRepository.getCategorybyId(categoryId);
-    //           if (!category)
-    //           {
-    //             throw new NotFoundException('Category not found.');
-    //           }
-    //
-    //           whereConditions = {
-    //             categories: { id: categoryId },
-    //         };
-    //      }
-    //      else if (query)
-    //      {
-    //             whereConditions = {
-    //               sellerName: Like(`${query}%`),
-    //         };
-    //      }
-    //
-    //
-    //      const [result, totalCount] = await this.sellerModel.findAndCount({
-    //          where: Object.keys(whereConditions).length !== 0
-    //            ? [{ ...whereConditions, categories: { approvedByAdmin: categoryStatus.APPROVED } }]
-    //            : { categories: { approvedByAdmin: categoryStatus.APPROVED} },
-    //          order: { sellerName: 'ASC' },
-    //          relations: ['categories'],
-    //          skip,
-    //          take,
-    //        });
-    //
-    //
-    //      if (!result.length)
-    //      {
-    //        throw new NotFoundException('No sellers were found matching the search criteria.');
-    //      }
-    //
-    //      return [result, totalCount];
-    //
-    // }
 
 
 

@@ -3,8 +3,6 @@ import {
   ExecutionContext,
   Injectable,
   ForbiddenException,
-  UnauthorizedException,
-  BadRequestException
 } from "@nestjs/common";
 import { Reflector } from '@nestjs/core';
 import { BlockRole } from '../enums/block.enum';

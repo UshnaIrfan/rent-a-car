@@ -4,7 +4,7 @@ import {
      IsNotEmpty, IsOptional,
      IsString,
      MaxLength,
-     MinLength, Matches, IsBoolean
+     MinLength, Matches
 } from "class-validator";
 import { Role } from "../../../enums/role.enum";
 import {status} from "../../users/schemas/user.schema";
@@ -45,14 +45,6 @@ export class SignUpUserDto {
      @ApiProperty({ required: false, default: Role.L2A_USER })
      @IsOptional()
      roles: string ;
-
-
-
-     // @ApiProperty({ type: Boolean, default: false,required: true })
-     // @IsBoolean()
-     // @IsNotEmpty()
-     // isActive: boolean;
-
 
 
      @ApiProperty({ type: String, enum: status, default: status.INACTIVE })

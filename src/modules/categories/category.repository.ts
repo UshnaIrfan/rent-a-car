@@ -16,7 +16,6 @@ export class CategoryRepository {
          // create category
          async createCategory(category: CreateCategoryDto):Promise<category | null>
          {
-
              return this.categoryModel.save(category);
          }
 
@@ -38,7 +37,7 @@ export class CategoryRepository {
            const whereConditions: any[] = [];
            if (categoryName)
            {
-             whereConditions.push({
+               whereConditions.push({
                categoryName: Like(`${categoryName}%`)});
            }
 
@@ -46,14 +45,13 @@ export class CategoryRepository {
           where: whereConditions,
           skip,
           take,
-          order: { categoryName: 'ASC' },
-           });
+          order: { categoryName: 'ASC' }, });
 
           if (!result.length)
           {
              throw new NotFoundException('No category were found matching the criteria.');
           }
-             return [result, totalCount];
+          return [result, totalCount];
 
       }
 
@@ -67,27 +65,25 @@ export class CategoryRepository {
             const category = await this.categoryModel.findOne({ where: { id}});
             if (!category)
             {
-              return null
+               return null
             }
 
 
+            // Check if the new category name is the same as the existing name
+            if (category.categoryName === categoryName)
+            {
+               throw new ConflictException('Category name must be different from the existing name');
+            }
 
-          // Check if the new category name is the same as the existing name
-          if (category.categoryName === categoryName)
-          {
-                throw new ConflictException('Category name must be different from the existing name');
+            // Check if the new category name already exists in the database
+            const existingCategory = await this.categoryModel.findOne({ where: { categoryName } });
+            if (existingCategory && existingCategory.id !== category.id)
+            {
+               throw new ConflictException('Category  name already exists. Please enter a unique name');
+            }
 
-          }
-
-          // Check if the new category name already exists in the database
-          const existingCategory = await this.categoryModel.findOne({ where: { categoryName } });
-          if (existingCategory && existingCategory.id !== category.id)
-          {
-                throw new ConflictException('Category  name already exists. Please enter a unique name');
-          }
-
-           category.categoryName = categoryName;
-           return this.categoryModel.save(category);
+            category.categoryName = categoryName;
+            return this.categoryModel.save(category);
        }
 
 
@@ -128,11 +124,11 @@ export class CategoryRepository {
             const category = await this.categoryModel.findOne({
             where: { id},
             relations: ['sellers'],
-          });
+            });
 
            if (!category)
            {
-                throw new NotFoundException('Category not found');
+             throw new NotFoundException('Category not found');
            }
            return category;
        }
@@ -156,18 +152,18 @@ export class CategoryRepository {
        // get category by id associated sellers
        async getCategoryId(id: string): Promise<category|null>
        {
-          const category = await this.categoryModel.findOne({
-          where: { id ,approvedByAdmin:status.APPROVED },
-          relations: ['sellers'],
-          });
+            const category = await this.categoryModel.findOne({
+            where: { id ,approvedByAdmin:status.APPROVED },
+            relations: ['sellers'],
+            });
 
-         if (!category)
-         {
-            throw new NotFoundException('Category not found');
-         }
+            if (!category)
+            {
+              throw new NotFoundException('Category not found');
+            }
 
-         category.sellers = category.sellers.filter((seller) => seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
-         return category;
+            category.sellers = category.sellers.filter((seller) => seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
+            return category;
        }
 
 
@@ -197,31 +193,26 @@ export class CategoryRepository {
         // common seller
         async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
         {
-          const category = await this.categoryModel.findOne(
-         {
+           const category = await this.categoryModel.findOne({
             where: { id: categoryId, approvedByAdmin: status.APPROVED },
             relations: ['sellers'],
-          });
+           });
 
-         if (!category)
-         {
-            throw new NotFoundException('Category not found');
-         }
-
-
-        const filteredSellers = category.sellers.filter((seller) => seller.id !== excludeSellerId && seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
-        if (filteredSellers.length === 0)
-        {
-           throw new NotFoundException('No approved seller found for this category');
-        }
-
-         category.sellers = filteredSellers;
-         return [category];
-    }
+           if (!category)
+           {
+              throw new NotFoundException('Category not found');
+           }
 
 
+          const filteredSellers = category.sellers.filter((seller) => seller.id !== excludeSellerId && seller.approvedByAdmin === status.APPROVED && seller.isListing===true);
+          if (filteredSellers.length === 0)
+          {
+             throw new NotFoundException('No approved seller found for this category');
+          }
 
-
+           category.sellers = filteredSellers;
+           return [category];
+     }
 
 
 }

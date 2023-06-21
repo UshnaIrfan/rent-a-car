@@ -12,7 +12,6 @@ export class adminUpdateUserDto {
      userId: string;
 
 
-
      @ApiProperty({ type: String })
      @IsString()
      status: string;

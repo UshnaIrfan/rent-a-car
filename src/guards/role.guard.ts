@@ -2,7 +2,6 @@ import { CanActivate, ExecutionContext, Injectable, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { Role } from '../enums/role.enum';
 
-
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
@@ -27,7 +26,7 @@ export class RoleGuard implements CanActivate {
         const hasRequiredRole = requiredRoles.some((role) => user.roles.includes(role));
         if (!hasRequiredRole)
         {
-          throw new ForbiddenException(`Only users with the role ${requiredRoles.join(' or ')} are allowed to perform this action`);
+           throw new ForbiddenException(`Only users with the role ${requiredRoles.join(' or ')} are allowed to perform this action`);
         }
 
         return true;

@@ -28,10 +28,10 @@ export class likeDislikeRepository{
 
 
 
-       async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislike[]|null>
-       {
-           return  await this.likeDislikeModel.find({ where: {   reviewId } });
-       }
+       // async getAllReviewsCountByReviewId(  reviewId: string): Promise<likeDislike[]|null>
+       // {
+       //     return  await this.likeDislikeModel.find({ where: {reviewId } });
+       // }
 
 
 
@@ -45,6 +45,14 @@ export class likeDislikeRepository{
             }
             return await this.likeDislikeModel.remove(review);
         }
+
+
+
+        async findLikeDislikeByUser(userId:string):Promise<likeDislike[]| null>
+        {
+          return this.likeDislikeModel.find({ where: { userId}});
+        }
+
 
 
 }

@@ -236,6 +236,19 @@ export class ReviewService {
             {
                throw new NotFoundException('invalid review id');
             }
+
+
+           const existingLikeDislike = await this.likeDislikeRepository.findLikeDislikeByUser(decoded.id);
+           if (existingLikeDislike.length > 0)
+           {
+               const submittedReviewIds = existingLikeDislike.map(review => review.reviewId);
+               if (submittedReviewIds.includes(likeDislikeInterface.reviewId))
+               {
+                   throw new ConflictException('User already submitted a review for this review ID');
+               }
+           }
+
+
            const likedislike = {
                ...likeDislikeInterface,
                userId: decoded.id,

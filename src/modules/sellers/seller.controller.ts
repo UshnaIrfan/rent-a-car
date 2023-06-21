@@ -18,7 +18,7 @@ export class SellerController {
         @Get('all-sellers')
         async  getAllSellers( ):Promise<{records:seller[]}>
         {
-            return this.sellerService.getAllSellers();
+             return this.sellerService.getAllSellers();
         }
 
 

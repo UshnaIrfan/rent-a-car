@@ -16,7 +16,6 @@ export class createDefaultSchemaMigration1685179560897 implements MigrationInter
         await queryRunner.query(`DROP TABLE categories_sellers_sellers`);
         await queryRunner.query(`DROP TABLE categories`);
         await queryRunner.query(`DROP TABLE sellers`);
-
     }
 
 }
