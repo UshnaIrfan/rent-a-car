@@ -146,11 +146,12 @@ export class reviewRepository{
                  where: [{ sellerId: In(sellerIds),
                  message: Not(IsNull()),
                  approvedByAdmin:true,
-                 titleId: In([
-                   "0b4b4b15-536b-4ac3-ae2e-13e17885041a",
-                   "77b4b57a-3248-46bb-a35c-cea54b2cb7ad",
-                   "c03307eb-823f-4e2a-b437-700813b0ad01"
-               ])}],
+                   titleSlug:In([
+                     'to-love-happy',
+                     'to-love-awesome',
+                     'to-love-satisfied'
+                   ])
+                 }],
                 relations: ['likeDislike'],
                 order: { createdAt: 'DESC' }
               });
