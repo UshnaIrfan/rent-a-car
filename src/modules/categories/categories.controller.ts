@@ -46,7 +46,6 @@ export class CategoriesController {
 
 
 
-
          // latest positive review
          @Get('/:category_id')
          async getReviewsPositive(@Param('category_id') categoryId: string)

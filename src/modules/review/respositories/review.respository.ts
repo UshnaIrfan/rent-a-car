@@ -42,13 +42,21 @@ export class reviewRepository{
 
 
 
-       async reviewBySellerIdALL(sellerId:string):Promise<review[]| null>
-       {
-            return this.reviewModel.find({
-            where: { sellerId  ,approvedByAdmin: true},
-           });
-       }
+          async reviewBySellerIdALL(sellerId:string):Promise<review[]| null>
+          {
+              return this.reviewModel.find({
+              where: { sellerId  ,approvedByAdmin: true},
+             });
+         }
 
+
+         // //updated    ( love /air review)
+         // async reviewBySellerIdAndTittle(sellerId:string,titleId):Promise<review[]| null>
+         // {
+         //    return this.reviewModel.find({
+         //      where: { sellerId, titleId,approvedByAdmin: true},
+         //    });
+         // }
 
 
 
@@ -61,8 +69,6 @@ export class reviewRepository{
             });
             return result;
        }
-
-
 
 
 
@@ -132,7 +138,6 @@ export class reviewRepository{
 
 
 
-
         // latest positive review
          async getLatestReviewBySellerId(sellerIds: any): Promise<review | null>
          {
@@ -154,7 +159,10 @@ export class reviewRepository{
 
 
 
-      //ADMIN APIS
+
+
+
+       //ADMIN APIS
         // review search
     //     async search(skip: number, take: number,  sellerId?: string, userId?: string, message?: string ,type?:string,categoryId ?:string): Promise<any>
     //     {

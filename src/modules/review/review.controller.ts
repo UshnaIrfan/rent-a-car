@@ -8,7 +8,7 @@ import {
   Req
 } from "@nestjs/common";
 import { ReviewService } from './review.service';
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {createClicksTitlesDto} from "./dto/create-clicks-titles.dto";
 import {createClicksTypesDto} from "./dto/create-click-types.dto";
 import { submitReviewDto } from "./dto/submit-review.dto";
@@ -20,6 +20,10 @@ import {seller} from "../sellers/schemas/seller.schema";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import {BlockRoles} from "../../decorators/block.decorators";
 import {BlockRole} from "../../enums/block.enum";
+import paginationCategoryInterface from "../categories/interfaces/pagination-category.interface";
+import { Roles } from "../../decorators/role.decorators";
+import { Role } from "../../enums/role.enum";
+
 
 
 @ApiTags('Review')
@@ -98,7 +102,21 @@ export class ReviewController {
 
 
 
-         //update review
+        // //updated    ( love /air review)
+        // @ApiQuery({ name: 'seller_id', required:false})
+        // @ApiQuery({ name: 'tittle_id', required: false })
+        // @ApiQuery({ name: 'page', type: Number, required: true })
+        // @Get('/:seller_id/title_id')
+        // async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('page') page: number = 1)
+        // {
+        //    console.log("here",seller_id,tittle_id,page)
+        //    return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
+        // }
+
+
+
+
+        //update review
          @ApiBearerAuth()
          @Patch('update')
          @BlockRoles(BlockRole.UNBLOCK)

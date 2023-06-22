@@ -19,6 +19,8 @@ import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
 import { User } from "../users/schemas/user.schema";
 import {changeUserPasswordTokenVerificationDto} from "./dto/change-user-password-token-verification.dto";
+import { Roles } from "../../decorators/role.decorators";
+import { Role } from "../../enums/role.enum";
 
 
 @ApiTags('Auth')

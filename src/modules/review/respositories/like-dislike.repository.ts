@@ -50,10 +50,8 @@ export class likeDislikeRepository{
 
         async findLikeDislikeByUser(userId:string):Promise<likeDislike[]| null>
         {
-          return this.likeDislikeModel.find({ where: { userId}});
+           return this.likeDislikeModel.find({ where: { userId}});
         }
-
-
 
 }
 

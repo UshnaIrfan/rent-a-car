@@ -550,7 +550,7 @@ export class AuthService {
             const html = template({ username: Username,contact_us_url,privacy_policy_url ,logo_l2a});
             await this.mailerService.sendMail({
               to: email,
-              subject: `You're in!`,
+              subject: `You're In!`,
               html: html,
             });
         }
