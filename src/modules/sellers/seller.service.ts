@@ -43,7 +43,7 @@ export class SellerService {
             const sellerName = await this.SellerRepository.getSellerName(body.sellerUrl)
             if (sellerName)
             {
-               throw new ConflictException('seller Name already exists');
+               throw new ConflictException('This seller is already on our list!');
 
             }
             const Url = await this.SellerRepository.getSellerUrl(body.sellerUrl)
@@ -218,7 +218,7 @@ export class SellerService {
           const sellerName = await this.SellerRepository.getSellerName(body.sellerName)
           if (sellerName)
           {
-            throw new ConflictException('Seller Name already exists');
+            throw new ConflictException('This seller is already on our list!');
           }
 
           const sellerUrl = await this.SellerRepository.getSellerUrl(body.sellerUrl)

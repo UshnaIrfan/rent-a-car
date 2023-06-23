@@ -7,9 +7,8 @@ import {
   Injectable,
   InternalServerErrorException,
   NotAcceptableException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+  NotFoundException, UnauthorizedException
+} from "@nestjs/common";
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -462,7 +461,7 @@ export class AuthService {
             const cachedToken = await this.cacheManager.get(accessToken);
             if (!cachedToken)
             {
-              throw new UnauthorizedException('Token expired');
+               throw new UnauthorizedException('Token expired');
             }
             return cachedToken;
         }

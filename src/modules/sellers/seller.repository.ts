@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from "typeorm";
+import { In, Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status as sellerStatus } from "./schemas/seller.schema";
@@ -228,7 +228,59 @@ export class sellerRepository{
 
 
 
-       // get all sellers
+
+  // async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]> {
+  //   let whereConditions = {};
+  //
+  //   if (query) {
+  //     whereConditions = {
+  //       sellerName: query? Like(`%${query}%`) : undefined,
+  //     };
+  //   }
+  //   let sellerIds: string[] = [];
+  //
+  //   if (categoryId) {
+  //     const category = await this.CategoryRepository.getCategoryById(categoryId);
+  //     if (!category) {
+  //       throw new NotFoundException('Category not found.');
+  //     }
+  //
+  //     const sellerId = category.sellers;
+  //
+  //     if (sellerId) {
+  //       whereConditions = {
+  //         ...whereConditions,
+  //         sellerId: sellerId,
+  //       };
+  //     }
+  //   }
+  //
+  //
+  //   const [result, totalCount] = await this.sellerModel.findAndCount({
+  //     where: Object.keys(whereConditions).length !== 0 ? [
+  //             whereConditions
+  //           ] : [],
+  //     order: {sellerName: 'ASC' },
+  //     relations: ['categories'],
+  //     skip,
+  //     take,
+  //   });
+  //
+  //   if (!result.length) {
+  //     throw new NotFoundException('No sellers were found matching the criteria.');
+  //   }
+  //
+  //   return [result, totalCount];
+  // }
+  //
+
+
+
+
+
+
+
+        // get all sellers
           async getAllSeller(): Promise<seller[]|null>
           {
             return  await this.sellerModel.find()

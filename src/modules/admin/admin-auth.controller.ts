@@ -57,15 +57,15 @@ export class adminAuthController {
 
 
 
-    // admin user update block status
-     @ApiBearerAuth()
-     @ApiBody({type:adminUpdateBlockStatusUserDto})
-     @Patch('user/update/block/status')
-     @Roles(Role.L2A_ADMIN)
-     async adminUpdateUserBlockStatus(@Body() body:adminUpdateBlockStatusUserDto)
-     {
-        return this.authService.adminUpdateUserBlockStatus(body);
-     }
+      // admin user update block status
+       @ApiBearerAuth()
+       @ApiBody({type:adminUpdateBlockStatusUserDto})
+       @Patch('user/update/block/status')
+       @Roles(Role.L2A_ADMIN)
+       async adminUpdateUserBlockStatus(@Body() body:adminUpdateBlockStatusUserDto)
+       {
+          return this.authService.adminUpdateUserBlockStatus(body);
+       }
 
 
 
