@@ -23,7 +23,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
            }
           catch (error)
           {
-              throw new NotFoundException('Please check your email / password and try again!');
+              throw new NotFoundException('Please check your email/password and try again!');
 
           }
       }

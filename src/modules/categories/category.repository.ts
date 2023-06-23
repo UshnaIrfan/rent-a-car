@@ -194,8 +194,7 @@ export class CategoryRepository {
 
 
 
-
-        // common seller
+       // common seller
         async getCommonSellers(categoryId: string, excludeSellerId: string): Promise<category[]>
         {
            const category = await this.categoryModel.findOne({

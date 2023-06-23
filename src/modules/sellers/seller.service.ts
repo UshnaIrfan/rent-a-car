@@ -1,9 +1,9 @@
 import {
-   CACHE_MANAGER,
+  CACHE_MANAGER,
   ConflictException, Inject,
   Injectable,
-  NotFoundException,
-  UnauthorizedException
+  NotFoundException, UnauthorizedException
+
 } from "@nestjs/common";
 import { seller } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
