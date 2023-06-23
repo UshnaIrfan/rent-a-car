@@ -313,7 +313,13 @@ export class sellerRepository{
         {
              const seller = await  this.sellerModel.findOne({
              where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
-             relations: ['categories']
+             relations: ['categories'],
+              order: {
+                  sellerName:"ASC",
+                 categories: {
+                   categoryName: "ASC"
+                 },
+               },
              });
             if (!seller)
             {

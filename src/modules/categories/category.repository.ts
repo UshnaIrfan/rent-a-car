@@ -155,6 +155,11 @@ export class CategoryRepository {
             const category = await this.categoryModel.findOne({
             where: { id ,approvedByAdmin:status.APPROVED },
             relations: ['sellers'],
+              order: {
+                sellers: {
+                  sellerName: "ASC"
+                },
+              },
             });
 
             if (!category)
