@@ -227,8 +227,6 @@ export class sellerRepository{
    // }
    //
 
-
-
           async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
           {
               let whereConditions: any = {};

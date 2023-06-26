@@ -157,13 +157,13 @@ export class AuthService {
             const username = await this.usersService.findUserByUsername(Signup.username,);
             if (username)
             {
-              throw new ConflictException('Username already exists');
+              throw new ConflictException('This username already exists');
             }
 
             const Email = await this.usersService.findUserByEmail(Signup.email);
             if (Email)
             {
-              throw new ConflictException('Email already exists');
+              throw new ConflictException('This email already exists');
             }
 
             const { password } = Signup;
@@ -214,7 +214,7 @@ export class AuthService {
             }
 
             return {
-              message: 'Email sent successfully',
+              message: 'Please check your email to verify your signup!' ,
             };
           }
       }
@@ -355,7 +355,7 @@ export class AuthService {
             throw new BadRequestException('Failed to send email');
           }
           return {
-            message: 'Please check your email.',
+            message: 'Please check your email to reset your password!',
             tokenStatus: true,
           };
       }
