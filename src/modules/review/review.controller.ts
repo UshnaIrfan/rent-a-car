@@ -92,26 +92,26 @@ export class ReviewController {
 
 
          // loved/air  review
-         @Get('/:seller_id')
-         async getReviewsWithTypes(
-         @Param('seller_id') sellerId: string,
-         @Query('page') page: number = 1)
-         {
-             return await this.reviewService.getReviewsWithTypes(sellerId, page);
-         }
+         // @Get('/:seller_id')
+         // async getReviewsWithTypes(
+         // @Param('seller_id') sellerId: string,
+         // @Query('page') page: number = 1)
+         // {
+         //     return await this.reviewService.getReviewsWithTypes(sellerId, page);
+         // }
 
 
 
-        // //updated    ( love /air review)
-        // @ApiQuery({ name: 'seller_id', required:false})
-        // @ApiQuery({ name: 'tittle_id', required: false })
-        // @ApiQuery({ name: 'page', type: Number, required: true })
-        // @Get('/:seller_id/title_id')
-        // async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('page') page: number = 1)
-        // {
-        //    console.log("here",seller_id,tittle_id,page)
-        //    return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
-        // }
+         //updated    ( love /air review)
+        @ApiQuery({ name: 'seller_id', required:true})
+        @ApiQuery({ name: 'tittle_id', required: false })
+        @ApiQuery({ name: 'page', type: Number, required: true })
+        @Get('/:seller_id/title_id')
+        async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('page') page: number = 1)
+        {
+           console.log("here",seller_id,tittle_id,page)
+           return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
+        }
 
 
 

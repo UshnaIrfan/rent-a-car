@@ -150,7 +150,7 @@ export class AuthService {
 
               await this.sendVerificationEmail(User.email, emailBody);
 
-              throw new ConflictException('You are already created this account. Resend email please verify your account.',);
+              throw new ConflictException('You have already created an account. We’re sending you a new email for verification!',);
          }
         else
         {
