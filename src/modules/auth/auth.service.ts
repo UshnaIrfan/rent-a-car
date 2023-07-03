@@ -296,6 +296,7 @@ export class AuthService {
               roles: user.roles,
               status: user.status,
               blockStatus: user.blockStatus,
+              profileIcon:user.profileIcon,
               //isActive: user.isActive,
             };
             const accessTokenRedis = this.jwtService.sign(payload);
@@ -310,7 +311,9 @@ export class AuthService {
               //isActive: user.isActive,
               status: user.status,
               blockStatus: user.blockStatus,
+              profileIcon:user.profileIcon,
               access_token: accessTokenRedis,
+
             };
         }
 

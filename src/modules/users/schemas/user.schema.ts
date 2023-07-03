@@ -70,6 +70,13 @@ export class User {
 
 
      @ApiProperty()
+     @Column({nullable: true ,type: 'longtext'})
+     profileIcon: string;
+     length: Boolean;
+
+
+
+     @ApiProperty()
      @CreateDateColumn()
      createdAt: Date
 

@@ -8,5 +8,7 @@ export default interface JwtTokensInterface {
    readonly  access_token: string;
    readonly  status: string;
    readonly  blockStatus: string;
+   readonly profileIcon:string,
+
 
 }
