@@ -47,7 +47,8 @@ export class User {
 
 
      @ApiProperty()
-     @Column({ unique: true })
+      @Column({})
+     // @Column({ unique: true })
      password: string;
 
 
