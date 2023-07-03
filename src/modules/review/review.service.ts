@@ -526,6 +526,7 @@ export class ReviewService {
           {
              throw new NotFoundException(`Seller does not exist`);
           }
+          console.log(seller)
 
           const title = await this.clicksTitleRepository.findByTitle(tittleId);
           if (!title)

@@ -173,17 +173,17 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
       //Beauty, Cosmetics and Skincare
-      { sellerName: 'Sephora', sellerUrl: 'https://sephora.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Ulta', sellerUrl: 'https://ulta.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Urban Decay', sellerUrl: 'https://urbandecay.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Dermstore', sellerUrl: 'https://dermstore.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Mac Cosmetics', sellerUrl: 'https://maccosmetics.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Byrdie', sellerUrl: 'https://byrdie.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Paula’s Choice', sellerUrl: 'https://paulaschoice.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Current Body', sellerUrl: 'https://currentbody.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Look Fantastic', sellerUrl: 'https://lookfantastic.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'My NuFACE', sellerUrl: 'https://mynuface.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
-      { sellerName: 'Beauty Bay', sellerUrl: 'https://beautybay.com', isListing: true,categoryName: 'Beauty,Cosmetics and Skincare'},
+      { sellerName: 'Sephora', sellerUrl: 'https://sephora.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Ulta', sellerUrl: 'https://ulta.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Urban Decay', sellerUrl: 'https://urbandecay.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Dermstore', sellerUrl: 'https://dermstore.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Mac Cosmetics', sellerUrl: 'https://maccosmetics.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Byrdie', sellerUrl: 'https://byrdie.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Paula’s Choice', sellerUrl: 'https://paulaschoice.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Current Body', sellerUrl: 'https://currentbody.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Look Fantastic', sellerUrl: 'https://lookfantastic.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'My NuFACE', sellerUrl: 'https://mynuface.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
+      { sellerName: 'Beauty Bay', sellerUrl: 'https://beautybay.com', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
 
       //Bedding and Bath
       { sellerName: 'BrookLinen', sellerUrl: 'https://brooklinen.com', isListing: true,categoryName: 'Bedding and Bath'},
@@ -232,23 +232,23 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
 
-      // Cable,Video and TV Streaming
-      { sellerName: 'Cox', sellerUrl: 'https://cox.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'DIRECTV', sellerUrl: 'https://directv.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Dish', sellerUrl: 'https://dish.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Frontier', sellerUrl: 'https://frontier.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Sling', sellerUrl: 'https://sling.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Spectrum', sellerUrl: 'https://spectrum.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Xfinity', sellerUrl: 'https://xfinity.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'YouTube', sellerUrl: 'https://tv.youtube.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Apple TV Plus', sellerUrl: 'https://tv.apple.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Crunchyroll', sellerUrl: 'https://crunchyroll.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Disney', sellerUrl: 'https://disneyplus.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'HBO Max', sellerUrl: 'https://hbomax.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Hulu', sellerUrl: 'https://hulu.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Netflix', sellerUrl: 'https://netflix.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
-      { sellerName: 'Peacock', sellerUrl: 'https://peacocktv.com', isListing: true,categoryName: 'Cable,Video and TV Streaming'},
+      // Cable, Video and TV Streaming
+      { sellerName: 'Cox', sellerUrl: 'https://cox.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'DIRECTV', sellerUrl: 'https://directv.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Dish', sellerUrl: 'https://dish.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Frontier', sellerUrl: 'https://frontier.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Sling', sellerUrl: 'https://sling.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Spectrum', sellerUrl: 'https://spectrum.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Xfinity', sellerUrl: 'https://xfinity.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'YouTube', sellerUrl: 'https://tv.youtube.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Apple TV Plus', sellerUrl: 'https://tv.apple.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Crunchyroll', sellerUrl: 'https://crunchyroll.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Disney', sellerUrl: 'https://disneyplus.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'HBO Max', sellerUrl: 'https://hbomax.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Hulu', sellerUrl: 'https://hulu.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Netflix', sellerUrl: 'https://netflix.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
+      { sellerName: 'Peacock', sellerUrl: 'https://peacocktv.com', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
 
 
 
@@ -338,27 +338,27 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
       // Computers, Cell Phones and Electronics
-      { sellerName: 'Best Buy', sellerUrl: 'https://bestbuy.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Newegg', sellerUrl: 'https://newegg.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Samsung', sellerUrl: 'https://samsung.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Apple', sellerUrl: 'https://apple.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Micro Center', sellerUrl: 'https://microcenter.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Dell', sellerUrl: 'https://dell.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'LG', sellerUrl: 'https://lg.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'HP', sellerUrl: 'https://hp.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Walmart', sellerUrl: 'https://walmart.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Microsoft', sellerUrl: 'https://microsoft.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Sony', sellerUrl: 'https://sony.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Nvidia', sellerUrl: 'https://nvidia.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'B&H Photo Video', sellerUrl: 'https://bhphotovideo.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'AT&T', sellerUrl: 'https://att.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Gazelle', sellerUrl: 'https://gazelle.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Google Store', sellerUrl: 'https://store.google.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Motorola', sellerUrl: 'https://motorola.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Staples', sellerUrl: 'https://staples.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'T-Mobile', sellerUrl: 'https://t-mobile.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
-      { sellerName: 'Verizon', sellerUrl: 'https://verizon.com', isListing: true,categoryName: 'Computers,Cell Phones and Electronics'},
+      { sellerName: 'Best Buy', sellerUrl: 'https://bestbuy.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Newegg', sellerUrl: 'https://newegg.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Samsung', sellerUrl: 'https://samsung.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Apple', sellerUrl: 'https://apple.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Micro Center', sellerUrl: 'https://microcenter.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Dell', sellerUrl: 'https://dell.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'LG', sellerUrl: 'https://lg.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'HP', sellerUrl: 'https://hp.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Walmart', sellerUrl: 'https://walmart.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Microsoft', sellerUrl: 'https://microsoft.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Sony', sellerUrl: 'https://sony.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Nvidia', sellerUrl: 'https://nvidia.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'B&H Photo Video', sellerUrl: 'https://bhphotovideo.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'AT&T', sellerUrl: 'https://att.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Gazelle', sellerUrl: 'https://gazelle.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Google Store', sellerUrl: 'https://store.google.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Motorola', sellerUrl: 'https://motorola.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Staples', sellerUrl: 'https://staples.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'T-Mobile', sellerUrl: 'https://t-mobile.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
+      { sellerName: 'Verizon', sellerUrl: 'https://verizon.com', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
 
 
 
@@ -603,17 +603,17 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
     //   Gyms, Pilates, Yoga, Barre, HIIT and Cycling
-      { sellerName: 'Gold’s Gym', sellerUrl: 'https://goldsgym.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Equinox', sellerUrl: 'https://equinox.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: '24 Hour Fitness', sellerUrl: 'https://24hourfitness.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Anytime Fitness', sellerUrl: 'https://anytimefitness.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'LA Fitness', sellerUrl: 'https://lafitness.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Orangetheory Fitness', sellerUrl: 'https://orangetheoryfitness.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Pure Barre', sellerUrl: 'https://purebarre.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Core Power Yoga', sellerUrl: 'https://corepoweryoga.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'YogaWorks', sellerUrl: 'https://yogaworks.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Club Pilates', sellerUrl: 'https://clubpilates.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
-      { sellerName: 'Cyclebar', sellerUrl: 'https://cyclebar.com', isListing: true,categoryName: 'Gyms,Pilates,Yoga,Barre,HIIT and Cycling'},
+      { sellerName: 'Gold’s Gym', sellerUrl: 'https://goldsgym.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Equinox', sellerUrl: 'https://equinox.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: '24 Hour Fitness', sellerUrl: 'https://24hourfitness.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Anytime Fitness', sellerUrl: 'https://anytimefitness.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'LA Fitness', sellerUrl: 'https://lafitness.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Orangetheory Fitness', sellerUrl: 'https://orangetheoryfitness.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Pure Barre', sellerUrl: 'https://purebarre.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Core Power Yoga', sellerUrl: 'https://corepoweryoga.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'YogaWorks', sellerUrl: 'https://yogaworks.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Club Pilates', sellerUrl: 'https://clubpilates.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
+      { sellerName: 'Cyclebar', sellerUrl: 'https://cyclebar.com', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
 
 
 
@@ -691,11 +691,11 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
     //   Home, Garden and Plants
-      { sellerName: 'Home Depot', sellerUrl: 'https://homedepot.com', isListing: true,categoryName: 'Home,Garden and Plants'},
-      { sellerName: "Lowe's", sellerUrl: 'https://lowes.com',isListing: true,categoryName: 'Home,Garden and Plants'},
-      { sellerName: 'The Sill', sellerUrl: 'https://thesill.com' ,isListing: true,categoryName: 'Home,Garden and Plants'},
-      { sellerName: 'Plants.com', sellerUrl: 'https://plants.com',isListing: true,categoryName: 'Home,Garden and Plants'},
-      { sellerName: 'Nature Hills', sellerUrl: 'https://naturehills.com',isListing: true,categoryName: 'Home,Garden and Plants'},
+      { sellerName: 'Home Depot', sellerUrl: 'https://homedepot.com', isListing: true,categoryName: 'Home, Garden and Plants'},
+      { sellerName: "Lowe's", sellerUrl: 'https://lowes.com',isListing: true,categoryName: 'Home, Garden and Plants'},
+      { sellerName: 'The Sill', sellerUrl: 'https://thesill.com' ,isListing: true,categoryName: 'Home, Garden and Plants'},
+      { sellerName: 'Plants.com', sellerUrl: 'https://plants.com',isListing: true,categoryName: 'Home, Garden and Plants'},
+      { sellerName: 'Nature Hills', sellerUrl: 'https://naturehills.com',isListing: true,categoryName: 'Home, Garden and Plants'},
 
 
     //   Home Improvement
@@ -1068,19 +1068,19 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
       //Outdoor Recreation, Sporting and Camping
-      { sellerName: 'REI', sellerUrl: 'https://rei.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Backcountry', sellerUrl: 'https://backcountry.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'The North Face', sellerUrl: 'https://thenorthface.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: "Dick's Sporting Goods", sellerUrl: 'https://dickssportinggoods.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Summit Hut', sellerUrl: 'https://summithut.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Patagonia', sellerUrl: 'https://patagonia.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'CampSaver', sellerUrl: 'https://campsaver.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Salomon', sellerUrl: 'https://salomon.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Big 5 Sporting Goods', sellerUrl: 'https://big5sportinggoods.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Nike', sellerUrl: 'https://nike.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Fanatics', sellerUrl: 'https://fanatics.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Champs Sports', sellerUrl: 'https://champssports.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
-      { sellerName: 'Academy Sports', sellerUrl: 'https://academy.com', isListing: true,categoryName: 'Outdoor Recreation,Sporting and Camping'},
+      { sellerName: 'REI', sellerUrl: 'https://rei.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Backcountry', sellerUrl: 'https://backcountry.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'The North Face', sellerUrl: 'https://thenorthface.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: "Dick's Sporting Goods", sellerUrl: 'https://dickssportinggoods.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Summit Hut', sellerUrl: 'https://summithut.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Patagonia', sellerUrl: 'https://patagonia.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'CampSaver', sellerUrl: 'https://campsaver.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Salomon', sellerUrl: 'https://salomon.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Big 5 Sporting Goods', sellerUrl: 'https://big5sportinggoods.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Nike', sellerUrl: 'https://nike.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Fanatics', sellerUrl: 'https://fanatics.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Champs Sports', sellerUrl: 'https://champssports.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
+      { sellerName: 'Academy Sports', sellerUrl: 'https://academy.com', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
 
 
       // Shoes
@@ -1182,13 +1182,13 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
 
       //Veterinarians, Pet Insurance and Pet Care
-      { sellerName: 'BetterVet', sellerUrl: 'https://bettervet.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'Vetster', sellerUrl: 'https://vetster.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'Nationwide', sellerUrl: 'https://petinsurance.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'VCA Hospitals', sellerUrl: 'https://vcahospitals.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'MetLife Pet Insurance', sellerUrl: 'https://metlifepetinsurance.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'Spot Pet Insurance', sellerUrl: 'https://spotpetins.com', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
-      { sellerName: 'The Humane Society', sellerUrl: 'https://humanesociety.org', isListing: true,categoryName: 'Veterinarians,Pet Insurance and Pet Care'},
+      { sellerName: 'BetterVet', sellerUrl: 'https://bettervet.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'Vetster', sellerUrl: 'https://vetster.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'Nationwide', sellerUrl: 'https://petinsurance.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'VCA Hospitals', sellerUrl: 'https://vcahospitals.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'MetLife Pet Insurance', sellerUrl: 'https://metlifepetinsurance.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'Spot Pet Insurance', sellerUrl: 'https://spotpetins.com', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
+      { sellerName: 'The Humane Society', sellerUrl: 'https://humanesociety.org', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
 
 
 

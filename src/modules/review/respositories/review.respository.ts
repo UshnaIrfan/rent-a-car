@@ -54,7 +54,7 @@ export class reviewRepository{
          async reviewBySellerIdAndTittle(sellerId:string,titleId):Promise<review[]| null>
          {
             return this.reviewModel.find({
-              where: { sellerId, titleId,approvedByAdmin: true},
+              where: { sellerId, titleId,approvedByAdmin:true},
             });
          }
 
