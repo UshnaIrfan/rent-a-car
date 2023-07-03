@@ -307,6 +307,11 @@ export class sellerRepository{
             {
               where: { id, approvedByAdmin: sellerStatus.APPROVED ,isListing:true},
               relations: ['categories'],
+              order: {
+                categories: {
+                  categoryName: "ASC"
+                },
+              },
             });
             if (!seller)
             {
