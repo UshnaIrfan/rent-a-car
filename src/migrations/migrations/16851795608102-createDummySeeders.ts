@@ -72,7 +72,8 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
           const roles = 'l2a_user';
           const status = 'active';
           const blockStatus = 'unblock';
-          const query = `INSERT INTO users (name, username, email, password, roles, status, blockStatus) VALUES('${name}', '${username}', '${email}', '${hashedPassword}', '${roles}', '${status}', '${blockStatus}')`;
+          const  profileIcon = 'http://localhost:5000/client/profile.png'
+          const query = `INSERT INTO users (name, username, email, password, roles, status, blockStatus,profileIcon) VALUES('${name}', '${username}', '${email}', '${hashedPassword}', '${roles}', '${status}', '${blockStatus}' , '${profileIcon}')`;
           await queryRunner.query(query);
       }
 

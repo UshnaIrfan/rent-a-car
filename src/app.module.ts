@@ -23,6 +23,8 @@ import * as AWS from 'aws-sdk';
 import {emailGeneralModule} from "./modules/email-general/email-general.module";
 import { MailchipModule } from './modules/mailchip/mailchip.module';
 import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -38,7 +40,7 @@ import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
 
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../'),
-      renderPath: '/client',
+      renderPath: '/asset',
     }),
     ConfigModule.forRoot(
       {
