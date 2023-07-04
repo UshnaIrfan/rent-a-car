@@ -38,6 +38,8 @@ import { join } from 'path';
      emailGeneralModule,
      MailchipModule,
 
+
+
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../'),
       renderPath: '/asset',

@@ -23,7 +23,6 @@
     "typeorm:generate-migration": "npm run typeorm -- -d ./typeOrm.config.ts migration:generate ./migrations/$npm_config_name",
     "typeorm:create-migration": "npm run typeorm -- migration:create ./src/database/migrations/$npm_config_name",
     "typeorm:revert-migration": "npm run typeorm -- -d ./typeOrm.config.ts migration:revert"
-
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.321.1",
@@ -37,6 +36,7 @@
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@types/cache-manager": "^4.0.2",
