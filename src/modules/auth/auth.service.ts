@@ -120,7 +120,6 @@ export class AuthService {
         // Sign up
       async signup(@Body() Signup: signupUserInterface)
       {
-
           const User = await this.usersService.findUserByEmail(Signup.email);
           if (User && User.status == 'inactive')
           {
