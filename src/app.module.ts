@@ -36,6 +36,10 @@ import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
      emailGeneralModule,
      MailchipModule,
 
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../'),
+      renderPath: '/client',
+    }),
     ConfigModule.forRoot(
       {
         cache: true,
