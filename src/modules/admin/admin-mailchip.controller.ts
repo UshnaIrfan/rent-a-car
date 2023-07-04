@@ -1,5 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import {MailchipDto} from "../mailchip/dto/create-mailchip.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {mailChip} from "../mailchip/schemas/mailchip.schema";
@@ -22,7 +21,6 @@ export class MailchipController {
       {
           return this.mailchipService.createMailChip(createMailChip );
       }
-
 
 
       //  get mail chip ( sending email)

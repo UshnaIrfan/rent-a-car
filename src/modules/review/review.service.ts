@@ -535,7 +535,6 @@ export class ReviewService {
           }
 
           const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId);
-          console.log(allReviews);
           for (const review of allReviews)
           {
             const result = await this.reviewRepository.reviewId(review.id);
