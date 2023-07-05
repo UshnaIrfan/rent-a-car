@@ -46,7 +46,7 @@ export class CreateUserDto {
      blockStatus: string = blockStatus.UNBLOCK;
 
 
-     @ApiProperty({ type: String, required: true ,default:null })
+     @ApiProperty({ type: String, required: true})
      @IsNotEmpty()
      @MaxLength(100000)
      profileIcon: string;
