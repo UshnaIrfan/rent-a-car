@@ -9,12 +9,10 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { review } from "../../review/schemas/submit-review.schema";
 
-
 export enum status {
      ACTIVE= 'active',
      INACTIVE = 'inactive',
 }
-
 
 export enum blockStatus {
      BLOCK= 'block',
@@ -47,10 +45,8 @@ export class User {
 
 
      @ApiProperty()
-      @Column({})
-     // @Column({ unique: true })
+     @Column({})
      password: string;
-
 
 
      @ApiProperty()
@@ -89,6 +85,5 @@ export class User {
      @ApiProperty({ type: () => [review] })
      @OneToMany(() => review, review => review.User, { cascade: true })
      review: review[];
-
 
 }

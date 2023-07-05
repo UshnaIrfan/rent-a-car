@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
 import {UsersRepository} from "./users.repository";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {User} from "./schemas/user.schema";
@@ -22,7 +21,7 @@ import {likeDislike} from "../review/schemas/like-dislike.schema";
   imports: [
       TypeOrmModule.forFeature([likeDislike,contact,User ,review,clicksTitle,clicksTypes,category]),
   ],
-     controllers: [UsersController],
+     controllers: [],
      providers: [ likeDislikeRepository,contactUsRepository,CategoryRepository,reviewRepository,UsersService ,UsersRepository,clicksTypesRepository,clicksTitlesRepository],
      exports: [UsersRepository, UsersService],
 })

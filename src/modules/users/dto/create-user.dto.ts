@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
 import {status} from "../schemas/user.schema";
@@ -19,12 +19,9 @@ export class CreateUserDto {
      email: string;
 
 
-
-
      @IsString()
      @IsNotEmpty()
      password: string;
-
 
 
      @ApiProperty({ required: false, default: Role.L2A_USER })
@@ -32,12 +29,10 @@ export class CreateUserDto {
      roles: string ;
 
 
-
      @ApiProperty({ type: String, enum: status, default: status.INACTIVE })
      @IsString()
      @IsNotEmpty()
      status: string = status.INACTIVE;
-
 
 
      @ApiProperty({ type: String, enum: status, default: blockStatus.UNBLOCK })
@@ -50,7 +45,5 @@ export class CreateUserDto {
      @IsNotEmpty()
      @MaxLength(100000)
      profileIcon: string;
-
-
 
 }

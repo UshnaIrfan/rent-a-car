@@ -10,9 +10,7 @@ import * as moment from "moment";
 @Injectable()
 export class UsersRepository {
   constructor(@InjectRepository(User) private userModel: Repository<User>,
-              private readonly ReviewRepository:reviewRepository
-              ) {}
-
+              private readonly ReviewRepository:reviewRepository) {}
 
 
 
@@ -23,9 +21,8 @@ export class UsersRepository {
             const user = await this.userModel.findOne({ where: { id}});
             if (!user)
             {
-                  return null
+               return null
             }
-
             user.name = name;
             user.username = username;
             user.email = email;
@@ -42,10 +39,9 @@ export class UsersRepository {
             {
                 return null
             }
-             user.status=status;
-             return this.userModel.save(user);
+            user.status=status;
+            return this.userModel.save(user);
        }
-
 
 
 
@@ -62,12 +58,8 @@ export class UsersRepository {
              {
                  throw new UnauthorizedException(' You cannot change status for an admin');
              }
-
-             console.log(user.roles)
-
-
-               user.blockStatus=blockStatus;
-               return this.userModel.save(user);
+             user.blockStatus=blockStatus;
+             return this.userModel.save(user);
         }
 
 
@@ -84,24 +76,21 @@ export class UsersRepository {
             if (User.roles !== 'l2a_user')
             {
                 throw new NotFoundException('You cannot delete an admin user.');
-           }
-
+            }
             const user = await this.userModel.findOne({
                 where: { id  },
-                relations: ['review'],
-             });
+                relations: ['review']});
 
-
-             const reviews = user.review;
-             if (reviews && reviews.length > 0)
-             {
-                for (const review of reviews)
-                {
-                    await this.ReviewRepository.delete(review.id);
-                }
-             }
-             const result = await this.userModel.remove(user);
-             return  result
+            const reviews = user.review;
+            if (reviews && reviews.length > 0)
+            {
+               for (const review of reviews)
+               {
+                  await this.ReviewRepository.delete(review.id);
+               }
+            }
+            const result = await this.userModel.remove(user);
+            return  result
 
         }
 
@@ -114,8 +103,7 @@ export class UsersRepository {
             const whereConditions: any[] = [];
             if (username)
             {
-               whereConditions.push({
-              username: Like(`${username}%`)});
+               whereConditions.push({ username: Like(`${username}%`)});
             }
 
             const [result, totalCount] = await this.userModel.findAndCount({
@@ -123,7 +111,7 @@ export class UsersRepository {
             skip,
             take,
             order: { username: 'ASC' },
-          });
+            });
 
            if (!result.length)
            {
@@ -139,51 +127,42 @@ export class UsersRepository {
       // calculate user each week and each month
         async getUserDetails(startDate?: string, endDate?: string)
         {
-             let query = {};
-             const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
-             const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
-           //  const start = moment(startDate, 'YYYY-MM-DD').startOf('day').toDate();
-           // const end = moment(endDate, 'YYYY-MM-DD').endOf('day').toDate();
-             query = {
-                createdAt: Between(start, end)
-            };
+              let query = {};
+              const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
+              const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
+              query = { createdAt: Between(start, end) };
 
-            const users = await this.userModel.find({ where: query });
-            const result = {};
-            const currentDate = moment(start);
-            const lastDate = moment(end);
-            let totalCount = 0;
-
-            for (const user of users)
-            {
-                totalCount++;
-            }
-
-            while (currentDate.isSameOrBefore(lastDate))
-            {
-              const formattedDate = currentDate.format('YYYY-MM-DD');
-              let countPerDay = 0;
+              const users = await this.userModel.find({ where: query });
+              const result = {};
+              const currentDate = moment(start);
+              const lastDate = moment(end);
+              let totalCount = 0;
 
               for (const user of users)
               {
-                  const userDate = moment(user.createdAt).format('YYYY-MM-DD');
-                  if (userDate === formattedDate)
-                  {
-                     countPerDay++;
-                  }
+                  totalCount++;
               }
 
-              const percentage = (countPerDay / totalCount) * 100;
-              const Percentage=parseFloat(percentage.toFixed(2))
+              while (currentDate.isSameOrBefore(lastDate))
+              {
+                const formattedDate = currentDate.format('YYYY-MM-DD');
+                let countPerDay = 0;
+                for (const user of users)
+                {
+                    const userDate = moment(user.createdAt).format('YYYY-MM-DD');
+                    if (userDate === formattedDate)
+                    {
+                       countPerDay++;
+                    }
+                }
 
-              result[formattedDate] = { count: countPerDay, percentage:Percentage};
-
-              currentDate.add(1, 'day');
-            }
-
-          result['totalCount'] = totalCount;
-
-          return result;
+                const percentage = (countPerDay / totalCount) * 100;
+                const Percentage=parseFloat(percentage.toFixed(2))
+                result[formattedDate] = { count: countPerDay, percentage:Percentage};
+                currentDate.add(1, 'day');
+              }
+               result['totalCount'] = totalCount;
+               return result;
     }
 
 
@@ -243,9 +222,7 @@ export class UsersRepository {
       // }
 
 
-
-
-     // get all users (l2_users)
+       // get all users (l2_users)
         async getAll()
         {
             return  this.userModel.find({ where: { status:'active',roles:'l2a_user'}});
@@ -255,33 +232,29 @@ export class UsersRepository {
 
 
        //FRONTEND APIS
-        async createUser(createUserDto: CreateUserDto): Promise<User | null>
-        {
-           return this.userModel.save(createUserDto);
-        }
+          async createUser(createUserDto: CreateUserDto): Promise<User | null>
+          {
+              return this.userModel.save(createUserDto);
+          }
+
+
+          async findUserByUsername(username: string): Promise<User | null>
+          {
+               return this.userModel.findOne({ where: { username }});
+          }
 
 
 
-        async findUserByUsername(username: string): Promise<User | null>
-        {
-             return this.userModel.findOne({ where: { username }});
-        }
+          async findUserByEmail(email: string): Promise<User | null>
+          {
+             return this.userModel.findOne({ where: { email }});
+          }
 
 
-
-
-        async findUserByEmail(email: string): Promise<User | null>
-        {
-           return this.userModel.findOne({ where: { email }});
-        }
-
-
-
-        async findUserByID(id: string): Promise<User|null>
-        {
-            return this.userModel.findOne({ where: { id }, });
-        }
-
+          async findUserByID(id: string): Promise<User|null>
+          {
+              return this.userModel.findOne({ where: { id }, });
+          }
 
 
 
@@ -305,7 +278,6 @@ export class UsersRepository {
 
 
 
-
          async isActive(email: string, status: string): Promise<User| null>
          {
             const user = await this.userModel.findOne({ where: { email } });
@@ -313,8 +285,8 @@ export class UsersRepository {
             {
                return null
             }
-           user.status = 'active';
-           return this.userModel.save(user);
+            user.status = 'active';
+            return this.userModel.save(user);
         }
 
 
@@ -322,19 +294,15 @@ export class UsersRepository {
          // get all users
          async getAllUser()
          {
-            return  this.userModel.find({ where: { status:'active' }});
+             return  this.userModel.find({ where: { status:'active' }});
          }
-
-
 
 
           // get user by id  with active status
          async findUserById(id: string): Promise<User|null>
          {
-            return this.userModel.findOne({ where: { id ,status:'active'} });
+             return this.userModel.findOne({ where: { id ,status:'active'} });
          }
-
-
 
 
   }

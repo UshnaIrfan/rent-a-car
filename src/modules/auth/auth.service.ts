@@ -27,7 +27,7 @@ import paginationUserInterface from './interfaces/pagination-user.interface';
 import userActiveInterface from './interfaces/user-active.interface';
 import changeUserPasswordTokenVerificationInterface from './interfaces/change-user-password-token-verification.interface';
 import adminUpdateUserInterface from './interfaces/admin-update.user.interface';
-import { adminUpdateBlockStatusUserDto } from './dto/admin-update-block-status.user.dto';
+import adminUpdateBlockStatusUserInterface from "./interfaces/admin-update-block-status.user.interface";
 
 @Injectable()
 export class AuthService {
@@ -50,50 +50,50 @@ export class AuthService {
 
 
 
-      //  admin user update
-      async updateUser(updateUser: updateUserInterface): Promise<{ message: string; update: updateUserInterface }>
-      {
-        const update = await this.usersService.updateUser(
-          updateUser.id,
-          updateUser.name,
-          updateUser.username,
-          updateUser.email,
-        );
-        if (!update)
+        //  admin user update
+        async updateUser(updateUser: updateUserInterface): Promise<{ message: string; update: updateUserInterface }>
         {
-          throw new NotFoundException('invalid user id');
-        }
-        return { message: 'User updated successfully', update };
-      }
-
-
-
-     // admin user update status
-      async adminUpdateUserStatus(adminUpdateStatus: adminUpdateUserInterface): Promise<{ update: User; message: string }>
-      {
-          const update = await this.usersService.adminUpdateUserStatus(adminUpdateStatus.userId, adminUpdateStatus.status,);
-          if (!update)
-          {
-            throw new NotFoundException('invalid user id');
-          }
-          return { message: 'User status updated successfully', update };
-      }
-
-
-
-      // admin user update  block status
-      async adminUpdateUserBlockStatus(adminUpdateBlockStatus: adminUpdateBlockStatusUserDto,): Promise<{ update: User; message: string }>
-      {
-          const update = await this.usersService.adminUpdateUserBlockStatus(
-            adminUpdateBlockStatus.userId,
-            adminUpdateBlockStatus.blockStatus,
+            const update = await this.usersService.updateUser(
+            updateUser.id,
+            updateUser.name,
+            updateUser.username,
+            updateUser.email,
           );
           if (!update)
           {
-            throw new NotFoundException('invalid user id');
+             throw new NotFoundException('invalid user id');
           }
-          return { message: 'User blocked status updated successfully', update };
-      }
+          return { message: 'User updated successfully', update };
+        }
+
+
+
+       // admin user update status
+        async adminUpdateUserStatus(adminUpdateStatus: adminUpdateUserInterface): Promise<{ update: User; message: string }>
+        {
+            const update = await this.usersService.adminUpdateUserStatus(adminUpdateStatus.userId, adminUpdateStatus.status,);
+            if (!update)
+            {
+              throw new NotFoundException('invalid user id');
+            }
+            return { message: 'User status updated successfully', update };
+        }
+
+
+
+        // admin user update  block status
+        async adminUpdateUserBlockStatus(adminUpdateBlockStatus: adminUpdateBlockStatusUserInterface): Promise<{ update: User; message: string }>
+        {
+            const update = await this.usersService.adminUpdateUserBlockStatus(
+              adminUpdateBlockStatus.userId,
+              adminUpdateBlockStatus.blockStatus,
+            );
+            if (!update)
+            {
+              throw new NotFoundException('invalid user id');
+            }
+            return { message: 'User blocked status updated successfully', update };
+        }
 
 
 
@@ -120,6 +120,11 @@ export class AuthService {
         // Sign up
       async signup(@Body() Signup: signupUserInterface)
       {
+          const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+          const ActiveUrl = `${FRONTEND_APP_URL}/login#/Auth/AuthController_isActive`;
+          const logo_l2a=process.env.LOGO_L2A
+          const contact_us_url= process.env.CONTACT_US
+          const privacy_policy_url= process.env.PRIVACY_POLICY
           const User = await this.usersService.findUserByEmail(Signup.email);
           if (User && User.status == 'inactive')
           {
@@ -128,27 +133,14 @@ export class AuthService {
               const expiresAt = new Date();
               expiresAt.setMinutes(expiresAt.getMinutes() + 90);
               const tokenKey = `forgot-password-token:${User.email}`;
-              const tokenValue = JSON.stringify({
-                token: Token,
-                expiresAt,
-                active: false,
-              });
+              const tokenValue = JSON.stringify({ token: Token, expiresAt, active: false, });
               await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
-
-              const baseUrl = process.env.BASE_URL;
-              const ActiveUrl = `${baseUrl}/login#/Auth/AuthController_isActive`;
-
               console.log('token', Token);
-              const logo_l2a=process.env.LOGO_L2A
-              const contact_us_url= process.env.CONTACT_US
-              const privacy_policy_url= process.env.PRIVACY_POLICY
               const queryParams = `?Token=${Token}&email=${User.email}`;
               const activeUrl = `${ActiveUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-              const emailBody = template({ activeUrl, username: Name, baseUrl, contact_us_url,privacy_policy_url,logo_l2a});
-
+              const emailBody = template({ activeUrl, username: Name, FRONTEND_APP_URL, contact_us_url,privacy_policy_url,logo_l2a});
               await this.sendVerificationEmail(User.email, emailBody);
-
               throw new ConflictException('You have already created an account. We’re sending you a new email for verification!',);
          }
         else
@@ -156,13 +148,13 @@ export class AuthService {
             const username = await this.usersService.findUserByUsername(Signup.username,);
             if (username)
             {
-              throw new ConflictException('This username already exists');
+               throw new ConflictException('This username already exists');
             }
 
             const Email = await this.usersService.findUserByEmail(Signup.email);
             if (Email)
             {
-              throw new ConflictException('This email already exists');
+               throw new ConflictException('This email already exists');
             }
 
             const { password } = Signup;
@@ -170,7 +162,7 @@ export class AuthService {
 
             if (!isPasswordStrongEnough)
             {
-              throw new BadRequestException('Password is too weak');
+               throw new BadRequestException('Password is too weak');
             }
 
             const user = await this.usersService.createUser({
@@ -183,44 +175,29 @@ export class AuthService {
             const expiresAt = new Date();
             expiresAt.setMinutes(expiresAt.getMinutes() + 90);
             const tokenKey = `forgot-password-token:${user.email}`;
-            const tokenValue = JSON.stringify({
-              token: Token,
-              expiresAt,
-              active: false,
-            });
+            const tokenValue = JSON.stringify({ token: Token, expiresAt, active: false, });
             await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
-
-            const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
-            const ActiveUrl = `${FRONTEND_APP_URL}/login#/Auth/AuthController_isActive`;
-
             console.log('token', Token);
-            const logo_l2a=process.env.LOGO_L2A
-            const contact_us_url= process.env.CONTACT_US
-            const privacy_policy_url= process.env.PRIVACY_POLICY
             const queryParams = `?Token=${Token}&email=${user.email}`;
             const activeUrl = `${ActiveUrl}${queryParams}`;
             const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
             const emailBody = template({ activeUrl, username: Name,contact_us_url,privacy_policy_url,logo_l2a});
-
             try
             {
-              await this.sendVerificationEmail(user.email, emailBody);
-              await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url,logo_l2a);
+                await this.sendVerificationEmail(user.email, emailBody);
+                await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url,logo_l2a);
             }
             catch (e)
             {
-              throw new BadRequestException('Failed to send email');
+                throw new BadRequestException('Failed to send email');
             }
-
-            return {
-              message: 'Please check your email to verify your signup!' ,
-            };
+            return { message: 'Please check your email to verify your signup!'};
           }
       }
 
 
 
-      // isActive
+           // isActive
            async isActive(@Body() reqBody: userActiveInterface)
            {
                 const user = await this.usersService.findUserByEmail(reqBody.email);
@@ -276,10 +253,9 @@ export class AuthService {
        //login
         async login(user: User): Promise<JwtTokensInterface>
         {
-            // if (user.isActive==false )
             if (user.status == 'inactive')
             {
-              throw new BadRequestException('User is not active');
+               throw new BadRequestException('User is not active');
             }
 
             if (user.blockStatus == 'block')
@@ -296,7 +272,6 @@ export class AuthService {
               status: user.status,
               blockStatus: user.blockStatus,
               profileIcon:user.profileIcon,
-              //isActive: user.isActive,
             };
             const accessTokenRedis = this.jwtService.sign(payload);
             const accessTokenTTL = 5400;
@@ -307,7 +282,6 @@ export class AuthService {
               username: user.username,
               email: user.email,
               roles: user.roles,
-              //isActive: user.isActive,
               status: user.status,
               blockStatus: user.blockStatus,
               profileIcon:user.profileIcon,
@@ -332,11 +306,7 @@ export class AuthService {
           const expiresAt = new Date();
           expiresAt.setHours(expiresAt.getHours() + 24);
           const tokenKey = `forgot-password-token:${user.email}`;
-          const tokenValue = JSON.stringify({
-            token: resetToken,
-            expiresAt,
-            active: false,
-          });
+          const tokenValue = JSON.stringify({token: resetToken, expiresAt, active: false, });
           const logo_l2a=process.env.LOGO_L2A
           const contact_us_url= process.env.CONTACT_US
           const privacy_policy_url= process.env.PRIVACY_POLICY
@@ -350,11 +320,11 @@ export class AuthService {
           const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a });
           try
           {
-            await this.sendToken(user.email, emailBody);
+             await this.sendToken(user.email, emailBody);
           }
           catch (e)
           {
-            throw new BadRequestException('Failed to send email');
+             throw new BadRequestException('Failed to send email');
           }
           return {
             message: 'Please check your email to reset your password!',
@@ -375,8 +345,6 @@ export class AuthService {
 
             const tokenKey = `forgot-password-token:${user.email}`;
             const cachedToken = await this.cacheManager.get(tokenKey);
-            console.log('before', cachedToken);
-
             if (!cachedToken)
             {
               throw new UnauthorizedException('token expired');
@@ -434,7 +402,7 @@ export class AuthService {
             const isPasswordStrongEnough = reqBody.newPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,);
             if (!isPasswordStrongEnough)
             {
-              throw new BadRequestException('Password is too weak');
+               throw new BadRequestException('Password is too weak');
             }
 
             const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
@@ -452,7 +420,7 @@ export class AuthService {
             }
             else
             {
-               throw new UnauthorizedException('plz firstly active token and then  password changed',);
+                throw new UnauthorizedException('plz firstly active token and then  password changed',);
             }
       }
 
@@ -521,7 +489,6 @@ export class AuthService {
                 password: users.password,
                 roles: users.roles,
                 status: users.status,
-                // isActive: users.isActive,
               };
               const accessTokenRedis = this.jwtService.sign(payload);
               const accessTokenTTL = 5400;
@@ -539,8 +506,8 @@ export class AuthService {
         // Generating hashed password
         private static async hashPassword(password: string): Promise<string>
         {
-          const salt = await bcrypt.genSalt();
-          return bcrypt.hash(password, salt);
+            const salt = await bcrypt.genSalt();
+            return bcrypt.hash(password, salt);
         }
 
 
@@ -569,7 +536,7 @@ export class AuthService {
           const passwordValid = await bcrypt.compare(password, user.password);
           if (!passwordValid)
           {
-            throw new NotFoundException('Invalid password');
+             throw new NotFoundException('Invalid password');
           }
 
           return user;

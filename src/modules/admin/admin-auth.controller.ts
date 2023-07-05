@@ -26,7 +26,7 @@ export class adminAuthController {
       async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
       {
             console.log("user")
-           return  this.authService.getAllUsers(page,pageSize,username);
+          return  this.authService.getAllUsers(page,pageSize,username);
       }
 
 
@@ -64,7 +64,7 @@ export class adminAuthController {
        @Roles(Role.L2A_ADMIN)
        async adminUpdateUserBlockStatus(@Body() body:adminUpdateBlockStatusUserDto)
        {
-          return this.authService.adminUpdateUserBlockStatus(body);
+            return this.authService.adminUpdateUserBlockStatus(body);
        }
 
 

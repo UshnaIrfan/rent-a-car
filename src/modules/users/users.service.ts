@@ -3,8 +3,6 @@ import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
 import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
-import { category } from "../categories/schemas/category.schema";
-
 
 @Injectable()
 export class UsersService {
@@ -85,10 +83,10 @@ export class UsersService {
 
 
 
-              async findUserByEmail(email: string): Promise<User | null>
-              {
+             async findUserByEmail(email: string): Promise<User | null>
+             {
                  return this.usersRepository.findUserByEmail(email);
-              }
+             }
 
 
 
@@ -96,7 +94,6 @@ export class UsersService {
              {
                  return this.usersRepository.createUser(user);
              }
-
 
 
              async updatePassword(email: string ,password:string): Promise<User | null>
@@ -113,23 +110,23 @@ export class UsersService {
 
 
 
-           async getAllUser():Promise<User[]>
-           {
-               const users =await this.usersRepository.getAllUser();
-               if(!users)
-               {
-                   throw new NotFoundException('No user exit');
-               }
-               return  users;
-           }
+            async getAllUser():Promise<User[]>
+            {
+                 const users =await this.usersRepository.getAllUser();
+                 if(!users)
+                 {
+                    throw new NotFoundException('No user exit');
+                 }
+                 return  users;
+             }
 
 
 
-          // get user by id  with active status
-          async findUserById (id:string): Promise<User | null>
-          {
-              return this.usersRepository.findUserById(id);
-          }
+            // get user by id  with active status
+            async findUserById (id:string): Promise<User | null>
+            {
+                return this.usersRepository.findUserById(id);
+            }
 
 
  }
