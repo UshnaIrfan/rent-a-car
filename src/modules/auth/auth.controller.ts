@@ -19,9 +19,7 @@ import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
 import { User } from "../users/schemas/user.schema";
 import {changeUserPasswordTokenVerificationDto} from "./dto/change-user-password-token-verification.dto";
-import { Roles } from "../../decorators/role.decorators";
-import { Role } from "../../enums/role.enum";
-
+import AuthBearer from "../../decorators/auth-bearer.decorators";
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -99,9 +97,8 @@ export class AuthController {
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
         @Get('/profile')
-        async getProfile(@Request() req)
+        async getProfile(@AuthBearer() accessToken: string)
         {
-           const accessToken = req.headers.authorization.split(' ')[1];
            return this.authService.getProfile(accessToken);
         }
 
@@ -130,9 +127,8 @@ export class AuthController {
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
         @Delete('/logout')
-        async logout(@Request() req): Promise<{message:string}>
+        async logout(@AuthBearer() accessToken: string): Promise<{message:string}>
         {
-           const accessToken = req.headers.authorization.split(' ')[1];
            return this.authService.logout(accessToken);
         }
 
@@ -143,9 +139,8 @@ export class AuthController {
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
         @Get('/refresh/token')
-        async refreshToken(@Request() req)
+        async refreshToken(@Request() req, @AuthBearer() accessToken: string)
         {
-           const accessToken = req.headers.authorization.split(' ')[1];
            return  this.authService.refreshToken(req.user,accessToken)
         }
 

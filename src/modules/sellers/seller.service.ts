@@ -233,7 +233,7 @@ export class SellerService {
           const categoriesIDs = body.categories;
           for (const categoryID of categoriesIDs)
           {
-            const category = await this.CategoryRepository.getCategoryById(categoryID);
+             const category = await this.CategoryRepository.getCategoryById(categoryID);
              if (!category)
              {
                throw new NotFoundException('Category does not exist');

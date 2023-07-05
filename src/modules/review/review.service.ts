@@ -208,8 +208,21 @@ export class ReviewService {
 
 
       //update review
-       async  updateReview(updateReviewInterface:updateReviewInterface)
+       async  updateReview(updateReviewInterface:updateReviewInterface,accessToken:string)
        {
+           const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret, });
+           const user = await this.usersRepository.findUserByID(decoded.id)
+           if(!user)
+           {
+             throw new  NotFoundException('invalid user')
+           }
+
+           const cachedToken = await this.cacheManager.get(accessToken);
+           if (!cachedToken)
+           {
+             throw new UnauthorizedException('Token expired');
+           }
+
             const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
             return { message: "updated successfully" ,updateReview};
        }

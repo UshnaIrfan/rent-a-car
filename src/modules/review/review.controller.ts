@@ -20,10 +20,7 @@ import {seller} from "../sellers/schemas/seller.schema";
 import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import {BlockRoles} from "../../decorators/block.decorators";
 import {BlockRole} from "../../enums/block.enum";
-import paginationCategoryInterface from "../categories/interfaces/pagination-category.interface";
-import { Roles } from "../../decorators/role.decorators";
-import { Role } from "../../enums/role.enum";
-
+import AuthBearer from "../../decorators/auth-bearer.decorators";
 
 
 @ApiTags('Review')
@@ -72,9 +69,8 @@ export class ReviewController {
          @Post('submit')
          @BlockRoles(BlockRole.UNBLOCK)
          async submitReview(
-         @Body() submitReview:submitReviewDto,@Req() req): Promise<review>
+         @Body() submitReview:submitReviewDto,@AuthBearer() accessToken: string): Promise<review>
          {
-             const accessToken = req.headers.authorization.split(' ')[1];
              return this.reviewService.submitReview(submitReview,accessToken);
          }
 
@@ -120,10 +116,9 @@ export class ReviewController {
          @ApiBearerAuth()
          @Patch('update')
          @BlockRoles(BlockRole.UNBLOCK)
-         async updateReview(
-         @Body() updateReviewDto:updateReviewDto)
+         async updateReview(@Body() updateReviewDto:updateReviewDto,@AuthBearer() accessToken: string)
          {
-            return this.reviewService.updateReview(updateReviewDto);
+            return this.reviewService.updateReview(updateReviewDto,accessToken);
          }
 
 
@@ -134,10 +129,8 @@ export class ReviewController {
         @ApiBody({type:likeDislikeReviewDto})
         @Post('likeDislike')
         @BlockRoles(BlockRole.UNBLOCK)
-        async createLikeDislike(
-        @Body() Review:likeDislikeReviewDto,@Req() req)
+        async createLikeDislike(@Body() Review:likeDislikeReviewDto,@AuthBearer() accessToken: string)
         {
-            const accessToken = req.headers.authorization.split(' ')[1];
             return this.reviewService.createLikeDislike(Review,accessToken);
         }
 
