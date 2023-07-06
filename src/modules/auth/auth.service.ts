@@ -15,7 +15,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/schemas/user.schema';
 import { Cache } from 'cache-manager';
 import { MailerService } from '@nestjs-modules/mailer';
-import JwtTokensInterface from '../../interfaces/jwt-token.interfac';
+import JwtTokensInterface from "./interfaces/jwt-token.interface";
 import signupUserInterface from './interfaces/signup-user.interface';
 import changeUserPasswordInterface from './interfaces/change-user-password.interface';
 import randomUserTokenInterface from './interfaces/random-user-token.dto';

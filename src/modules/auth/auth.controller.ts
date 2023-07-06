@@ -14,7 +14,7 @@ import {LoginUserDto} from "./dto/login-user.dto";
 import { LocalAuthGuard } from "./guards/local-auth-guard";
 import { JwtAuthGuard } from "./guards/jwt-auth-guard";
 import { ChangeUserPasswordDto } from "./dto/change-user-password.dto";
-import JwtTokensInterface from "../../interfaces/jwt-token.interfac";
+import JwtTokensInterface from "./interfaces/jwt-token.interface";
 import {randomUserTokenDto} from "./dto/random-user-token.dto";
 import {userActiveDto} from "./dto/user-active.dto";
 import { User } from "../users/schemas/user.schema";
