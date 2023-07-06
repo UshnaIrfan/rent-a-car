@@ -80,7 +80,7 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
 
       // create dummy review
       const allUsers = await queryRunner.query("SELECT * FROM users");
-      const titleQuery: string = "SELECT id, slug FROM clicksTitle";
+      const titleQuery: string = "SELECT id,type ,slug FROM clicksTitle";
       const titles = await queryRunner.query(titleQuery);
    //   const titleCount = titles.length;
 
@@ -99,19 +99,21 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
               sellerId: existingSeller[0].id,
               titleId: title.id,
               titleSlug: title.slug,
+              type:title.type,
               message: 'The quality of this product is outstanding. I was impressed by its durability and functionality. It definitely exceeded my expectations. The seller provided excellent customer service throughout the entire purchasing process. I highly recommend this product to anyone in need.',
               userId: user.id,
               approvedByAdmin: true,
               bestWriter: false
             };
 
-            const reviewQuery = `INSERT INTO review (sellerId, titleId, titleSlug, message, userId, approvedByAdmin, bestWriter)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            const reviewQuery = `INSERT INTO review (sellerId, titleId, titleSlug,type, message, userId, approvedByAdmin, bestWriter)
+            VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
 
             await queryRunner.query(reviewQuery, [
               reviewData.sellerId,
               reviewData.titleId,
               reviewData.titleSlug,
+              reviewData.type,
               reviewData.message,
               reviewData.userId,
               reviewData.approvedByAdmin,

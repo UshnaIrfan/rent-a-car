@@ -213,7 +213,6 @@ export class CategoryRepository {
           {
              throw new NotFoundException('No approved seller found for this category');
           }
-
            category.sellers = filteredSellers;
            return [category];
      }

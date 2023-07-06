@@ -148,10 +148,11 @@ export class ReviewService {
           }
 
 
-         const reviewData: submitReviewInterface & { userId: string, titleSlug: string } = {
+         const reviewData: submitReviewInterface & { userId: string, titleSlug: string,type:string } = {
             ...createReviewInterface,
              userId: decoded.id,
-             titleSlug:title.slug
+             titleSlug:title.slug,
+              type:title.type
         };
 
           return this.reviewRepository.submitReview(reviewData);
@@ -531,60 +532,112 @@ export class ReviewService {
   // }
   //
 
-      async getReviewsWithTypes(sellerId: string, tittleId: string, page: number = 1)
+      // async getReviewsWithTypes(sellerId: string, tittleId: string, page: number = 1)
+      // {
+      //     const reviews = [];
+      //     const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+      //     if (!seller)
+      //     {
+      //        throw new NotFoundException(`Seller does not exist`);
+      //     }
+      //
+      //     const title = await this.clicksTitleRepository.findByTitle(tittleId);
+      //     if (!title)
+      //     {
+      //        throw new NotFoundException(`Title does not exist`);
+      //     }
+      //
+      //     const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId);
+      //     for (const review of allReviews)
+      //     {
+      //       const result = await this.reviewRepository.reviewId(review.id);
+      //       const res = JSON.stringify(result);
+      //       const data = {
+      //         like: JSON.parse(res).likeDislike,
+      //         dislike: JSON.parse(res).likeDislike,
+      //         report: JSON.parse(res).likeDislike,
+      //       };
+      //
+      //       const counts = {
+      //         like: data.like.filter(record => record.type === 'like').length,
+      //         dislike: data.dislike.filter(record => record.type === 'dislike').length,
+      //         report: data.like.filter(record => record.type === 'report').length,
+      //       };
+      //
+      //       if (review.message && review.message.trim() !== '')
+      //       {
+      //           reviews.push({ ...review, result: counts });
+      //       }
+      //     }
+      //
+      //     const limit = 3;
+      //     const offset = (page - 1) * limit;
+      //     const paginatedReviews = reviews.slice(offset, offset + limit);
+      //     const totalRecords = reviews.length;
+      //     const totalPages = Math.ceil(reviews.length / limit);
+      //
+      //     return {
+      //       data: paginatedReviews.map((review) => {
+      //       return { ...review}}),
+      //       totalRecords: totalRecords,
+      //       totalPages: totalPages,
+      //       currentPage: page,
+      //     };
+      // }
+      async getReviewsWithTypes(sellerId: string, tittleId: string,type:string, page: number = 1)
       {
-          const reviews = [];
-          const seller = await this.reviewRepository.reviewBySellerId(sellerId);
-          if (!seller)
-          {
-             throw new NotFoundException(`Seller does not exist`);
-          }
-          console.log(seller)
 
-          const title = await this.clicksTitleRepository.findByTitle(tittleId);
-          if (!title)
-          {
-             throw new NotFoundException(`Title does not exist`);
-          }
+        console.log(type)
+        const reviews = [];
+        const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+        if (!seller)
+        {
+          throw new NotFoundException(`Seller does not exist`);
+        }
 
-          const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId);
-          for (const review of allReviews)
-          {
-            const result = await this.reviewRepository.reviewId(review.id);
-            const res = JSON.stringify(result);
-            const data = {
-              like: JSON.parse(res).likeDislike,
-              dislike: JSON.parse(res).likeDislike,
-              report: JSON.parse(res).likeDislike,
-            };
+        const title = await this.clicksTitleRepository.findByTitle(tittleId);
+        if (!title)
+        {
+          throw new NotFoundException(`Title does not exist`);
+        }
 
-            const counts = {
-              like: data.like.filter(record => record.type === 'like').length,
-              dislike: data.dislike.filter(record => record.type === 'dislike').length,
-              report: data.like.filter(record => record.type === 'report').length,
-            };
-
-            if (review.message && review.message.trim() !== '')
-            {
-                reviews.push({ ...review, result: counts });
-            }
-          }
-
-          const limit = 3;
-          const offset = (page - 1) * limit;
-          const paginatedReviews = reviews.slice(offset, offset + limit);
-          const totalRecords = reviews.length;
-          const totalPages = Math.ceil(reviews.length / limit);
-
-          return {
-            data: paginatedReviews.map((review) => {
-            return { ...review}}),
-            totalRecords: totalRecords,
-            totalPages: totalPages,
-            currentPage: page,
+        const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId,type);
+        for (const review of allReviews)
+        {
+          const result = await this.reviewRepository.reviewId(review.id);
+          const res = JSON.stringify(result);
+          const data = {
+            like: JSON.parse(res).likeDislike,
+            dislike: JSON.parse(res).likeDislike,
+            report: JSON.parse(res).likeDislike,
           };
-      }
 
+          const counts = {
+            like: data.like.filter(record => record.type === 'like').length,
+            dislike: data.dislike.filter(record => record.type === 'dislike').length,
+            report: data.like.filter(record => record.type === 'report').length,
+          };
+
+          if (review.message && review.message.trim() !== '')
+          {
+            reviews.push({ ...review, result: counts });
+          }
+        }
+
+        const limit = 3;
+        const offset = (page - 1) * limit;
+        const paginatedReviews = reviews.slice(offset, offset + limit);
+        const totalRecords = reviews.length;
+        const totalPages = Math.ceil(reviews.length / limit);
+
+        return {
+          data: paginatedReviews.map((review) => {
+            return { ...review}}),
+          totalRecords: totalRecords,
+          totalPages: totalPages,
+          currentPage: page,
+        };
+      }
 
 
 

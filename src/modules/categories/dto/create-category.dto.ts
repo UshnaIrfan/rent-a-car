@@ -15,11 +15,7 @@ export class CreateCategoryDto {
       categoryName: string;
 
 
-
       @ApiProperty({ type: String, enum: status, default: status.PENDING })
       @IsString()
       approvedByAdmin: string = status.PENDING;
-
-
-
 }

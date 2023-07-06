@@ -5,7 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
-  Delete, Put, Patch, Param, HttpCode, HttpStatus
+  Delete, Put, Patch, Param,
 } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";

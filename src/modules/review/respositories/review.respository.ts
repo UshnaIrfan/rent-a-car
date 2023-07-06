@@ -51,12 +51,18 @@ export class reviewRepository{
 
 
          // //updated    ( love /air review)
-         async reviewBySellerIdAndTittle(sellerId:string,titleId):Promise<review[]| null>
-         {
-            return this.reviewModel.find({
-              where: { sellerId, titleId,approvedByAdmin:true},
-            });
-         }
+         // async reviewBySellerIdAndTittle(sellerId:string,titleId):Promise<review[]| null>
+         // {
+         //    return this.reviewModel.find({
+         //      where: { sellerId, titleId,approvedByAdmin:true},
+         //    });
+         // }
+        async reviewBySellerIdAndTittle(sellerId:string,titleId:string,type:string):Promise<review[]| null>
+        {
+          return this.reviewModel.find({
+            where: { sellerId, titleId,approvedByAdmin:true,type},
+          });
+        }
 
 
 

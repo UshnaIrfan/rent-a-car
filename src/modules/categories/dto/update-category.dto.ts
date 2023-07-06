@@ -17,5 +17,4 @@ export class updateCategoryDto {
     @IsNotEmpty()
     categoryName: string;
 
-
 }

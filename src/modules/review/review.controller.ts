@@ -5,7 +5,6 @@ import {
   Param, Patch,
   Post,
   Query,
-  Req
 } from "@nestjs/common";
 import { ReviewService } from './review.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -99,16 +98,27 @@ export class ReviewController {
 
 
          //updated    ( love /air review)
-        @ApiQuery({ name: 'seller_id', required:true})
-        @ApiQuery({ name: 'tittle_id', required: false })
-        @ApiQuery({ name: 'page', type: Number, required: true })
-        @Get('/:seller_id/title_id')
-        async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('page') page: number = 1)
-        {
-           console.log("here",seller_id,tittle_id,page)
-           return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
-        }
+        // @ApiQuery({ name: 'seller_id', required:true})
+        // @ApiQuery({ name: 'tittle_id', required: false })
+        // @ApiQuery({ name: 'page', type: Number, required: true })
+        // @Get('/:seller_id/title_id')
+        // async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('page') page: number = 1)
+        // {
+        //    console.log("here",seller_id,tittle_id,page)
+        //    return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
+        // }
 
+
+          @ApiQuery({ name: 'seller_id', required:true})
+          @ApiQuery({ name: 'tittle_id', required: false })
+          @ApiQuery({ name: 'type', required: false })
+          @ApiQuery({ name: 'page', type: Number, required: true })
+          @Get('/:seller_id/title_id/type')
+          async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('type') type?: string,@Query('page') page: number = 1)
+          {
+            console.log("here",seller_id,tittle_id,page)
+            return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id,type, page);
+          }
 
 
 

@@ -34,6 +34,9 @@ export class review{
      @Column({default: null, nullable: true})
      titleSlug: string;
 
+     @ApiProperty()
+     @Column({default: null, nullable: true})
+     type: string;
 
      @ApiProperty()
      @Column({ default: null,nullable: true,type: 'longtext'})
