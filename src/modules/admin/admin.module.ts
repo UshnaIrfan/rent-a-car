@@ -37,6 +37,7 @@ import {ContactUsService} from "../contact-us/contact-us.service";
       store: redisStore,
       uri: process.env.REDIS_URL,
     })],
+
   controllers: [adminContactController,adminReviewController,adminAuthController,AdminSellerController,AdminCategoryController],
   providers: [ContactUsService, contactUsRepository,UsersService,AuthService,SellerService, clicksTypesRepository,sellerRepository, ReviewService,JwtService,likeDislikeRepository,CategoriesService,clicksTitlesRepository,CategoryRepository,UsersRepository,reviewRepository]
 })
