@@ -13,16 +13,16 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
 
       // create dummy sellers
       const sellers = [
-        { sellerName: 'test 1', sellerUrl: 'https://test1.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 2', sellerUrl: 'https://test2.com', isListing: true,approvedByAdmin:'approved', categoryName: 'Stylo test' },
-        { sellerName: 'test 3', sellerUrl: 'https://test3.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 4', sellerUrl: 'https://test4.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 5', sellerUrl: 'https://test5.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 6', sellerUrl: 'https://test6.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 7', sellerUrl: 'https://test7.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 8', sellerUrl: 'https://test8.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 9', sellerUrl: 'https://test9.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
-        { sellerName: 'test 10', sellerUrl: 'https://test10.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 1', sellerUrl: 'https://test1.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 2', sellerUrl: 'https://test2.com', isListing: true,approvedByAdmin:'approved', categoryName: 'Stylo test' },
+        { sellerName: 'Test 3', sellerUrl: 'https://test3.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 4', sellerUrl: 'https://test4.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 5', sellerUrl: 'https://test5.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 6', sellerUrl: 'https://test6.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 7', sellerUrl: 'https://test7.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 8', sellerUrl: 'https://test8.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 9', sellerUrl: 'https://test9.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
+        { sellerName: 'Test 10', sellerUrl: 'https://test10.com', isListing: true, approvedByAdmin:'approved',categoryName: 'Stylo test' },
 
         { sellerName: 'Bitdefender test', sellerUrl: 'https://bitdefendertest.com', isListing: true,approvedByAdmin:'approved',categoryName: 'Antivirus Software test'},
         { sellerName: 'Intego test', sellerUrl: 'https://integotest.com', isListing: true,approvedByAdmin:'approved',categoryName: 'Antivirus Software test'},

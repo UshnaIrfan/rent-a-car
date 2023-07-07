@@ -43,7 +43,7 @@ async function bootstrap() {
       .addBearerAuth({ in: 'header', type: 'http' })
       .build();
        const document = SwaggerModule.createDocument(app, config);
-       SwaggerModule.setup('api', app, document);
+       SwaggerModule.setup('api/la2-disablekeyword', app, document);
 
 
      // Server Connection
