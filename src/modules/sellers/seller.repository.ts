@@ -227,12 +227,16 @@ export class sellerRepository{
    // }
    //
 
-          async search(skip: number, take: number, query?: string, categoryId?: string): Promise<[seller[], number]>
+          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string): Promise<[seller[], number]>
           {
+              console.log(type)
               let whereConditions: any = {};
-              if (query)
+              if ( query || type)
               {
-                 whereConditions = { sellerName: Like(`%${query}%`)};
+                 whereConditions = {
+                   sellerName: query ?Like(`%${query}%`): undefined,
+                   type:type ?? undefined,
+                 };
               }
               if (categoryId)
               {

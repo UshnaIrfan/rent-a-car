@@ -26,9 +26,9 @@ export class  addSellerDto{
      @IsString()
      approvedByAdmin: string = status.PENDING;
 
-     @ApiProperty({ type: String, enum: type, default:type.ONLINE })
+     @ApiProperty({ type: String, enum: type, default:type.NATIONAL,required:true })
      @IsString()
-     type: string = type.ONLINE;
+     type: string = type.NATIONAL;
 
 
      @ApiProperty({ type: String, required: true })

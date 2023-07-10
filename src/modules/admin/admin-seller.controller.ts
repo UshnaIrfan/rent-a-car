@@ -75,12 +75,15 @@ export class AdminSellerController {
         @ApiQuery({ name: 'pageSize', type: Number, required:false})
         @ApiQuery({ name: 'query', required: false })
         @ApiQuery({ name: 'categoryId', required: false })
+        @ApiQuery({ name: 'type', required: false })
         @Get('Seller_search')
         @Roles(Role.L2A_ADMIN)
-        async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string,)
+        async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string, @Query('type') type?: string)
         {
+
+              console.log("controller" , type)
               console.log("adminseller")
-            return this.sellerService.search(page ,pageSize,query, categoryId);
+            return this.sellerService.search(page ,pageSize,query, categoryId,type);
         }
 
 
