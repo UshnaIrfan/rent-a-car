@@ -53,7 +53,7 @@ export class seller{
 
 
       @ApiProperty()
-      @Column({})
+      @Column({nullable: true})
       country: string;
 
 

@@ -27,6 +27,10 @@ export class sellerRepository{
            seller.sellerName = body.sellerName;
            seller.sellerUrl = body.sellerUrl;
            seller.approvedByAdmin = body.approvedByAdmin;
+           seller.type=body.type;
+           seller.country=body.country;
+           seller.state=body.state;
+           seller.address=body.address;
            seller.isListing = body.isListing;
            await this.sellerModel.save(seller);
            return seller

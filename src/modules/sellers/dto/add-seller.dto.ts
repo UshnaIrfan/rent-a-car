@@ -31,7 +31,7 @@ export class  addSellerDto{
      type: string = type.NATIONAL;
 
 
-     @ApiProperty({ type: String, required: true })
+     @ApiProperty({ type: String,required: true })
      @IsString()
      @IsNotEmpty()
      country: string;
