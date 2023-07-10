@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param,  Query,  Req,} from "@nestjs/common";
 import { SellerService } from './seller.service';
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
@@ -17,12 +17,18 @@ export class SellerController {
 
 
         // get all sellers
-        @Get('all-sellers')
-        async  getAllSellers( ):Promise<{records:seller[]}>
-        {
-             return this.sellerService.getAllSellers();
-        }
+        // @Get('all-sellers')
+        // async  getAllSellers( ):Promise<{records:seller[]}>
+        // {
+        //      return this.sellerService.getAllSellers();
+        // }
 
+        @ApiQuery({ name: 'type', required: false })
+        @Get('all-sellers/:type')
+        async  getAllSellers( @Query('type') type?: string):Promise<{records:seller[]}>
+        {
+          return this.sellerService.getAllSellers(type);
+        }
 
 
 

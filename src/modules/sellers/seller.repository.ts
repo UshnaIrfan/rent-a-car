@@ -231,15 +231,19 @@ export class sellerRepository{
    // }
    //
 
-          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string): Promise<[seller[], number]>
+          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string,country?: string,state?: string,address?: string): Promise<[seller[], number]>
           {
               console.log(type)
               let whereConditions: any = {};
-              if ( query || type)
+              if ( query || type || country|| state|| address)
               {
                  whereConditions = {
                    sellerName: query ?Like(`%${query}%`): undefined,
                    type:type ?? undefined,
+                   country: country ?? undefined,
+                   state: state ?? undefined,
+                   address: address ?? undefined
+
                  };
               }
               if (categoryId)
@@ -334,21 +338,44 @@ export class sellerRepository{
 
 
         // get all sellers
-         async getAllSellers(): Promise<seller[]|null>
-         {
-             const sellers = await this.sellerModel.find({
-             relations: ['categories'],
-             where: {
-                categories: { approvedByAdmin: sellerStatus.APPROVED },
-                approvedByAdmin: sellerStatus.APPROVED,
-                isListing: true,
-              },
-              order: {sellerName: 'ASC' },
-             });
+        //  async getAllSellers(): Promise<seller[]|null>
+        //  {
+        //      const sellers = await this.sellerModel.find({
+        //      relations: ['categories'],
+        //      where: {
+        //         categories: { approvedByAdmin: sellerStatus.APPROVED },
+        //         approvedByAdmin: sellerStatus.APPROVED,
+        //         isListing: true,
+        //       },
+        //       order: {sellerName: 'ASC' },
+        //      });
+        //
+        //      return sellers;
+        // }
+        async getAllSellers(type?: string): Promise<seller[]|null>
+        {
+          let whereConditions: any = {};
+          if (  type )
+          {
+            whereConditions = {
+              type:type ?? undefined,
 
-             return sellers;
+            };
+          }
+
+          const sellers = await this.sellerModel.find({
+            where: {
+              ...whereConditions,
+              categories: { approvedByAdmin: sellerStatus.APPROVED },
+              approvedByAdmin: sellerStatus.APPROVED,
+              isListing: true,
+            },
+            order: { sellerName: 'ASC' },
+            relations: ['categories'],
+          });
+          return  sellers
+
         }
-
 
 
         //get seller ID

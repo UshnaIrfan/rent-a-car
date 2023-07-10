@@ -135,11 +135,11 @@ export class SellerService {
 
 
          // seller by name search
-       async search(pageNumber: number,pageSize?:number, query?: string, categoryId?: string,type?: string)
+       async search(pageNumber: number,pageSize?:number, query?: string, categoryId?: string,type?: string,country?: string,state?: string,address?: string)
        {
 
            const skip = (pageNumber - 1) * pageSize;
-           const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId,type);
+           const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId,type,country,state,address);
            const totalPages = Math.ceil(totalCount / pageSize);
            if (result.length === 0)
            {
@@ -172,20 +172,32 @@ export class SellerService {
 
          // FRONTEND APIS
         // get all sellers
-        async getAllSellers( ):Promise<{records:seller[]}>
+       //  async getAllSellers( ):Promise<{records:seller[]}>
+       //  {
+       //     const sellers = await this.SellerRepository.getAllSellers()
+       //     if(!sellers)
+       //     {
+       //        throw new  NotFoundException('sellers do not exist');
+       //     }
+       //
+       //     return { records: sellers};
+       // }
+
+
+        async getAllSellers( type?: string):Promise<{records:seller[]}>
         {
-           const sellers = await this.SellerRepository.getAllSellers()
-           if(!sellers)
-           {
-              throw new  NotFoundException('sellers do not exist');
-           }
+          const sellers = await this.SellerRepository.getAllSellers(type)
+          if(!sellers)
+          {
+            throw new  NotFoundException('sellers do not exist');
+          }
 
-           return { records: sellers};
-       }
+          return { records: sellers};
+        }
 
 
 
-        // get seller by ID (associated categories)
+  // get seller by ID (associated categories)
         async getSellerById(id:string ) :Promise<{record:seller}>
         {
            const seller = await this.SellerRepository.getSellerById(id)
