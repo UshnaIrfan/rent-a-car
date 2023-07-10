@@ -15,6 +15,13 @@ export enum status {
 }
 
 
+export enum type {
+  NATIONAL= 'National',
+  REGIONAL = 'Regional',
+  ONLINE  = 'Online '
+}
+
+
 @Entity({ name: 'sellers' })
 export class seller{
 
@@ -39,6 +46,24 @@ export class seller{
       approvedByAdmin: string;
 
 
+      @ApiProperty()
+      @Column({ type:"enum", enum: type, default: type.ONLINE })
+      type: string;
+
+
+      @ApiProperty()
+      @Column({})
+      country: string;
+
+
+      @ApiProperty()
+      @Column({ nullable: true})
+      state: string;
+
+
+      @ApiProperty()
+      @Column({ nullable: true})
+      address: string;
 
       @ApiProperty()
       @Column('bool')

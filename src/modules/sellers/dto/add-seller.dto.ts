@@ -5,6 +5,7 @@ import {
      IsString
 } from "class-validator";
 import {status} from "../schemas/seller.schema";
+import {type} from "../schemas/seller.schema";
 
 export class  addSellerDto{
 
@@ -24,6 +25,27 @@ export class  addSellerDto{
      @ApiProperty({ type: String, enum: status, default: status.PENDING })
      @IsString()
      approvedByAdmin: string = status.PENDING;
+
+     @ApiProperty({ type: String, enum: type, default:type.ONLINE })
+     @IsString()
+     type: string = type.ONLINE;
+
+
+     @ApiProperty({ type: String, required: true })
+     @IsString()
+     @IsNotEmpty()
+     country: string;
+
+
+     @ApiProperty({ type: String,default:null})
+     @IsString()
+     state: string;
+
+
+     @ApiProperty({ type: String,default:null })
+     @IsString()
+     address: string;
+
 
 
      @ApiProperty({ type: Boolean, default: true })
