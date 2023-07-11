@@ -6,7 +6,6 @@ import {
   Post,
   Query,
 } from "@nestjs/common";
-import { ReviewService } from './review.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import {createClicksTitlesDto} from "./dto/create-clicks-titles.dto";
 import {createClicksTypesDto} from "./dto/create-click-types.dto";
@@ -20,6 +19,7 @@ import { likeDislikeReviewDto } from "./dto/like-dislike-review.dto";
 import {BlockRoles} from "../../decorators/block.decorators";
 import {BlockRole} from "../../enums/block.enum";
 import AuthBearer from "../../decorators/auth-bearer.decorators";
+import { ReviewService } from "./review.service";
 
 
 @ApiTags('Review')
@@ -35,9 +35,8 @@ export class ReviewController {
          async createClicksTypes(
          @Body() clicksReview:createClicksTypesDto):Promise<clicksTypes>
          {
-            return this.reviewService.createClicksTypes(clicksReview);
+             return this.reviewService.createClicksTypes(clicksReview);
          }
-
 
 
 
@@ -47,9 +46,8 @@ export class ReviewController {
          async createClicksTitle(
          @Body() clicksTypes:createClicksTitlesDto): Promise<{record:clicksTitle}>
          {
-             return this.reviewService.createClicksTitles(clicksTypes);
+              return this.reviewService.createClicksTitles(clicksTypes);
          }
-
 
 
 
@@ -108,7 +106,6 @@ export class ReviewController {
         //    return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id, page);
         // }
 
-
           @ApiQuery({ name: 'seller_id', required:true})
           @ApiQuery({ name: 'tittle_id', required: false })
           @ApiQuery({ name: 'type', required: false })
@@ -116,8 +113,7 @@ export class ReviewController {
           @Get('/:seller_id/title_id/type')
           async getReviewsWithTypes(@Query('seller_id')seller_id?: string,@Query('tittle_id') tittle_id?: string,@Query('type') type?: string,@Query('page') page: number = 1)
           {
-            console.log("here",seller_id,tittle_id,page)
-            return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id,type, page);
+              return await this.reviewService.getReviewsWithTypes(seller_id,tittle_id,type, page);
           }
 
 
@@ -128,9 +124,8 @@ export class ReviewController {
          @BlockRoles(BlockRole.UNBLOCK)
          async updateReview(@Body() updateReviewDto:updateReviewDto,@AuthBearer() accessToken: string)
          {
-            return this.reviewService.updateReview(updateReviewDto,accessToken);
+             return this.reviewService.updateReview(updateReviewDto,accessToken);
          }
-
 
 
 

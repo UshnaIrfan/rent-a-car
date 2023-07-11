@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
 import {likeDislike} from "../schemas/like-dislike.schema";
 import {likeDislikeReviewDto} from "../dto/like-dislike-review.dto";
-import {status} from "../schemas/like-dislike.schema";
-import { review } from "../schemas/submit-review.schema";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 
 @Injectable()
@@ -14,6 +12,7 @@ export class likeDislikeRepository{
   ){}
 
 
+       //like dislike submit review
         async createLikeDislike(reqBody:likeDislikeReviewDto): Promise<likeDislike>
         {
             return this.likeDislikeModel.save(reqBody);
@@ -21,6 +20,7 @@ export class likeDislikeRepository{
 
 
 
+       // get like dislike by id
        async getById(reviewId:string):Promise<likeDislike[]| null>
        {
           return this.likeDislikeModel.find({ where: { reviewId}, });
@@ -32,7 +32,6 @@ export class likeDislikeRepository{
        // {
        //     return  await this.likeDislikeModel.find({ where: {reviewId } });
        // }
-
 
 
         //delete user with review with likeAndDislike
@@ -47,7 +46,7 @@ export class likeDislikeRepository{
         }
 
 
-
+        // find like dislike by id
         async findLikeDislikeByUser(userId:string):Promise<likeDislike[]| null>
         {
            return this.likeDislikeModel.find({ where: { userId}});

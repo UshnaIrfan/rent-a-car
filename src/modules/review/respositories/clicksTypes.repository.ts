@@ -1,8 +1,8 @@
 import { Injectable} from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {clicksTypes} from "../schemas/create-click-types.schema";
 import {createClicksTypesDto} from "../dto/create-click-types.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class clicksTypesRepository{
@@ -18,13 +18,11 @@ export class clicksTypesRepository{
        }
 
 
-
        // find by individual type
         async findByType(type:string):Promise<clicksTypes| null>
         {
             return this.clickModel.findOne({ where: { type}, });
         }
-
 
 }
 

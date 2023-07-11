@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty, MaxLength
 } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class createClicksTitlesDto {
 

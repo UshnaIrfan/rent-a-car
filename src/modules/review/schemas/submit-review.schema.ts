@@ -6,10 +6,10 @@ import {
      UpdateDateColumn,
     JoinTable, ManyToOne, OneToMany,
 } from "typeorm";
-import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
 import { User } from "../../users/schemas/user.schema";
 import { likeDislike } from "./like-dislike.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 @Entity({ name: 'review' })
 export class review{
@@ -75,13 +75,11 @@ export class review{
 
 
 
-
      // relation between user and seller
      @ApiProperty({ type: () => [seller] })
      @ManyToOne(() => seller, seller => seller.review)
      @JoinTable()
      seller: seller[];
-
 
 
 

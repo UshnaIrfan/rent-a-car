@@ -6,8 +6,8 @@ import {
     UpdateDateColumn,
      ManyToOne,
 } from "typeorm";
-import { ApiProperty } from '@nestjs/swagger';
 import { review } from "./submit-review.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum status {
     LIKE = 'like',

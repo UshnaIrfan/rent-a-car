@@ -1,8 +1,8 @@
 import { Injectable} from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
 import { OrderByCondition, Repository } from "typeorm";
 import {clicksTitle} from "../schemas/create-clicks-titles.schema";
 import {createClicksTitlesDto} from "../dto/create-clicks-titles.dto";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class clicksTitlesRepository{
@@ -23,15 +23,10 @@ export class clicksTitlesRepository{
        // find all title
        async getAllReviewsTitle(): Promise<clicksTitle[] | null>
        {
-           const orderBy: OrderByCondition = {
-           'type': 'DESC',
-           'slug':'ASC'
-         };
-        const result = await this.clickTypesModel.find({ order: orderBy, select: ['id', 'slug', 'title', 'type','imageName']});
-        return result;
+            const orderBy: OrderByCondition = { 'type': 'DESC', 'slug':'ASC' };
+            const result = await this.clickTypesModel.find({ order: orderBy, select: ['id', 'slug', 'title', 'type','imageName']});
+            return result;
        }
-
-
 
 
 
@@ -42,13 +37,10 @@ export class clicksTitlesRepository{
         }
 
 
-
        //find by slug
        async findBySlug(slug:string):Promise<clicksTitle| null>
        {
          return this.clickTypesModel.findOne({ where: { slug }, });
        }
-
-
 
 }

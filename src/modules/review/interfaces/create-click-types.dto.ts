@@ -1,5 +1,3 @@
 export default interface createClicksTypesInterface {
-
-  readonly  type: string;
-
+    readonly  type: string;
 }

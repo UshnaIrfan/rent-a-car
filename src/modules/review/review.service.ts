@@ -14,10 +14,10 @@ import {clicksTypesRepository} from "./respositories/clicksTypes.repository";
 import {clicksTitlesRepository} from "./respositories/clicksTitles.repository";
 import createClicksTypesInterface from "./interfaces/create-click-types.dto";
 import { clicksTitle } from "./schemas/create-clicks-titles.schema";
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from "@nestjs/jwt";
 import { jwtConstants } from "../auth/constants/constants";
 import {UsersRepository} from "../users/users.repository";
-import { Cache } from 'cache-manager';
+import { Cache } from "cache-manager";
 import updateReviewInterface from "./interfaces/update-review.interface";
 import {seller} from "../sellers/schemas/seller.schema";
 import likeDislikeInterface from "./interfaces/like-dislike.interface";
@@ -26,7 +26,7 @@ import adminUpdateSubmitReviewInterface from "./interfaces/admin-update-submit-r
 import adminUpdateBestwriterReviewInterface from "./interfaces/admin-update-bestwriter-review.interface";
 import {MailerService} from "@nestjs-modules/mailer";
 import handlebars from "handlebars";
-import * as fs from 'fs';
+import * as fs from "fs";
 
 @Injectable()
 export class ReviewService {
@@ -149,10 +149,10 @@ export class ReviewService {
 
 
          const reviewData: submitReviewInterface & { userId: string, titleSlug: string,type:string } = {
-            ...createReviewInterface,
+             ...createReviewInterface,
              userId: decoded.id,
              titleSlug:title.slug,
-              type:title.type
+             type:title.type
         };
 
           return this.reviewRepository.submitReview(reviewData);
@@ -163,7 +163,6 @@ export class ReviewService {
          // balloons count
          async getReviewsWithCounts(sellerId: string): Promise<{ seller: seller, result: { titleId: string, count: number }[] }>
          {
-           // approved sellers record show
             const seller = await this.sellerRepository.getSellerId(sellerId);
             if (!seller)
             {
@@ -215,13 +214,13 @@ export class ReviewService {
            const user = await this.usersRepository.findUserByID(decoded.id)
            if(!user)
            {
-             throw new  NotFoundException('invalid user')
+              throw new  NotFoundException('invalid user')
            }
 
            const cachedToken = await this.cacheManager.get(accessToken);
            if (!cachedToken)
            {
-             throw new UnauthorizedException('Token expired');
+              throw new UnauthorizedException('Token expired');
            }
 
             const updateReview = await this.reviewRepository.updateReview(updateReviewInterface.titleId , updateReviewInterface.message,updateReviewInterface.reviewId);
@@ -261,11 +260,7 @@ export class ReviewService {
                    throw new ConflictException('User already submitted a review for this review ID');
                }
            }
-
-           const likedislike = {
-               ...likeDislikeInterface,
-               userId: decoded.id,
-           };
+            const likedislike = { ...likeDislikeInterface, userId: decoded.id};
             return  await this.likeDislikeRepository.createLikeDislike(likedislike);
        }
 
@@ -586,57 +581,55 @@ export class ReviewService {
       // }
       async getReviewsWithTypes(sellerId: string, tittleId: string,type:string, page: number = 1)
       {
+            const reviews = [];
+            const seller = await this.reviewRepository.reviewBySellerId(sellerId);
+            if (!seller)
+            {
+                throw new NotFoundException(`Seller does not exist`);
+            }
 
-        console.log(type)
-        const reviews = [];
-        const seller = await this.reviewRepository.reviewBySellerId(sellerId);
-        if (!seller)
-        {
-          throw new NotFoundException(`Seller does not exist`);
-        }
+            const title = await this.clicksTitleRepository.findByTitle(tittleId);
+            if (!title)
+            {
+                throw new NotFoundException(`Title does not exist`);
+            }
 
-        const title = await this.clicksTitleRepository.findByTitle(tittleId);
-        if (!title)
-        {
-          throw new NotFoundException(`Title does not exist`);
-        }
+            const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId,type);
+            for (const review of allReviews)
+            {
+              const result = await this.reviewRepository.reviewId(review.id);
+              const res = JSON.stringify(result);
+              const data = {
+                like: JSON.parse(res).likeDislike,
+                dislike: JSON.parse(res).likeDislike,
+                report: JSON.parse(res).likeDislike,
+              };
 
-        const allReviews = await this.reviewRepository.reviewBySellerIdAndTittle(sellerId, tittleId,type);
-        for (const review of allReviews)
-        {
-          const result = await this.reviewRepository.reviewId(review.id);
-          const res = JSON.stringify(result);
-          const data = {
-            like: JSON.parse(res).likeDislike,
-            dislike: JSON.parse(res).likeDislike,
-            report: JSON.parse(res).likeDislike,
-          };
+              const counts = {
+                like: data.like.filter(record => record.type === 'like').length,
+                dislike: data.dislike.filter(record => record.type === 'dislike').length,
+                report: data.like.filter(record => record.type === 'report').length,
+              };
 
-          const counts = {
-            like: data.like.filter(record => record.type === 'like').length,
-            dislike: data.dislike.filter(record => record.type === 'dislike').length,
-            report: data.like.filter(record => record.type === 'report').length,
-          };
+              if (review.message && review.message.trim() !== '')
+              {
+                 reviews.push({ ...review, result: counts });
+              }
+            }
 
-          if (review.message && review.message.trim() !== '')
-          {
-            reviews.push({ ...review, result: counts });
-          }
-        }
+            const limit = 3;
+            const offset = (page - 1) * limit;
+            const paginatedReviews = reviews.slice(offset, offset + limit);
+            const totalRecords = reviews.length;
+            const totalPages = Math.ceil(reviews.length / limit);
 
-        const limit = 3;
-        const offset = (page - 1) * limit;
-        const paginatedReviews = reviews.slice(offset, offset + limit);
-        const totalRecords = reviews.length;
-        const totalPages = Math.ceil(reviews.length / limit);
-
-        return {
-          data: paginatedReviews.map((review) => {
-            return { ...review}}),
-          totalRecords: totalRecords,
-          totalPages: totalPages,
-          currentPage: page,
-        };
+            return {
+              data: paginatedReviews.map((review) => {
+                return { ...review}}),
+                totalRecords: totalRecords,
+                totalPages: totalPages,
+               currentPage: page,
+            };
       }
 
 
@@ -648,7 +641,6 @@ export class ReviewService {
 
             const skip = (pageNumber - 1) * pageSize;
             const [result, totalCount] = await this.reviewRepository.search(skip,pageSize,sellerId,userId ,message,type,categoryId,orderType,orderBy,startDate,endDate);
-
             const totalPages = Math.ceil(totalCount / pageSize);
             if (result.length === 0)
             {

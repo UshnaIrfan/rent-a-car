@@ -381,7 +381,7 @@ export class sellerRepository{
         }
 
 
-        //get seller ID
+        //get seller ID with approved status
         async getSellerId(id:string): Promise<seller|null>
         {
             return  this.sellerModel.findOne({ where: { id ,approvedByAdmin:sellerStatus.APPROVED } })
