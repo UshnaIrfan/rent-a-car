@@ -1,12 +1,7 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinTable, OneToMany
-} from "typeorm";
-import { ApiProperty } from '@nestjs/swagger';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable, OneToMany } from "typeorm";
 import { category } from "../../categories/schemas/category.schema";
 import { review } from "../../review/schemas/submit-review.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum status {
      PENDING = 'pending',
@@ -81,6 +76,7 @@ export class seller{
       updatedAt: Date
 
 
+     // relation between category and seller
      @ApiProperty({ type: () => [category] })
      @ManyToMany(() => category, category => category.sellers, { cascade: true })
      categories: any[];

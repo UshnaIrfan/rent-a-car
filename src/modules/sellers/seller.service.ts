@@ -3,7 +3,6 @@ import {
   ConflictException, Inject,
   Injectable,
   NotFoundException, UnauthorizedException
-
 } from "@nestjs/common";
 import { seller } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
@@ -14,9 +13,9 @@ import updateSellerInterface from "./interfaces/update-seller.interface";
 import createSellerInterface from "./interfaces/create-seller.interface";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
 import { jwtConstants } from "../auth/constants/constants";
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from "@nestjs/jwt";
 import {UsersRepository} from "../users/users.repository";
-import { Cache } from 'cache-manager';
+import { Cache } from "cache-manager";
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
 
@@ -51,7 +50,6 @@ export class SellerService {
             {
                throw new ConflictException('Seller Url already exists');
             }
-
             const seller = await this.SellerRepository.createSeller(body);
             seller.categories = [];
             const categoriesIDs = body.categories;
@@ -183,21 +181,20 @@ export class SellerService {
        //     return { records: sellers};
        // }
 
-
+         // get all seller with type
         async getAllSellers( type?: string):Promise<{records:seller[]}>
         {
-          const sellers = await this.SellerRepository.getAllSellers(type)
-          if(!sellers)
-          {
-            throw new  NotFoundException('sellers do not exist');
-          }
-
-          return { records: sellers};
+            const sellers = await this.SellerRepository.getAllSellers(type)
+            if(!sellers)
+            {
+              throw new  NotFoundException('sellers do not exist');
+            }
+            return { records: sellers};
         }
 
 
 
-  // get seller by ID (associated categories)
+        // get seller by ID (associated categories)
         async getSellerById(id:string ) :Promise<{record:seller}>
         {
            const seller = await this.SellerRepository.getSellerById(id)
@@ -254,19 +251,15 @@ export class SellerService {
           }
 
           await this.SellerRepository.sellerCategories(seller);
-
           if(body.titleId==null)
           {
             return { seller};
           }
-
-
           const typeResult = await this.clicksTitleRepository.findByTitle(body.titleId);
           if(!typeResult)
           {
              throw new  NotFoundException('Balloon title not found');
           }
-
          const previousReview = await this.ReviewRepository.findReviewByUserAndSeller(decoded.id,seller.id);
          if (previousReview)
          {
@@ -287,14 +280,11 @@ export class SellerService {
    }
 
 
-
-
         // unique seller show
         async getUniqueSeller(seller_Id: string)
         {
               const result = await this.SellerRepository.getUniqueSeller( seller_Id);
               return  result
         }
-
 
 }

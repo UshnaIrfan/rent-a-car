@@ -15,49 +15,43 @@ export class adminAuthController {
   constructor(private readonly authService:AuthService) {}
 
 
-
-      //get all users and search by name
-      @ApiBearerAuth()
-      @ApiQuery({ name: 'page', type: Number, required: true })
-      @ApiQuery({ name: 'pageSize', type: Number, required:false})
-      @ApiQuery({ name: 'username', required: false })
-      @Get('/search/:user')
-      @Roles(Role.L2A_ADMIN)
-      async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
-      {
-            console.log("user")
-          return  this.authService.getAllUsers(page,pageSize,username);
-      }
+        //get all users and search by name
+        @ApiBearerAuth()
+        @ApiQuery({ name: 'page', type: Number, required: true })
+        @ApiQuery({ name: 'pageSize', type: Number, required:false})
+        @ApiQuery({ name: 'username', required: false })
+        @Get('/search/:user')
+        @Roles(Role.L2A_ADMIN)
+        async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('username')username?: string):Promise<paginationUserInterface>
+        {
+            return  this.authService.getAllUsers(page,pageSize,username);
+        }
 
 
+        // update user
+        @ApiBearerAuth()
+        @ApiBody({type:updateUserDto})
+        @Patch('user/update')
+        @Roles(Role.L2A_ADMIN)
+        async updateUser(@Body() updateUserDto:updateUserDto):Promise<{ message: string, update:updateUserInterface}>
+        {
+            return this.authService.updateUser(updateUserDto);
+        }
 
 
-       //update user
-      @ApiBearerAuth()
-      @ApiBody({type:updateUserDto})
-      @Patch('user/update')
-      @Roles(Role.L2A_ADMIN)
-      async updateUser(@Body() updateUserDto:updateUserDto):Promise<{ message: string, update:updateUserInterface}>
-      {
-          return this.authService.updateUser(updateUserDto);
-      }
-
-
-
-
-       // admin user update status
-       @ApiBearerAuth()
-       @ApiBody({type:adminUpdateUserDto})
-       @Patch('user/update/status')
-       @Roles(Role.L2A_ADMIN)
-       async adminUpdateUserStatus(@Body() body:adminUpdateUserDto)
-       {
+        // user status update ( admin)
+        @ApiBearerAuth()
+        @ApiBody({type:adminUpdateUserDto})
+        @Patch('user/update/status')
+        @Roles(Role.L2A_ADMIN)
+        async adminUpdateUserStatus(@Body() body:adminUpdateUserDto)
+        {
             return this.authService.adminUpdateUserStatus(body);
-       }
+        }
 
 
 
-      // admin user update block status
+       // user  block status update ( admin)
        @ApiBearerAuth()
        @ApiBody({type:adminUpdateBlockStatusUserDto})
        @Patch('user/update/block/status')
@@ -66,9 +60,6 @@ export class adminAuthController {
        {
             return this.authService.adminUpdateUserBlockStatus(body);
        }
-
-
-
 
 
 
@@ -83,17 +74,15 @@ export class adminAuthController {
 
 
 
-
-
       // calculate user each week and each month
-        @ApiBearerAuth()
-        @ApiQuery({ name: 'start', required: false })
-        @ApiQuery({ name: 'end', required: false })
-        @Get("/user/details/count")
-        @Roles(Role.L2A_ADMIN)
-        async getUserDetails(  @Query('start') start?: string ,@Query('end')end?: string,)
-        {
-             return this.authService.getUserDetails(start ,end);
-        }
+      @ApiBearerAuth()
+      @ApiQuery({ name: 'start', required: false })
+      @ApiQuery({ name: 'end', required: false })
+      @Get("/user/details/count")
+      @Roles(Role.L2A_ADMIN)
+      async getUserDetails(  @Query('start') start?: string ,@Query('end')end?: string,)
+      {
+          return this.authService.getUserDetails(start ,end);
+      }
 
 }

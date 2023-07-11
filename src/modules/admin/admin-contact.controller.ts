@@ -11,9 +11,7 @@ import {adminUpdateContactStatusDto} from "../contact-us/dto/admin-update-contac
 export class adminContactController {
   constructor(private readonly contactUsService:ContactUsService) {}
 
-
-
-       //get all contactus users
+       //get all contact_us users
        @ApiBearerAuth()
        @ApiQuery({ name: 'page', type: Number, required: true })
        @ApiQuery({ name: 'pageSize', type: Number, required:false})
@@ -27,8 +25,6 @@ export class adminContactController {
        }
 
 
-
-
        //  update contact us status
        @ApiBearerAuth()
        @ApiBody({type:adminUpdateContactStatusDto})
@@ -36,8 +32,7 @@ export class adminContactController {
        @Roles(Role.L2A_ADMIN)
        async adminUpdateContactStatus(@Body() body:adminUpdateContactStatusDto)
        {
-          return this.contactUsService.adminUpdateContactStatus(body);
+           return this.contactUsService.adminUpdateContactStatus(body);
        }
-
 
 }

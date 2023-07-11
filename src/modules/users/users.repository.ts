@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Like, Repository } from "typeorm";
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from "./schemas/user.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
 import * as moment from "moment";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CreateUserDto } from "./dto/create-user.dto";
 
 
 @Injectable()
@@ -31,7 +31,7 @@ export class UsersRepository {
 
 
 
-        // admin user update status
+        //  user update status ( admin)
         async adminUpdateUserStatus(userId:string,status:string):Promise<User | null>
         {
             const user = await this.userModel.findOne({ where: { id:userId}});
@@ -45,7 +45,7 @@ export class UsersRepository {
 
 
 
-        // admin user update  block status
+        // user update  block status ( admin)
         async adminUpdateUserBlockStatus(userId:string,blockStatus:string):Promise<User | null>
         {
              const user = await this.userModel.findOne({ where: { id:userId}});
@@ -77,10 +77,7 @@ export class UsersRepository {
             {
                 throw new NotFoundException('You cannot delete an admin user.');
             }
-            const user = await this.userModel.findOne({
-                where: { id  },
-                relations: ['review']});
-
+            const user = await this.userModel.findOne({ where: { id  }, relations: ['review']});
             const reviews = user.review;
             if (reviews && reviews.length > 0)
             {
@@ -96,7 +93,6 @@ export class UsersRepository {
 
 
 
-
         // get all users and search by name (pagination)
         async findAndCount(skip: number, take: number,username?:string): Promise<[User[], number]>
         {
@@ -105,7 +101,6 @@ export class UsersRepository {
             {
                whereConditions.push({ username: Like(`${username}%`)});
             }
-
             const [result, totalCount] = await this.userModel.findAndCount({
             where: whereConditions,
             skip,
@@ -122,8 +117,6 @@ export class UsersRepository {
 
 
 
-
-
       // calculate user each week and each month
         async getUserDetails(startDate?: string, endDate?: string)
         {
@@ -131,13 +124,11 @@ export class UsersRepository {
               const start = startDate ? moment(startDate, 'YYYY-MM-DD').startOf('day').toDate() : moment().startOf('day').subtract(1, 'month').toDate();
               const end = endDate ? moment(endDate, 'YYYY-MM-DD').endOf('day').toDate() : moment().endOf('day').toDate();
               query = { createdAt: Between(start, end) };
-
               const users = await this.userModel.find({ where: query });
               const result = {};
               const currentDate = moment(start);
               const lastDate = moment(end);
               let totalCount = 0;
-
               for (const user of users)
               {
                   totalCount++;
@@ -225,39 +216,40 @@ export class UsersRepository {
        // get all users (l2_users)
         async getAll()
         {
-            return  this.userModel.find({ where: { status:'active',roles:'l2a_user'}});
+             return  this.userModel.find({ where: { status:'active',roles:'l2a_user'}});
         }
 
 
 
-
-       //FRONTEND APIS
+          //FRONTEND APIS
+          // create user
           async createUser(createUserDto: CreateUserDto): Promise<User | null>
           {
-              return this.userModel.save(createUserDto);
+               return this.userModel.save(createUserDto);
           }
 
 
+          // find user by name
           async findUserByUsername(username: string): Promise<User | null>
           {
                return this.userModel.findOne({ where: { username }});
           }
 
 
-
+         // find user by email
           async findUserByEmail(email: string): Promise<User | null>
           {
              return this.userModel.findOne({ where: { email }});
           }
 
-
+          //find user by id
           async findUserByID(id: string): Promise<User|null>
           {
               return this.userModel.findOne({ where: { id }, });
           }
 
 
-
+         // update password
          async updatePassword(email: string, password: string): Promise<User| null>
          {
             const user = await this.userModel.findOne({ where: { email } });
@@ -277,7 +269,7 @@ export class UsersRepository {
          }
 
 
-
+         // user update ( active status)
          async isActive(email: string, status: string): Promise<User| null>
          {
             const user = await this.userModel.findOne({ where: { email } });

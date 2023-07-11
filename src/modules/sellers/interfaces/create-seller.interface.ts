@@ -1,5 +1,4 @@
 export default interface  createSellerInterface{
-
     readonly sellerName: string;
     readonly sellerUrl: string;
     readonly  approvedByAdmin: string;

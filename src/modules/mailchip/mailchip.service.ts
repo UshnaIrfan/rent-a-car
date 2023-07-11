@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import MailchipInterface from "./interfaces/create-mailchip.interface";
 import {MailChipRepository} from "./mailchip.repository";
 import handlebars from "handlebars";
-import * as fs from 'fs';
+import * as fs from "fs";
 import {MailerService} from "@nestjs-modules/mailer";
 import { mailChip } from "./schemas/mailchip.schema";
 
@@ -12,7 +12,8 @@ export class MailchipService {
               private readonly mailerService: MailerService
   ) {}
 
-        // mail chip
+
+        //create mail chip data
         async createMailChip(createMailChipInterface: MailchipInterface):Promise<mailChip>
         {
             const mailChip = await this.MailchipRepository.createMailChip(createMailChipInterface);

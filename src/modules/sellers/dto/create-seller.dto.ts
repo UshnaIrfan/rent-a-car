@@ -1,11 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-   IsBoolean,
-   IsNotEmpty,
-   IsString
-} from "class-validator";
+import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 import { status } from "../../categories/schemas/category.schema";
 import {type} from "../schemas/seller.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateSellerDto {
 

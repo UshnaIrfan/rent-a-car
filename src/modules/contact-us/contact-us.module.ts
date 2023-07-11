@@ -1,6 +1,3 @@
-import { Module } from '@nestjs/common';
-import { ContactUsService } from './contact-us.service';
-import { ContactUsController } from './contact-us.controller';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import {contact} from "./schemas/contact-us.schema";
 import {contactUsRepository} from "./contact-us.repository";
@@ -17,6 +14,9 @@ import {category} from "../categories/schemas/category.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 import {likeDislike} from "../review/schemas/like-dislike.schema";
+import { ContactUsController } from "./contact-us.controller";
+import { ContactUsService } from "./contact-us.service";
+import { Module } from "@nestjs/common";
 
 
 @Module({

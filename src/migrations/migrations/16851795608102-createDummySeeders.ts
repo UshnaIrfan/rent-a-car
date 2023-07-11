@@ -3,39 +3,37 @@ import * as bcrypt from 'bcrypt';
 
 export class createDummySeeders16851795608102 implements MigrationInterface {
 
-
-  public async up(queryRunner: QueryRunner): Promise<void> {
-
+  public async up(queryRunner: QueryRunner): Promise<void>
+  {
       // Create dummy category
       await queryRunner.query("INSERT INTO categories (categoryName,approvedByAdmin) VALUES('Stylo test','approved')");
       await queryRunner.query("INSERT INTO categories (categoryName,approvedByAdmin) VALUES('Antivirus Software test','approved')");
 
-
       // create dummy sellers
-      const sellers = [
-        { sellerName: 'Test 1', sellerUrl: 'https://test1.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 2', sellerUrl: 'https://test2.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Stylo test' },
-        { sellerName: 'Test 3', sellerUrl: 'https://test3.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 4', sellerUrl: 'https://test4.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 5', sellerUrl: 'https://test5.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 6', sellerUrl: 'https://test6.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 7', sellerUrl: 'https://test7.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 8', sellerUrl: 'https://test8.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Stylo test' },
-        { sellerName: 'Test 9', sellerUrl: 'https://test9.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
-        { sellerName: 'Test 10', sellerUrl: 'https://test10.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+      const sellers =
+        [
+            { sellerName: 'Test 1', sellerUrl: 'https://test1.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 2', sellerUrl: 'https://test2.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Stylo test' },
+            { sellerName: 'Test 3', sellerUrl: 'https://test3.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 4', sellerUrl: 'https://test4.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 5', sellerUrl: 'https://test5.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 6', sellerUrl: 'https://test6.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 7', sellerUrl: 'https://test7.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 8', sellerUrl: 'https://test8.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Stylo test' },
+            { sellerName: 'Test 9', sellerUrl: 'https://test9.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 10', sellerUrl: 'https://test10.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true, categoryName: 'Stylo test' },
 
-        { sellerName: 'Bitdefender test', sellerUrl: 'https://bitdefendertest.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Antivirus Software test'},
-        { sellerName: 'Intego test', sellerUrl: 'https://integotest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
-        { sellerName: 'McAfee test', sellerUrl: 'https://mcafeetest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
-        { sellerName: 'Norton test', sellerUrl: 'https://nortontest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
-
+            { sellerName: 'Bitdefender test', sellerUrl: 'https://bitdefendertest.com',approvedByAdmin:'approved',type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null', isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'Intego test', sellerUrl: 'https://integotest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'McAfee test', sellerUrl: 'https://mcafeetest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'Norton test', sellerUrl: 'https://nortontest.com',approvedByAdmin:'approved', type:'U.S. National, Regional & Online',country:'U.S',state:'null',address:'null',isListing: true,categoryName: 'Antivirus Software test'},
       ];
       for (const seller of sellers)
       {
           const existingSeller = await queryRunner.query("SELECT * FROM sellers WHERE sellerName = ?", [seller.sellerName]);
           if (!existingSeller.length)
           {
-             await queryRunner.query("INSERT INTO sellers (sellerName, sellerUrl, approvedByAdmin,type,country,state,address,isListing) VALUES (?, ?, ?,?,?,?,?,?)", [seller.sellerName, seller.sellerUrl,seller.approvedByAdmin,seller.type,seller.country,seller.state,seller.address,seller.isListing]);
+              await queryRunner.query("INSERT INTO sellers (sellerName, sellerUrl, approvedByAdmin,type,country,state,address,isListing) VALUES (?, ?, ?,?,?,?,?,?)", [seller.sellerName, seller.sellerUrl,seller.approvedByAdmin,seller.type,seller.country,seller.state,seller.address,seller.isListing]);
           }
       }
 
@@ -51,13 +49,11 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
             {
               const categoryId = category[0].id;
               const sellerId = existingSeller.id;
-
               // Create relationship between seller and category
               await queryRunner.query("INSERT INTO categories_sellers_sellers (categoriesId, sellersId) VALUES (?, ?)", [categoryId, sellerId]);
             }
           }
       }
-
 
       // Create dummy users
       const salt = await bcrypt.genSalt();
@@ -77,13 +73,10 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
           await queryRunner.query(query);
       }
 
-
       // create dummy review
       const allUsers = await queryRunner.query("SELECT * FROM users");
       const titleQuery: string = "SELECT id,type ,slug FROM clicksTitle";
       const titles = await queryRunner.query(titleQuery);
-
-
       for (const seller of sellers)
       {
           const existingSeller = await queryRunner.query("SELECT * FROM sellers WHERE sellerName = ?", [seller.sellerName]);
@@ -91,10 +84,8 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
           {
             const userIndex = Math.floor(Math.random() * allUsers.length);
             const user = allUsers[userIndex];
-
             const titleIndex = Math.floor(Math.random() * titles.length);
             const title = titles[titleIndex];
-
             const reviewData = {
               sellerId: existingSeller[0].id,
               titleId: title.id,
@@ -105,10 +96,8 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
               approvedByAdmin: true,
               bestWriter: false
             };
-
             const reviewQuery = `INSERT INTO review (sellerId, titleId, titleSlug,type, message, userId, approvedByAdmin, bestWriter)
             VALUES (?, ?, ?, ?, ?, ?, ?,?)`;
-
             await queryRunner.query(reviewQuery, [
               reviewData.sellerId,
               reviewData.titleId,
@@ -121,13 +110,11 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
             ]);
           }
       }
-
-
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void>
-  {
+    public async down(queryRunner: QueryRunner): Promise<void>
+    {
 
-  }
+    }
 
 }

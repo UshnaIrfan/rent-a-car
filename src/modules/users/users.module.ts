@@ -1,7 +1,4 @@
-import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
 import {UsersRepository} from "./users.repository";
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {User} from "./schemas/user.schema";
 import {review} from "../review/schemas/submit-review.schema";
 import {reviewRepository} from "../review/respositories/review.respository";
@@ -15,6 +12,9 @@ import {contactUsRepository} from "../contact-us/contact-us.repository";
 import {contact} from "../contact-us/schemas/contact-us.schema";
 import {likeDislikeRepository} from "../review/respositories/like-dislike.repository";
 import {likeDislike} from "../review/schemas/like-dislike.schema";
+import { UsersService } from "./users.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Module } from "@nestjs/common";
 
 
 @Module({

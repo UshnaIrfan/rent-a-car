@@ -14,7 +14,6 @@ export class ContactUsService {
       // contact-us
       async createContact(contactUsInterface:createContactUsInterface): Promise<{message: string ,contact}>
       {
-
           try
           {
               const contact = await this.contactUsRepository.createContact(contactUsInterface);

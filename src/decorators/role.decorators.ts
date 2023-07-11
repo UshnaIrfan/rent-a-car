@@ -5,6 +5,6 @@ import {JwtAuthGuard} from "../modules/auth/guards/jwt-auth-guard";
 export const ROLES_KEY = 'roles';
 
 export const Roles = (...roles: Role[]) => applyDecorators(
-  SetMetadata(ROLES_KEY, roles),
-  UseGuards( JwtAuthGuard,RoleGuard)
+    SetMetadata(ROLES_KEY, roles),
+    UseGuards( JwtAuthGuard,RoleGuard)
 );

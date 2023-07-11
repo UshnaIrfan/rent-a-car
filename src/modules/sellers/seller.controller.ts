@@ -1,5 +1,4 @@
-import { Controller, Post, Body, Get, Param,  Query,  Req,} from "@nestjs/common";
-import { SellerService } from './seller.service';
+import { Controller, Post, Body, Get, Param,  Query,} from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
@@ -7,6 +6,7 @@ import {review} from "../review/schemas/submit-review.schema";
 import { BlockRoles } from "../../decorators/block.decorators";
 import { BlockRole } from "../../enums/block.enum";
 import AuthBearer from "../../decorators/auth-bearer.decorators";
+import { SellerService } from "./seller.service";
 
 
 
@@ -23,6 +23,7 @@ export class SellerController {
         //      return this.sellerService.getAllSellers();
         // }
 
+        // get all seller with type
         @ApiQuery({ name: 'type', required: false })
         @Get('all-sellers/:type')
         async  getAllSellers( @Query('type') type?: string):Promise<{records:seller[]}>

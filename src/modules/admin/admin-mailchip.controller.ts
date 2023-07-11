@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Body, Post } from "@nestjs/common";
 import {MailchipDto} from "../mailchip/dto/create-mailchip.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {mailChip} from "../mailchip/schemas/mailchip.schema";
@@ -12,7 +12,7 @@ export class MailchipController {
   constructor(private readonly mailchipService: MailchipService) {}
 
 
-      // mail chip
+      //  create mail chip data
       @ApiBearerAuth()
       @ApiBody({type:MailchipDto})
       @Post('mailchip/create')

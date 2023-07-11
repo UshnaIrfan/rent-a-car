@@ -1,5 +1,3 @@
 export default interface MailchipInterface{
-
-  readonly email: string;
-
+    readonly email: string;
 }

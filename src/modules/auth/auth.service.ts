@@ -68,7 +68,7 @@ export class AuthService {
 
 
 
-       // admin user update status
+       // user status update ( admin)
         async adminUpdateUserStatus(adminUpdateStatus: adminUpdateUserInterface): Promise<{ update: User; message: string }>
         {
             const update = await this.usersService.adminUpdateUserStatus(adminUpdateStatus.userId, adminUpdateStatus.status,);
@@ -81,7 +81,7 @@ export class AuthService {
 
 
 
-        // admin user update  block status
+        //   user  block status update ( admin)
         async adminUpdateUserBlockStatus(adminUpdateBlockStatus: adminUpdateBlockStatusUserInterface): Promise<{ update: User; message: string }>
         {
             const update = await this.usersService.adminUpdateUserBlockStatus(
@@ -197,7 +197,7 @@ export class AuthService {
 
 
 
-           // isActive
+           // user update ( active status)
            async isActive(@Body() reqBody: userActiveInterface)
            {
                 const user = await this.usersService.findUserByEmail(reqBody.email);

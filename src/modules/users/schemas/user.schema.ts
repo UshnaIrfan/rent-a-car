@@ -6,8 +6,8 @@ import {
      UpdateDateColumn,
      OneToMany
 } from "typeorm";
-import { ApiProperty } from '@nestjs/swagger';
 import { review } from "../../review/schemas/submit-review.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum status {
      ACTIVE= 'active',
@@ -22,7 +22,6 @@ export enum blockStatus {
 
 @Entity({ name: 'users' })
 export class User {
-
 
      @ApiProperty()
      @PrimaryGeneratedColumn('uuid')

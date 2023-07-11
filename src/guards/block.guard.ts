@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from '@nestjs/core';
-import { BlockRole } from '../enums/block.enum';
+import {BlockRole} from "../enums/block.enum";
 
 @Injectable()
 export class BlockGuard implements CanActivate {
@@ -13,24 +13,22 @@ export class BlockGuard implements CanActivate {
 
       canActivate(context: ExecutionContext): boolean
       {
-
            const requiredRoles = this.reflector.get<BlockRole[]>('roles', context.getHandler());
            if (!requiredRoles)
            {
-               return true;
+              return true;
            }
 
           const { user } = context.switchToHttp().getRequest();
           if (!user)
           {
-               throw new ForbiddenException('Forbidden resource');
+              throw new ForbiddenException('Forbidden resource');
           }
-
 
          // Check if the user is blocked
           if (user.blockStatus=='block')
           {
-                throw new ForbiddenException('Your account has been blocked');
+              throw new ForbiddenException('Your account has been blocked');
           }
 
             return true;

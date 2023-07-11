@@ -9,13 +9,10 @@ import updateSellerInterface from "../sellers/interfaces/update-seller.interface
 import {updateSellerDto} from "../sellers/dto/update-seller.dto";
 import {adminUpdateSellerDto} from "../sellers/dto/admin-update.seller.dto";
 
-
 @ApiTags('admin')
 @Controller('admin')
 export class AdminSellerController {
   constructor(private readonly sellerService:SellerService) {}
-
-
 
 
         // create  admin seller
@@ -29,8 +26,6 @@ export class AdminSellerController {
         }
 
 
-
-
         // update seller
         @ApiBearerAuth()
         @ApiBody({type:updateSellerDto})
@@ -40,8 +35,6 @@ export class AdminSellerController {
         {
              return this.sellerService.updateSeller(updateSellerDto);
         }
-
-
 
 
         // delete seller with review
@@ -55,7 +48,6 @@ export class AdminSellerController {
 
 
 
-
         //admin update seller status
         @ApiOperation({ summary: "Update seller status" })
         @ApiBearerAuth()
@@ -66,7 +58,6 @@ export class AdminSellerController {
         {
             return this.sellerService.adminUpdateSeller(adminUpdateSellerDto);
         }
-
 
 
         // search seller by name
@@ -83,12 +74,8 @@ export class AdminSellerController {
         @Roles(Role.L2A_ADMIN)
         async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string, @Query('type') type?: string, @Query('country') country?: string, @Query('state') state?: string, @Query('address') address?: string)
         {
-
-              console.log("controller" , type)
-              console.log("adminseller")
             return this.sellerService.search(page ,pageSize,query, categoryId,type,country,state,address);
         }
-
 
 
 
@@ -101,6 +88,5 @@ export class AdminSellerController {
               console.log("adminallseller")
              return this.sellerService.getAllSeller();
         }
-
 
 }

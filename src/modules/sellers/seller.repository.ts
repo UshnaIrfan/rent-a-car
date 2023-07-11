@@ -352,33 +352,31 @@ export class sellerRepository{
         //
         //      return sellers;
         // }
+
+        // get all seller with type
         async getAllSellers(type?: string): Promise<seller[]|null>
         {
-          let whereConditions: any = {};
-          if (  type )
-          {
-            whereConditions = {
-              type:type ?? undefined,
+            let whereConditions: any = {};
+            if (  type )
+            {
+                whereConditions = { type:type ?? undefined, };
+            }
 
-            };
-          }
-
-          const sellers = await this.sellerModel.find({
-            where: {
-              ...whereConditions,
-              categories: {  approvedByAdmin: sellerStatus.APPROVED},
-              approvedByAdmin: sellerStatus.APPROVED,
-              isListing: true,
-            },
-            order: { sellerName: 'ASC' },
-            relations: ['categories'],
-          });
-          if (!sellers.length)
-          {
-            throw new NotFoundException('No sellers were found matching the criteria.');
-          }
-          return  sellers
-
+            const sellers = await this.sellerModel.find({
+              where: {
+                ...whereConditions,
+                categories: {  approvedByAdmin: sellerStatus.APPROVED},
+                approvedByAdmin: sellerStatus.APPROVED,
+                isListing: true,
+              },
+              order: { sellerName: 'ASC' },
+              relations: ['categories'],
+            });
+            if (!sellers.length)
+            {
+              throw new NotFoundException('No sellers were found matching the criteria.');
+            }
+              return  sellers
         }
 
 

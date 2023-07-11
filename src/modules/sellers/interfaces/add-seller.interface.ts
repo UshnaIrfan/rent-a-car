@@ -1,5 +1,4 @@
 export default interface  addSellerInterface{
-
     readonly sellerName: string;
     readonly sellerUrl: string;
     readonly  approvedByAdmin: string;
@@ -13,5 +12,4 @@ export default interface  addSellerInterface{
     readonly   message: string;
     readonly  approvedbyAdmin: boolean;
     readonly  bestWriter: boolean;
-
 }

@@ -6,10 +6,9 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
     // Create sellers
     const sellers = [
-
       //Airlines
       { sellerName: 'Air Canada', sellerUrl: 'https://aircanada.com',country:'U.S', isListing: true, categoryName: 'Airlines'},
-     { sellerName: 'Air New Zealand', sellerUrl: 'https://airnewzealand.com',country:'U.S', isListing: true, categoryName: 'Airlines'},
+      { sellerName: 'Air New Zealand', sellerUrl: 'https://airnewzealand.com',country:'U.S', isListing: true, categoryName: 'Airlines'},
       { sellerName: 'British Airways', sellerUrl: 'https://britishairways.com', country:'U.S', isListing: true,categoryName: 'Airlines'},
       { sellerName: 'Delta Air Lines', sellerUrl: 'https://delta.com', country:'U.S', isListing: true,categoryName: 'Airlines'},
       { sellerName: 'Hawaiian Airlines', sellerUrl: 'https://hawaiinairlines.com',country:'U.S', isListing: true,categoryName: 'Airlines'},
@@ -171,7 +170,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'First Republic', sellerUrl: 'https://firstrepublic.com ',country:'U.S', isListing: true,categoryName: 'Banks and Banking'},
       { sellerName: 'Morgan Stanley', sellerUrl: 'https://morganstanley.com', country:'U.S', isListing: true,categoryName: 'Banks and Banking'},
 
-
       //Beauty, Cosmetics and Skincare
       { sellerName: 'Sephora', sellerUrl: 'https://sephora.com',country:'U.S',isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
       { sellerName: 'Ulta', sellerUrl: 'https://ulta.com',country:'U.S', isListing: true,categoryName: 'Beauty, Cosmetics and Skincare'},
@@ -199,7 +197,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Rough Linen', sellerUrl: 'https://roughlinen.com', country:'U.S', isListing: true,categoryName: 'Bedding and Bath'},
       { sellerName: 'Fine Linens', sellerUrl: 'https://finelinens.com', country:'U.S', isListing: true,categoryName: 'Bedding and Bath'},
 
-
       // Supercenter Stores
       { sellerName: 'Costco', sellerUrl: 'https://costco.com', country:'U.S', isListing: true,categoryName: 'Supercenter Stores'},
       { sellerName: 'Sam\'s Club', sellerUrl: 'https://samsclub.com', country:'U.S', isListing: true,categoryName: 'Supercenter Stores'},
@@ -210,7 +207,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', country:'U.S', isListing: true,categoryName: 'Supercenter Stores'},
       { sellerName: 'Big Lots', sellerUrl: 'https://biglots.com', country:'U.S', isListing: true,categoryName: 'Supercenter Stores'},
 
-
       // Books
       { sellerName: 'Barnes & Noble', sellerUrl: 'https://barnesandnoble.com', country:'U.S', isListing: true,categoryName: 'Books'},
       { sellerName: 'Book Outlet', sellerUrl: 'https://bookoutlet.com', country:'U.S', isListing: true,categoryName: 'Books'},
@@ -218,7 +214,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', country:'U.S', isListing: true,categoryName: 'Books'},
       { sellerName: 'AbeBooks', sellerUrl: 'https://abebooks.com', country:'U.S', isListing: true,categoryName: 'Books'},
       { sellerName: 'KidsBooks', sellerUrl: 'https://kidsbooks.com', country:'U.S', isListing: true,categoryName: 'Books'},
-
 
       // Brokers
       { sellerName: 'Fidelity Investments', sellerUrl: 'https://fidelity.com', country:'U.S', isListing: true,categoryName: 'Brokers'},
@@ -229,7 +224,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Interactive Brokers', sellerUrl: 'https://interactivebrokers.com', country:'U.S', isListing: true,categoryName: 'Brokers'},
       { sellerName: 'Merrill Edge', sellerUrl: 'https://merrilledge.com', country:'U.S', isListing: true,categoryName: 'Brokers'},
       { sellerName: 'Ally', sellerUrl: 'https://ally.com', country:'U.S', isListing: true,categoryName: 'Brokers'},
-
 
 
       // Cable, Video and TV Streaming
@@ -250,9 +244,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Netflix', sellerUrl: 'https://netflix.com', country:'U.S', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
       { sellerName: 'Peacock', sellerUrl: 'https://peacocktv.com', country:'U.S', isListing: true,categoryName: 'Cable, Video and TV Streaming'},
 
-
-
-
       //  Mobile, Wireless, Cell Phone Service
       { sellerName: 'T-Mobile', sellerUrl: 'https://t-mobile.com', country:'U.S', isListing: true,categoryName: 'Mobile, Wireless, Cell Phone Service'},
       { sellerName: 'Verizon', sellerUrl: 'https://verizon.com', country:'U.S', isListing: true,categoryName: 'Mobile, Wireless, Cell Phone Service'},
@@ -270,7 +261,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Xfinity', sellerUrl: 'https://xfinity.com', country:'U.S', isListing: true,categoryName: 'Mobile, Wireless, Cell Phone Service'},
       { sellerName: 'Optimum', sellerUrl: 'https://optimum.com', country:'U.S', isListing: true,categoryName: 'Mobile, Wireless, Cell Phone Service'},
 
-
       // Chocolate
       { sellerName: 'See’s Candies', sellerUrl: 'https://sees.com', country:'U.S', isListing: true,categoryName: 'Chocolate'},
       { sellerName: 'Godiva', sellerUrl: 'https://godiva.com', country:'U.S', isListing: true,categoryName: 'Chocolate'},
@@ -287,7 +277,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Caribou Coffee', sellerUrl: 'https://cariboucoffee.com', country:'U.S', isListing: true,categoryName: 'Coffee'},
       { sellerName: 'Peet’s Coffee', sellerUrl: 'https://peets.com', country:'U.S', isListing: true,categoryName: 'Coffee'},
 
-
       // Credit Cards
       { sellerName: 'American Express', sellerUrl: 'https://americanexpress.com', country:'U.S', isListing: true,categoryName: 'Credit Cards'},
       { sellerName: 'Bank of America', sellerUrl: 'https://bankofamerica.com', country:'U.S', isListing: true,categoryName: 'Credit Cards'},
@@ -302,7 +291,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'U.S. Bank', sellerUrl: 'https://usbank.com', country:'U.S', isListing: true,categoryName: 'Credit Cards'},
       { sellerName: 'Wells Fargo', sellerUrl: 'https://wellsfargo.com', country:'U.S', isListing: true,categoryName: 'Credit Cards'},
 
-
       // Cryptocurrency Exchanges and Wallets
       { sellerName: 'Bitfinex', sellerUrl: 'https://bitfinex.com', country:'U.S', isListing: true,categoryName: 'Cryptocurrency Exchanges and Wallets'},
       { sellerName: 'Coinbase', sellerUrl: 'https://coinbase.com', country:'U.S', isListing: true,categoryName: 'Cryptocurrency Exchanges and Wallets'},
@@ -311,7 +299,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Gemini', sellerUrl: 'https://gemini.com', country:'U.S', isListing: true,categoryName: 'Cryptocurrency Exchanges and Wallets'},
       { sellerName: 'eToro', sellerUrl: 'https://etoro.com', country:'U.S', isListing: true,categoryName: 'Cryptocurrency Exchanges and Wallets'},
       { sellerName: 'Robinhood', sellerUrl: 'https://robinhood.com', country:'U.S', isListing: true,categoryName: 'Cryptocurrency Exchanges and Wallets'},
-
 
       // Creativity
       { sellerName: 'Figma', sellerUrl: 'https://figma.com', country:'U.S', isListing: true,categoryName: 'Creativity'},
@@ -336,7 +323,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Partycity', sellerUrl: 'https://partycity.com', country:'U.S', isListing: true,categoryName: 'Creativity'},
       { sellerName: 'Create and Craft', sellerUrl: 'https://createandcraft.com', country:'U.S', isListing: true,categoryName: 'Creativity'},
 
-
       // Computers, Cell Phones and Electronics
       { sellerName: 'Best Buy', sellerUrl: 'https://bestbuy.com', country:'U.S', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
       { sellerName: 'Newegg', sellerUrl: 'https://newegg.com', country:'U.S', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
@@ -360,8 +346,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'T-Mobile', sellerUrl: 'https://t-mobile.com', country:'U.S', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
       { sellerName: 'Verizon', sellerUrl: 'https://verizon.com', country:'U.S', isListing: true,categoryName: 'Computers, Cell Phones and Electronics'},
 
-
-
     // Commuter Rail Systems
       { sellerName: 'Caltrain', sellerUrl: 'https://caltrain.com', country:'U.S', isListing: true,categoryName: 'Commuter Rail Systems'},
       { sellerName: 'MetroRail', sellerUrl: 'https://metro.net', country:'U.S', isListing: true,categoryName: 'Commuter Rail Systems'},
@@ -376,7 +360,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Tri-Rail', sellerUrl: 'https://tri-rail.com', country:'U.S', isListing: true,categoryName: 'Commuter Rail Systems'},
       { sellerName: 'Trinity Railway', sellerUrl: 'https://trinityrailwayexpress.org', country:'U.S', isListing: true,categoryName: 'Commuter Rail Systems'},
 
-
       // Dating
       { sellerName: 'Bumble', sellerUrl: 'https://bumble.com', country:'U.S', isListing: true,categoryName: 'Dating'},
       { sellerName: 'Eharmony', sellerUrl: 'https://eharmony.com', country:'U.S', isListing: true,categoryName: 'Dating'},
@@ -386,7 +369,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'OkCupid', sellerUrl: 'https://okcupid.com', country:'U.S', isListing: true,categoryName: 'Dating'},
       { sellerName: 'Tinder', sellerUrl: 'https://tinder.com', country:'U.S', isListing: true,categoryName: 'Dating'},
       { sellerName: 'Zoosk', sellerUrl: 'https://zoosk.com', country:'U.S', isListing: true,categoryName: 'Dating'},
-
 
       // Daycare
       { sellerName: 'La Petite Academy', sellerUrl: 'https://lapetite.com', country:'U.S', isListing: true,categoryName: 'Daycare'},
@@ -398,7 +380,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Sunshine House', sellerUrl: 'https://sunshinehouse.com', country:'U.S', isListing: true,categoryName: 'Daycare'},
       { sellerName: 'Primrose Schools', sellerUrl: 'https://primroseschools.com', country:'U.S', isListing: true,categoryName: 'Daycare'},
       { sellerName: 'Children’s Courtyard', sellerUrl: 'https://childrenscourtyard.com', country:'U.S', isListing: true,categoryName: 'Daycare'},
-
 
       // Department Stores
       { sellerName: 'Bloomingdale’s', sellerUrl: 'https://bloomingdales.com', country:'U.S', isListing: true,categoryName: 'Department Stores'},
@@ -412,7 +393,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Belk', sellerUrl: 'https://belk.com', country:'U.S', isListing: true,categoryName: 'Department Stores'},
       { sellerName: 'Von Maur', sellerUrl: 'https://vonmaur.com', country:'U.S', isListing: true,categoryName: 'Department Stores'},
 
-    //   Dental Insurance
+     //  Dental Insurance
       { sellerName: 'Nationwide', sellerUrl: 'https://dentalinsurance.com', country:'U.S', isListing: true,categoryName: 'Dental Insurance'},
       { sellerName: 'Delta Dental', sellerUrl: 'https://deltadental.com', country:'U.S', isListing: true,categoryName: 'Dental Insurance'},
       { sellerName: 'Cigna', sellerUrl: 'https://cigna.com', country:'U.S', isListing: true,categoryName: 'Dental Insurance'},
@@ -420,8 +401,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Aflac', sellerUrl: 'https://aflac.com', country:'U.S', isListing: true,categoryName: 'Dental Insurance'},
       { sellerName: 'MetLife', sellerUrl: 'https://metlife.com', country:'U.S', isListing: true,categoryName: 'Dental Insurance'},
 
-
-    //   Discount Department Stores
+      //  Discount Department Stores
       { sellerName: 'J.C. Penney', sellerUrl: 'https://jcp.com', country:'U.S', isListing: true,categoryName: 'Discount Department Stores'},
       { sellerName: 'Kohl\'s', sellerUrl: 'https://kohls.com', country:'U.S', isListing: true,categoryName: 'Discount Department Stores'},
       { sellerName: 'Montgomery Ward', sellerUrl: 'https://wards.com', country:'U.S', isListing: true,categoryName: 'Discount Department Stores'},
@@ -446,8 +426,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Five Below', sellerUrl: 'https://fivebelow.com', country:'U.S', isListing: true,categoryName: 'Discount Stores'  },
       { sellerName: 'Sam\'s Club', sellerUrl: 'https://samsclub.com' , country:'U.S', isListing: true,categoryName: 'Discount Stores'},
 
-
-     //   Fashion Women
+     //  Fashion Women
       { sellerName: 'Free People', sellerUrl: 'https://freepeople.com', country:'U.S', isListing: true,categoryName:'Fashion Women'},
       { sellerName: 'Made Trade', sellerUrl: 'https://madetrade.com', country:'U.S', isListing: true,categoryName:'Fashion Women'  },
       { sellerName: 'Wolf and Badger', sellerUrl: 'https://wolfandbadger.com' , country:'U.S', isListing: true,categoryName: 'Fashion Women'},
@@ -513,15 +492,13 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Ash and Erie', sellerUrl: 'https://ashanderie.com', country:'U.S', isListing: true,categoryName: 'Fashion Men'  },
       { sellerName: 'UNTUCKit', sellerUrl: 'https://untuckit.com', country:'U.S', isListing: true ,categoryName: 'Fashion Men' },
 
-
-    //   Fast Food
+     //  Fast Food
       { sellerName: 'McDonald’s', sellerUrl: 'https://mcdonalds.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
       { sellerName: 'Subway', sellerUrl: 'https://subway.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
       { sellerName: 'Taco Bell', sellerUrl: 'https://tacobell.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
       { sellerName: 'Wendy’s', sellerUrl: 'https://wendys.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
       { sellerName: 'Burger King', sellerUrl: 'https://burgerking.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
       { sellerName: 'Chick-Fil-A', sellerUrl: 'https://chick-fil-a.com', country:'U.S', isListing: true,categoryName: 'Fast Food'},
-
 
     //   Financial Investment, Money Management
       { sellerName: 'American Funds', sellerUrl: 'https://capitalgroup.com', country:'U.S', isListing: true,categoryName: 'Financial Investment, Money Management'},
@@ -534,7 +511,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Morgan Stanley', sellerUrl: 'https://morganstanley.com', country:'U.S', isListing: true,categoryName: 'Financial Investment, Money Management'},
       { sellerName: 'T.Rowe Price', sellerUrl: 'https://troweprice.com', country:'U.S', isListing: true,categoryName: 'Financial Investment, Money Management'},
       { sellerName: 'Vanguard Brokerage', sellerUrl: 'https://vanguard.com', country:'U.S', isListing: true,categoryName: 'Financial Investment, Money Management'},
-
 
     //   Flowers
       { sellerName: 'UrbanStems', sellerUrl: 'https://urbanstems.com', country:'U.S', isListing: true,categoryName: 'Flowers'},
@@ -583,7 +559,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Sinclair', sellerUrl: 'https://sinclairoil.com', country:'U.S', isListing: true,categoryName: 'Gas Stations'},
       { sellerName: '76', sellerUrl: 'https://76.com', country:'U.S', isListing: true,categoryName: 'Gas Stations'},
 
-
     //   Gifts
       { sellerName: 'Uncommon Goods', sellerUrl: 'https://uncommongoods.com', country:'U.S', isListing: true,categoryName: 'Gifts'},
       { sellerName: 'Home Wet Bar', sellerUrl: 'https://homewetbar.com', country:'U.S', isListing: true,categoryName: 'Gifts'},
@@ -601,8 +576,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Knack', sellerUrl: 'https://knackshops.com', country:'U.S', isListing: true,categoryName: 'Gifts'},
       { sellerName: 'Mindful', sellerUrl: 'https://shopmindfulgifts.com', country:'U.S', isListing: true,categoryName: 'Gifts'},
 
-
-    //   Gyms, Pilates, Yoga, Barre, HIIT and Cycling
+    //  Gyms, Pilates, Yoga, Barre, HIIT and Cycling
       { sellerName: 'Gold’s Gym', sellerUrl: 'https://goldsgym.com', country:'U.S', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
       { sellerName: 'Equinox', sellerUrl: 'https://equinox.com', country:'U.S', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
       { sellerName: '24 Hour Fitness', sellerUrl: 'https://24hourfitness.com', country:'U.S', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
@@ -615,9 +589,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Club Pilates', sellerUrl: 'https://clubpilates.com', country:'U.S', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
       { sellerName: 'Cyclebar', sellerUrl: 'https://cyclebar.com', country:'U.S', isListing: true,categoryName: 'Gyms, Pilates, Yoga, Barre, HIIT and Cycling'},
 
-
-
-    //   Health Food and Vitamins
+    // Health Food and Vitamins
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', country:'U.S', isListing: true,categoryName: 'Health Food and Vitamins'},
       { sellerName: 'Brandless', sellerUrl: 'https://brandless.com', country:'U.S', isListing: true,categoryName: 'Health Food and Vitamins'},
       { sellerName: 'Puritan’s Pride', sellerUrl: 'https://puritan.com', country:'U.S', isListing: true,categoryName: 'Health Food and Vitamins'},
@@ -631,9 +603,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Vitacost', sellerUrl: 'https://vitacost.com', country:'U.S', isListing: true,categoryName: 'Health Food and Vitamins'},
       { sellerName: 'Whole Foods', sellerUrl: 'https://wholefoodsmarket.com', country:'U.S', isListing: true,categoryName: 'Health Food and Vitamins'},
 
-
-
-    //   Health Insurance
+    //  Health Insurance
       { sellerName: 'Aetna', sellerUrl: 'https://aetna.com', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
       { sellerName: 'Aflac', sellerUrl: 'https://Aflac.com', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
       { sellerName: 'Anthem', sellerUrl: 'https://anthem.com', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
@@ -644,7 +614,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Kaiser Permanente', sellerUrl: 'https://kaiserpermanente.org', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
       { sellerName: 'Molina', sellerUrl: 'https://molinahealthcare.com', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
       { sellerName: 'UnitedHealth Group', sellerUrl: 'https://unitedhealthgroup.com', country:'U.S', isListing: true,categoryName: 'Health Insurance'},
-
 
     //   Home and Mortgage Loans
       { sellerName: 'Bank of America', sellerUrl: 'https://bankofamerica.com',country:'U.S', isListing: true,categoryName: 'Home and Mortgage Loans'},
@@ -665,9 +634,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Fannie Mae', sellerUrl: 'https://fanniemae.com' ,country:'U.S', isListing: true,categoryName: 'Home and Mortgage Loans'},
       { sellerName: 'Fairway Independent', sellerUrl: 'https://fairwayindependentmc.com',country:'U.S', isListing: true,categoryName: 'Home and Mortgage Loans'},
 
-
-
-
     //   Home Style and Furniture
       { sellerName: 'Article', sellerUrl: 'https://article.com' ,country:'U.S', isListing: true,categoryName: 'Home Style and Furniture'},
       { sellerName: 'Ashley Furniture', sellerUrl: 'https://ashleyfurniture.com',country:'U.S', isListing: true,categoryName: 'Home Style and Furniture'},
@@ -687,16 +653,12 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'West Elm', sellerUrl: 'https://westelm.com',country:'U.S', isListing: true,categoryName: 'Home Style and Furniture'},
       { sellerName: 'World Market', sellerUrl: 'https://worldmarket.com',country:'U.S', isListing: true,categoryName: 'Home Style and Furniture'},
 
-
-
-
     //   Home, Garden and Plants
       { sellerName: 'Home Depot', sellerUrl: 'https://homedepot.com', country:'U.S', isListing: true,categoryName: 'Home, Garden and Plants'},
       { sellerName: "Lowe's", sellerUrl: 'https://lowes.com',country:'U.S', isListing: true,categoryName: 'Home, Garden and Plants'},
       { sellerName: 'The Sill', sellerUrl: 'https://thesill.com' ,country:'U.S', isListing: true,categoryName: 'Home, Garden and Plants'},
       { sellerName: 'Plants.com', sellerUrl: 'https://plants.com',country:'U.S', isListing: true,categoryName: 'Home, Garden and Plants'},
       { sellerName: 'Nature Hills', sellerUrl: 'https://naturehills.com',country:'U.S', isListing: true,categoryName: 'Home, Garden and Plants'},
-
 
     //   Home Improvement
       { sellerName: 'Home Depot', sellerUrl: 'https://homedepot.com',country:'U.S', isListing: true,categoryName: 'Home Improvement'},
@@ -709,7 +671,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Overstock', sellerUrl: 'https://overstock.com' ,country:'U.S', isListing: true,categoryName: 'Home Improvement'},
       { sellerName: 'Tractor Supply Co.', sellerUrl: 'https://tractorsupply.com' ,country:'U.S', isListing: true,categoryName: 'Home Improvement'},
 
-
     //   Home Repair and Handyman
       { sellerName: 'Task Rabbit', sellerUrl: 'https://taskrabbit.com' ,country:'U.S', isListing: true,categoryName: 'Home Repair and Handyman'},
       { sellerName: 'Yelp', sellerUrl: 'https://yelp.com' ,country:'U.S', isListing: true,categoryName: 'Home Repair and Handyman'},
@@ -719,7 +680,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'HomeAdvisor', sellerUrl: 'https://homeadvisor.com',country:'U.S', isListing: true,categoryName: 'Home Repair and Handyman'},
       { sellerName: 'Angi', sellerUrl: 'https://angi.com',country:'U.S', isListing: true,categoryName: 'Home Repair and Handyman'},
       { sellerName: 'AirTasker', sellerUrl: 'https://airtasker.com',country:'U.S', isListing: true,categoryName: 'Home Repair and Handyman'},
-
 
     //   Home Owner’s Insurance
       { sellerName: 'American Family', sellerUrl: 'https://amfam.com',country:'U.S', isListing: true,categoryName: 'Home Owner’s Insurance'},
@@ -735,7 +695,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Travelers', sellerUrl: 'https://travelers.com',country:'U.S', isListing: true,categoryName: 'Home Owner’s Insurance'},
       { sellerName: 'USAA', sellerUrl: 'https://usaa.com' ,country:'U.S', isListing: true,categoryName: 'Home Owner’s Insurance'},
 
-
     // Home Shopping Networks
       { sellerName: 'Gem Shopping Network', sellerUrl: 'https://gemshopping.com' ,country:'U.S', isListing: true,categoryName: 'Home Shopping Networks'},
       { sellerName: 'Home Shopping Network', sellerUrl: 'https://hsn.com' ,country:'U.S', isListing: true,categoryName: 'Home Shopping Networks'},
@@ -744,8 +703,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'QVC', sellerUrl: 'https://qvc.com' ,country:'U.S', isListing: true,categoryName: 'Home Shopping Networks'},
       { sellerName: 'ShopHQ', sellerUrl: 'https://shophq.com' ,country:'U.S', isListing: true,categoryName: 'Home Shopping Networks'},
       { sellerName: 'Talk Shop Live', sellerUrl: 'https://talkshop.live',country:'U.S', isListing: true,categoryName: 'Home Shopping Networks'},
-
-
 
     // Hotels, Motels, Lodging
       { sellerName: 'Baymont', sellerUrl: 'https://wyndhamhotels.com',country:'U.S', isListing: true,categoryName: 'Hotels, Motels, Lodging'},
@@ -810,14 +767,12 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Maisonette', sellerUrl: 'https://maisonette.com', country:'U.S', isListing: true,categoryName: 'Kid’s Clothing'},
       { sellerName: 'Janie and Jack', sellerUrl: 'https://janieandjack.com', country:'U.S', isListing: true,categoryName: 'Kid’s Clothing'},
 
-
     // Laundry
       { sellerName: 'Laundry Butler', sellerUrl: 'https://laundrybutlerforyou.com', country:'U.S', isListing: true,categoryName: 'Laundry'},
       { sellerName: 'Happy Nest', sellerUrl: 'https://happynest.com', country:'U.S', isListing: true,categoryName: 'Laundry'},
       { sellerName: 'SudShare', sellerUrl: 'https://sudshare.com', country:'U.S', isListing: true,categoryName: 'Laundry'},
       { sellerName: 'Laundry Care', sellerUrl: 'https://laundrycare.biz', country:'U.S', isListing: true,categoryName: 'Laundry'},
       { sellerName: 'Rinse', sellerUrl: 'https://rinse.com', country:'U.S', isListing: true,categoryName: 'Laundry'},
-
 
     // Legal
       { sellerName: 'Avvo', sellerUrl: 'https://avvo.com', country:'U.S', isListing: true,categoryName: 'Legal'},
@@ -833,7 +788,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Country Wide Prepaid Legal Services', sellerUrl: 'https://countrywideppls.com', country:'U.S', isListing: true,categoryName: 'Legal'},
       { sellerName: 'Lawyers.com', sellerUrl: 'https://lawyers.com', country:'U.S', isListing: true,categoryName: 'Legal'},
       { sellerName: 'Legal Plans', sellerUrl: 'https://legalplans.com', country:'U.S', isListing: true,categoryName: 'Legal'},
-
 
     // Life Insurance
       { sellerName: 'AIG', sellerUrl: 'https://aig.com', country:'U.S', isListing: true,categoryName: 'Life Insurance'},
@@ -851,7 +805,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'State Farm', sellerUrl: 'https://statefarm.com', country:'U.S', isListing: true,categoryName: 'Life Insurance'},
       { sellerName: 'Transamerica', sellerUrl: 'https://transamerica.com', country:'U.S', isListing: true,categoryName: 'Life Insurance'},
 
-
     // Medical and Urgent Care
       { sellerName: 'Urgent Care', sellerUrl: 'https://urgentcare.com', country:'U.S', isListing: true,categoryName: 'Medical and Urgent Care'},
       { sellerName: 'Care Well Urgent Care', sellerUrl: 'https://carewellurgentcare.com', country:'U.S', isListing: true,categoryName: 'Medical and Urgent Care'},
@@ -861,7 +814,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Total Access Urgent Care', sellerUrl: 'https://totalaccessurgentcare.com', country:'U.S', isListing: true,categoryName: 'Medical and Urgent Care'},
       { sellerName: 'Carbon Health', sellerUrl: 'https://carbonhealth.com/urgent-care', country:'U.S', isListing: true,categoryName: 'Medical and Urgent Care'},
       { sellerName: 'Centers Urgent Care', sellerUrl: 'https://centersurgentcare.net', country:'U.S', isListing: true,categoryName: 'Medical and Urgent Care'},
-
 
     // Box Subscriptions
       { sellerName: 'Beachly', sellerUrl: 'https://beach.ly', country:'U.S', isListing: true,categoryName: 'Box Subscriptions'},
@@ -878,8 +830,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Vinebox', sellerUrl: 'https://getvinebox.com', country:'U.S', isListing: true,categoryName: 'Box Subscriptions'},
       { sellerName: 'Lovevery', sellerUrl: 'https://lovevery.com', country:'U.S', isListing: true,categoryName: 'Box Subscriptions'},
       { sellerName: 'Splendies', sellerUrl: 'https://splendies.com', country:'U.S', isListing: true,categoryName: 'Box Subscriptions'},
-
-
 
     // Marketplaces
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', country:'U.S', isListing: true,categoryName: 'Marketplaces'},
@@ -910,7 +860,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Target', sellerUrl: 'https://target.com', country:'U.S', isListing: true,categoryName: 'Marketplaces'},
       { sellerName: 'StockX', sellerUrl: 'https://stockx.com', country:'U.S', isListing: true,categoryName: 'Marketplaces'},
 
-
       // Learning
       { sellerName: 'Adobe', sellerUrl: 'https://learning.adobe.com', country:'U.S', isListing: true,categoryName: 'Learning'},
       { sellerName: 'Codecademy Shop', sellerUrl: 'https://codecademy.com', country:'U.S', isListing: true,categoryName: 'Learning'},
@@ -924,7 +873,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'McGraw-Hill Education', sellerUrl: 'https://mheducation.com', country:'U.S', isListing: true,categoryName: 'Learning'},
       { sellerName: 'AWS Certification', sellerUrl: 'https://aws.amazon.com', country:'U.S', isListing: true,categoryName: 'Learning'},
 
-
       // Meal Kit Delivery
       { sellerName: 'Blue Apron', sellerUrl: 'https://blueapron.com', country:'U.S', isListing: true,categoryName: 'Meal Kit Delivery'},
       { sellerName: 'Dinnerly', sellerUrl: 'https://dinnerly.com', country:'U.S', isListing: true,categoryName: 'Meal Kit Delivery'},
@@ -936,7 +884,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Hello Fresh', sellerUrl: 'https://hellofresh.com', country:'U.S', isListing: true,categoryName: 'Meal Kit Delivery'},
       { sellerName: 'Purple Carrot', sellerUrl: 'https://purplecarrot.com', country:'U.S', isListing: true,categoryName: 'Meal Kit Delivery'},
       { sellerName: 'Sunbasket', sellerUrl: 'https://sunbasket.com', country:'U.S', isListing: true,categoryName: 'Meal Kit Delivery'},
-
 
     // Movers and Moving
       { sellerName: 'ABF U-Pack', sellerUrl: 'https://upack.com', country:'U.S', isListing: true,categoryName: 'Movers and Moving'},
@@ -953,9 +900,7 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'United Van Lines', sellerUrl: 'https://unitedvanlines.com', country:'U.S', isListing: true,categoryName: 'Movers and Moving'},
       { sellerName: 'Zippy Shell', sellerUrl: 'https://zippyshell.com', country:'U.S', isListing: true,categoryName: 'Movers and Moving'},
 
-
       // Movie Theaters
-
       { sellerName: 'AMC Theaters', sellerUrl: 'https://amctheaters.com', country:'U.S', isListing: true,categoryName: 'Movie Theaters'},
       { sellerName: 'B&B Theaters', sellerUrl: 'https://bbtheatres.com', country:'U.S', isListing: true,categoryName: 'Movie Theaters'},
       { sellerName: 'Cinemark', sellerUrl: 'https://cinemark.com', country:'U.S', isListing: true,categoryName: 'Movie Theaters'},
@@ -966,7 +911,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Marcus Theaters', sellerUrl: 'https://marcustheaters.com', country:'U.S', isListing: true,categoryName: 'Movie Theaters'},
       { sellerName: 'Regal Cinemas', sellerUrl: 'https://regmovies.com', country:'U.S', isListing: true,categoryName: 'Movie Theaters'},
 
-
       // Pet Supplies
       { sellerName: 'Chewy\'s', sellerUrl: 'https://chewys.com', country:'U.S', isListing: true,categoryName: 'Pet Supplies'},
       { sellerName: 'Earthwise Pet Supply', sellerUrl: 'https://earthwisepet.com', country:'U.S', isListing: true,categoryName: 'Pet Supplies'},
@@ -974,7 +918,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Petsense', sellerUrl: 'https://petsense.com', country:'U.S', isListing: true,categoryName: 'Pet Supplies'},
       { sellerName: 'PetSmart', sellerUrl: 'https://petsmart.com', country:'U.S', isListing: true,categoryName: 'Pet Supplies'},
       { sellerName: 'Pet Supplies Plus', sellerUrl: 'https://petsuppliesplus.com', country:'U.S', isListing: true,categoryName: 'Pet Supplies'},
-
 
       // Pharmacies
       { sellerName: 'Costco', sellerUrl: 'https://costco.com', country:'U.S', isListing: true,categoryName: 'Pharmacies'},
@@ -984,7 +927,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Rite Aid', sellerUrl: 'https://riteaid.com', country:'U.S', isListing: true,categoryName: 'Pharmacies'},
       { sellerName: 'Walgreens', sellerUrl: 'https://walgreens.com', country:'U.S', isListing: true,categoryName: 'Pharmacies'},
       { sellerName: 'Walmart', sellerUrl: 'https://walmart.com', country:'U.S', isListing: true,categoryName: 'Pharmacies'},
-
 
       // Real Estate
       { sellerName: 'Camden Property Trust', sellerUrl: 'https://camdenliving.com', country:'U.S', isListing: true,categoryName: 'Real Estate'},
@@ -1012,7 +954,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'RealEstateAgents.com', sellerUrl: 'https://realestateagents.com', country:'U.S', isListing: true,categoryName: 'Real Estate Agents'},
       { sellerName: 'Realtor.com', sellerUrl: 'https://realtor.com', country:'U.S', isListing: true,categoryName: 'Real Estate Agents'},
 
-
       // Renters Insurance
       { sellerName: 'Allstate', sellerUrl: 'https://allstate.com', country:'U.S', isListing: true,categoryName: 'Renters Insurance'},
       { sellerName: 'American Family', sellerUrl: 'https://amfam.com', country:'U.S', isListing: true,categoryName: 'Renters Insurance'},
@@ -1031,7 +972,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Travelers', sellerUrl: 'https://travelers.com', country:'U.S', isListing: true,categoryName: 'Renters Insurance'},
       { sellerName: 'USAA', sellerUrl: 'https://usaa.com', country:'U.S', isListing: true,categoryName: 'Renters Insurance'},
 
-
       // Ride Hail and Car Sharing
       { sellerName: 'Lyft', sellerUrl: 'https://lyft.com', country:'U.S', isListing: true,categoryName: 'Ride Hail and Car Sharing'},
       { sellerName: 'Uber', sellerUrl: 'https://uber.com', country:'U.S', isListing: true,categoryName: 'Ride Hail and Car Sharing'},
@@ -1040,8 +980,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Turo', sellerUrl: 'https://turo.com', country:'U.S', isListing: true,categoryName: 'Ride Hail and Car Sharing'},
       { sellerName: 'Getaround', sellerUrl: 'https://getaround.com', country:'U.S', isListing: true,categoryName: 'Ride Hail and Car Sharing'},
       { sellerName: 'Flexcar', sellerUrl: 'https://flexcar.com', country:'U.S', isListing: true,categoryName: 'Ride Hail and Car Sharing'},
-
-
 
       // Restaurants
       { sellerName: 'TGI Fridays', sellerUrl: 'https://tgifridays.com', country:'U.S', isListing: true,categoryName: 'Restaurants'},
@@ -1066,7 +1004,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'U.S. Postal Service', sellerUrl: 'https://usps.com', country:'U.S', isListing: true,categoryName: 'Shipping'},
       { sellerName: 'UPS', sellerUrl: 'https://ups.com', country:'U.S', isListing: true,categoryName: 'Shipping'},
 
-
       //Outdoor Recreation, Sporting and Camping
       { sellerName: 'REI', sellerUrl: 'https://rei.com', country:'U.S', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
       { sellerName: 'Backcountry', sellerUrl: 'https://backcountry.com', country:'U.S', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
@@ -1081,7 +1018,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Fanatics', sellerUrl: 'https://fanatics.com', country:'U.S', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
       { sellerName: 'Champs Sports', sellerUrl: 'https://champssports.com', country:'U.S', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
       { sellerName: 'Academy Sports', sellerUrl: 'https://academy.com', country:'U.S', isListing: true,categoryName: 'Outdoor Recreation, Sporting and Camping'},
-
 
       // Shoes
       { sellerName: 'Zappos', sellerUrl: 'https://zappos.com', country:'U.S', isListing: true,categoryName: 'Shoes'},
@@ -1100,7 +1036,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Crocs', sellerUrl: 'https://crocs.com', country:'U.S', isListing: true,categoryName: 'Shoes'},
       { sellerName: 'Dansko', sellerUrl: 'https://dansko.com', country:'U.S', isListing: true,categoryName: 'Shoes'},
 
-
       // Storage
       { sellerName: 'CubeSmart', sellerUrl: 'https://cubesmart.com', country:'U.S', isListing: true,categoryName: 'Storage'},
       { sellerName: 'Extra Space Storage', sellerUrl: 'https://extraspace.com', country:'U.S', isListing: true,categoryName: 'Storage'},
@@ -1108,7 +1043,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Public Storage', sellerUrl: 'https://publicstorage.com', country:'U.S', isListing: true,categoryName: 'Storage'},
       { sellerName: 'Simply Self Storage', sellerUrl: 'https://simplyss.com', country:'U.S', isListing: true,categoryName: 'Storage'},
       { sellerName: 'Price Self Storage', sellerUrl: 'https://priceselfstorage.com', country:'U.S', isListing: true,categoryName: 'Storage'},
-
 
       // Therapy
       { sellerName: 'Better Help', sellerUrl: 'https://betterhelp.com', country:'U.S', isListing: true,categoryName: 'Therapy'},
@@ -1118,7 +1052,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Online-Therapy.com', sellerUrl: 'https://online-therapy.com', country:'U.S', isListing: true,categoryName: 'Therapy'},
       { sellerName: 'Cerebral', sellerUrl: 'https://cerebral.com', country:'U.S', isListing: true,categoryName: 'Therapy'},
 
-
       //Ticket Marketplaces
       { sellerName: 'Ticketmaster', sellerUrl: 'https://ticketmaster.com', country:'U.S', isListing: true,categoryName: 'Ticket Marketplaces'},
       { sellerName: 'StubHub', sellerUrl: 'https://stubhub.com', country:'U.S', isListing: true,categoryName: 'Ticket Marketplaces'},
@@ -1126,8 +1059,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Vivid Seats', sellerUrl: 'https://vividseats.com', country:'U.S', isListing: true,categoryName: 'Ticket Marketplaces'},
       { sellerName: 'Songkick', sellerUrl: 'https://songkick.com', country:'U.S', isListing: true,categoryName: 'Ticket Marketplaces'},
       { sellerName: 'SeatGeek', sellerUrl: 'https://seatgeek.com', country:'U.S', isListing: true,categoryName: 'Ticket Marketplaces'},
-
-
 
      //Travel and Booking
       { sellerName: 'Airbnb', sellerUrl: 'https://airbnb.com', country:'U.S', isListing: true,categoryName: 'Travel and Booking'},
@@ -1142,7 +1073,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Priceline', sellerUrl: 'https://priceline.com', country:'U.S', isListing: true,categoryName: 'Travel and Booking'},
       { sellerName: 'CheapOair', sellerUrl: 'https://cheapoair.com', country:'U.S', isListing: true,categoryName: 'Travel and Booking'},
       { sellerName: 'Travelocity', sellerUrl: 'https://travelocity.com', country:'U.S', isListing: true,categoryName: 'Travel and Booking'},
-
 
      // Music Streaming
       { sellerName: 'Amazon', sellerUrl: 'https://amazon.com', country:'U.S', isListing: true,categoryName: 'Music Streaming'},
@@ -1159,8 +1089,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Jango', sellerUrl: 'https://jango.com', country:'U.S', isListing: true,categoryName: 'Music Streaming'},
       { sellerName: 'Discogs', sellerUrl: 'https://discogs.com', country:'U.S', isListing: true,categoryName: 'Music Streaming'},
 
-
-
       //Vacation Packages
       { sellerName: 'Virgin Voyages', sellerUrl: 'https://virginvoyages.com', country:'U.S', isListing: true,categoryName: 'Vacation Packages'},
       { sellerName: 'Brendan', sellerUrl: 'https://brendanvacations.com', country:'U.S', isListing: true,categoryName: 'Vacation Packages'},
@@ -1169,17 +1097,12 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Expedia', sellerUrl: 'https://expedia.comall-inclusive', country:'U.S', isListing: true,categoryName: 'Vacation Packages'},
       { sellerName: 'Funjet', sellerUrl: 'https://funjet.com', country:'U.S', isListing: true,categoryName: 'Vacation Packages'},
 
-
-
-
       //Vacation Rentals
       { sellerName: 'Vrbo', sellerUrl: 'https://vrbo.com', country:'U.S', isListing: true,categoryName: 'Vacation Rentals'},
       { sellerName: 'Airbnb', sellerUrl: 'https://airbnb.com', country:'U.S', isListing: true,categoryName: 'Vacation Rentals'},
       { sellerName: 'HomeToGo', sellerUrl: 'https://hometogo.com', country:'U.S', isListing: true,categoryName: 'Vacation Rentals'},
       { sellerName: 'FlipKey', sellerUrl: 'https://flipkey.com', country:'U.S', isListing: true,categoryName: 'Vacation Rentals'},
       { sellerName: 'Vacasa', sellerUrl: 'https://vacasa.com', country:'U.S', isListing: true,categoryName: 'Vacation Rentals'},
-
-
 
       //Veterinarians, Pet Insurance and Pet Care
       { sellerName: 'BetterVet', sellerUrl: 'https://bettervet.com', country:'U.S', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
@@ -1190,10 +1113,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Spot Pet Insurance', sellerUrl: 'https://spotpetins.com', country:'U.S', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
       { sellerName: 'The Humane Society', sellerUrl: 'https://humanesociety.org', country:'U.S', isListing: true,categoryName: 'Veterinarians, Pet Insurance and Pet Care'},
 
-
-
-
-
       //Video Games
       { sellerName: 'Sony', sellerUrl: 'https://playstation.com', country:'U.S', isListing: true,categoryName: 'Video Games'},
       { sellerName: 'Microsoft', sellerUrl: 'https://microsoft.com', country:'U.S', isListing: true,categoryName: 'Video Games'},
@@ -1203,17 +1122,12 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
       { sellerName: 'Electronic Arts', sellerUrl: 'https://ea.com', country:'U.S', isListing: true,categoryName: 'Video Games'},
       { sellerName: 'Epic Games', sellerUrl: 'https://store.epicgames.com', country:'U.S', isListing: true,categoryName: 'Video Games'},
 
-
-
-
        //Wine
       { sellerName: 'Drizly', sellerUrl: 'https://drizly.com', country:'U.S', isListing: true,categoryName: 'Wine'},
       { sellerName: 'Naked Wines', sellerUrl: 'https://nakedwines.com', country:'U.S', isListing: true,categoryName: 'Wine'},
       { sellerName: 'Totalwine.com', sellerUrl: 'https://totalwine.com', country:'U.S', isListing: true,categoryName: 'Wine'},
       { sellerName: 'Wine.com', sellerUrl: 'https://wine.com', country:'U.S', isListing: true,categoryName: 'Wine'},
       { sellerName: 'BevMo!', sellerUrl: 'https://bevmo.com', country:'U.S', isListing: true,categoryName: 'Wine'},
-
-
 
       //Weddings and Parties
       { sellerName: 'Party Slate', sellerUrl: 'https://partyslate.com', country:'U.S', isListing: true,categoryName: 'Weddings and Parties'},
@@ -1239,7 +1153,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
 
       // Retrieve all sellers
       const allSellers = await queryRunner.query("SELECT * FROM sellers");
-
       for (const seller of sellers)
       {
         const existingSeller = allSellers.find((s) => s.sellerName === seller.sellerName);
@@ -1250,7 +1163,6 @@ export class createInitialSellersSeeder1685179560899 implements MigrationInterfa
           {
               const categoryId = category[0].id;
               const sellerId = existingSeller.id;
-
               // Create relationship between seller and category
               await queryRunner.query("INSERT INTO categories_sellers_sellers (categoriesId, sellersId) VALUES (?, ?)", [categoryId, sellerId]);
           }

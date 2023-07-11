@@ -1,5 +1,4 @@
 import { CacheModule, Module } from "@nestjs/common";
-import { AdminCategoryController } from './admin-category.controller';
 import {CategoriesService} from "../categories/categories.service";
 import {CategoryRepository} from "../categories/category.repository";
 import {UsersRepository} from "../users/users.repository";
@@ -29,6 +28,7 @@ import {adminContactController} from "./admin-contact.controller";
 import {contact} from "../contact-us/schemas/contact-us.schema";
 import {contactUsRepository} from "../contact-us/contact-us.repository";
 import {ContactUsService} from "../contact-us/contact-us.service";
+import { AdminCategoryController } from "./admin-category.controller";
 
 
 @Module({
@@ -37,7 +37,6 @@ import {ContactUsService} from "../contact-us/contact-us.service";
       store: redisStore,
       uri: process.env.REDIS_URL,
     })],
-
   controllers: [adminContactController,adminReviewController,adminAuthController,AdminSellerController,AdminCategoryController],
   providers: [ContactUsService, contactUsRepository,UsersService,AuthService,SellerService, clicksTypesRepository,sellerRepository, ReviewService,JwtService,likeDislikeRepository,CategoriesService,clicksTitlesRepository,CategoryRepository,UsersRepository,reviewRepository]
 })

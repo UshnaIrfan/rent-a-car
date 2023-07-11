@@ -40,7 +40,7 @@ export class AuthController {
 
 
 
-        // is active
+        // user update ( active status)
         @ApiBody({type:userActiveDto})
         @Patch('active')
         async isActive(

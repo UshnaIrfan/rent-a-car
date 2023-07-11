@@ -9,6 +9,8 @@ export class emailGeneralController {
   constructor(private readonly emailGeneralService:emailGeneralService) {}
 
 
+
+     // email send
      @ApiBody({type:emailGeneralDto})
      @Post('email/sent')
      async emailSend(

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Delete, Query } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { CreateCategoryDto } from "../categories/dto/create-category.dto";
 import { Roles } from "../../decorators/role.decorators";
@@ -24,10 +24,8 @@ export class AdminCategoryController {
        @Roles(Role.L2A_ADMIN)
        async  create(@Body() createCategoryDto: CreateCategoryDto):Promise<category>
        {
-           return this.categoriesService.createCategory(createCategoryDto);
+            return this.categoriesService.createCategory(createCategoryDto);
        }
-
-
 
 
        // get all categories and search by name
@@ -39,12 +37,8 @@ export class AdminCategoryController {
        @Roles(Role.L2A_ADMIN)
        async getReview(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('categoryName') categoryName?: string):Promise<paginationCategoryInterface>
        {
-
-            console.log("category")
             return this.categoriesService.getAllAdminCategories(page,pageSize,categoryName);
        }
-
-
 
 
        // update category
@@ -58,17 +52,14 @@ export class AdminCategoryController {
        }
 
 
-
       // delete category
       @ApiBearerAuth()
       @Delete('categories/delete')
       @Roles(Role.L2A_ADMIN)
       async deleteCategory(@Query('id') id:string):Promise<{ message: string, deletedCategory: category }>
       {
-          return this.categoriesService.deleteCategory(id);
+           return this.categoriesService.deleteCategory(id);
       }
-
-
 
 
       // admin update category status
@@ -79,9 +70,7 @@ export class AdminCategoryController {
       @Roles(Role.L2A_ADMIN)
       async adminUpdateCategory(@Body() adminUpdateCategoryDto:adminUpdateCategoryDto)
       {
-          return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
+           return this.categoriesService.adminUpdateCategory(adminUpdateCategoryDto);
       }
-
-
 
 }

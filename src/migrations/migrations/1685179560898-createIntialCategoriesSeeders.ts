@@ -2,7 +2,6 @@ import { MigrationInterface, QueryRunner } from "typeorm"
 
 export class createIntialCategoriesSeeders1685179560898 implements MigrationInterface {
 
-
   public async up(queryRunner: QueryRunner): Promise<void>
   {
 
