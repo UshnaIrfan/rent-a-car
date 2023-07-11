@@ -1,13 +1,10 @@
 import { CacheModule, Module } from "@nestjs/common";
-import { CategoriesService } from './categories.service';
-import { CategoriesController } from './categories.controller';
 import {CategoryRepository} from "./category.repository";
 import {category} from "./schemas/category.schema";
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {UsersRepository} from "../users/users.repository";
 import {User} from "../users/schemas/user.schema";
-import { JwtService } from '@nestjs/jwt';
-import * as redisStore from 'cache-manager-redis-store';
+import { JwtService } from "@nestjs/jwt";
+import * as redisStore from "cache-manager-redis-store";
 import {reviewRepository} from "../review/respositories/review.respository";
 import {review} from "../review/schemas/submit-review.schema";
 import {clicksTitlesRepository} from "../review/respositories/clicksTitles.repository";
@@ -20,6 +17,9 @@ import {sellerRepository} from "../sellers/seller.repository";
 import {seller} from "../sellers/schemas/seller.schema";
 import {clicksTypes} from "../review/schemas/create-click-types.schema";
 import {clicksTypesRepository} from "../review/respositories/clicksTypes.repository";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { CategoriesService } from "./categories.service";
+import { CategoriesController } from "./categories.controller";
 
 @Module({
 

@@ -4,9 +4,9 @@ import {
   Param,
   Query,
 } from "@nestjs/common";
-import { CategoriesService } from './categories.service';
 import { ApiTags } from "@nestjs/swagger";
 import { category } from "./schemas/category.schema";
+import { CategoriesService } from "./categories.service";
 
 
 @ApiTags('Categories')
@@ -41,7 +41,6 @@ export class CategoriesController {
          {
             return this.categoriesService.get(categoryId, excludeSellerId);
          }
-
 
 
          // latest positive review

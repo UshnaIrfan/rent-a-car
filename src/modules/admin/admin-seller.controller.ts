@@ -68,13 +68,14 @@ export class AdminSellerController {
         @ApiQuery({ name: 'categoryId', required: false })
         @ApiQuery({ name: 'type', required: false })
         @ApiQuery({ name: 'country', required: false })
+        @ApiQuery({ name: 'city', required: false })
         @ApiQuery({ name: 'state', required: false })
         @ApiQuery({ name: 'address', required: false })
         @Get('Seller_search')
         @Roles(Role.L2A_ADMIN)
-        async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string, @Query('type') type?: string, @Query('country') country?: string, @Query('state') state?: string, @Query('address') address?: string)
+        async search(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10,@Query('query') query?: string, @Query('categoryId') categoryId?: string, @Query('type') type?: string, @Query('country') country?: string, @Query('city') city?: string, @Query('state') state?: string, @Query('address') address?: string)
         {
-            return this.sellerService.search(page ,pageSize,query, categoryId,type,country,state,address);
+            return this.sellerService.search(page ,pageSize,query, categoryId,type,country,city,state,address);
         }
 
 

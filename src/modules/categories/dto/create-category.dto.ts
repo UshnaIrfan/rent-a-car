@@ -1,9 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString
 } from "class-validator";
 import {status} from "../schemas/category.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 
 export class CreateCategoryDto {

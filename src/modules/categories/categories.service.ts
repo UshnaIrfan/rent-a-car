@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException
 } from "@nestjs/common";
-import { Cache } from 'cache-manager';
+import { Cache } from "cache-manager";
 import {CategoryRepository} from "./category.repository";
 import createCategoryInterface from "./interfaces/create-category.interface";
 import { category } from "./schemas/category.schema";
@@ -41,7 +41,7 @@ export class CategoriesService {
           const  categoryName= await this.categoryRepository.getCategoryByName(createCategory.categoryName);
           if (categoryName)
           {
-             throw new ConflictException(' category already exists');
+              throw new ConflictException(' category already exists');
           }
 
          try
@@ -51,7 +51,7 @@ export class CategoriesService {
          }
          catch (e)
          {
-           throw new BadRequestException('Category creation failed');
+            throw new BadRequestException('Category creation failed');
          }
 
      }
@@ -59,17 +59,15 @@ export class CategoriesService {
 
 
 
-
       //get all categories and search by name(pagination)
       async getAllAdminCategories(pageNumber: number,pageSize?:number,categoryName?: string):Promise<paginationCategoryInterface>
       {
-
           const skip = (pageNumber - 1) * pageSize;
           const [result, totalCount] = await this.categoryRepository.findAndCount(skip, pageSize,categoryName);
           const totalPages = Math.ceil(totalCount / pageSize);
           if (result.length === 0)
           {
-             throw new NotFoundException('No records found');
+              throw new NotFoundException('No records found');
           }
 
          return {
@@ -79,8 +77,6 @@ export class CategoriesService {
             currentPage: pageNumber,
          };
      }
-
-
 
 
 
@@ -115,7 +111,6 @@ export class CategoriesService {
 
 
 
-
        // admin update category status
        async adminUpdateCategory(adminUpdateCategoryInterface:adminUpdateCategoryInterface):Promise<{ updateAdmin: category; message: string }>
        {
@@ -124,10 +119,8 @@ export class CategoriesService {
            {
                throw new NotFoundException('Category not exist');
            }
-            return { message: "Category status updated successfully",updateAdmin };
+              return { message: "Category status updated successfully",updateAdmin };
       }
-
-
 
 
 
@@ -155,7 +148,6 @@ export class CategoriesService {
            {
             throw new  NotFoundException('invalid category id');
            }
-
            return { records: category};
        }
 
@@ -166,11 +158,8 @@ export class CategoriesService {
        async get(category_Id: string, seller_Id: string)
        {
          const result = await this.categoryRepository.getCommonSellers(category_Id, seller_Id);
-         return {
-             records: result.length > 0 ? result : null,
-        };
+         return {records: result.length > 0 ? result : null };
       }
-
 
 
 
@@ -189,7 +178,6 @@ export class CategoriesService {
              {
                    sellerIds.push(seller.id);
              }
-
             const latestPositiveReview = await this.reviewRepository.getLatestReviewBySellerId(sellerIds);
             if (!latestPositiveReview)
             {
@@ -218,7 +206,5 @@ export class CategoriesService {
                };
            }
     }
-
-
 
 }

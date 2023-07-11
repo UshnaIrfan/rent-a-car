@@ -7,8 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn
 } from "typeorm";
-import { ApiProperty } from '@nestjs/swagger';
 import { seller } from "../../sellers/schemas/seller.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum status {
      PENDING = 'pending',

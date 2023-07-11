@@ -1,6 +1,4 @@
 export default interface updateCategoryInterface {
-
-  readonly  id: string;
-  readonly  categoryName: string;
-
+    readonly  id: string;
+    readonly  categoryName: string;
 }

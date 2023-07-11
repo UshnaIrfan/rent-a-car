@@ -232,18 +232,18 @@ export class sellerRepository{
    // }
    //
 
-          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string,country?: string,state?: string,address?: string): Promise<[seller[], number]>
+          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string,country?: string,city ?:string,state?: string,address?: string): Promise<[seller[], number]>
           {
-              console.log(type)
               let whereConditions: any = {};
-              if ( query || type || country|| state|| address)
+              if ( query || type || country || city|| state|| address)
               {
                  whereConditions = {
                    sellerName: query ?Like(`%${query}%`): undefined,
                    type:type ?? undefined,
-                   country: country ?? undefined,
-                   state: state ?? undefined,
-                   address: address ?? undefined
+                   country: country ?Like(`%${country}%`): undefined,
+                   city: city ?Like(`%${city}%`): undefined,
+                   state: state ?Like(`%${state}%`): undefined,
+                   address: address ?Like(`%${address}%`): undefined,
 
                  };
               }

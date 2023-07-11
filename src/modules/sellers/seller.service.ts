@@ -133,11 +133,11 @@ export class SellerService {
 
 
          // seller by name search
-       async search(pageNumber: number,pageSize?:number, query?: string, categoryId?: string,type?: string,country?: string,state?: string,address?: string)
+       async search(pageNumber: number,pageSize?:number, query?: string, categoryId?: string,type?: string,country?: string,city?: string,state?: string,address?: string)
        {
 
            const skip = (pageNumber - 1) * pageSize;
-           const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId,type,country,state,address);
+           const [result, totalCount] = await this.SellerRepository.search(skip,pageSize,query,categoryId,type,country,city,state,address);
            const totalPages = Math.ceil(totalCount / pageSize);
            if (result.length === 0)
            {

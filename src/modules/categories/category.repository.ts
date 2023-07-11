@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from "typeorm";
 import {category} from "./schemas/category.schema";
 import {CreateCategoryDto} from "./dto/create-category.dto";
@@ -30,7 +30,6 @@ export class CategoryRepository {
 
 
 
-
         // get all categories and search by name( pagination)
         async findAndCount(skip: number, take: number, categoryName?: string): Promise<[category[], number]>
         {
@@ -57,8 +56,6 @@ export class CategoryRepository {
 
 
 
-
-
          // update category
         async updateCategory(id:string, categoryName:string): Promise<category | null>
         {
@@ -68,24 +65,22 @@ export class CategoryRepository {
                return null
             }
 
-
             // Check if the new category name is the same as the existing name
             if (category.categoryName === categoryName)
             {
-               throw new ConflictException('Category name must be different from the existing name');
+                throw new ConflictException('Category name must be different from the existing name');
             }
 
             // Check if the new category name already exists in the database
             const existingCategory = await this.categoryModel.findOne({ where: { categoryName } });
             if (existingCategory && existingCategory.id !== category.id)
             {
-               throw new ConflictException('Category  name already exists. Please enter a unique name');
+                throw new ConflictException('Category  name already exists. Please enter a unique name');
             }
 
             category.categoryName = categoryName;
             return this.categoryModel.save(category);
        }
-
 
 
 
@@ -118,7 +113,7 @@ export class CategoryRepository {
 
 
 
-
+       // get category by ID
         async GetCategoryId(id: string): Promise<category|null>
         {
             const category = await this.categoryModel.findOne({
@@ -136,13 +131,12 @@ export class CategoryRepository {
 
 
 
-        // get category byId
+        // get category by ID with approved status
         async getCategorybyId(id:string): Promise<category |null>
         {
             const category = await this.categoryModel.findOne({where:{id,approvedByAdmin:status.APPROVED}})
             return category;
         }
-
 
 
 
@@ -183,14 +177,12 @@ export class CategoryRepository {
 
 
 
-
        // get category by id
         async getCategoryById(id:string): Promise<category |null>
         {
             const category = await this.categoryModel.findOne({where:{id }})
             return category;
         }
-
 
 
 

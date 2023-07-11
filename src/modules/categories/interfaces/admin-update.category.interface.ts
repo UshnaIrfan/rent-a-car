@@ -1,6 +1,4 @@
 export default interface adminUpdateCategoryInterface {
-
-  readonly  categoryId: string;
-  readonly  approvedByAdmin: string;
-
+    readonly  categoryId: string;
+    readonly  approvedByAdmin: string;
 }
