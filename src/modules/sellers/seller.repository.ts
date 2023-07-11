@@ -366,13 +366,17 @@ export class sellerRepository{
           const sellers = await this.sellerModel.find({
             where: {
               ...whereConditions,
-              categories: { approvedByAdmin: sellerStatus.APPROVED },
+              categories: {  approvedByAdmin: sellerStatus.APPROVED},
               approvedByAdmin: sellerStatus.APPROVED,
               isListing: true,
             },
             order: { sellerName: 'ASC' },
             relations: ['categories'],
           });
+          if (!sellers.length)
+          {
+            throw new NotFoundException('No sellers were found matching the criteria.');
+          }
           return  sellers
 
         }
