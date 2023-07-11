@@ -9,25 +9,26 @@ import {
   NotAcceptableException,
   NotFoundException, UnauthorizedException
 } from "@nestjs/common";
-import { UsersService } from '../users/users.service';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/schemas/user.schema';
-import { Cache } from 'cache-manager';
-import { MailerService } from '@nestjs-modules/mailer';
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
+import { User } from "../users/schemas/user.schema";
+import { Cache } from "cache-manager";
+import { MailerService } from "@nestjs-modules/mailer";
 import JwtTokensInterface from "./interfaces/jwt-token.interface";
-import signupUserInterface from './interfaces/signup-user.interface';
-import changeUserPasswordInterface from './interfaces/change-user-password.interface';
-import randomUserTokenInterface from './interfaces/random-user-token.dto';
-import { generateRandomToken } from '../../helpers/randomtoken.helper';
-import * as handlebars from 'handlebars';
-import * as fs from 'fs';
-import updateUserInterface from './interfaces/update-user.interface';
-import paginationUserInterface from './interfaces/pagination-user.interface';
-import userActiveInterface from './interfaces/user-active.interface';
-import changeUserPasswordTokenVerificationInterface from './interfaces/change-user-password-token-verification.interface';
-import adminUpdateUserInterface from './interfaces/admin-update.user.interface';
+import * as handlebars from "handlebars";
+import * as fs from "fs";
+import adminUpdateUserInterface from "./interfaces/admin-update.user.interface";
+import updateUserInterface from "./interfaces/update-user.interface";
+import userActiveInterface from "./interfaces/user-active.interface";
+import paginationUserInterface from "./interfaces/pagination-user.interface";
+import changeUserPasswordTokenVerificationInterface from "./interfaces/change-user-password-token-verification.interface";
 import adminUpdateBlockStatusUserInterface from "./interfaces/admin-update-block-status.user.interface";
+import { generateRandomToken } from "../../helpers/randomtoken.helper";
+import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
+import signupUserInterface from "./interfaces/signup-user.interface";
+import randomUserTokenInterface from "./interfaces/random-user-token.dto";
+import { UsersService } from "../users/users.service";
+
 
 @Injectable()
 export class AuthService {

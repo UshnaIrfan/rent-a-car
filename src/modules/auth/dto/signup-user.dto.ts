@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
      IsEmail,
      IsNotEmpty, IsOptional,
@@ -9,6 +8,7 @@ import {
 import { Role } from "../../../enums/role.enum";
 import {status} from "../../users/schemas/user.schema";
 import {blockStatus} from "../../users/schemas/user.schema";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class SignUpUserDto {
 

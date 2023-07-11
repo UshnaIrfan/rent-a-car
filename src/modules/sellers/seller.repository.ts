@@ -29,6 +29,7 @@ export class sellerRepository{
            seller.approvedByAdmin = body.approvedByAdmin;
            seller.type=body.type;
            seller.country=body.country;
+           seller.city=body.city;
            seller.state=body.state;
            seller.address=body.address;
            seller.isListing = body.isListing;

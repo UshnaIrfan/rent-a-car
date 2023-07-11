@@ -1,6 +1,4 @@
 export default interface adminUpdateUserInterface {
-
-  readonly  userId: string;
-  readonly  status: string;
-
+    readonly  userId: string;
+    readonly  status: string;
 }

@@ -4,6 +4,7 @@ export default interface  addSellerInterface{
     readonly  approvedByAdmin: string;
     readonly  type: string;
     readonly  country: string;
+    readonly  city: string;
     readonly  state: string;
     readonly  address: string;
     readonly  isListing: boolean;

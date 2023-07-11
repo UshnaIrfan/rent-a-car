@@ -54,6 +54,11 @@ export class seller{
 
       @ApiProperty()
       @Column({ nullable: true})
+      city: string;
+
+
+      @ApiProperty()
+      @Column({ nullable: true})
       state: string;
 
 

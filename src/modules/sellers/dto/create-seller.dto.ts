@@ -33,9 +33,14 @@ export class CreateSellerDto {
      @IsNotEmpty()
      country: string;
 
-
-     @ApiProperty({ type: String,default:null})
+     @ApiProperty({ type: String,default:null,required: true})
      @IsString()
+     @IsNotEmpty()
+     city: string;
+
+     @ApiProperty({ type: String,default:null,required: true})
+     @IsString()
+     @IsNotEmpty()
      state: string;
 
 

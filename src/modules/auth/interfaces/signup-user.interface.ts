@@ -1,5 +1,4 @@
 export default interface signupUserInterface {
-
    readonly name: string;
    readonly username: string;
    readonly email: string;

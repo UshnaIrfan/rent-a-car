@@ -7,7 +7,6 @@ import {
   Get,
   Delete, Put, Patch, Param,
 } from "@nestjs/common";
-import { AuthService } from './auth.service';
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
@@ -20,13 +19,13 @@ import {userActiveDto} from "./dto/user-active.dto";
 import { User } from "../users/schemas/user.schema";
 import {changeUserPasswordTokenVerificationDto} from "./dto/change-user-password-token-verification.dto";
 import AuthBearer from "../../decorators/auth-bearer.decorators";
+import { AuthService } from "./auth.service";
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
-  ) {}
+    private readonly authService: AuthService) {}
 
 
         // Sign up
@@ -112,14 +111,12 @@ export class AuthController {
         }
 
 
-
         // get all users
         @Get('/users/:all_users')
         async  getAllUser():Promise<User[]>
         {
             return this.authService.getAllUser();
         }
-
 
 
 
@@ -131,7 +128,6 @@ export class AuthController {
         {
            return this.authService.logout(accessToken);
         }
-
 
 
 
