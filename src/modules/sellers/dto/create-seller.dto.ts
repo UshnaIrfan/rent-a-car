@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 import { status } from "../../categories/schemas/category.schema";
-import {type} from "../schemas/seller.schema";
+import {types} from "../schemas/seller.schema";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateSellerDto {
@@ -23,9 +23,9 @@ export class CreateSellerDto {
      approvedByAdmin: string = status.PENDING;
 
 
-     @ApiProperty({ type: String, enum: type, default:type.NATIONAL,required:true})
+     @ApiProperty({ type: String, enum: types, default:types.DEFAULT,required:true})
      @IsString()
-     type: string = type.NATIONAL;
+     type: string = types.DEFAULT;
 
 
      @ApiProperty({ type: String, required: true })

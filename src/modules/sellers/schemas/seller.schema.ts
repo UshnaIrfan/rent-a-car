@@ -10,9 +10,9 @@ export enum status {
 }
 
 
-export enum type {
-  NATIONAL= 'U.S. National, Regional & Online',
-  LOCAL = 'Local Only',
+export enum types {
+  DEFAULT= 'National/Regional/Online ,U.S. (Default)',
+  LOCAL = 'Local Only within the U.S.',
   OUTSIDE = 'Outside the U.S.',
   B2B='B2B'
 }
@@ -43,7 +43,7 @@ export class seller{
 
 
       @ApiProperty()
-      @Column({ type:"enum", enum: type, default: type.NATIONAL})
+      @Column({ type:"enum", enum: types, default: types.DEFAULT})
       type: string;
 
 
