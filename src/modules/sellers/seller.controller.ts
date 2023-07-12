@@ -17,19 +17,19 @@ export class SellerController {
 
 
         // get all sellers
-        // @Get('all-sellers')
-        // async  getAllSellers( ):Promise<{records:seller[]}>
-        // {
-        //      return this.sellerService.getAllSellers();
-        // }
+        @Get('all-sellers')
+        async  getAllSellers( ):Promise<{records:seller[]}>
+        {
+             return this.sellerService.getAllSellers();
+        }
 
         // get all seller with type
-        @ApiQuery({ name: 'type', required: false })
-        @Get('all-sellers/:type')
-        async  getAllSellers( @Query('type') type?: string):Promise<{records:seller[]}>
-        {
-          return this.sellerService.getAllSellers(type);
-        }
+        // @ApiQuery({ name: 'type', required: false })
+        // @Get('all-sellers/:type')
+        // async  getAllSellers( @Query('type') type?: string):Promise<{records:seller[]}>
+        // {
+        //   return this.sellerService.getAllSellers(type);
+        // }
 
 
 

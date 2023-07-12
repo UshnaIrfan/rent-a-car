@@ -170,27 +170,27 @@ export class SellerService {
 
          // FRONTEND APIS
         // get all sellers
-       //  async getAllSellers( ):Promise<{records:seller[]}>
-       //  {
-       //     const sellers = await this.SellerRepository.getAllSellers()
-       //     if(!sellers)
-       //     {
-       //        throw new  NotFoundException('sellers do not exist');
-       //     }
-       //
-       //     return { records: sellers};
-       // }
+        async getAllSellers( ):Promise<{records:seller[]}>
+        {
+           const sellers = await this.SellerRepository.getAllSellers()
+           if(!sellers)
+           {
+              throw new  NotFoundException('sellers do not exist');
+           }
+
+           return { records: sellers};
+       }
 
          // get all seller with type
-        async getAllSellers( type?: string):Promise<{records:seller[]}>
-        {
-            const sellers = await this.SellerRepository.getAllSellers(type)
-            if(!sellers)
-            {
-              throw new  NotFoundException('sellers do not exist');
-            }
-            return { records: sellers};
-        }
+        // async getAllSellers( type?: string):Promise<{records:seller[]}>
+        // {
+        //     const sellers = await this.SellerRepository.getAllSellers(type)
+        //     if(!sellers)
+        //     {
+        //       throw new  NotFoundException('sellers do not exist');
+        //     }
+        //     return { records: sellers};
+        // }
 
 
 
