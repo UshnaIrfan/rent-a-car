@@ -12,7 +12,7 @@ export enum status {
 
 export enum type {
   NATIONAL= 'U.S. National, Regional & Online',
-  LOCAL = 'For Local\'s Only!',
+  LOCAL = 'Local Only',
   OUTSIDE = 'Outside the U.S.',
   B2B='B2B'
 }
