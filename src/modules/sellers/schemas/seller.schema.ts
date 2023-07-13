@@ -11,8 +11,8 @@ export enum status {
 
 
 export enum types {
-  DEFAULT= 'National/Regional/Online, U.S. (Default)',
-  LOCAL = 'Local Only within the U.S.',
+  DEFAULT= 'National & Regional Online, U.S. (Default)',
+  LOCAL = 'For U.S. Locals Only!',
   OUTSIDE = 'Outside the U.S.',
   B2B='B2B'
 }

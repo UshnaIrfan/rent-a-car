@@ -1,13 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import {  Like, Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status as sellerStatus } from "./schemas/seller.schema";
 import {CategoryRepository} from "../categories/category.repository";
 import { reviewRepository } from "../review/respositories/review.respository";
-import { category, status, status as categoryStatus } from "../categories/schemas/category.schema";
-import { User } from "../users/schemas/user.schema";
+
 
 @Injectable()
 export class sellerRepository{

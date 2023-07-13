@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param,  Query,} from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
