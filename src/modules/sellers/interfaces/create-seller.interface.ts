@@ -6,7 +6,6 @@ export default interface  createSellerInterface{
     readonly  country: string;
     readonly  city: string;
     readonly  state: string;
-    readonly  address: string;
     readonly  isListing: boolean;
     readonly  categories: string[];
 }

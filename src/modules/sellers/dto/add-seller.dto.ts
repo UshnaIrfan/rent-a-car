@@ -43,11 +43,6 @@ export class  addSellerDto{
      @IsNotEmpty()
      state:string;
 
-     @ApiProperty({ type: String,default:null })
-     @IsString()
-     address: string;
-
-
 
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()

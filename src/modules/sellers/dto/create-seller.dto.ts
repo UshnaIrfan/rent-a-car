@@ -44,11 +44,6 @@ export class CreateSellerDto {
      state: string;
 
 
-     @ApiProperty({ type: String ,default:null})
-     @IsString()
-     address: string;
-
-
      @ApiProperty({ type: Boolean, default: true })
      @IsBoolean()
      readonly isListing: boolean;

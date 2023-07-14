@@ -63,10 +63,6 @@ export class seller{
 
 
       @ApiProperty()
-      @Column({ nullable: true})
-      address: string;
-
-      @ApiProperty()
       @Column('bool')
       isListing: boolean;
 

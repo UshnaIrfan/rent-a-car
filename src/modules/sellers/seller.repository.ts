@@ -30,7 +30,6 @@ export class sellerRepository{
            seller.country=body.country;
            seller.city=body.city;
            seller.state=body.state;
-           seller.address=body.address;
            seller.isListing = body.isListing;
            await this.sellerModel.save(seller);
            return seller
@@ -231,10 +230,10 @@ export class sellerRepository{
    // }
    //
 
-          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string,country?: string,city ?:string,state?: string,address?: string): Promise<[seller[], number]>
+          async search(skip: number, take: number, query?: string, categoryId?: string,type?: string,country?: string,city ?:string,state?: string): Promise<[seller[], number]>
           {
               let whereConditions: any = {};
-              if ( query || type || country || city|| state|| address)
+              if ( query || type || country || city|| state)
               {
                  whereConditions = {
                    sellerName: query ?Like(`%${query}%`): undefined,
@@ -242,8 +241,6 @@ export class sellerRepository{
                    country: country ?Like(`%${country}%`): undefined,
                    city: city ?Like(`%${city}%`): undefined,
                    state: state ?Like(`%${state}%`): undefined,
-                   address: address ?Like(`%${address}%`): undefined,
-
                  };
               }
               if (categoryId)
