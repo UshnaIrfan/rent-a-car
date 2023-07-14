@@ -18,7 +18,7 @@ import {UsersRepository} from "../users/users.repository";
 import { Cache } from "cache-manager";
 import paginationSellerInterface from "./interfaces/pagination-seller.interface";
 import adminUpdateSellerInterface from "./interfaces/admin-update.seller.interface";
-
+ import PaginationOtherSellerInterface from "./interfaces/pagination-otherSeller.interface";
 
 @Injectable()
 export class SellerService {
@@ -180,6 +180,28 @@ export class SellerService {
 
            return { records: sellers};
        }
+
+
+
+        //all other sellers except default type
+        async getOtherSellers(pageNumber: number,pageSize?:number ):Promise<PaginationOtherSellerInterface>
+        {
+
+            const skip = (pageNumber - 1) * pageSize;
+            const [result, totalCount] = await this.SellerRepository.getOtherSellers(skip,pageSize);
+            const totalPages = Math.ceil(totalCount / pageSize);
+            if (result.length === 0)
+            {
+               throw new NotFoundException('No records found');
+            }
+            return {
+              records: result,
+              totalRecords: totalCount,
+              totalPages,
+              currentPage: pageNumber,
+            };
+        }
+
 
          // get all seller with type
         // async getAllSellers( type?: string):Promise<{records:seller[]}>

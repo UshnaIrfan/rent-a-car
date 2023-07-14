@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Get, Param,  Query,} from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { seller } from "./schemas/seller.schema";
 import {addSellerDto} from "./dto/add-seller.dto";
 import {review} from "../review/schemas/submit-review.schema";
@@ -7,7 +7,7 @@ import { BlockRoles } from "../../decorators/block.decorators";
 import { BlockRole } from "../../enums/block.enum";
 import AuthBearer from "../../decorators/auth-bearer.decorators";
 import { SellerService } from "./seller.service";
-
+import PaginationOtherSellerInterface from "./interfaces/pagination-otherSeller.interface";
 
 
 @ApiTags('Sellers')
@@ -21,6 +21,16 @@ export class SellerController {
         async  getAllSellers( ):Promise<{records:seller[]}>
         {
              return this.sellerService.getAllSellers();
+        }
+
+
+        //  all other sellers except default type
+        @ApiQuery({ name: 'page', type: Number, required: true })
+        @ApiQuery({ name: 'pageSize', type: Number, required:false})
+        @Get('other-sellers')
+        async  getOtherSellers(@Query('page') page: number = 1,@Query('pageSize') pageSize: number =10 ):Promise<PaginationOtherSellerInterface>
+        {
+            return this.sellerService.getOtherSellers(page,pageSize);
         }
 
         // get all seller with type

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import {  Like, Repository } from "typeorm";
+import { In, Like,  Repository } from "typeorm";
 import {seller} from "./schemas/seller.schema";
 import {CreateSellerDto} from "./dto/create-seller.dto";
 import {status as sellerStatus } from "./schemas/seller.schema";
@@ -346,12 +346,40 @@ export class sellerRepository{
                 categories: { approvedByAdmin: sellerStatus.APPROVED },
                 approvedByAdmin: sellerStatus.APPROVED,
                 isListing: true,
+                type:In(['National & Regional Online, U.S. (Default)'])
               },
               order: {sellerName: 'ASC' },
              });
 
              return sellers;
         }
+
+        //all other sellers except default type
+        async getOtherSellers(skip: number, take: number):Promise<[seller[], number]>
+        {
+            const [result, totalCount] = await this.sellerModel.findAndCount({
+            relations: ['categories'],
+            where: {
+              categories: { approvedByAdmin: sellerStatus.APPROVED },
+              approvedByAdmin: sellerStatus.APPROVED,
+              isListing: true,
+              type:In([
+                'For U.S. Locals Only!',
+                'Outside the U.S.',
+                'B2B'
+              ])
+            },
+            order: {sellerName: 'ASC' },
+            skip,
+            take,
+          });
+           if (!result.length)
+           {
+              throw new NotFoundException('No seller were found matching the criteria.');
+           }
+            return [result, totalCount];
+        }
+
 
         // get all seller with type
         // async getAllSellers(type?: string): Promise<seller[]|null>
