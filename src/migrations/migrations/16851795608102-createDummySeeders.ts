@@ -12,14 +12,16 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
       // create dummy sellers
       const sellers =
         [
-            { sellerName: 'Test 1', sellerUrl: 'https://test1.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 2', sellerUrl: 'https://test2.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Stylo test' },
-            { sellerName: 'Test 3', sellerUrl: 'https://test3.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 4', sellerUrl: 'https://test4.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 5', sellerUrl: 'https://test5.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 6', sellerUrl: 'https://test6.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 7', sellerUrl: 'https://test7.com',approvedByAdmin:'approved', type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',  isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 8', sellerUrl: 'https://test8.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Stylo test' },
+
+
+            { sellerName: 'Test 1', sellerUrl: 'https://test1.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 2', sellerUrl: 'https://test2.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Stylo test' },
+            { sellerName: 'Test 3', sellerUrl: 'https://test3.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 4', sellerUrl: 'https://test4.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 5', sellerUrl: 'https://test5.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 6', sellerUrl: 'https://test6.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 7', sellerUrl: 'https://test7.com',approvedByAdmin:'approved', type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',  isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 8', sellerUrl: 'https://test8.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Stylo test' },
             { sellerName: 'Test 9', sellerUrl: 'https://test9.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
             { sellerName: 'Test 10', sellerUrl: 'https://test10.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
 
