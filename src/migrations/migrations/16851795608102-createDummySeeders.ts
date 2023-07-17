@@ -22,13 +22,13 @@ export class createDummySeeders16851795608102 implements MigrationInterface {
             { sellerName: 'Test 6', sellerUrl: 'https://test6.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
             { sellerName: 'Test 7', sellerUrl: 'https://test7.com',approvedByAdmin:'approved', type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',  isListing: true, categoryName: 'Stylo test' },
             { sellerName: 'Test 8', sellerUrl: 'https://test8.com',approvedByAdmin:'approved',type:'National & Regional Online, U.S. (Default)',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Stylo test' },
-            { sellerName: 'Test 9', sellerUrl: 'https://test9.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
-            { sellerName: 'Test 10', sellerUrl: 'https://test10.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'null',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 9', sellerUrl: 'https://test9.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'California',   isListing: true, categoryName: 'Stylo test' },
+            { sellerName: 'Test 10', sellerUrl: 'https://test10.com',approvedByAdmin:'approved',type:'For U.S. Locals Only!',country:'U.S',city:'null',state:'California',   isListing: true, categoryName: 'Stylo test' },
 
-            { sellerName: 'Bitdefender test', sellerUrl: 'https://bitdefendertest.com',approvedByAdmin:'approved',type:'Outside the U.S.',country:'U.S',city:'null',state:'null',   isListing: true,categoryName: 'Antivirus Software test'},
-            { sellerName: 'Intego test', sellerUrl: 'https://integotest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'null',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
-            { sellerName: 'McAfee test', sellerUrl: 'https://mcafeetest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'null',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
-            { sellerName: 'Norton test', sellerUrl: 'https://nortontest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'null',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'Bitdefender test', sellerUrl: 'https://bitdefendertest.com',approvedByAdmin:'approved',type:'Outside the U.S.',country:'Pakistan',city:'null',state:'null',   isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'Intego test', sellerUrl: 'https://integotest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'India',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'McAfee test', sellerUrl: 'https://mcafeetest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'Pakistan',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
+            { sellerName: 'Norton test', sellerUrl: 'https://nortontest.com',approvedByAdmin:'approved', type:'Outside the U.S.',country:'U.S',city:'India',state:'null',  isListing: true,categoryName: 'Antivirus Software test'},
       ];
       for (const seller of sellers)
       {
