@@ -15,7 +15,7 @@ export class ContactUsController {
       async create(
       @Body() contactUsDto: createContactUsDto):Promise<{message: string}>
       {
-         return this.contactUsService.createContact(contactUsDto );
+          return this.contactUsService.createContact(contactUsDto );
       }
 
 
