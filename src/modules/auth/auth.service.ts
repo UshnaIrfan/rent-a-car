@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Body,
-  CACHE_MANAGER,
   ConflictException,
   Inject,
   Injectable,
@@ -17,17 +16,22 @@ import { MailerService } from "@nestjs-modules/mailer";
 import JwtTokensInterface from "./interfaces/jwt-token.interface";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
-import adminUpdateUserInterface from "./interfaces/admin-update.user.interface";
-import updateUserInterface from "./interfaces/update-user.interface";
-import userActiveInterface from "./interfaces/user-active.interface";
-import paginationUserInterface from "./interfaces/pagination-user.interface";
 import changeUserPasswordTokenVerificationInterface from "./interfaces/change-user-password-token-verification.interface";
-import adminUpdateBlockStatusUserInterface from "./interfaces/admin-update-block-status.user.interface";
 import { generateRandomToken } from "../../helpers/randomtoken.helper";
 import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
 import signupUserInterface from "./interfaces/signup-user.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { UsersService } from "../users/users.service";
+import { ConfigService } from "@nestjs/config";
+import { CACHE_MANAGER } from "@nestjs/common/cache";
+import * as otpGenerator from 'otp-generator';
+import * as twilio from 'twilio';
+import {  TwilioService } from 'nestjs-twilio';
+import { generateRandomOtp } from "../../helpers/randomOtp.helper";
+import userOtpActiveInterface from "./interfaces/user-otp-active.interface";
+import { UsersRepository } from "../users/repositories/users.respository";
+import signupUserDocumentsInterface from "./interfaces/signup-user-documents.interface";
+import * as path from 'path';
 
 
 @Injectable()
@@ -36,462 +40,491 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
+    private readonly twilioService: TwilioService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly usersRepository: UsersRepository,
   ) {}
-
-
-
-        // ADMIN APIS
-       // get all users and search by name
-        async getAllUsers(page: number, pageSize?: number, username?: string,): Promise<paginationUserInterface>
-        {
-            return this.usersService.getAllUsers(page, pageSize, username);
-        }
-
-
-
-        //  admin user update
-        async updateUser(updateUser: updateUserInterface): Promise<{ message: string; update: updateUserInterface }>
-        {
-            const update = await this.usersService.updateUser(
-            updateUser.id,
-            updateUser.name,
-            updateUser.username,
-            updateUser.email,
-          );
-          if (!update)
-          {
-             throw new NotFoundException('invalid user id');
-          }
-          return { message: 'User updated successfully', update };
-        }
-
-
-
-       // user status update ( admin)
-        async adminUpdateUserStatus(adminUpdateStatus: adminUpdateUserInterface): Promise<{ update: User; message: string }>
-        {
-            const update = await this.usersService.adminUpdateUserStatus(adminUpdateStatus.userId, adminUpdateStatus.status,);
-            if (!update)
-            {
-              throw new NotFoundException('invalid user id');
-            }
-            return { message: 'User status updated successfully', update };
-        }
-
-
-
-        //   user  block status update ( admin)
-        async adminUpdateUserBlockStatus(adminUpdateBlockStatus: adminUpdateBlockStatusUserInterface): Promise<{ update: User; message: string }>
-        {
-            const update = await this.usersService.adminUpdateUserBlockStatus(
-              adminUpdateBlockStatus.userId,
-              adminUpdateBlockStatus.blockStatus,
-            );
-            if (!update)
-            {
-               throw new NotFoundException('invalid user id');
-            }
-               return { message: 'User blocked status updated successfully', update };
-        }
-
-
-
-        //delete user with review with likeAndDislike
-        async deleteUser(id: string): Promise<{ message: string }>
-        {
-            await this.usersService.deleteUser(id);
-            return { message: ' deleted successfully'};
-        }
-
-
-
-        // calculate user each week and each month
-        async getUserDetails(start?: string, end ?: string)
-        {
-            return await this.usersService.getUserDetails(start,end);
-        }
 
 
 
         //FRONTEND APIS
          // Sign up
-         async signup(@Body() Signup: signupUserInterface)
-         {
-            const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
-            const ActiveUrl = `${FRONTEND_APP_URL}/login#/Auth/AuthController_isActive`;
-            const logo_l2a=process.env.LOGO_L2A
-            const contact_us_url= process.env.CONTACT_US
-            const privacy_policy_url= process.env.PRIVACY_POLICY
-            const User = await this.usersService.findUserByEmail(Signup.email);
-            if (User && User.status == 'inactive')
-            {
-                const Name = User.name;
-                const Token = generateRandomToken(32);
-                const expiresAt = new Date();
-                expiresAt.setMinutes(expiresAt.getMinutes() + 90);
-                const tokenKey = `forgot-password-token:${User.email}`;
-                const tokenValue = JSON.stringify({ token: Token, expiresAt, active: false, });
-                await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
-                console.log('token', Token);
-                const queryParams = `?Token=${Token}&email=${User.email}`;
-                const activeUrl = `${ActiveUrl}${queryParams}`;
-                const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-                const emailBody = template({ activeUrl, username: Name, FRONTEND_APP_URL, contact_us_url,privacy_policy_url,logo_l2a});
-                await this.sendVerificationEmail(User.email, emailBody);
-                throw new ConflictException('You have already created an account. We’re sending you a new email for verification!',);
-           }
-          else
-          {
-              const username = await this.usersService.findUserByUsername(Signup.username,);
-              if (username)
-              {
-                 throw new ConflictException('This username already exists');
-              }
+        async signup(@Body() Signup: signupUserInterface)
+        {
 
+              const Otpexpires = this.configService.get("OTP_EXPIRY");
               const Email = await this.usersService.findUserByEmail(Signup.email);
               if (Email)
               {
                  throw new ConflictException('This email already exists');
               }
 
-              const { password } = Signup;
-              const isPasswordStrongEnough = password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,);
+              if (Signup.password !== Signup.confirm_password)
+              {
+                 throw new NotAcceptableException('Passwords do not match');
+              }
 
+              const isPasswordStrongEnough = Signup.password.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,);
               if (!isPasswordStrongEnough)
               {
                  throw new BadRequestException('Password is too weak');
               }
 
               const user = await this.usersService.createUser({
-                ...Signup,
-                password: await AuthService.hashPassword(password),
+                   ...Signup,
+                  password: await AuthService.hashPassword(Signup.password),
               });
+              const base64Data = user.image;
+              const base64image = base64Data.split(';base64,').pop();
+              const pdfBuffer = Buffer.from(base64image, 'base64');
 
-              const Name = user.name;
-              const Token = generateRandomToken(32);
-              const expiresAt = new Date();
-              expiresAt.setMinutes(expiresAt.getMinutes() + 90);
-              const tokenKey = `forgot-password-token:${user.email}`;
-              const tokenValue = JSON.stringify({ token: Token, expiresAt, active: false, });
-              await this.cacheManager.set(tokenKey, tokenValue, { ttl: 5400 });
-              console.log('token', Token);
-              const queryParams = `?Token=${Token}&email=${user.email}`;
-              const activeUrl = `${ActiveUrl}${queryParams}`;
-              const template = handlebars.compile(fs.readFileSync('src/templates/signUp.html', 'utf8'),);
-              const emailBody = template({ activeUrl, username: Name,contact_us_url,privacy_policy_url,logo_l2a});
+              const savePath = path.join(
+                __dirname,
+                '../../../..',
+                '/asset/',
+                `${user.firstName}-${user.lastName}.png`
+              );
+              fs.writeFileSync(savePath, pdfBuffer);
+
+              const Otp =generateRandomOtp(6)
+              const OtpKey = `Otp-token:${user.email}`;
+              const OtpValue = JSON.stringify({ token: Otp, active: false, });
+              await this.cacheManager.set(OtpKey, OtpValue, { ttl:  Otpexpires});
+              console.log(Otp)
               try
               {
-                  await this.sendVerificationEmail(user.email, emailBody);
-                  await this.sendAdminEmail(process.env.ADMIN_EMAIL, user,contact_us_url,privacy_policy_url,logo_l2a);
+                   await  this.sendOtp(user.phoneNo,Otp)
+                   await this.sendAdminEmail(this.configService.get("ADMIN_EMAIL"), user);
               }
               catch (e)
               {
-                  throw new BadRequestException('Failed to send email');
+                    throw new BadRequestException('Failed to send otp');
               }
-              return { message: 'Please check your email to verify your signup!'};
+              return { message: 'Please check your number to verify your otp!'};
+        }
+
+
+
+
+
+
+
+
+          // user update ( otp active status)
+          async isOtpActive(@Body() reqBody: userOtpActiveInterface)
+          {
+            const user = await this.usersService.findUserByEmail(reqBody.email);
+            if (!user)
+            {
+                throw new NotFoundException('Invalid email');
             }
-        }
 
+            const OtpKey = `Otp-token:${user.email}`;
+            const cachedToken = await this.cacheManager.get(OtpKey);
+            if (!cachedToken)
+            {
+                throw new UnauthorizedException('Otp expired');
+            }
 
+            const parsedToken = JSON.parse(<string>cachedToken);
+            if (parsedToken.token !== reqBody.Otp)
+            {
+                throw new UnauthorizedException('Invalid Otp');
+            }
 
-           // user update ( active status)
-           async isActive(@Body() reqBody: userActiveInterface)
-           {
-                const user = await this.usersService.findUserByEmail(reqBody.email);
-                if (!user)
-                {
-                  throw new NotFoundException('Invalid email');
-                }
+            if (parsedToken.active === true)
+            {
+                throw new ConflictException('You are already active, Please log in');
+            }
+            try
+            {
+                parsedToken.active = true;
+                const updatedTokenValue = JSON.stringify(parsedToken);
+                await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
+                const user = await this.usersService.isOtpActive(reqBody.email, reqBody.otp_status);
+                const Username = user.firstName;
+                const logo_l2a=process.env.LOGO_L2A
+                const contact_us_url= process.env.CONTACT_US
+                const privacy_policy_url= process.env.PRIVACY_POLICY
+                await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url,logo_l2a);
+                return { message: 'Your account has been successfully created. Please login here' };
 
-                const tokenKey = `forgot-password-token:${user.email}`;
-                const cachedToken = await this.cacheManager.get(tokenKey);
-
-                if (!cachedToken)
-                {
-                  throw new UnauthorizedException('Token expired');
-                }
-
-                const parsedToken = JSON.parse(<string>cachedToken);
-                if (parsedToken.token !== reqBody.token)
-                {
-                  throw new UnauthorizedException('Invalid token');
-                }
-
-                if (parsedToken.active === true)
-                {
-                  throw new ConflictException('You are already active, Please log in');
-                }
-
-              try
-              {
-                  if (parsedToken.active === false)
-                  {
-                    parsedToken.active = true;
-                    const updatedTokenValue = JSON.stringify(parsedToken);
-                    await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-                    const user = await this.usersService.isActive(reqBody.email, reqBody.status,);
-                    const Username = user.name;
-                    const logo_l2a=process.env.LOGO_L2A
-                    const contact_us_url= process.env.CONTACT_US
-                    const privacy_policy_url= process.env.PRIVACY_POLICY
-                    await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url,logo_l2a);
-                    return { message: 'Your account has been successfully created. Please login here' };
-                  }
-              }
-              catch (e)
-              {
-                  throw new InternalServerErrorException();
-              }
-        }
+            }
+            catch (e)
+            {
+                 throw new InternalServerErrorException();
+            }
+          }
 
 
 
 
        //login
-        async login(user: User): Promise<JwtTokensInterface>
+        async login(user: User):Promise<JwtTokensInterface>
         {
-            if (user.status == 'inactive')
+            const result= await this.usersService.findUserById(user.id);
+            if ( result.UserDocuments.some(doc => doc.documentstatus === 'false'))
             {
-               throw new BadRequestException('User is not active');
+                 const unapprovedDocuments = result.UserDocuments
+                 .filter(doc => doc.documentstatus === 'false')
+                 .map(doc => doc.titleName)
+                 throw new BadRequestException(`User documents (${unapprovedDocuments}) have not been approved`);
+            }
+
+            if (user.otpStatus == 'false'   )
+            {
+                throw new BadRequestException('User is not active');
             }
 
             if (user.blockStatus == 'block')
             {
-              throw new BadRequestException('Your account has been blocked');
+               throw new BadRequestException('Your account has been blocked');
             }
             const payload = {
               id: user.id,
-              name: user.name,
-              username: user.username,
+              firstName: user.firstName,
+              lastName: user.lastName,
               email: user.email,
               password: user.password,
+              country:user.country,
+              dateOfBirth:user.dateOfBirth,
+              phoneNo:user.phoneNo,
+              imag:user.image,
               roles: user.roles,
-              status: user.status,
+              otpStatus: user.otpStatus,
               blockStatus: user.blockStatus,
-              profileIcon:user.profileIcon,
             };
             const accessTokenRedis = this.jwtService.sign(payload);
-            const accessTokenTTL = 5400;
-            await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: accessTokenTTL }),]);
+            const expires = this.configService.get("TOKEN_EXPIRY");
+            console.log("expired" ,expires)
+            await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
             return {
               id: user.id,
-              name: user.name,
-              username: user.username,
+              firstname: user.firstName,
+              lastname: user.lastName,
               email: user.email,
+              country:user.country,
+              date_of_birth:user.dateOfBirth,
+              phone_no:user.phoneNo,
+              image:user.image,
               roles: user.roles,
-              status: user.status,
+              otp_status: user.otpStatus,
               blockStatus: user.blockStatus,
-              profileIcon:user.profileIcon,
               access_token: accessTokenRedis,
-
             };
         }
 
 
 
-      //email (token)
-      async token(randomUserToken: randomUserTokenInterface)
-      {
-          const user = await this.usersService.findUserByEmail(randomUserToken.email);
-          if (!user)
+
+         // user document
+          async UserDocument(@Body() body:signupUserDocumentsInterface )
           {
-             throw new NotFoundException('Invalid email');
+                const User = await this.usersService.getUserById(body.userId)
+                if (!User)
+                {
+                  throw new NotFoundException('user not found');
+                }
+
+                const type = await this.usersService.gettittlebytype(body.type)
+                if (!type)
+                {
+                    throw new NotFoundException('Invalid type');
+                }
+
+                const title = await this.usersService.gettittlebyname(body.titleName)
+                if (!title)
+                {
+                    throw new NotFoundException('Invalid tittle Name');
+                }
+
+                const slug = await this.usersService.gettittlebySlug(body.slug)
+                if (!slug)
+                {
+                    throw new NotFoundException('Invalid slug');
+                }
+
+                const previous =await this.usersService.getByImage(body.userId,body.image)
+                if (previous)
+                {
+
+                    throw new ConflictException('You have already submitted ');
+                }
+                const user = await this.usersService.UserDocument(body);
+                const base64Data = user.image;
+                const base64image = base64Data.split(';base64,').pop();
+                const pdfBuffer = Buffer.from(base64image, 'base64');
+
+                const savePath = path.join(
+                  __dirname,
+                  '../../../..',
+                  '/asset/',
+                  `${user.id}-${user.type}.png`
+                );
+
+                fs.writeFileSync(savePath, pdfBuffer);
+                return user;
           }
-          const Username = user.name;
-          const resetToken = generateRandomToken(32);
-          const expiresAt = new Date();
-          expiresAt.setHours(expiresAt.getHours() + 24);
-          const tokenKey = `forgot-password-token:${user.email}`;
-          const tokenValue = JSON.stringify({token: resetToken, expiresAt, active: false, });
-          const logo_l2a=process.env.LOGO_L2A
-          const contact_us_url= process.env.CONTACT_US
-          const privacy_policy_url= process.env.PRIVACY_POLICY
-          await this.cacheManager.set(tokenKey, tokenValue, { ttl: 86400 });
-          const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
-          const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
-          console.log('token', resetToken);
-          const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
-          const resetUrl = `${changePasswordUrl}${queryParams}`;
-          const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
-          const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a });
-          try
+
+
+
+
+          //get user by id
+          async findUserById(userId: string): Promise<User>
           {
-              await this.sendToken(user.email, emailBody);
-          }
-          catch (e)
-          {
-              throw new BadRequestException('Failed to send email');
-          }
-          return {
-            message: 'Please check your email to reset your password!',
-            tokenStatus: true,
-          };
-      }
-
-
-
-       //change user password token verification
-        async tokenVerification(@Body() reqBody: changeUserPasswordTokenVerificationInterface,)
-        {
-            const user = await this.usersService.findUserByEmail(reqBody.email);
-            if (!user)
-            {
-               throw new NotFoundException('Invalid email');
-            }
-            const tokenKey = `forgot-password-token:${user.email}`;
-            const cachedToken = await this.cacheManager.get(tokenKey);
-            if (!cachedToken)
-            {
-               throw new UnauthorizedException('token expired');
-            }
-
-            const parsedToken = JSON.parse(<string>cachedToken);
-            if (parsedToken.token !== reqBody.token)
-            {
-               throw new UnauthorizedException('Invalid token');
-            }
-            else
-            {
-                parsedToken.active = true;
-                const updatedTokenValue = JSON.stringify(parsedToken);
-                await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-            }
-            return {
-                statusCode: 200,
-                message: 'Token is active and valid',
-                tokenStatus: true,
-            };
-        }
-
-
-
-         // change password
-         async Password(@Body() reqBody: changeUserPasswordInterface)
-         {
-              const user = await this.usersService.findUserByEmail(reqBody.email);
+              const user = await this.usersService.findUserById(userId);
               if (!user)
               {
-                 throw new NotFoundException('Invalid email');
+                throw new NotFoundException('user not found');
               }
 
-              const tokenKey = `forgot-password-token:${user.email}`;
-              const cachedToken = await this.cacheManager.get(tokenKey);
-              if (!cachedToken)
-              {
-                  throw new UnauthorizedException('token expired');
-              }
-
-              const parsedToken = JSON.parse(<string>cachedToken);
-              console.log(cachedToken);
-              if (parsedToken.token !== reqBody.token)
-              {
-                 throw new UnauthorizedException('Invalid token');
-              }
-
-              if (reqBody.newPassword !== reqBody.confirmPassword)
-              {
-                 throw new NotAcceptableException('Passwords do not match');
-              }
-
-              const isPasswordStrongEnough = reqBody.newPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,);
-              if (!isPasswordStrongEnough)
-              {
-                 throw new BadRequestException('Password is too weak');
-              }
-
-              const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-
-              if (parsedToken.active == true)
-              {
-                  const logo_l2a=process.env.LOGO_L2A
-                  const contact_us_url= process.env.CONTACT_US
-                  const privacy_policy_url= process.env.PRIVACY_POLICY
-                  await this.usersService.updatePassword(reqBody.email, hashedPassword);
-                  await this.sendPasswordUpdatedEmail(reqBody.email, user.name,contact_us_url,privacy_policy_url,logo_l2a);
-                  const loginResult = this.login(user);
-                  await this.cacheManager.del(tokenKey);
-                  return loginResult;
-              }
-              else
-              {
-                  throw new UnauthorizedException('plz firstly active token and then  password changed',);
-              }
-      }
+              return user;
+          }
 
 
-        // profile get
-        async getProfile(accessToken: string)
-        {
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken)
+
+          // get data from google ( signup)
+          async  googleLogin(req:any)
+          {
+            if (!req.user)
             {
-               throw new UnauthorizedException('Token expired');
+              return { message: "No user from Google", user: null, access_token: null };
             }
-            return cachedToken;
-        }
+               return  req.user;
+          }
 
 
 
-        //get user by id
-        async getUserById(userId: string): Promise<User>
-        {
-            const user = await this.usersService.findUserById(userId);
-            if (!user)
+          // sign up with google
+          async saveUserToDatabase(userData:any): Promise<User | null>
+          {
+                const  email= await this.usersService.findUserByEmail(userData.email);
+                if(email)
+                {
+                  throw new UnauthorizedException("Email is already in use")
+                }
+                const user = new User();
+                user.firstName = userData.name;
+                user.lastName = userData.username;
+                user.email = userData.email;
+                user.country=userData.country;
+                user.dateOfBirth=userData.date_of_birth;
+                user.phoneNo=userData.phone_no;
+                user.image=userData.image;
+                user.email=userData.email;
+                user.password=userData.password;
+                user.roles=userData.roles;
+                user.otpStatus=userData.otp_status;
+                user.blockStatus=userData.blockStatus;
+                return   await this.usersRepository.createUser(user);
+          }
+
+
+            // get all users
+            async getAllUser(): Promise<User[]>
             {
-              throw new NotFoundException('user not found');
+                const users = await this.usersService.getAllUser();
+                if(!users)
+                {
+                  throw new NotFoundException('No user exit');
+                }
+                return users;
             }
 
-            return user;
-        }
 
 
 
-        // get all users
-        async getAllUser(): Promise<User[]>
-        {
-            const user = await this.usersService.getAllUser();
-            return user;
-        }
 
-
-
-       //logout
-        async logout(accessToken: string): Promise<{ message: string }>
-        {
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken)
+          // profile get
+            async getProfile(accessToken: string)
             {
-              throw new NotFoundException('Token expired');
+                const cachedToken = await this.cacheManager.get(accessToken);
+                if (!cachedToken)
+                {
+                   throw new UnauthorizedException('Token expired');
+                }
+                return cachedToken;
             }
-            await this.cacheManager.del(accessToken);
-            return { message: 'Successfully logout' };
-        }
+
 
 
 
         // refresh token
-        async refreshToken(users: User, accessToken: string)
+        async refreshToken(user: User, accessToken: string)
         {
             const cachedToken = await this.cacheManager.get(accessToken);
             if (!cachedToken || cachedToken)
             {
                 await this.cacheManager.del(accessToken);
                 const payload = {
-                  id: users.id,
-                  name: users.name,
-                  username: users.username,
-                  email: users.email,
-                  password: users.password,
-                  roles: users.roles,
-                  status: users.status,
+                  id: user.id,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email,
+                  password: user.password,
+                  country:user.country,
+                  dateOfBirth:user.dateOfBirth,
+                  phoneNo:user.phoneNo,
+                  imag:user.image,
+                  roles: user.roles,
+                  otpStatus: user.otpStatus,
+                  blockStatus: user.blockStatus,
                 };
                 const accessTokenRedis = this.jwtService.sign(payload);
-                const accessTokenTTL = 5400;
-                await Promise.all([this.cacheManager.set(accessTokenRedis, users, { ttl: accessTokenTTL })]);
+                const expires = this.configService.get("TOKEN_EXPIRY");
+                await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires })]);
                 return { refresh_token: accessTokenRedis};
             }
         }
+
+
+
+         //logout
+          async logout(accessToken: string): Promise<{ message: string }>
+          {
+              const cachedToken = await this.cacheManager.get(accessToken);
+              if (!cachedToken)
+              {
+                throw new NotFoundException('Token expired');
+              }
+              await this.cacheManager.del(accessToken);
+              return { message: 'Successfully logout' };
+          }
+
+
+
+
+
+          //email (token)
+          async token(randomUserToken: randomUserTokenInterface)
+          {
+              const user = await this.usersService.findUserByEmail(randomUserToken.email);
+              if (!user)
+              {
+                 throw new NotFoundException('Invalid email');
+              }
+              const Username = user.firstName;
+              const resetToken = generateRandomToken(32);
+              const expires = this.configService.get("TOKEN_EXPIRY");
+              const tokenKey = `forgot-password-token:${user.email}`;
+              const tokenValue = JSON.stringify({token: resetToken,active: false, });
+              const logo_l2a=process.env.LOGO_L2A
+              const contact_us_url= process.env.CONTACT_US
+              const privacy_policy_url= process.env.PRIVACY_POLICY
+              await this.cacheManager.set(tokenKey, tokenValue, { ttl: expires });
+              const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+              const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
+              console.log('token', resetToken);
+              const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
+              const resetUrl = `${changePasswordUrl}${queryParams}`;
+              const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
+              const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a });
+              try
+              {
+                  await this.sendToken(user.email, emailBody);
+              }
+              catch (e)
+              {
+                  throw new BadRequestException('Failed to send email');
+              }
+              return {
+                message: 'Please check your email to reset your password!',
+                tokenStatus: true,
+              };
+          }
+
+
+
+           //change user password token verification
+            async tokenVerification(@Body() reqBody: changeUserPasswordTokenVerificationInterface)
+            {
+                const user = await this.usersService.findUserByEmail(reqBody.email);
+                if (!user)
+                {
+                   throw new NotFoundException('Invalid email');
+                }
+                const tokenKey = `forgot-password-token:${user.email}`;
+                const cachedToken = await this.cacheManager.get(tokenKey);
+                if (!cachedToken)
+                {
+                   throw new UnauthorizedException('token expired');
+                }
+
+                const parsedToken = JSON.parse(<string>cachedToken);
+                if (parsedToken.token !== reqBody.token)
+                {
+                   throw new UnauthorizedException('Invalid token');
+                }
+                else
+                {
+                    parsedToken.active = true;
+                    const updatedTokenValue = JSON.stringify(parsedToken);
+                    await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
+                }
+                return {
+                    statusCode: 200,
+                    message: 'Token is active and valid',
+                    tokenStatus: true,
+                };
+            }
+
+
+
+             // change password
+             async changePassword(@Body() reqBody: changeUserPasswordInterface)
+             {
+                  const user = await this.usersService.findUserByEmail(reqBody.email);
+                  if (!user)
+                  {
+                     throw new NotFoundException('Invalid email');
+                  }
+
+                  const tokenKey = `forgot-password-token:${user.email}`;
+                  const cachedToken = await this.cacheManager.get(tokenKey);
+                  if (!cachedToken)
+                  {
+                      throw new UnauthorizedException('token expired');
+                  }
+
+                  const parsedToken = JSON.parse(<string>cachedToken);
+                  console.log(cachedToken);
+                  if (parsedToken.token !== reqBody.token)
+                  {
+                     throw new UnauthorizedException('Invalid token');
+                  }
+
+                  if (reqBody.newPassword !== reqBody.confirmPassword)
+                  {
+                     throw new NotAcceptableException('Passwords do not match');
+                  }
+
+                  const isPasswordStrongEnough = reqBody.newPassword.match(/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,);
+                  if (!isPasswordStrongEnough)
+                  {
+                     throw new BadRequestException('Password is too weak');
+                  }
+
+                  const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
+
+                  if (parsedToken.active == true)
+                  {
+                      const logo_l2a=process.env.LOGO_L2A
+                      const contact_us_url= process.env.CONTACT_US
+                      const privacy_policy_url= process.env.PRIVACY_POLICY
+                      await this.usersService.updatePassword(reqBody.email, hashedPassword);
+                      await this.sendPasswordUpdatedEmail(reqBody.email, user.firstName,contact_us_url,privacy_policy_url,logo_l2a);
+                      const loginResult = this.login(user);
+                      await this.cacheManager.del(tokenKey);
+                      return loginResult;
+                  }
+                  else
+                  {
+                      throw new UnauthorizedException('plz firstly active token and then  password changed',);
+                  }
+          }
+
+
 
 
 
@@ -503,7 +536,29 @@ export class AuthService {
           }
 
 
-          // sending email(welcome after registered)
+         // send Otp
+           async sendOtp(phone_no: any,Otp:any)
+           {
+                //  const OTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
+                const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+                try
+                {
+                     await twilioClient.messages.create({
+                      to:  phone_no,
+                      from: process.env.TWILIO_PHONE_NUMBER,
+                      body: `Your verification OTP is: ${Otp}`,
+                  });
+                }
+                catch (error)
+                {
+                     throw new BadRequestException('Failed to send OTP');
+                }
+
+          }
+
+
+
+         // sending email(welcome after registered)
           async sendWelcomeEmail(email: string, Username: string,contact_us_url:string,privacy_policy_url:string,logo_l2a:String)
           {
               const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
@@ -514,6 +569,7 @@ export class AuthService {
                 html: html,
               });
           }
+
 
 
 
@@ -536,28 +592,20 @@ export class AuthService {
 
 
 
-          //sending Token(forgotPassword)
-          async sendToken(email: string, emailBody: string)
+
+
+          // sending admin email
+          async sendAdminEmail(email: string, user: any)
           {
+
+            const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
+            const html = template({ email, name: user.firstname, userEmail: user.email});
             await this.mailerService.sendMail({
               to: email,
-              subject: 'Need a Reset?',
-              html: emailBody,
+              subject: 'New Signup',
+              html: html,
             });
           }
-
-
-
-          // after register welcome  email
-          async sendVerificationEmail(email: string, emailBody: string)
-          {
-            await this.mailerService.sendMail({
-              to: email,
-              subject: 'Please confirm your recent signup!',
-              html: emailBody,
-            });
-          }
-
 
 
           //sending email (updated password)
@@ -574,17 +622,57 @@ export class AuthService {
 
 
 
-          // sending admin email
-          async sendAdminEmail(email: string, user: any,contact_us_url:string,privacy_policy_url:string,logo_l2a:string)
+
+
+          //sending Token(forgotPassword)
+          async sendToken(email: string, emailBody: string)
           {
-            const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
-            const html = template({ email, name: user.name, userEmail: user.email ,contact_us_url,privacy_policy_url,logo_l2a});
             await this.mailerService.sendMail({
               to: email,
-              subject: 'New Signup',
-              html: html,
+              subject: 'Need a Reset?',
+              html: emailBody,
             });
           }
 
 
-  }
+
+
+
+
+
+  //apple
+  // async registerByIDtoken(payload: any)
+  // {
+  //   if(payload.hasOwnProperty('id_token')){
+  //
+  //     let email, firstName, lastName = '';
+  //
+  //     //You can decode the id_token which returned from Apple,
+  //     const decodedObj = await this.jwtService.decode(payload.id_token);
+  //     const accountId = decodedObj.sub || '';
+  //     console.info(`Apple Account ID: ${accountId}`);
+  //
+  //     //Email address
+  //     if (decodedObj.hasOwnProperty('email'))
+  //     {
+  //       email = decodedObj['email'];
+  //       console.info(`Apple Email: ${email}`);
+  //     }
+  //
+  //     //You can also extract the firstName and lastName from the user, but they are only shown in the first time.
+  //     if (payload.hasOwnProperty('user')) {
+  //       const userData = JSON.parse(payload.user);
+  //       const { firstName, lastName } = userData.name || {};
+  //     }
+  //
+  //     //.... you logic for registration and login here
+  //
+  //   }
+  //   throw new UnauthorizedException('Unauthorized');
+  // }
+  //
+  //
+
+
+
+}

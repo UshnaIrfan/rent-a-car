@@ -1,86 +1,26 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import {UsersRepository} from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
-import paginationUserInterface from "../auth/interfaces/pagination-user.interface";
+import { UsersRepository } from "./repositories/users.respository";
+import {UsersDocumentRepository} from "./repositories/user-document.respository";
+import { createUserDocumentsDto } from "./dto/create-user-documents.dto";
+import { userVerifcationDocumentsRepository } from "./repositories/user-verifcation-documents.repository";
+import { UserDocuments } from "./schemas/user-document.schema";
+import { UserVerificationDocuments } from "./schemas/user-verification-document.schema";
+
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly usersDocumentRepository: UsersDocumentRepository,
+    private readonly UserVerifcationDocumentsRepository: userVerifcationDocumentsRepository,
+
   ) {}
-
-
-             //ADMIN APIS
-            // get all users and search by name (pagination)
-              async getAllUsers(pageNumber: number,pageSize?:number,username?:string):Promise<paginationUserInterface>
-              {
-
-                   const skip = (pageNumber - 1) * pageSize;
-                   const [result, totalCount] = await this.usersRepository.findAndCount(skip, pageSize,username);
-                   const totalPages = Math.ceil(totalCount / pageSize);
-
-                   if (result.length === 0)
-                   {
-                        throw new NotFoundException('No records found');
-                   }
-                  return {
-                      records: result,
-                      totalRecords: totalCount,
-                      totalPages,
-                      currentPage: pageNumber,
-                  };
-            }
-
-
-               // update user
-               async  updateUser (id:string, name:string,username:string,email:string)
-               {
-                   return this.usersRepository.updateUser(id,name,username,email);
-               }
-
-
-
-               // user update status ( admin)
-               async  adminUpdateUserStatus (userId:string, status:string):Promise<User | null>
-               {
-                  return this.usersRepository.adminUpdateUserStatus(userId,status);
-               }
-
-
-
-              // user update  block status ( admin)
-              async adminUpdateUserBlockStatus (userId:string, blockStatus:string):Promise<User | null>
-              {
-                 return this.usersRepository.adminUpdateUserBlockStatus(userId,blockStatus);
-              }
-
-
-              //delete user with review with likeAndDislike
-              async deleteUser(id:string): Promise<User|null>
-              {
-                 return this.usersRepository.deleteUser(id);
-              }
-
-
-
-             // calculate user each week and each month
-             async getUserDetails(start?: string, end ?: string)
-             {
-                   const  result=await this.usersRepository.getUserDetails(start,end);
-                   return result
-             }
 
 
 
              //FRONTEND APIS
-              // find user by name
-              async findUserByUsername(username: string): Promise<User | null>
-              {
-                 return this.usersRepository.findUserByUsername(username);
-              }
-
-
             // find user by email
              async findUserByEmail(email: string): Promise<User | null>
              {
@@ -95,38 +35,99 @@ export class UsersService {
              }
 
 
-             // update password
-             async updatePassword(email: string ,password:string): Promise<User | null>
-             {
-                return this.usersRepository.updatePassword(email,password);
-             }
-
-
-            // user update ( active status)
-            async isActive(email: string,status:string): Promise<User | null>
-            {
-               return this.usersRepository.isActive(email,status);
-            }
-
-
-            // get all users
-            async getAllUser():Promise<User[]>
-            {
-                 const users =await this.usersRepository.getAllUser();
-                 if(!users)
-                 {
-                    throw new NotFoundException('No user exit');
-                 }
-                 return  users;
-             }
-
-
-
-            // get user by id  with active status
+            // get user by id   ( with relation)
             async findUserById (id:string): Promise<User | null>
             {
                 return this.usersRepository.findUserById(id);
             }
 
 
- }
+
+            // get user by id
+            async getUserById (id:string):Promise<User| null>
+            {
+              return this.usersRepository.getUserById(id);
+            }
+
+
+
+
+
+
+            // get all users
+            async getAllUser(): Promise<User[] | null>
+            {
+              const users =await this.usersRepository.getAllUser();
+              if(!users)
+              {
+                throw new NotFoundException('No user exit');
+              }
+              return  users;
+            }
+
+
+
+           // user update ( otp active status)
+            async isOtpActive(email: string,otp_status:string): Promise<User | null>
+            {
+                 return this.usersRepository.isOtpActive(email,otp_status);
+            }
+
+
+            //  update password
+            async updatePassword(email: string ,password:string): Promise<User | null>
+            {
+                return this.usersRepository.updatePassword(email,password);
+            }
+
+
+             // find user by  first name
+            async findUserByFirstName(firstname: string): Promise<User | null>
+            {
+              return this.usersRepository.findUserByFirstName(firstname);
+            }
+
+
+
+           // user document
+            async UserDocument(user: createUserDocumentsDto):Promise<UserDocuments>
+            {
+                return this.usersDocumentRepository.UserDocument(user);
+            }
+
+
+          // get user documents  by   title name
+            async getByImage (id:string,image:string):Promise<UserDocuments>
+            {
+              return this.usersDocumentRepository.getByImage(id,image);
+            }
+
+
+
+
+
+
+         // find user documents  by   title name
+          async gettittlebyname (titleName:string):Promise<UserVerificationDocuments>
+          {
+            return this.UserVerifcationDocumentsRepository.gettittlebyname(titleName);
+          }
+
+
+          // find user documents  by   title type
+          async gettittlebytype (type:string):Promise<UserVerificationDocuments>
+          {
+            return this.UserVerifcationDocumentsRepository.gettittlebytype(type);
+          }
+
+
+
+          // find user documents  by slug
+          async gettittlebySlug (type:string):Promise<UserVerificationDocuments>
+          {
+            return this.UserVerifcationDocumentsRepository.gettittlebySlug(type);
+          }
+
+
+
+}

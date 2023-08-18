@@ -3,16 +3,17 @@ import {
      Column,
      PrimaryGeneratedColumn,
      CreateDateColumn,
-     UpdateDateColumn,
-     OneToMany
+     UpdateDateColumn, OneToMany
 } from "typeorm";
-import { review } from "../../review/schemas/submit-review.schema";
 import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "../../../enums/role.enum";
+import { UserDocuments } from "./user-document.schema";
 
-export enum status {
-     ACTIVE= 'active',
-     INACTIVE = 'inactive',
+export enum otpStatus {
+     ACTIVE= 'true',
+     INACTIVE = 'false',
 }
+
 
 export enum blockStatus {
      BLOCK= 'block',
@@ -29,45 +30,62 @@ export class User {
 
 
      @ApiProperty()
-     @Column({})
-     name: string;
+     @Column({nullable:true})
+     firstName: string;
 
 
      @ApiProperty()
-     @Column({ unique: true })
-     username: string;
+     @Column({nullable:true  })
+     lastName: string;
 
 
      @ApiProperty()
-     @Column({ unique: true })
+     @Column({nullable:true  })
+     country: string;
+
+
+     @ApiProperty()
+     @Column({nullable:true, type: 'date'})
+     dateOfBirth: Date;
+
+
+
+     @ApiProperty()
+     @Column({nullable:true})
+     phoneNo: string;
+
+
+
+     @ApiProperty()
+     @Column({nullable:true,type: 'text'})
+     image: string;
+
+
+     @ApiProperty()
+     @Column({nullable:true,unique:true})
      email: string;
 
 
      @ApiProperty()
-     @Column({})
+     @Column({nullable:true})
      password: string;
 
 
+
      @ApiProperty()
-     @Column({ default: 'L2A_USER',nullable:true})
+     @Column({ default: Role.USER})
      roles: string;
 
 
      @ApiProperty()
-     @Column({ type:"enum", enum: status, default: status.INACTIVE })
-     status: string;
+     @Column({  enum: otpStatus , default: otpStatus.INACTIVE  })
+     otpStatus: string;
 
 
 
      @ApiProperty()
-     @Column({ type:"enum", enum: blockStatus, default: blockStatus.UNBLOCK })
+     @Column({  enum: blockStatus, default: blockStatus.UNBLOCK })
      blockStatus: string;
-
-
-     @ApiProperty()
-     @Column({type: 'longtext'})
-     profileIcon: string;
-     length: Boolean;
 
 
 
@@ -81,8 +99,8 @@ export class User {
      updatedAt: Date
 
 
-     @ApiProperty({ type: () => [review] })
-     @OneToMany(() => review, review => review.User, { cascade: true })
-     review: review[];
+     @ApiProperty({ type: () => [UserDocuments] })
+     @OneToMany(() => UserDocuments, UserDocuments => UserDocuments.User)
+     UserDocuments: UserDocuments[];
 
 }

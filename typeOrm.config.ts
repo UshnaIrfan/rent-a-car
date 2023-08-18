@@ -8,14 +8,13 @@ const configService = new ConfigService();
 
 export default  new DataSource({
 
-     type: 'mysql',
+     type: 'postgres',
      host: configService.get('DATABASE_HOST'),
      port: configService.get('DATABASE_PORT'),
      username: configService.get('DATABASE_USERNAME'),
      password: configService.get('DATABASE_PASSWORD'),
      database: configService.get('DATABASE_NAME'),
      entities: ['./src/**/schemas/*.schema{.ts,.js}'],
-     migrations: ['./src/migrations/migrations/*{.ts,.js}'],
+     migrations: ['./src/database/migrations/*{.ts,.js}'],
      migrationsTableName: 'migrations_table',
-
 });

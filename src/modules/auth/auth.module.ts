@@ -1,4 +1,4 @@
-import { Module ,CacheModule } from "@nestjs/common";
+import { Module  } from "@nestjs/common";
 import * as redisStore from "cache-manager-redis-store";
 import {UsersService} from "../users/users.service";
 import { UsersModule } from "../users/users.module";
@@ -10,6 +10,10 @@ import {JwtAuthGuard} from "./guards/jwt-auth-guard";
 import {JwtStrategy} from "../../strategies/jwt.strategy";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
+import { CacheModule } from "@nestjs/common/cache";
+import { TwilioModule, TwilioService } from "nestjs-twilio";
+
+
 
 @Module({
   imports: [
@@ -22,6 +26,10 @@ import { AuthController } from "./auth.controller";
       JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '90m' },
+    }),
+    TwilioModule.forRoot({
+      accountSid: process.env.TWILIO_ACCOUNT_SID,
+      authToken: process.env.TWILIO_AUTH_TOKEN,
     }),
   ],
      controllers: [AuthController],

@@ -4,43 +4,29 @@ import {ConfigModule,ConfigService} from "@nestjs/config";
 import {AuthModule} from "./modules/auth/auth.module";
 import {UsersModule} from "./modules/users/users.module";
 import { MailerModule } from "@nestjs-modules/mailer";
-import { seller } from "./modules/sellers/schemas/seller.schema";
+import {  Module } from "@nestjs/common";
 import { User } from "./modules/users/schemas/user.schema";
-import { category } from "./modules/categories/schemas/category.schema";
-import {contact} from "./modules/contact-us/schemas/contact-us.schema";
-import {review} from "./modules/review/schemas/submit-review.schema";
-import {clicksTypes} from "./modules/review/schemas/create-click-types.schema";
-import {clicksTitle} from "./modules/review/schemas/create-clicks-titles.schema";
-import {likeDislike} from "./modules/review/schemas/like-dislike.schema";
-import { AdminModule } from './modules/admin/admin.module';
-import * as AWS from "aws-sdk";
-import {emailGeneralModule} from "./modules/email-general/email-general.module";
-import { MailchipModule } from './modules/mailchip/mailchip.module';
-import {mailChip} from "./modules/mailchip/schemas/mailchip.schema";
-import { join } from "path";
-import { CacheModule, Module } from "@nestjs/common";
-import { SellerModule } from "./modules/sellers/seller.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CategoriesModule } from "./modules/categories/categories.module";
+import {GoogleStrategy} from "./strategies/google-auth-strategy";
+import { HubspotModule } from './modules/hubspot/hubspot.module';
+import { CacheModule } from "@nestjs/common/cache";
+import { TwilioModule } from 'nestjs-twilio';
+import { UserDocuments } from "./modules/users/schemas/user-document.schema";
+import { UserVerificationDocuments } from "./modules/users/schemas/user-verification-document.schema";
+import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { ReviewModule } from "./modules/review/review.module";
-import { ContactUsModule } from "./modules/contact-us/contact-us.module";
+
 
 @Module({
   imports: [
-     AuthModule,
-     UsersModule,
-     CategoriesModule,
-     SellerModule,
-     ContactUsModule,
-     ReviewModule,
-     AdminModule,
-     emailGeneralModule,
-     MailchipModule,
+    AuthModule,
+    UsersModule,
+    HubspotModule,
 
-     ServeStaticModule.forRoot({
-        rootPath: join(__dirname, '../../'),
-        renderPath: '/asset',
+
+    TwilioModule.forRoot({
+      accountSid: process.env.TWILIO_ACCOUNT_SID,
+      authToken: process.env.TWILIO_AUTH_TOKEN,
     }),
 
     ConfigModule.forRoot(
@@ -48,59 +34,57 @@ import { ContactUsModule } from "./modules/contact-us/contact-us.module";
         cache: true,
         isGlobal: true,
         expandVariables: true,
-        envFilePath: ['.env'],
-        validationSchema: envSchema,
+        envFilePath: [".env"],
+        validationSchema: envSchema
       }),
 
 
-     // mailer module
-      MailerModule.forRootAsync({
+
+    // mailer module
+    MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-      transport: {
-          SES: new AWS.SES({
-            region: configService.get('AWS_SES_REGION'),
-            accessKeyId: configService.get('AWS_SES_ACCESS_KEY'),
-            secretAccessKey: configService.get('AWS_SES_KEY_SECRET'),
-          }),
-          host: configService.get('AWS_SES_SMTP_HOST'),
-          port: configService.get('AWS_SES_SMTP_PORT'),
-          secure: false,
-          ignoreTLS:true,
-          requireTLS:false,
+        transport: {
+          host: configService.get("MAILER_HOST"),
+          port: 465,
           auth: {
-             user: configService.get('AWS_SES_SMTP_USER_NAME'),
-             pass: configService.get('AWS_SES_SMTP_USER_PASSWORD'),
-          },
+            user: configService.get("MAIL_USER"),
+            pass: configService.get("MAILER_PASSWORD")
+          }
         },
         defaults: {
-          from: configService.get('SMTP_EMAIL'),
+          from: configService.get("MAIL_FROM")
         },
-            preview: true,
-        }),
-          inject: [ConfigService],
+        preview: true
       }),
+      inject: [ConfigService]
+    }),
 
-      // redis
-      CacheModule.register({ store: redisStore, uri: process.env.REDIS_URL}),
 
-       // Database connection
-      TypeOrmModule.forRootAsync({
+    // redis
+    CacheModule.register({ store: redisStore, uri: process.env.REDIS_URL }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../'),
+      renderPath: '/asset',
+    }),
+
+    // Database connection
+    TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('DATABASE_HOST'),
-        port: parseInt(configService.get('DATABASE_PORT'), 10),
-        username: configService.get('DATABASE_USERNAME'),
-        password: configService.get('DATABASE_PASSWORD'),
-        database: configService.get('DATABASE_NAME'),
-        entities: [User,category,seller,contact,review,clicksTypes,clicksTitle,likeDislike,mailChip],
+        type: "postgres",
+        host: configService.get("DATABASE_HOST"),
+        port: parseInt(configService.get("DATABASE_PORT"), 10),
+        username: configService.get("DATABASE_USERNAME"),
+        password: configService.get("DATABASE_PASSWORD"),
+        database: configService.get("DATABASE_NAME"),
+        entities: [User,UserDocuments,UserVerificationDocuments],
         synchronize: true,
       }),
-        inject: [ConfigService],
+      inject: [ConfigService]
     }),
   ],
      controllers: [],
-     providers: [],
+     providers: [GoogleStrategy],
 })
 export class AppModule {}
