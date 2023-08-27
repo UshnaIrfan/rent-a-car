@@ -5,16 +5,43 @@ import {AuthModule} from "./modules/auth/auth.module";
 import {UsersModule} from "./modules/users/users.module";
 import { MailerModule } from "@nestjs-modules/mailer";
 import {  Module } from "@nestjs/common";
-import { User } from "./modules/users/schemas/user.schema";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import {GoogleStrategy} from "./strategies/google-auth-strategy";
 import { HubspotModule } from './modules/hubspot/hubspot.module';
 import { CacheModule } from "@nestjs/common/cache";
 import { TwilioModule } from 'nestjs-twilio';
-import { UserDocuments } from "./modules/users/schemas/user-document.schema";
-import { UserVerificationDocuments } from "./modules/users/schemas/user-verification-document.schema";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { CarModule } from './modules/car/car.module';
+import { DriverModule } from './modules/driver/driver.module';
+import { UserDocumentsModule } from './modules/user-documents/user-documents.module';
+import { UserVerificationsDocumentsModule } from "./modules/user-verifications-documents/user-verifications-documents.module";
+import { UserDocuments } from "./modules/user-documents/schemas/userDocuments.schema";
+import { User } from "./modules/users/schemas/user.schema";
+import { driver } from "./modules/driver/schemas/driver.schema";
+import { car } from "./modules/car/schemas/car.schema";
+import {
+  UserVerificationDocuments
+} from "./modules/user-verifications-documents/schemas/userVerificationDocumets.schema";
+import { BrandModule } from './modules/brand/brand.module';
+import { CarModelModule } from './modules/car-model/car-model.module';
+import { YearModule } from './modules/year/year.module';
+import { ColorModule } from './modules/color/color.module';
+import { TransmissionModule } from './modules/transmission/transmission.module';
+import { CarTypeModule } from './modules/car-type/car-type.module';
+import { BaggageOptionModule } from './modules/baggage-option/baggage-option.module';
+import { SeatsCapacityModule } from './modules/seats-capacity/seats-capacity.module';
+import { DriverOptionModule } from './modules/driver-option/driver-option.module';
+import { year } from "./modules/year/schemas/year.schema";
+import { seatsCapacity } from "./modules/seats-capacity/schemas/seats-capacity.schema";
+import { driverOption } from "./modules/driver-option/schemas/driver-option.schema";
+import { color } from "./modules/color/schemas/color.schema";
+import { carType } from "./modules/car-type/schemas/car-type.schema";
+import { carModel } from "./modules/car-model/schemas/car-model.schema";
+import { brand } from "./modules/brand/schemas/brand.schema";
+import { baggageOption } from "./modules/baggage-option/schemas/baggage-option.schema";
+import { transmission } from "./modules/transmission/schemas/transmission.schema";
+
 
 
 @Module({
@@ -22,6 +49,19 @@ import { ServeStaticModule } from "@nestjs/serve-static";
     AuthModule,
     UsersModule,
     HubspotModule,
+    CarModule,
+    DriverModule,
+    UserDocumentsModule,
+    UserVerificationsDocumentsModule,
+    BrandModule,
+    CarModelModule,
+    YearModule,
+    ColorModule,
+    TransmissionModule,
+    CarTypeModule,
+    BaggageOptionModule,
+    SeatsCapacityModule,
+    DriverOptionModule,
 
 
     TwilioModule.forRoot({
@@ -78,11 +118,16 @@ import { ServeStaticModule } from "@nestjs/serve-static";
         username: configService.get("DATABASE_USERNAME"),
         password: configService.get("DATABASE_PASSWORD"),
         database: configService.get("DATABASE_NAME"),
-        entities: [User,UserDocuments,UserVerificationDocuments],
+
+
+        entities: [transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]
     }),
+
+
+
   ],
      controllers: [],
      providers: [GoogleStrategy],

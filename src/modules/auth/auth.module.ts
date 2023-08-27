@@ -11,9 +11,9 @@ import {JwtStrategy} from "../../strategies/jwt.strategy";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { CacheModule } from "@nestjs/common/cache";
-import { TwilioModule, TwilioService } from "nestjs-twilio";
-
-
+import { TwilioModule } from "nestjs-twilio";
+import { UserDocumentsService } from "../user-documents/user-documents.service";
+import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { TwilioModule, TwilioService } from "nestjs-twilio";
     }),
   ],
      controllers: [AuthController],
-     providers: [AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
+     providers: [userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
      exports: [AuthService],
 })
 export class AuthModule {}

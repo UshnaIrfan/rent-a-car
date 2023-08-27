@@ -1,17 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Request,
-  Get,
-  Delete,
-  Put,
-  Patch,
-  Param,
-  Req,
-  HttpStatus, UnauthorizedException
-} from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Request, Get, Delete, Put, Patch, Param, Req, UsePipes, ParseUUIDPipe } from "@nestjs/common";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
@@ -27,6 +14,10 @@ import { AuthService } from "./auth.service";
 import { GoogleAuthGuard } from "./guards/google-auth-guard";
 import { userOtpActiveDto } from "./dto/user-otp-active.dto";
 import { SignupUserDocumentDto } from "./dto/signup-user-document.dto";
+import { userDocumentActiveDto } from "./dto/user-document-active.dto";
+import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
+import { SwaggerGetUser } from "./swagger-decorator/get-user-decorator";
+import { SwaggerGetAllUsers } from "./swagger-decorator/get-all-users-decorator";
 
 
 @ApiTags('Auth')
@@ -54,7 +45,6 @@ export class AuthController {
         {
             return this.authService.UserDocument(body);
         }
-
 
 
         //  international user document visa
@@ -111,10 +101,21 @@ export class AuthController {
 
         // user update ( otp active status)
         @ApiBody({type:userOtpActiveDto})
-        @Patch('Otp_active')
-        async isOtpActive(@Body() userOtpActivedto: userOtpActiveDto)
+        @Patch('otp_active/:email')
+        async isOtpActive(@Param('email') email:string,@Body() userOtpActivedto: userOtpActiveDto)
         {
-            return this.authService.isOtpActive(userOtpActivedto);
+            return this.authService.isOtpActive(email,userOtpActivedto);
+        }
+
+
+
+
+        // user  document update
+        @ApiBody({type:userDocumentActiveDto})
+        @Patch('document_active/:userId')
+        async isDocumentActive(@Param('userId') userId:string,@Body() UserDocumentActiveDto: userDocumentActiveDto):Promise<{ message: string, updateResult:UserDocuments}>
+        {
+             return this.authService.isDocumentActive(userId,UserDocumentActiveDto);
         }
 
 
@@ -130,6 +131,7 @@ export class AuthController {
         }
 
 
+
         //profile get
         @ApiBearerAuth()
         @UseGuards(JwtAuthGuard)
@@ -138,6 +140,7 @@ export class AuthController {
         {
             return this.authService.getProfile(accessToken);
         }
+
 
 
         // sign up with google
@@ -161,8 +164,10 @@ export class AuthController {
 
 
           // get user by id
-          @Get('/:user_id')
-          async  findUserById(@Param('user_id') userId:string): Promise<User>
+          @SwaggerGetUser()
+          @Get('/:userId')
+          @UsePipes(ParseUUIDPipe)
+          async  findUserById(@Param('userId') userId:string): Promise<User>
           {
                return this.authService.findUserById(userId);
           }
@@ -171,7 +176,8 @@ export class AuthController {
 
 
           // get all users
-          @Get('/users/:all_users')
+          @SwaggerGetAllUsers()
+          @Get('/users/:allUsers')
           async  getAllUser(): Promise<User[]>
           {
                return this.authService.getAllUser();
@@ -218,27 +224,21 @@ export class AuthController {
 
          //change user password token verification
          @ApiBody({type:changeUserPasswordTokenVerificationDto})
-         @Post('changePassword/token_verification')
-         async tokenVerification(@Body() body: changeUserPasswordTokenVerificationDto)
+         @Put('changePassword/token_verification/:email')
+         async tokenVerification(@Param('email') email:string,@Body() body: changeUserPasswordTokenVerificationDto)
          {
-              return this.authService.tokenVerification(body);
+              return this.authService.tokenVerification(email,body);
          }
 
 
 
           //change password
          @ApiBody({type:ChangeUserPasswordDto})
-         @Put('changePassword')
-         async changePassword(@Body() reqBody: ChangeUserPasswordDto)
+         @Put('changePassword/:email')
+         async changePassword(@Param('email') email:string,@Body() reqBody: ChangeUserPasswordDto)
          {
-              return this.authService.changePassword(reqBody);
+              return this.authService.changePassword(email,reqBody);
          }
-
-
-
-
-
-
 
 
 
@@ -263,13 +263,6 @@ export class AuthController {
   //    }
   //     throw new UnauthorizedException('Unauthorized');
   //  }
-
-
-
-
-
-
-
 
 
 

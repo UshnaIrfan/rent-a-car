@@ -1,10 +1,4 @@
-import {
-     IsEmail,
-     IsNotEmpty, IsOptional,
-     IsString,
-     MaxLength,
-     MinLength, Matches
-} from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString} from "class-validator";
 import { Role } from "../../../enums/role.enum";
 import {otpStatus} from "../../users/schemas/user.schema";
 import {blockStatus} from "../../users/schemas/user.schema";

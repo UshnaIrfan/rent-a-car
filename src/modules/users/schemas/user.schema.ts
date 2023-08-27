@@ -1,13 +1,8 @@
-import {
-     Entity,
-     Column,
-     PrimaryGeneratedColumn,
-     CreateDateColumn,
-     UpdateDateColumn, OneToMany
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
-import { UserDocuments } from "./user-document.schema";
+import {UserDocuments} from "../../user-documents/schemas/userDocuments.schema";
+
 
 export enum otpStatus {
      ACTIVE= 'true',

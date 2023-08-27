@@ -2,11 +2,11 @@ import {User} from "./schemas/user.schema";
 import { UsersService } from "./users.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Module } from "@nestjs/common";
-import { UsersRepository } from "./repositories/users.respository";
-import {UserDocuments } from "./schemas/user-document.schema";
-import {UsersDocumentRepository} from "./repositories/user-document.respository";
-import {userVerifcationDocumentsRepository} from "./repositories/user-verifcation-documents.repository";
-import {UserVerificationDocuments} from "./schemas/user-verification-document.schema";
+import { UsersRepository } from "./users.respository";
+import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
+import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
+import { userVerifcationDocumentsRepository } from "../user-verifications-documents/user-verification-documents.repository";
+import { UsersDocumentRepository } from "../user-documents/user-document.repository";
 
 
 @Module({

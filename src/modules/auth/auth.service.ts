@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  ConflictException,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotAcceptableException,
-  NotFoundException, UnauthorizedException
-} from "@nestjs/common";
+import { BadRequestException, Body, ConflictException, Inject, Injectable, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "../users/schemas/user.schema";
@@ -17,7 +8,7 @@ import JwtTokensInterface from "./interfaces/jwt-token.interface";
 import * as handlebars from "handlebars";
 import * as fs from "fs";
 import changeUserPasswordTokenVerificationInterface from "./interfaces/change-user-password-token-verification.interface";
-import { generateRandomToken } from "../../helpers/randomtoken.helper";
+import { generateRandomToken } from "../../helpers/randomToken.helper";
 import changeUserPasswordInterface from "./interfaces/change-user-password.interface";
 import signupUserInterface from "./interfaces/signup-user.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
@@ -29,21 +20,29 @@ import * as twilio from 'twilio';
 import {  TwilioService } from 'nestjs-twilio';
 import { generateRandomOtp } from "../../helpers/randomOtp.helper";
 import userOtpActiveInterface from "./interfaces/user-otp-active.interface";
-import { UsersRepository } from "../users/repositories/users.respository";
+import { UsersRepository } from "../users/users.respository";
 import signupUserDocumentsInterface from "./interfaces/signup-user-documents.interface";
 import * as path from 'path';
+import userDocumentActiveInterface from "./interfaces/user-document-active.interface";
+import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
+import {UserDocumentsService} from "../user-documents/user-documents.service";
+import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
 
 
 @Injectable()
 export class AuthService {
+
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
     private readonly twilioService: TwilioService,
+    private readonly UsersDocumentService: UserDocumentsService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly usersRepository: UsersRepository,
+    private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
+
   ) {}
 
 
@@ -52,7 +51,6 @@ export class AuthService {
          // Sign up
         async signup(@Body() Signup: signupUserInterface)
         {
-
               const Otpexpires = this.configService.get("OTP_EXPIRY");
               const Email = await this.usersService.findUserByEmail(Signup.email);
               if (Email)
@@ -112,9 +110,9 @@ export class AuthService {
 
 
           // user update ( otp active status)
-          async isOtpActive(@Body() reqBody: userOtpActiveInterface)
+          async isOtpActive(email:string,@Body() reqBody: userOtpActiveInterface)
           {
-            const user = await this.usersService.findUserByEmail(reqBody.email);
+            const user = await this.usersService.findUserByEmail(email);
             if (!user)
             {
                 throw new NotFoundException('Invalid email');
@@ -142,12 +140,12 @@ export class AuthService {
                 parsedToken.active = true;
                 const updatedTokenValue = JSON.stringify(parsedToken);
                 await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
-                const user = await this.usersService.isOtpActive(reqBody.email, reqBody.otp_status);
+                const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
                 const Username = user.firstName;
                 const logo_l2a=process.env.LOGO_L2A
                 const contact_us_url= process.env.CONTACT_US
                 const privacy_policy_url= process.env.PRIVACY_POLICY
-                await this.sendWelcomeEmail(reqBody.email, Username,contact_us_url,privacy_policy_url,logo_l2a);
+                await this.sendWelcomeEmail(email, Username,contact_us_url,privacy_policy_url,logo_l2a);
                 return { message: 'Your account has been successfully created. Please login here' };
 
             }
@@ -156,6 +154,16 @@ export class AuthService {
                  throw new InternalServerErrorException();
             }
           }
+
+
+
+           // user  document update
+            async isDocumentActive(userId:string,@Body() reqBody: userDocumentActiveInterface):Promise<{ message: string, updateResult:UserDocuments}>
+            {
+                  await this.usersService.findUserById(userId);
+                  const updateResult =await this.UsersDocumentService.updateDocument(userId,reqBody.documentStatus);
+                  return { message: "document updated successfully", updateResult };
+            }
 
 
 
@@ -221,65 +229,54 @@ export class AuthService {
          // user document
           async UserDocument(@Body() body:signupUserDocumentsInterface )
           {
-                const User = await this.usersService.getUserById(body.userId)
-                if (!User)
-                {
-                  throw new NotFoundException('user not found');
-                }
+              await this.usersService.getUserById(body.userId)
 
-                const type = await this.usersService.gettittlebytype(body.type)
-                if (!type)
-                {
-                    throw new NotFoundException('Invalid type');
-                }
 
-                const title = await this.usersService.gettittlebyname(body.titleName)
-                if (!title)
-                {
-                    throw new NotFoundException('Invalid tittle Name');
-                }
+              // const type = await this.UserVerificationsDocumentsService.gettittlebytype(body.type)
+              // if (!type)
+              // {
+              //   throw new NotFoundException('Invalid type');
+              // }
 
-                const slug = await this.usersService.gettittlebySlug(body.slug)
-                if (!slug)
-                {
-                    throw new NotFoundException('Invalid slug');
-                }
+              // const title = await this.UserVerificationsDocumentsService.gettittlebyname(body.titleName)
+              // if (!title)
+              // {
+              //   throw new NotFoundException('Invalid tittle Name');
+              // }
 
-                const previous =await this.usersService.getByImage(body.userId,body.image)
-                if (previous)
-                {
+              const slug = await this.UserVerificationsDocumentsService.gettittlebySlug(body.slug)
+              if (!slug)
+              {
+                throw new NotFoundException('Invalid slug');
+              }
+              const userData: signupUserDocumentsInterface & { titleName: string,type:string } = {
+                ...body,
+                titleName:slug.title,
+                type:slug.type,
 
-                    throw new ConflictException('You have already submitted ');
-                }
-                const user = await this.usersService.UserDocument(body);
-                const base64Data = user.image;
-                const base64image = base64Data.split(';base64,').pop();
-                const pdfBuffer = Buffer.from(base64image, 'base64');
+              };
+              const user = await this.UsersDocumentService.UserDocument(userData);
+              const base64Data = user.image;
+              const base64image = base64Data.split(';base64,').pop();
+              const pdfBuffer = Buffer.from(base64image, 'base64');
 
-                const savePath = path.join(
-                  __dirname,
-                  '../../../..',
-                  '/asset/',
-                  `${user.id}-${user.type}.png`
-                );
-
-                fs.writeFileSync(savePath, pdfBuffer);
-                return user;
+              const savePath = path.join(
+                __dirname,
+                '../../../..',
+                '/asset/',
+                `${user.id}-${user.type}-${user.titleName}.png`
+              );
+              fs.writeFileSync(savePath, pdfBuffer);
+              return user;
           }
 
 
 
 
-          //get user by id
+         //get user by id
           async findUserById(userId: string): Promise<User>
           {
-              const user = await this.usersService.findUserById(userId);
-              if (!user)
-              {
-                throw new NotFoundException('user not found');
-              }
-
-              return user;
+               return  await this.usersService.findUserById(userId);
           }
 
 
@@ -297,7 +294,7 @@ export class AuthService {
 
 
           // sign up with google
-          async saveUserToDatabase(userData:any): Promise<User | null>
+          async saveUserToDatabase(userData:any): Promise<User>
           {
                 const  email= await this.usersService.findUserByEmail(userData.email);
                 if(email)
@@ -437,9 +434,9 @@ export class AuthService {
 
 
            //change user password token verification
-            async tokenVerification(@Body() reqBody: changeUserPasswordTokenVerificationInterface)
+            async tokenVerification(email:string,@Body() reqBody: changeUserPasswordTokenVerificationInterface)
             {
-                const user = await this.usersService.findUserByEmail(reqBody.email);
+                const user = await this.usersService.findUserByEmail(email);
                 if (!user)
                 {
                    throw new NotFoundException('Invalid email');
@@ -472,9 +469,9 @@ export class AuthService {
 
 
              // change password
-             async changePassword(@Body() reqBody: changeUserPasswordInterface)
+             async changePassword(email:string,@Body() reqBody: changeUserPasswordInterface)
              {
-                  const user = await this.usersService.findUserByEmail(reqBody.email);
+                  const user = await this.usersService.findUserByEmail(email);
                   if (!user)
                   {
                      throw new NotFoundException('Invalid email');
@@ -512,8 +509,8 @@ export class AuthService {
                       const logo_l2a=process.env.LOGO_L2A
                       const contact_us_url= process.env.CONTACT_US
                       const privacy_policy_url= process.env.PRIVACY_POLICY
-                      await this.usersService.updatePassword(reqBody.email, hashedPassword);
-                      await this.sendPasswordUpdatedEmail(reqBody.email, user.firstName,contact_us_url,privacy_policy_url,logo_l2a);
+                      await this.usersService.updatePassword(email, hashedPassword);
+                      await this.sendPasswordUpdatedEmail(email, user.firstName,contact_us_url,privacy_policy_url,logo_l2a);
                       const loginResult = this.login(user);
                       await this.cacheManager.del(tokenKey);
                       return loginResult;
@@ -633,11 +630,6 @@ export class AuthService {
               html: emailBody,
             });
           }
-
-
-
-
-
 
 
   //apple

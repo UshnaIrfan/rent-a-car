@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "../schemas/user.schema";
+import { User } from "./schemas/user.schema";
+import * as uuid from "uuid";
 
 @Injectable()
 export class UsersRepository {
@@ -47,13 +48,20 @@ export class UsersRepository {
           // get user by id   ( with relation)
          async findUserById(id: string): Promise<User | null>
          {
-             const result=  await this.userModel.findOne({ where: { id} , relations: ['UserDocuments']});
-             if (!result)
+
+             if (!uuid.validate(id))
+             {
+               throw new NotFoundException('Invalid UUID Format');
+             }
+             const user=  await this.userModel.findOne({ where: { id} , relations: ['UserDocuments']});
+             if (!user)
              {
                throw new NotFoundException('user not found');
              }
-              return  result
+              return  user
          }
+
+
 
 
           // get user by id

@@ -1,26 +1,16 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./schemas/user.schema";
-import { UsersRepository } from "./repositories/users.respository";
-import {UsersDocumentRepository} from "./repositories/user-document.respository";
-import { createUserDocumentsDto } from "./dto/create-user-documents.dto";
-import { userVerifcationDocumentsRepository } from "./repositories/user-verifcation-documents.repository";
-import { UserDocuments } from "./schemas/user-document.schema";
-import { UserVerificationDocuments } from "./schemas/user-verification-document.schema";
-
+import { UsersRepository } from "./users.respository";
+import * as uuid from "uuid";
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly usersRepository: UsersRepository,
-    private readonly usersDocumentRepository: UsersDocumentRepository,
-    private readonly UserVerifcationDocumentsRepository: userVerifcationDocumentsRepository,
-
-  ) {}
+    private readonly usersRepository: UsersRepository) {}
 
 
 
-             //FRONTEND APIS
             // find user by email
              async findUserByEmail(email: string): Promise<User | null>
              {
@@ -38,7 +28,7 @@ export class UsersService {
             // get user by id   ( with relation)
             async findUserById (id:string): Promise<User | null>
             {
-                return this.usersRepository.findUserById(id);
+                return  await this.usersRepository.findUserById(id);
             }
 
 
@@ -46,7 +36,16 @@ export class UsersService {
             // get user by id
             async getUserById (id:string):Promise<User| null>
             {
-              return this.usersRepository.getUserById(id);
+                if (!uuid.validate(id))
+                {
+                  throw new NotFoundException('Invalid UUID Format');
+                }
+                const user= await this.usersRepository.getUserById(id);
+                if (!user)
+                {
+                  throw new NotFoundException('user not found');
+                }
+                return user
             }
 
 
@@ -88,45 +87,6 @@ export class UsersService {
             }
 
 
-
-           // user document
-            async UserDocument(user: createUserDocumentsDto):Promise<UserDocuments>
-            {
-                return this.usersDocumentRepository.UserDocument(user);
-            }
-
-
-          // get user documents  by   title name
-            async getByImage (id:string,image:string):Promise<UserDocuments>
-            {
-              return this.usersDocumentRepository.getByImage(id,image);
-            }
-
-
-
-
-
-
-         // find user documents  by   title name
-          async gettittlebyname (titleName:string):Promise<UserVerificationDocuments>
-          {
-            return this.UserVerifcationDocumentsRepository.gettittlebyname(titleName);
-          }
-
-
-          // find user documents  by   title type
-          async gettittlebytype (type:string):Promise<UserVerificationDocuments>
-          {
-            return this.UserVerifcationDocumentsRepository.gettittlebytype(type);
-          }
-
-
-
-          // find user documents  by slug
-          async gettittlebySlug (type:string):Promise<UserVerificationDocuments>
-          {
-            return this.UserVerifcationDocumentsRepository.gettittlebySlug(type);
-          }
 
 
 

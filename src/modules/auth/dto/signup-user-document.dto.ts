@@ -1,9 +1,6 @@
-import {
-  IsNotEmpty,
-  IsString,
-} from "class-validator";
+import { IsNotEmpty, IsString} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { documentStatus } from "../../users/schemas/user-document.schema";
+import { documentStatus } from "src/modules/user-documents/schemas/userDocuments.schema";
 
 export class SignupUserDocumentDto {
 
@@ -12,16 +9,22 @@ export class SignupUserDocumentDto {
       @IsNotEmpty()
       userId: string;
 
-      @ApiProperty()
-      @IsString()
-      @IsNotEmpty()
-      type: string;
+      // @ApiProperty()
+      // @IsString()
+      // @IsNotEmpty()
+      // type: string;
+
+      //
+      // @ApiProperty()
+      // @IsString()
+      // @IsNotEmpty()
+      // titleName: string;
 
 
       @ApiProperty()
       @IsString()
       @IsNotEmpty()
-      titleName: string;
+      slug: string;
 
 
       @ApiProperty()
@@ -29,11 +32,6 @@ export class SignupUserDocumentDto {
       @IsNotEmpty()
       image: string;
 
-
-      @ApiProperty()
-      @IsString()
-      @IsNotEmpty()
-      slug: string;
 
 
 

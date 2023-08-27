@@ -4,13 +4,14 @@ import { ApiProperty } from "@nestjs/swagger";
 export class ChangeUserPasswordDto {
 
     @ApiProperty({ type: String, required: true })
+    @IsString()
     @IsNotEmpty()
     token: string;
 
-    @ApiProperty({ type: String, required: true })
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+    // @ApiProperty({ type: String, required: true })
+    // @IsEmail()
+    // @IsNotEmpty()
+    // email: string;
 
 
     @ApiProperty({ type: String, required: true })

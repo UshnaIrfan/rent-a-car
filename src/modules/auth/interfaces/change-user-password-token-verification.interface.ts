@@ -1,4 +1,4 @@
 export default interface changeUserPasswordTokenVerificationInterface{
-   readonly email: string;
+//   readonly email: string;
    readonly token: string;
 }
