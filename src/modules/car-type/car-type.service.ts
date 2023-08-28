@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import createCarTypeInterface from "./interfaces/create-car-type.interface";
 import { CarTypeRepository } from "./car-type.repository";
 import { year } from "../year/schemas/year.schema";
@@ -24,23 +24,40 @@ export class CarTypeService {
       // get all  car types
       async getCarTypes ():Promise<carType[]>
       {
-        return  await this.carTypeRepository.getCarTypes();
+        const  result= await this.carTypeRepository.getCarTypes();
+        if (result.length==0)
+        {
+          throw new NotFoundException('car types not exist');
+        }
+        return  result
       }
 
 
 
       // update  car types
-      async updateCarTypes (cartypeId:string,body:UpdateCarTypeDto)
+      async updateCarTypes (cartypeId:string,body:UpdateCarTypeDto):Promise<{ carType:carType; message: string }>
       {
-        return  await this.carTypeRepository.updateCarTypes(cartypeId,body);
+        const carType=await this.carTypeRepository.updateCarTypes(cartypeId,body);
+        return { message: "updated successfully", carType};
+
       }
 
 
 
       // delete  car types
-      async deleteCarTypes(cartypeId:string)
+      async deleteCarTypes(cartypeId:string):Promise<{ carType:carType; message: string }>
       {
-        return  await this.carTypeRepository.deleteCarTypes(cartypeId);
+        const carType= await this.carTypeRepository.deleteCarTypes(cartypeId);
+        return { message: "deleted successfully", carType};
+
+      }
+
+
+
+      // get  car types
+      async getCarTypeById(cartypeId:string): Promise<carType>
+      {
+        return  await this.carTypeRepository.getCarTypeById(cartypeId);
       }
 
 }

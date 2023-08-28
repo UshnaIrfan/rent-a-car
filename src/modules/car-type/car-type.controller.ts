@@ -2,9 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CarTypeService } from './car-type.service';
 import { CreateCarTypeDto } from './dto/create-car-type.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
 import { carType } from "./schemas/car-type.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import { UpdateCarTypeDto } from "./dto/update-car-type.dto";
 
 

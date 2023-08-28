@@ -1,16 +1,16 @@
 export default interface createCarInterface {
-  readonly company: string;
-  readonly model: string;
-  readonly year: string;
-  readonly  color: string;
-  readonly transmission: string;
-  readonly  carType: string;
-  readonly baggageOption: string;
-  readonly  seatsCapacity: string;
+  readonly brandId: string;
+  readonly modelId: string;
+  readonly yearId: string;
+  readonly  colorId: string;
+  readonly transmissionId: string;
+  readonly  carTypeId: string;
+  readonly baggageOptionId: string;
+  readonly  seatsCapacityId: string;
   readonly mileage: string;
   readonly  chassyNo: string;
   readonly numberPlate: string;
   readonly  securityAmount: string;
-  readonly driverOption: string;
+  readonly driverOptionId: string;
   readonly  description: string;
 }

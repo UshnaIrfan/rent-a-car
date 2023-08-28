@@ -31,8 +31,8 @@ export class transmissionRepository{
 
 
 
-  // update  transmission
-      async updateTransmission(transmissionId: string, body: UpdateTransmissionDto)
+     // update  transmission
+      async updateTransmission(transmissionId: string, body: UpdateTransmissionDto):Promise<transmission|null>
       {
         if (!uuid.validate(transmissionId))
         {
@@ -56,7 +56,7 @@ export class transmissionRepository{
 
 
       // delete transmission
-      async deleteTransmission(transmissionId:string)
+      async deleteTransmission(transmissionId:string):Promise<transmission|null>
       {
           if (!uuid.validate(transmissionId))
           {
@@ -70,6 +70,20 @@ export class transmissionRepository{
           }
           return await this.transmissionModel.remove(result);
 
+      }
+
+
+
+      // get transmission
+      async getCarTransmissionById(transmissionId:string):Promise<transmission|null>
+      {
+          if (!uuid.validate(transmissionId))
+          {
+            throw new NotFoundException('Invalid UUID Format');
+          }
+
+          const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
+          return result
       }
 }
 

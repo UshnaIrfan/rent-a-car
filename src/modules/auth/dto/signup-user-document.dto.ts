@@ -35,7 +35,7 @@ export class SignupUserDocumentDto {
 
 
 
-      @ApiProperty({type: String, enum: documentStatus, default: documentStatus.INACTIVE})
+      @ApiProperty({type: String, enum: documentStatus, default: documentStatus.PENDING})
       @IsString()
       @IsNotEmpty()
       documentStatus: string;

@@ -27,7 +27,7 @@ export class brandRepository{
 
 
       // get all  car brands
-      async getCarBrands(): Promise<brand[]| null>
+      async getCarBrands():Promise<brand[]| null>
       {
         return  this.brandModel.find({ });
       }
@@ -35,7 +35,7 @@ export class brandRepository{
 
 
        // update   car brands
-        async updateCarBrands(brandId: string, body: UpdateBrandDto)
+        async updateCarBrands(brandId: string, body: UpdateBrandDto):Promise<brand| null>
         {
             if (!uuid.validate(brandId))
             {
@@ -57,7 +57,7 @@ export class brandRepository{
 
 
        // delete  car brands
-         async deleteCarBrands(brandId: string)
+         async deleteCarBrands(brandId: string):Promise<brand| null>
         {
                 if (!uuid.validate(brandId))
                 {
@@ -73,5 +73,19 @@ export class brandRepository{
                 return await this.brandModel.remove(result);
         }
 
+
+
+
+        // get  car brand by id
+        async getCarBrandById(brandId: string):Promise<brand| null>
+        {
+          if (!uuid.validate(brandId))
+          {
+            throw new NotFoundException('Invalid UUID Format');
+          }
+
+          const result = await this.brandModel.findOne({ where: {  id:brandId}});
+          return  result
+        }
 }
 

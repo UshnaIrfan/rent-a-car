@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import createDriverOptionInterface from "./interfaces/create-driver-option.interface";
 import { driverOptionRepository } from "./driver-option.repository";
 import { driverOption } from "./schemas/driver-option.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import { UpdateDriverOptionDto } from "./dto/update-driver-option.dto";
 
 @Injectable()
@@ -22,21 +21,35 @@ export class DriverOptionService {
          // get all  driver  Option
         async getDriverOption ():Promise<driverOption[]>
         {
-          return  await this.driverOptionRepository.getDriverOption();
+          const result= await this.driverOptionRepository.getDriverOption();
+          if (result.length==0)
+          {
+            throw new NotFoundException('driver  Option not exist');
+          }
+          return  result
         }
 
 
 
        // update  driver  Option
-        async updateDriverOptionById (driverOptionId:string,body:UpdateDriverOptionDto)
+        async updateDriverOptionById (driverOptionId:string,body:UpdateDriverOptionDto):Promise<{ driverOption:driverOption; message: string }>
         {
-          return  await this.driverOptionRepository.updateDriverOptionById(driverOptionId,body);
+           const driverOption= await this.driverOptionRepository.updateDriverOptionById(driverOptionId,body);
+           return { message: "updated successfully", driverOption};
         }
 
 
-      // delete  driver  Option
-      async deleteDriverOption(driverOptionId:string)
-      {
-        return  await this.driverOptionRepository.deleteDriverOption(driverOptionId);
-      }
+        // delete  driver  Option
+        async deleteDriverOption(driverOptionId:string):Promise<{ driverOption:driverOption; message: string }>
+        {
+           const driverOption= await this.driverOptionRepository.deleteDriverOption(driverOptionId);
+           return { message: " deleted successfully", driverOption};
+        }
+
+
+        // get  driver  Option
+        async getCarDriverOptionById(driverOptionId:string): Promise<driverOption>
+        {
+          return  await this.driverOptionRepository.getCarDriverOptionById(driverOptionId);
+        }
 }

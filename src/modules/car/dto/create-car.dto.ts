@@ -10,53 +10,53 @@ export class createCarDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  company : string;
+  brandId : string;
 
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  model: string;
+  modelId: string;
 
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  year: string;
+  yearId: string;
 
-
-
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  color : string;
-
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  transmission: string;
-
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  carType : string;
 
 
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  baggageOption: string;
+  colorId : string;
+
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  transmissionId: string;
+
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  carTypeId : string;
 
 
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  seatsCapacity : string;
+  baggageOptionId: string;
+
+
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  seatsCapacityId : string;
 
 
 
@@ -89,7 +89,7 @@ export class createCarDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  driverOption: string ;
+  driverOptionId: string ;
 
 
   @ApiProperty()

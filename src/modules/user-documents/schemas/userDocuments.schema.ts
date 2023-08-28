@@ -7,14 +7,15 @@ import {
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "../../users/schemas/user.schema"
-import { UserVerificationDocuments } from "../../user-verifications-documents/schemas/userVerificationDocumets.schema";
 import { driver } from "../../driver/schemas/driver.schema";
 
 
 
 export enum  documentStatus {
-  ACTIVE= 'true',
-  INACTIVE = 'false',
+      PENDING = 'pending',
+      APPROVED = 'approved',
+      REJECTED = 'rejected'
+
 }
 
 export enum  usertype {
@@ -50,7 +51,7 @@ export class UserDocuments {
 
 
       @ApiProperty()
-      @Column({  enum: documentStatus , default: documentStatus.INACTIVE  })
+      @Column({  enum: documentStatus , default: documentStatus.PENDING  })
       documentstatus: string;
 
 

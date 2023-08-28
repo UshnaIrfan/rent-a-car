@@ -172,13 +172,13 @@ export class AuthService {
         async login(user: User):Promise<JwtTokensInterface>
         {
             const result= await this.usersService.findUserById(user.id);
-            if ( result.UserDocuments.some(doc => doc.documentstatus === 'false'))
+            const unapprovedDocuments = result.UserDocuments.filter(doc => doc.documentstatus === 'pending' || doc.documentstatus === 'rejected');
+            if (unapprovedDocuments.length > 0)
             {
-                 const unapprovedDocuments = result.UserDocuments
-                 .filter(doc => doc.documentstatus === 'false')
-                 .map(doc => doc.titleName)
-                 throw new BadRequestException(`User documents (${unapprovedDocuments}) have not been approved`);
+              const unapprovedDocumentTitles = unapprovedDocuments.map(doc => doc.titleName).join(', ');
+              throw new BadRequestException(`User documents (${unapprovedDocumentTitles}) have not been approved`);
             }
+
 
             if (user.otpStatus == 'false'   )
             {

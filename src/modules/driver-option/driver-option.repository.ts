@@ -3,11 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateDriverOptionDto } from "./dto/create-driver-option.dto";
 import { driverOption } from "./schemas/driver-option.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
+
 import { UpdateDriverOptionDto } from "./dto/update-driver-option.dto";
 
 
@@ -35,7 +32,7 @@ export class driverOptionRepository{
 
 
       // update  driver  Option
-        async updateDriverOptionById(driverOptionId: string, body: UpdateDriverOptionDto)
+        async updateDriverOptionById(driverOptionId: string, body: UpdateDriverOptionDto): Promise<driverOption| null>
         {
           if (!uuid.validate(driverOptionId))
           {
@@ -57,7 +54,7 @@ export class driverOptionRepository{
 
 
         // delete  driver  Option
-        async deleteDriverOption(driverOptionId:string)
+        async deleteDriverOption(driverOptionId:string): Promise<driverOption| null>
         {
             if (!uuid.validate(driverOptionId))
             {
@@ -70,6 +67,20 @@ export class driverOptionRepository{
               throw new NotFoundException('Driver Option not found');
             }
             return await this.driverOptionModel.remove(result);
+        }
+
+
+
+        //  get driver  Option
+        async getCarDriverOptionById(driverOptionId:string): Promise<driverOption| null>
+        {
+            if (!uuid.validate(driverOptionId))
+            {
+              throw new NotFoundException('Invalid UUID Format');
+            }
+
+            const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
+            return result
         }
 }
 

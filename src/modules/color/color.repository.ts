@@ -3,11 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { color } from "./schemas/color.schema";
 import { CreateColorDto } from "./dto/create-color.dto";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
 import { UpdateColorDto } from "./dto/update-color.dto";
 
 
@@ -25,7 +21,7 @@ export class ColorRepository{
         }
 
 
-        // get all users
+        // get all  color
         async getCarColor(): Promise<color[]| null>
         {
           return  this.colorModel.find({ });
@@ -33,7 +29,7 @@ export class ColorRepository{
 
 
        // update  color
-        async updateCarColor(colorId: string, body: UpdateColorDto)
+        async updateCarColor(colorId: string, body: UpdateColorDto):Promise<color| null>
         {
           if (!uuid.validate(colorId))
           {
@@ -56,7 +52,7 @@ export class ColorRepository{
 
 
         // delete  color
-        async deleteCarColor(colorId:string)
+        async deleteCarColor(colorId:string):Promise<color| null>
         {
 
           if (!uuid.validate(colorId))
@@ -72,5 +68,18 @@ export class ColorRepository{
           return await this.colorModel.remove(result);
         }
 
+
+
+        // get color
+          async getCarColorById(colorId:string):Promise<color| null>
+          {
+            if (!uuid.validate(colorId))
+            {
+              throw new NotFoundException('Invalid UUID Format');
+            }
+
+            const result = await this.colorModel.findOne({ where: {  id:colorId}});
+            return result
+          }
 }
 

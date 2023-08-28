@@ -18,44 +18,44 @@ export class car {
 
   @ApiProperty()
   @Column({nullable:true})
-  company: string;
+  brandId: string;
 
 
   @ApiProperty()
   @Column({nullable:true  })
-  model: string;
-
-
-
-  @ApiProperty()
-  @Column({nullable:true  })
-  year: string;
-
-
-  @ApiProperty()
-  @Column({nullable:true  })
-  color: string;
-
-
-  @ApiProperty()
-  @Column({nullable:true  })
-  transmission: string;
+  modelId: string;
 
 
 
   @ApiProperty()
   @Column({nullable:true  })
-  carType: string;
+  yearId: string;
+
+
+  @ApiProperty()
+  @Column({nullable:true  })
+  colorId: string;
+
+
+  @ApiProperty()
+  @Column({nullable:true  })
+  transmissionId: string;
+
+
+
+  @ApiProperty()
+  @Column({nullable:true  })
+  carTypeId: string;
 
 
   @ApiProperty()
   @Column({nullable:true})
-  baggageOption: string;
+  baggageOptionId: string;
 
 
   @ApiProperty()
   @Column({nullable:true})
-  seatsCapacity: string;
+  seatsCapacityId: string;
 
 
 
@@ -84,7 +84,7 @@ export class car {
 
   @ApiProperty()
   @Column({nullable:true})
-  driverOption: string;
+  driverOptionId: string;
 
 
 

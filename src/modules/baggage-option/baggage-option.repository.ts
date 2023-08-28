@@ -31,7 +31,7 @@ export class baggageOptionRepository{
 
 
       // update  Baggage
-      async updateBaggageOption(baggageId: string, body: UpdateBaggageOptionDto)
+      async updateBaggageOption(baggageId: string, body: UpdateBaggageOptionDto) :Promise<baggageOption| null>
       {
               if (!uuid.validate(baggageId))
               {
@@ -70,6 +70,20 @@ export class baggageOptionRepository{
           }
 
           return await this.baggageOptionModel.remove(result);
+      }
+
+
+
+      // get Baggage
+      async getCarBaggageOptionById(baggageId:string): Promise<baggageOption| null>
+      {
+          if (!uuid.validate(baggageId))
+          {
+            throw new NotFoundException('Invalid UUID Format');
+          }
+
+          const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
+          return result
       }
 }
 

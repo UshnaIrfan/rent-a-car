@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateTransmissionDto } from './dto/create-transmission.dto';
 import { UpdateTransmissionDto } from './dto/update-transmission.dto';
 import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
@@ -24,22 +24,37 @@ export class TransmissionService {
       // get all  transmission
       async getTransmission ():Promise<transmission[]>
       {
-        return  await this.transmissionRepository.getTransmission();
+          const result= await this.transmissionRepository.getTransmission();
+          if (result.length==0)
+          {
+            throw new NotFoundException('transmission not exist');
+          }
+          return  result
       }
 
 
 
 
       // update  transmission
-      async updateTransmission (transmissionId:string,body:UpdateTransmissionDto)
+      async updateTransmission (transmissionId:string,body:UpdateTransmissionDto):Promise<{ transmission:transmission; message: string }>
       {
-        return  await this.transmissionRepository.updateTransmission(transmissionId,body);
+          const  transmission= await this.transmissionRepository.updateTransmission(transmissionId,body);
+          return { message: "updated successfully", transmission};
       }
 
 
       // delete transmission
-      async deleteTransmission(transmissionId:string)
+      async deleteTransmission(transmissionId:string):Promise<{ transmission:transmission; message: string }>
       {
-        return  await this.transmissionRepository.deleteTransmission(transmissionId);
+          const transmission= await this.transmissionRepository.deleteTransmission(transmissionId);
+          return { message: " deleted successfully", transmission};
+      }
+
+
+
+      // get transmission
+      async getCarTransmissionById(transmissionId:string):Promise<transmission>
+      {
+        return  await this.transmissionRepository.getCarTransmissionById(transmissionId);
       }
 }

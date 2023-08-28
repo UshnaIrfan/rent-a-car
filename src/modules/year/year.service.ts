@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateYearDto } from './dto/create-year.dto';
 import { UpdateYearDto } from './dto/update-year.dto';
 import createCarInterface from "../car/interfaces/create-car.interface";
@@ -22,22 +22,37 @@ export class YearService {
         // get all  car year
         async getAllCarYear (): Promise<year[]| null>
         {
-          return  await this.yearRepository.getAllCarYear();
+          const result= await this.yearRepository.getAllCarYear();
+          if (result.length==0)
+          {
+            throw new NotFoundException('year not exist');
+          }
+          return  result
         }
 
 
-     // update  car year
-      async updateCarYear (yearId:string,body:UpdateYearDto)
-      {
-        return  await this.yearRepository.updateCarYear(yearId,body);
-      }
+         // update  car year
+          async updateCarYear (yearId:string,body:UpdateYearDto):Promise<{ year:year; message: string }>
+          {
+              const  year= await this.yearRepository.updateCarYear(yearId,body);
+              return { message: "updated successfully", year};
+          }
 
 
 
           // delete  car year
-          async deleteCarYear(yearId:string)
+          async deleteCarYear(yearId:string):Promise<{ year:year; message: string }>
           {
-              return  await this.yearRepository.deleteCarYear(yearId);
+              const  year= await this.yearRepository.deleteCarYear(yearId);
+              return { message: "deleted successfully", year};
           }
+
+
+
+            // get car year
+            async getCarYearById(yearId:string):Promise<year| null>
+            {
+              return  await this.yearRepository.getCarYearById(yearId);
+            }
 
 }

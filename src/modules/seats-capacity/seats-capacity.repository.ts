@@ -3,12 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateSeatsCapacityDto } from "./dto/create-seats-capacity.dto";
 import { seatsCapacity } from "./schemas/seats-capacity.schema";
-import { year } from "../year/schemas/year.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
 import { UpdateSeatsCapacityDto } from "./dto/update-seats-capacity.dto";
 
 
@@ -37,7 +32,7 @@ export class seatsCapacityRepository{
 
 
   // update  seats  Capacity
-      async updateSeatsCapacity(seatsCapacityId: string, body: UpdateSeatsCapacityDto)
+      async updateSeatsCapacity(seatsCapacityId: string, body: UpdateSeatsCapacityDto): Promise<seatsCapacity| null>
       {
         if (!uuid.validate(seatsCapacityId))
         {
@@ -59,7 +54,7 @@ export class seatsCapacityRepository{
 
 
      // delete  seats  Capacity
-      async deleteSeatsCapacity(seatsCapacityId:string)
+      async deleteSeatsCapacity(seatsCapacityId:string): Promise<seatsCapacity| null>
       {
             if (!uuid.validate(seatsCapacityId))
             {
@@ -73,6 +68,21 @@ export class seatsCapacityRepository{
             }
             return await this.seatsCapacityModel.remove(result);
       }
+
+
+
+
+        // get  seats  Capacity
+        async getCarSeatsCapacityById(seatsCapacityId:string): Promise<seatsCapacity| null>
+        {
+          if (!uuid.validate(seatsCapacityId))
+          {
+            throw new NotFoundException('Invalid UUID Format');
+          }
+
+          const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
+          return result
+        }
 
 }
 

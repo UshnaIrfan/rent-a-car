@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import createSeatsCapacityInterface from "./interfaces/create-seats-capacity.interface";
 import { seatsCapacityRepository } from "./seats-capacity.repository";
 import { year } from "../year/schemas/year.schema";
@@ -24,21 +24,38 @@ export class SeatsCapacityService {
         // get all  seats  Capacity
         async getSeatsCapacity (): Promise<seatsCapacity[]>
         {
-          return  await this.seatsCapacityRepository.getSeatsCapacity();
+            const  result= await this.seatsCapacityRepository.getSeatsCapacity();
+            if (result.length==0)
+            {
+              throw new NotFoundException('seats  Capacity not exist');
+            }
+            return  result
         }
 
 
 
       // update  seats  Capacity
-      async updateSeatsCapacity (seatsCapacityId:string,body:UpdateSeatsCapacityDto)
+      async updateSeatsCapacity (seatsCapacityId:string,body:UpdateSeatsCapacityDto):Promise<{ seatsCapacity:seatsCapacity; message: string }>
       {
-        return  await this.seatsCapacityRepository.updateSeatsCapacity(seatsCapacityId,body);
+        const  seatsCapacity=await this.seatsCapacityRepository.updateSeatsCapacity(seatsCapacityId,body);
+        return { message: "updated successfully", seatsCapacity};
+
       }
 
 
       // delete  seats  Capacity
-      async deleteSeatsCapacity(seatsCapacityId:string)
+      async deleteSeatsCapacity(seatsCapacityId:string):Promise<{ seatsCapacity:seatsCapacity; message: string }>
       {
-        return  await this.seatsCapacityRepository.deleteSeatsCapacity(seatsCapacityId);
+          const seatsCapacity=await this.seatsCapacityRepository.deleteSeatsCapacity(seatsCapacityId);
+          return { message: "deleted successfully", seatsCapacity};
+      }
+
+
+
+      // get  seats  Capacity
+      async getCarSeatsCapacityById(seatsCapacityId:string): Promise<seatsCapacity>
+      {
+        console.log(seatsCapacityId)
+        return  await this.seatsCapacityRepository.getCarSeatsCapacityById(seatsCapacityId);
       }
 }

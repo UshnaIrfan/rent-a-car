@@ -3,11 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { year } from "./schemas/year.schema";
 import { CreateYearDto } from "./dto/create-year.dto";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
 import { UpdateYearDto } from "./dto/update-year.dto";
 
 
@@ -35,7 +31,7 @@ export class yearRepository{
 
 
        // update  car year
-        async updateCarYear(yearId: string, body: UpdateYearDto)
+        async updateCarYear(yearId: string, body: UpdateYearDto): Promise<year| null>
         {
           if (!uuid.validate(yearId))
           {
@@ -57,7 +53,7 @@ export class yearRepository{
 
 
         // delete  car year
-        async deleteCarYear(yearId:string)
+        async deleteCarYear(yearId:string): Promise<year| null>
         {
               if (!uuid.validate(yearId))
               {
@@ -72,5 +68,26 @@ export class yearRepository{
               return await this.yearModel.remove(result);
 
         }
+
+
+
+
+
+          // get car year
+          async getCarYearById(yearId:string):Promise<year| null>
+          {
+              if (!uuid.validate(yearId))
+              {
+                throw new NotFoundException('Invalid UUID Format');
+              }
+
+              const result = await this.yearModel.findOne({ where: {  id:yearId}});
+              return result
+
+          }
 }
+
+
+
+
 

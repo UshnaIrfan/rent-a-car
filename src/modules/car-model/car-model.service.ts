@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCarModelDto } from './dto/create-car-model.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateCarModelDto } from './dto/update-car-model.dto';
 import createCarModelInterface from "./interfaces/create-car-model.interface";
 import { CarModelRepository } from "./car-model.repository";
 import { carModel } from "./schemas/car-model.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 
 @Injectable()
 export class CarModelService {
@@ -22,23 +20,38 @@ export class CarModelService {
         // get all  car model
         async getCarModel ():Promise<carModel[]>
         {
-          return  await this.carModelRepository.getCarModel();
+          const result= await this.carModelRepository.getCarModel();
+          if (result.length==0)
+          {
+            throw new NotFoundException('car model not exist');
+          }
+          return  result
         }
 
 
 
       // update  car model
-        async updateCarModel (modelId:string,body:UpdateCarModelDto)
+        async updateCarModel (modelId:string,body:UpdateCarModelDto):Promise<{ carModel:carModel; message: string }>
         {
-          return  await this.carModelRepository.updateCarModel(modelId,body);
+            const carModel = await this.carModelRepository.updateCarModel(modelId,body);
+            return { message: "updated successfully", carModel};
         }
 
 
 
        // delete  car model
-        async deleteCarModel(modelId:string)
+        async deleteCarModel(modelId:string):Promise<{ carModel:carModel; message: string }>
         {
-             return  await this.carModelRepository.deleteCarModel(modelId);
+              const carModel= await this.carModelRepository.deleteCarModel(modelId);
+              return { message: "deleted successfully", carModel};
+        }
+
+
+
+        // get by car model
+        async getCarModelById(modelId:string): Promise<carModel>
+        {
+          return  await this.carModelRepository.getCarModelById(modelId);
         }
 
 }

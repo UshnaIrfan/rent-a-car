@@ -3,12 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { carModel } from "./schemas/car-model.schema";
 import { CreateCarModelDto } from "./dto/create-car-model.dto";
-import { year } from "../year/schemas/year.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
+
 import { UpdateCarModelDto } from "./dto/update-car-model.dto";
 
 
@@ -35,7 +31,7 @@ export class CarModelRepository {
 
 
        // update  car model
-        async updateCarModel(modelId: string, body: UpdateCarModelDto)
+        async updateCarModel(modelId: string, body: UpdateCarModelDto): Promise<carModel| null>
         {
             if (!uuid.validate(modelId))
             {
@@ -57,7 +53,7 @@ export class CarModelRepository {
 
 
       // delete  car model
-        async deleteCarModel(modelId:string)
+        async deleteCarModel(modelId:string): Promise<carModel| null>
         {
               if (!uuid.validate(modelId))
               {
@@ -71,6 +67,21 @@ export class CarModelRepository {
               }
               return await this.carModel.remove(result);
 
+        }
+
+
+
+
+        // get by car model
+        async getCarModelById(modelId:string): Promise<carModel| null>
+        {
+            if (!uuid.validate(modelId))
+            {
+              throw new NotFoundException('Invalid UUID Format');
+            }
+
+            const result = await this.carModel.findOne({ where: { id:modelId}});
+            return result
         }
 }
 
