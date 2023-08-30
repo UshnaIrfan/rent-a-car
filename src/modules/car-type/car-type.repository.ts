@@ -3,8 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { carType } from "./schemas/car-type.schema";
 import { CreateCarTypeDto } from "./dto/create-car-type.dto";
-import * as uuid from "uuid";
 import { UpdateCarTypeDto } from "./dto/update-car-type.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -30,21 +30,15 @@ export class CarTypeRepository{
        // update  car types
         async updateCarTypes(cartypeId: string, body: UpdateCarTypeDto): Promise<carType| null>
         {
-            if (!uuid.validate(cartypeId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
-            const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
-            if (!result)
-            {
-              throw new NotFoundException('Car  Type not found');
-            }
-
-            result.carType = body.carType;
-
-            const updatedResult = await this.carTypeModel.save(result);
-            return updatedResult;
+              validateUuid(cartypeId);
+              const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
+              if (!result)
+              {
+                throw new NotFoundException('Car  Type not found');
+              }
+              result.carType = body.carType;
+              const updatedResult = await this.carTypeModel.save(result);
+              return updatedResult;
 
         }
 
@@ -52,11 +46,7 @@ export class CarTypeRepository{
         // delete  car types
         async deleteCarTypes(cartypeId:string): Promise<carType| null>
         {
-            if (!uuid.validate(cartypeId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(cartypeId);
             const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
             if (!result)
             {
@@ -71,13 +61,9 @@ export class CarTypeRepository{
         // get  car types
         async getCarTypeById(cartypeId:string): Promise<carType| null>
         {
-          if (!uuid.validate(cartypeId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
-          const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
-          return result
+            validateUuid(cartypeId);
+            const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
+            return result
         }
 }
 

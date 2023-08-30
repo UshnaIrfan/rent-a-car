@@ -3,8 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreatePricingDto } from "./dto/create-pricing.dto";
 import { pricing } from "./schemas/pricing.schema";
-import * as uuid from "uuid";
 import { UpdatePricingDto } from "./dto/update-pricing.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -33,11 +33,8 @@ export class pricingRepository{
         // update  pricing
         async updatePricing(pricingId: string, body: UpdatePricingDto): Promise<pricing| null>
         {
-            if (!uuid.validate(pricingId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
 
+            validateUuid(pricingId);
             const result = await this.pricingModel.findOne({ where: { id:pricingId}});
             if (!result)
             {
@@ -55,11 +52,7 @@ export class pricingRepository{
         // delete  pricing
         async deletePricing(pricingId:string): Promise<pricing| null>
         {
-            if (!uuid.validate(pricingId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(pricingId);
             const result = await this.pricingModel.findOne({ where: { id:pricingId}});
             if (!result)
             {

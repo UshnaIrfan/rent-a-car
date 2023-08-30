@@ -28,19 +28,19 @@ export class SeatsCapacityController {
         }
 
 
-       // update  seats  Capacity
-      @Patch('/:seatsCapacityId')
-      async  updateSeatsCapacity(@Param('seatsCapacityId') seatsCapacityId:string, @Body() body:UpdateSeatsCapacityDto )
-      {
-        return this.seatsCapacityService.updateSeatsCapacity(seatsCapacityId,body);
-      }
+         // update  seats  Capacity
+        @Patch('/:seatsCapacityId')
+        async  updateSeatsCapacity(@Param('seatsCapacityId') seatsCapacityId:string, @Body() body:UpdateSeatsCapacityDto )
+        {
+          return this.seatsCapacityService.updateSeatsCapacity(seatsCapacityId,body);
+        }
 
 
-      // delete  seats  Capacity
-      @Delete('/:seatsCapacityId')
-      async  deleteSeatsCapacity(@Param('seatsCapacityId') seatsCapacityId:string )
-      {
-        return this.seatsCapacityService.deleteSeatsCapacity(seatsCapacityId,);
-      }
+        // delete  seats  Capacity
+        @Delete('/:seatsCapacityId')
+        async  deleteSeatsCapacity(@Param('seatsCapacityId') seatsCapacityId:string )
+        {
+          return this.seatsCapacityService.deleteSeatsCapacity(seatsCapacityId,);
+        }
 
 }

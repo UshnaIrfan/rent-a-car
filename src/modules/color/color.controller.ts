@@ -3,9 +3,7 @@ import { ColorService } from './color.service';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
 import { color } from "./schemas/color.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 
 
 @ApiTags('color')

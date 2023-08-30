@@ -1,10 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { createCarDto } from "./dto/create-car.dto";
 import { car } from "./schemas/car.schema";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import * as uuid from "uuid";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -21,12 +19,9 @@ export class carRepository{
 
 
        // Get by car id
-        async getCaById(carId:string):Promise<car| null>
+        async getCarById(carId:string):Promise<car| null>
         {
-          if (!uuid.validate(carId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
+            validateUuid(carId);
             return  this.carModel.findOne({  where: { id:carId},
             relations:['pricing','carImage']});
         }

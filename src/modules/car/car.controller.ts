@@ -31,9 +31,9 @@ export class CarController {
         // Get by car id
         @Get('/:carId')
         @UsePipes(ParseUUIDPipe)
-        async  getCaById(@Param('carId') carId:string ):Promise<car>
+        async  getCarById(@Param('carId') carId:string ):Promise<car>
         {
-            return this.carService.getCaById(carId);
+            return this.carService.getCarById(carId);
         }
 
 }

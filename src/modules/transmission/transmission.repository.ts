@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import * as uuid from "uuid";
 import { transmission } from "./schemas/transmission.schema";
 import { UpdateTransmissionDto } from "./dto/update-transmission.dto";
 import { CreateTransmissionDto } from "./dto/create-transmission.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -34,22 +34,17 @@ export class transmissionRepository{
      // update  transmission
       async updateTransmission(transmissionId: string, body: UpdateTransmissionDto):Promise<transmission|null>
       {
-        if (!uuid.validate(transmissionId))
-        {
-          throw new NotFoundException('Invalid UUID Format');
-        }
 
-        const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
-        if (!result)
-        {
-          throw new NotFoundException('transmission not found');
-        }
+          validateUuid(transmissionId);
+          const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
+          if (!result)
+          {
+            throw new NotFoundException('transmission not found');
+          }
 
-        result.transmission = body.transmission;
-
-
-        const updatedResult = await this.transmissionModel.save(result);
-        return updatedResult;
+          result.transmission = body.transmission;
+          const updatedResult = await this.transmissionModel.save(result);
+          return updatedResult;
 
       }
 
@@ -58,11 +53,7 @@ export class transmissionRepository{
       // delete transmission
       async deleteTransmission(transmissionId:string):Promise<transmission|null>
       {
-          if (!uuid.validate(transmissionId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
+          validateUuid(transmissionId);
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           if (!result)
           {
@@ -77,11 +68,7 @@ export class transmissionRepository{
       // get transmission
       async getCarTransmissionById(transmissionId:string):Promise<transmission|null>
       {
-          if (!uuid.validate(transmissionId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
+          validateUuid(transmissionId);
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           return result
       }

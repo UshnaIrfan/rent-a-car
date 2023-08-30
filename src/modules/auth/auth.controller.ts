@@ -1,4 +1,19 @@
-import { Controller, Post, Body, UseGuards, Request, Get, Delete, Put, Patch, Param, Req, UsePipes, ParseUUIDPipe } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Get,
+  Delete,
+  Put,
+  Patch,
+  Param,
+  Req,
+  UsePipes,
+  ParseUUIDPipe,
+  UseInterceptors
+} from "@nestjs/common";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
@@ -166,7 +181,7 @@ export class AuthController {
           // get user by id
           @SwaggerGetUser()
           @Get('/:userId')
-          @UsePipes(ParseUUIDPipe)
+         // @UsePipes(ParseUUIDPipe)
           async  findUserById(@Param('userId') userId:string): Promise<User>
           {
                return this.authService.findUserById(userId);

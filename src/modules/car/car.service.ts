@@ -122,9 +122,9 @@ export class CarService {
 
 
         // Get by car id
-        async getCaById (carId:string):Promise<car>
+        async getCarById (carId:string):Promise<car>
         {
-          const result= await this.CarRepository.getCaById(carId);
+          const result= await this.CarRepository.getCarById(carId);
           if (!result)
           {
             throw new NotFoundException('car not exist');

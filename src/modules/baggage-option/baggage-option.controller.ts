@@ -3,8 +3,6 @@ import { BaggageOptionService } from './baggage-option.service';
 import { CreateBaggageOptionDto } from './dto/create-baggage-option.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { baggageOption } from "./schemas/baggage-option.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
-import updateBaggageOptionInterface from "./interfaces/update-baggage-option.interface";
 import { UpdateBaggageOptionDto } from "./dto/update-baggage-option.dto";
 
 

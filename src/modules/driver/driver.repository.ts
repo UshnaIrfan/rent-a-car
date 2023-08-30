@@ -8,7 +8,7 @@ import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
 import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
 import * as path from 'path';
 import * as fs from "fs";
-import * as uuid from 'uuid';
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 
@@ -31,10 +31,7 @@ export class driverRepository{
         // get  driver By  Id
         async getDriverById(id:string): Promise<driver| null>
         {
-             if (!uuid.validate(id))
-             {
-                 throw new NotFoundException('Invalid UUID Format');
-             }
+             validateUuid(id);
              const driver =await this.DriverModel.findOne({ where: { id}  });
              if (!driver)
              {
@@ -49,10 +46,7 @@ export class driverRepository{
         // get  driver By  Id with relations
         async findDriverById(driverId: string): Promise<driver | null>
         {
-              if (!uuid.validate(driverId))
-              {
-                throw new NotFoundException('Invalid UUID Format');
-              }
+              validateUuid(driverId);
               const driver = await this.DriverModel.findOne({ where: { id: driverId }, relations: ['UserDocuments'] });
               if (!driver)
               {
@@ -68,11 +62,7 @@ export class driverRepository{
         // update driver documents
         async updatedriverById(id: string, body: updateDriverDocumentsDto)
         {
-              if (!uuid.validate(id))
-              {
-                throw new NotFoundException('Invalid UUID Format');
-              }
-
+              validateUuid(id);
               const result = await this.userDocumentsModel.findOne({ where: { driverId: id}});
               if (!result)
               {

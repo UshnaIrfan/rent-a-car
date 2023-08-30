@@ -33,7 +33,7 @@ import { driverOption } from "../driver-option/schemas/driver-option.schema";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { CacheModule } from "@nestjs/common/cache";
 import * as redisStore from "cache-manager-redis-store";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import {  JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/schemas/user.schema";
 import { UsersRepository } from "../users/users.respository";

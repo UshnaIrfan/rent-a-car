@@ -3,8 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { year } from "./schemas/year.schema";
 import { CreateYearDto } from "./dto/create-year.dto";
-import * as uuid from "uuid";
 import { UpdateYearDto } from "./dto/update-year.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -33,21 +33,15 @@ export class yearRepository{
        // update  car year
         async updateCarYear(yearId: string, body: UpdateYearDto): Promise<year| null>
         {
-          if (!uuid.validate(yearId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
-          const result = await this.yearModel.findOne({ where: {  id:yearId}});
-          if (!result)
-          {
-            throw new NotFoundException('car year not found');
-          }
-
-          result.year = body.year;
-
-          const updatedResult = await this.yearModel.save(result);
-          return updatedResult;
+              validateUuid(yearId);
+              const result = await this.yearModel.findOne({ where: {  id:yearId}});
+              if (!result)
+              {
+                throw new NotFoundException('car year not found');
+              }
+              result.year = body.year;
+              const updatedResult = await this.yearModel.save(result);
+              return updatedResult;
 
         }
 
@@ -55,11 +49,7 @@ export class yearRepository{
         // delete  car year
         async deleteCarYear(yearId:string): Promise<year| null>
         {
-              if (!uuid.validate(yearId))
-              {
-                throw new NotFoundException('Invalid UUID Format');
-              }
-
+              validateUuid(yearId);
               const result = await this.yearModel.findOne({ where: {  id:yearId}});
               if (!result)
               {
@@ -76,11 +66,7 @@ export class yearRepository{
           // get car year
           async getCarYearById(yearId:string):Promise<year| null>
           {
-              if (!uuid.validate(yearId))
-              {
-                throw new NotFoundException('Invalid UUID Format');
-              }
-
+               validateUuid(yearId);
               const result = await this.yearModel.findOne({ where: {  id:yearId}});
               return result
 

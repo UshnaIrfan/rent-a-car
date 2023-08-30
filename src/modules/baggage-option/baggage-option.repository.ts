@@ -3,11 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateBaggageOptionDto } from "./dto/create-baggage-option.dto";
 import { baggageOption } from "./schemas/baggage-option.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
-import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
 import { UpdateBaggageOptionDto } from "./dto/update-baggage-option.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -33,11 +30,7 @@ export class baggageOptionRepository{
       // update  Baggage
       async updateBaggageOption(baggageId: string, body: UpdateBaggageOptionDto) :Promise<baggageOption| null>
       {
-              if (!uuid.validate(baggageId))
-              {
-                throw new NotFoundException('Invalid UUID Format');
-              }
-
+              validateUuid(baggageId);
               const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
               if (!result)
               {
@@ -58,11 +51,7 @@ export class baggageOptionRepository{
       // delete Baggage
       async deleteBaggageOption(baggageId:string)
       {
-          if (!uuid.validate(baggageId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
+          validateUuid(baggageId);
           const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
           if (!result)
           {
@@ -77,11 +66,7 @@ export class baggageOptionRepository{
       // get Baggage
       async getCarBaggageOptionById(baggageId:string): Promise<baggageOption| null>
       {
-          if (!uuid.validate(baggageId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
+          validateUuid(baggageId);
           const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
           return result
       }

@@ -1,9 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { CreateTransmissionDto } from './dto/create-transmission.dto';
 import { UpdateTransmissionDto } from './dto/update-transmission.dto';
-import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-import { UpdateSeatsCapacityDto } from "../seats-capacity/dto/update-seats-capacity.dto";
-import createSeatsCapacityInterface from "./interfaces/create-transmission.interface";
 import createTransmissionInterface from "./interfaces/create-transmission.interface";
 import { transmissionRepository } from "./transmission.repository";
 import { transmission } from "./schemas/transmission.schema";

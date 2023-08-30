@@ -3,10 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { time } from "./schemas/time.schema";
 import { CreateTimeDto } from "./dto/create-time.dto";
-import * as uuid from "uuid";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import { UpdateCarModelDto } from "../car-model/dto/update-car-model.dto";
 import { UpdateTimeDto } from "./dto/update-time.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 
@@ -27,13 +25,9 @@ export class timeRepository{
       // get by time id
       async getTimeById(timeId: string):Promise<time| null>
       {
-        if (!uuid.validate(timeId))
-        {
-          throw new NotFoundException('Invalid UUID Format');
-        }
-
-        const result = await this.timeModel.findOne({ where: {  id:timeId}});
-        return  result
+          validateUuid(timeId);
+          const result = await this.timeModel.findOne({ where: {  id:timeId}});
+          return  result
       }
 
 
@@ -51,11 +45,7 @@ export class timeRepository{
         // update  car model
         async updateTime(timeId: string, body: UpdateTimeDto): Promise<time| null>
         {
-            if (!uuid.validate(timeId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(timeId);
             const result = await this.timeModel.findOne({ where: { id:timeId}});
             if (!result)
             {
@@ -73,11 +63,7 @@ export class timeRepository{
         // delete  car model
         async deleteTime(timeId:string): Promise<time| null>
         {
-            if (!uuid.validate(timeId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(timeId);
             const result = await this.timeModel.findOne({ where: { id:timeId}});
             if (!result)
             {

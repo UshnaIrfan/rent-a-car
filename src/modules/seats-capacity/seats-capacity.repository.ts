@@ -3,8 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateSeatsCapacityDto } from "./dto/create-seats-capacity.dto";
 import { seatsCapacity } from "./schemas/seats-capacity.schema";
-import * as uuid from "uuid";
 import { UpdateSeatsCapacityDto } from "./dto/update-seats-capacity.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -31,24 +31,18 @@ export class seatsCapacityRepository{
 
 
 
-  // update  seats  Capacity
+      // update  seats  Capacity
       async updateSeatsCapacity(seatsCapacityId: string, body: UpdateSeatsCapacityDto): Promise<seatsCapacity| null>
       {
-        if (!uuid.validate(seatsCapacityId))
-        {
-          throw new NotFoundException('Invalid UUID Format');
-        }
-
-        const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
-        if (!result)
-        {
-          throw new NotFoundException('Seats Capacity not found');
-        }
-
-        result.seatsCapacity = body.seatsCapacity;
-
-        const updatedResult = await this.seatsCapacityModel.save(result);
-        return updatedResult;
+          validateUuid(seatsCapacityId);
+          const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
+          if (!result)
+          {
+            throw new NotFoundException('Seats Capacity not found');
+          }
+          result.seatsCapacity = body.seatsCapacity;
+          const updatedResult = await this.seatsCapacityModel.save(result);
+          return updatedResult;
 
       }
 
@@ -56,11 +50,7 @@ export class seatsCapacityRepository{
      // delete  seats  Capacity
       async deleteSeatsCapacity(seatsCapacityId:string): Promise<seatsCapacity| null>
       {
-            if (!uuid.validate(seatsCapacityId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(seatsCapacityId);
             const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
             if (!result)
             {
@@ -75,13 +65,9 @@ export class seatsCapacityRepository{
         // get  seats  Capacity
         async getCarSeatsCapacityById(seatsCapacityId:string): Promise<seatsCapacity| null>
         {
-          if (!uuid.validate(seatsCapacityId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
-          const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
-          return result
+            validateUuid(seatsCapacityId);
+            const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
+            return result
         }
 
 }

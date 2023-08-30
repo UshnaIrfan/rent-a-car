@@ -3,9 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { brand } from "./schemas/brand.schema";
 import { CreateBrandDto } from "./dto/create-brand.dto";
-import * as uuid from "uuid";
-
 import { UpdateBrandDto } from "./dto/update-brand.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -33,11 +32,7 @@ export class brandRepository{
        // update   car brands
         async updateCarBrands(brandId: string, body: UpdateBrandDto):Promise<brand| null>
         {
-            if (!uuid.validate(brandId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(brandId);
             const result = await this.brandModel.findOne({ where: {  id:brandId}});
             if (!result)
             {
@@ -54,12 +49,8 @@ export class brandRepository{
 
        // delete  car brands
          async deleteCarBrands(brandId: string):Promise<brand| null>
-        {
-                if (!uuid.validate(brandId))
-                {
-                  throw new NotFoundException('Invalid UUID Format');
-                }
-
+         {
+                validateUuid(brandId);
                 const result = await this.brandModel.findOne({ where: {  id:brandId}});
                 if (!result)
                 {
@@ -67,7 +58,7 @@ export class brandRepository{
                 }
 
                 return await this.brandModel.remove(result);
-        }
+         }
 
 
 
@@ -75,13 +66,9 @@ export class brandRepository{
         // get  car brand by id
         async getCarBrandById(brandId: string):Promise<brand| null>
         {
-          if (!uuid.validate(brandId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
-
-          const result = await this.brandModel.findOne({ where: {  id:brandId}});
-          return  result
+            validateUuid(brandId);
+            const result = await this.brandModel.findOne({ where: {  id:brandId}});
+            return  result
         }
 }
 

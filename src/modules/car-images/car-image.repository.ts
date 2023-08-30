@@ -3,10 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { carImage } from "./schemas/car-image.schema";
 import { CreateCarImageDto } from "./dto/create-car-image.dto";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import { UpdateCarModelDto } from "../car-model/dto/update-car-model.dto";
-import * as uuid from "uuid";
 import { UpdateCarImageDto } from "./dto/update-car-image.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 
@@ -36,11 +34,7 @@ export class carImageRepository{
            // update car image
           async updateCarImage(carImageId: string, body: UpdateCarImageDto): Promise<carImage| null>
           {
-            if (!uuid.validate(carImageId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(carImageId);
             const result = await this.carImageModel.findOne({ where: { id:carImageId}});
             if (!result)
             {
@@ -58,11 +52,7 @@ export class carImageRepository{
         // delete car image
           async deleteCarImage(carImageId:string): Promise<carImage| null>
           {
-            if (!uuid.validate(carImageId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(carImageId);
             const result = await this.carImageModel.findOne({ where: { id:carImageId}});
             if (!result)
             {

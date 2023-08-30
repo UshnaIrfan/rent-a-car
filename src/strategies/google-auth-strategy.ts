@@ -30,7 +30,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
               name: name.givenName,
               username: name.familyName,
             };
-            console.log(user)
             const  result =  await this.authService.saveUserToDatabase(user);
             done(null, result);
 

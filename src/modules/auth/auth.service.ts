@@ -278,7 +278,25 @@ export class AuthService {
             {
               return { message: "No user from Google", user: null, access_token: null };
             }
-               return  req.user;
+              const user={
+                id:req.user.id,
+                firstName: req.user.firstName,
+                lastName: req.user.lastName,
+                email: req.user.email,
+                password: req.user.password,
+                country:req.user.country,
+                dateOfBirth:req.user.dateOfBirth,
+                phoneNo:req.user.phoneNo,
+                imag:req.user.image,
+                roles: req.user.roles,
+                otpStatus: req.user.otpStatus,
+                blockStatus: req.user.blockStatus,
+             };
+              const accessToken = this.jwtService.sign(user);
+              const expires = this.configService.get("TOKEN_EXPIRY");
+              await Promise.all([this.cacheManager.set(accessToken, user, { ttl: expires })]);
+              return {   access_token: accessToken };
+               //return  req.user;
           }
 
 
@@ -302,7 +320,7 @@ export class AuthService {
                 user.email=userData.email;
                 user.password=userData.password;
                 user.roles=userData.roles;
-                user.otpStatus=userData.otp_status;
+                user.otpStatus='true';
                 user.blockStatus=userData.blockStatus;
                 return   await this.usersRepository.createUser(user);
           }

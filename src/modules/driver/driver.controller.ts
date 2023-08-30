@@ -88,7 +88,6 @@ export class DriverController {
          // get  driver By  Id
         @SwaggerGetDriver()
         @Get('/:driverId')
-        @UsePipes(ParseUUIDPipe)
         async  findDriverById(@Param('driverId') driverId:string): Promise<driver>
         {
               return this.driverService.findDriverById(driverId);

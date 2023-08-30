@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./schemas/user.schema";
-import * as uuid from "uuid";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 @Injectable()
 export class UsersRepository {
@@ -29,13 +29,13 @@ export class UsersRepository {
           // user update ( otp active status)
           async isOtpActive(email: string, otp_status: string): Promise<User| null>
           {
-            const user = await this.userModel.findOne({ where: { email } });
-            if (!user)
-            {
-              return null
-            }
-            user.otpStatus = otp_status;
-            return this.userModel.save(user);
+              const user = await this.userModel.findOne({ where: { email } });
+              if (!user)
+              {
+                return null
+              }
+              user.otpStatus = otp_status;
+              return this.userModel.save(user);
           }
 
 
@@ -43,17 +43,13 @@ export class UsersRepository {
           // get user by id   ( with relation)
          async findUserById(id: string): Promise<User | null>
          {
-
-             if (!uuid.validate(id))
-             {
-               throw new NotFoundException('Invalid UUID Format');
-             }
-             const user=  await this.userModel.findOne({ where: { id} , relations: ['UserDocuments']});
-             if (!user)
-             {
-               throw new NotFoundException('user not found');
-             }
-              return  user
+               validateUuid(id);
+               const user=  await this.userModel.findOne({ where: { id} , relations: ['UserDocuments']});
+               if (!user)
+               {
+                 throw new NotFoundException('user not found');
+               }
+                 return  user
          }
 
 
@@ -62,7 +58,7 @@ export class UsersRepository {
           // get user by id
           async getUserById(id: string):Promise<User| null>
           {
-            return this.userModel.findOne({ where: { id}  });
+             return this.userModel.findOne({ where: { id}  });
           }
 
 

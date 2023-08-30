@@ -20,7 +20,7 @@ export class PricingService {
       async createPricing(createPricingInterface:createPricingInterface):Promise<pricing>
       {
 
-        const carId= await this.carService.getCaById(createPricingInterface.carId);
+        const carId= await this.carService.getCarById(createPricingInterface.carId);
         if(!carId)
         {
           throw new NotFoundException('invalid car id');

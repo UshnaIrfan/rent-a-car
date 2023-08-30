@@ -3,9 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateDriverOptionDto } from "./dto/create-driver-option.dto";
 import { driverOption } from "./schemas/driver-option.schema";
-import * as uuid from "uuid";
-
 import { UpdateDriverOptionDto } from "./dto/update-driver-option.dto";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 
 @Injectable()
@@ -34,21 +33,17 @@ export class driverOptionRepository{
       // update  driver  Option
         async updateDriverOptionById(driverOptionId: string, body: UpdateDriverOptionDto): Promise<driverOption| null>
         {
-          if (!uuid.validate(driverOptionId))
-          {
-            throw new NotFoundException('Invalid UUID Format');
-          }
+            validateUuid(driverOptionId);
+            const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
+            if (!result)
+            {
+              throw new NotFoundException('Driver Option not found');
+            }
 
-          const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
-          if (!result)
-          {
-            throw new NotFoundException('Driver Option not found');
-          }
+            result.driverOption = body.driverOption;
 
-          result.driverOption = body.driverOption;
-
-          const updatedResult = await this.driverOptionModel.save(result);
-          return updatedResult;
+            const updatedResult = await this.driverOptionModel.save(result);
+            return updatedResult;
 
         }
 
@@ -56,11 +51,7 @@ export class driverOptionRepository{
         // delete  driver  Option
         async deleteDriverOption(driverOptionId:string): Promise<driverOption| null>
         {
-            if (!uuid.validate(driverOptionId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(driverOptionId);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             if (!result)
             {
@@ -74,11 +65,7 @@ export class driverOptionRepository{
         //  get driver  Option
         async getCarDriverOptionById(driverOptionId:string): Promise<driverOption| null>
         {
-            if (!uuid.validate(driverOptionId))
-            {
-              throw new NotFoundException('Invalid UUID Format');
-            }
-
+            validateUuid(driverOptionId);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             return result
         }

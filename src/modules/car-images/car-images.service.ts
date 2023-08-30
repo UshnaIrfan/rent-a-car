@@ -14,7 +14,7 @@ export class CarImagesService {
       // create
       async createCarImage(createCarImageInterface:createCarImageInterface)
       {
-        const carModel= await this.carService.getCaById(createCarImageInterface.carId);
+        const carModel= await this.carService.getCarById(createCarImageInterface.carId);
         if(!carModel)
         {
           throw new NotFoundException('invalid car id');
