@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeUpdate, BeforeInsert, OneToMany, OneToOne } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import slugify from "slugify";
-import { UserDocuments } from "../../user-documents/schemas/userDocuments.schema";
 
 
 export enum  verifyType {
@@ -62,11 +61,6 @@ export class UserVerificationDocuments {
           }
         }
 
-
-        //
-        // @ApiProperty({ type: () => [UserDocuments] })
-        // @OneToOne(() => UserDocuments, UserDocuments => UserDocuments.UserVerificationDocuments)
-        // UserDocuments: UserDocuments[];
 
 
 }

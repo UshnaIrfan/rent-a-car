@@ -48,19 +48,6 @@ export class DriverService {
         async UserDocument(@Body() body:driverDocumentsInterface )
         {
            await this.DriverRepository.getDriverById(body.driverId)
-
-          // const type = await this.UserVerificationsDocumentsService.gettittlebytype(body.type)
-          // if (!type)
-          // {
-          //    throw new NotFoundException('Invalid type');
-          // }
-
-          // const title = await this.UserVerificationsDocumentsService.gettittlebyname(body.titleName)
-          // if (!title)
-          // {
-          //    throw new NotFoundException('Invalid tittle Name');
-          // }
-
           const slug = await this.UserVerificationsDocumentsService.gettittlebySlug(body.slug)
           if (!slug)
           {

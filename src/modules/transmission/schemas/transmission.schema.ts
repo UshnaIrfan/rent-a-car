@@ -11,29 +11,23 @@ export enum transmissiontype {
 @Entity({ name: 'transmission' })
 export class  transmission {
 
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @ApiProperty()
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
 
+    @ApiProperty()
+    @Column({ enum: transmissiontype, default: transmissiontype.MANUAL})
+    transmission: string;
 
 
-  @ApiProperty()
-  @Column({ enum: transmissiontype, default: transmissiontype.MANUAL})
-  transmission: string;
+    @ApiProperty()
+    @CreateDateColumn()
+    createdAt: Date
 
 
-
-
-
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date
-
-
-
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date
+    @ApiProperty()
+    @UpdateDateColumn()
+    updatedAt: Date
 
 }

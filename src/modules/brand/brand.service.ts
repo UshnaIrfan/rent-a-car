@@ -11,7 +11,7 @@ export class BrandService {
 
 
           // create
-          async createBrand(CreateBrandInterface:createBrandInterface)
+          async createBrand(CreateBrandInterface:createBrandInterface):Promise<brand>
           {
             return  await this.brandRepository.createBrand(CreateBrandInterface);
           }

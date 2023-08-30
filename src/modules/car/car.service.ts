@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import createCarInterface from "./interfaces/create-car.interface";
 import { carRepository } from "./car-repository";
 import { BrandService } from "../brand/brand.service";
@@ -11,6 +11,13 @@ import { BaggageOptionService } from "../baggage-option/baggage-option.service";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
+import { jwtConstants } from "../auth/constants/constants";
+import { Cache } from "cache-manager";
+import { CACHE_MANAGER } from "@nestjs/common/cache";
+import { JwtService } from "@nestjs/jwt";
+import { UsersService } from "../users/users.service";
+
+
 
 @Injectable()
 export class CarService {
@@ -24,13 +31,33 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverOptionService : DriverOptionService,
+              private jwtService: JwtService,
+              private usersService: UsersService,
+              @Inject(CACHE_MANAGER) private cacheManager: Cache,
+
+
+
   ) {}
 
 
 
       // create
-      async createCar(CreateCarInterface:createCarInterface): Promise<car>
+      async createCar(CreateCarInterface:createCarInterface,accessToken: string): Promise<car>
       {
+
+          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret});
+          const user = await this.usersService.getUserById(decoded.id)
+          if(!user)
+          {
+            throw new  NotFoundException('invalid user')
+          }
+
+          const cachedToken = await this.cacheManager.get(accessToken);
+          if (!cachedToken)
+          {
+            throw new UnauthorizedException('Token expired');
+          }
+
           const carBrand= await this.brandService.getCarBrandById(CreateCarInterface.brandId);
           if(!carBrand)
           {
@@ -80,11 +107,30 @@ export class CarService {
           {
             throw new NotFoundException('car driver option not exist');
           }
-          return  await this.CarRepository.createCar(CreateCarInterface);
+
+
+          const carData: createCarInterface & { UserId: string } = {
+            ...CreateCarInterface,
+            UserId: decoded.id,
+
+          };
+
+          return  await this.CarRepository.createCar(carData);
       }
 
 
 
+
+        // Get by car id
+        async getCaById (carId:string):Promise<car>
+        {
+          const result= await this.CarRepository.getCaById(carId);
+          if (!result)
+          {
+            throw new NotFoundException('car not exist');
+          }
+            return  result;
+        }
 
 
 }

@@ -1,6 +1,5 @@
 import { BadRequestException, Body, ConflictException, Inject, Injectable, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
 import { User } from "../users/schemas/user.schema";
 import { Cache } from "cache-manager";
 import { MailerService } from "@nestjs-modules/mailer";
@@ -27,14 +26,16 @@ import userDocumentActiveInterface from "./interfaces/user-document-active.inter
 import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import {UserDocumentsService} from "../user-documents/user-documents.service";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
+import { jwtConstants } from "./constants/constants";
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class AuthService {
 
   constructor(
+    private   jwtService : JwtService,
     private usersService: UsersService,
-    private jwtService: JwtService,
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
     private readonly twilioService: TwilioService,
@@ -171,6 +172,7 @@ export class AuthService {
        //login
         async login(user: User):Promise<JwtTokensInterface>
         {
+
             const result= await this.usersService.findUserById(user.id);
             const unapprovedDocuments = result.UserDocuments.filter(doc => doc.documentstatus === 'pending' || doc.documentstatus === 'rejected');
             if (unapprovedDocuments.length > 0)
@@ -203,7 +205,9 @@ export class AuthService {
               otpStatus: user.otpStatus,
               blockStatus: user.blockStatus,
             };
+
             const accessTokenRedis = this.jwtService.sign(payload);
+            console.log(accessTokenRedis)
             const expires = this.configService.get("TOKEN_EXPIRY");
             console.log("expired" ,expires)
             await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
@@ -230,20 +234,6 @@ export class AuthService {
           async UserDocument(@Body() body:signupUserDocumentsInterface )
           {
               await this.usersService.getUserById(body.userId)
-
-
-              // const type = await this.UserVerificationsDocumentsService.gettittlebytype(body.type)
-              // if (!type)
-              // {
-              //   throw new NotFoundException('Invalid type');
-              // }
-
-              // const title = await this.UserVerificationsDocumentsService.gettittlebyname(body.titleName)
-              // if (!title)
-              // {
-              //   throw new NotFoundException('Invalid tittle Name');
-              // }
-
               const slug = await this.UserVerificationsDocumentsService.gettittlebySlug(body.slug)
               if (!slug)
               {

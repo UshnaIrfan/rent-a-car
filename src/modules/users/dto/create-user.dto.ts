@@ -61,7 +61,7 @@ export class CreateUserDto {
      confirm_password: string;
 
 
-     @ApiProperty({ required: false, default: Role.USER })
+     @ApiProperty({ required: false, default: Role.CUSTOMER })
      @IsOptional()
      roles: string ;
 

@@ -16,7 +16,7 @@ export class BrandController {
         // create
         @ApiBody({type:CreateBrandDto})
         @Post('create')
-        async createBrand(@Body() createBrandDto: CreateBrandDto)
+        async createBrand(@Body() createBrandDto: CreateBrandDto):Promise<brand>
         {
           return this.brandService.createBrand(createBrandDto);
         }

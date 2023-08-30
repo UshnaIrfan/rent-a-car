@@ -55,6 +55,7 @@
     "google-auth-library": "^9.0.0",
     "handlebars": "^4.7.7",
     "joi": "^17.8.4",
+    "jwt-service": "^10.0.4",
     "moment": "^2.29.4",
     "mongoose-find-and-filter": "^1.0.0",
     "mysql2": "^3.2.0",

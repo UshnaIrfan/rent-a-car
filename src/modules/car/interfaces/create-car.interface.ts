@@ -13,4 +13,8 @@ export default interface createCarInterface {
   readonly  securityAmount: string;
   readonly driverOptionId: string;
   readonly  description: string;
+  readonly latitude: string;
+  readonly  longitude: string;
+  readonly pickUpLocation: string;
+  readonly  dropOffLocation: string;
 }

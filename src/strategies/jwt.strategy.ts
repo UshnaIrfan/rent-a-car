@@ -14,19 +14,21 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
          jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
          ignoreExpiration: false,
          secretOrKey: jwtConstants.secret,
+
     });
+      console.log( jwtConstants.secret)
   }
 
 
       async validate(payload: any): Promise<User>
       {
-        console.log('HER',payload)
+
+
           const user = await this.userService.findUserByFirstName(payload.firstName);
           if (!user)
           {
               throw new UnauthorizedException("Invalid user");
           }
-          console.log(user)
           if (user.email !== payload.email)
           {
               throw new UnauthorizedException("Invalid email");

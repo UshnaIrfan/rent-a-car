@@ -3,8 +3,7 @@ import * as redisStore from "cache-manager-redis-store";
 import {UsersService} from "../users/users.service";
 import { UsersModule } from "../users/users.module";
 import { PassportModule } from "@nestjs/passport";
-import { JwtModule } from "@nestjs/jwt";
-import {jwtConstants} from "./constants/constants";
+import { JwtModule, JwtService } from "@nestjs/jwt";
 import {LocalStrategy} from "../../strategies/local.strategy";
 import {JwtAuthGuard} from "./guards/jwt-auth-guard";
 import {JwtStrategy} from "../../strategies/jwt.strategy";
@@ -14,6 +13,8 @@ import { CacheModule } from "@nestjs/common/cache";
 import { TwilioModule } from "nestjs-twilio";
 import { UserDocumentsService } from "../user-documents/user-documents.service";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
+import { jwtConstants } from "./constants/constants";
+
 
 @Module({
   imports: [
@@ -23,17 +24,20 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
       store: redisStore,
       uri: process.env.REDIS_URL,
     }),
-      JwtModule.register({
+
+    JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '90m' },
     }),
+
     TwilioModule.forRoot({
       accountSid: process.env.TWILIO_ACCOUNT_SID,
       authToken: process.env.TWILIO_AUTH_TOKEN,
     }),
+
   ],
      controllers: [AuthController],
-     providers: [userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
+     providers: [LocalStrategy,JwtAuthGuard,JwtStrategy,userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
      exports: [AuthService],
 })
 export class AuthModule {}

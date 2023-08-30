@@ -4,24 +4,24 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity({ name: 'car_type' })
 export class  carType {
 
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @ApiProperty()
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
 
-  @ApiProperty()
-  @Column({nullable:true})
-  carType: string;
+    @ApiProperty()
+    @Column({nullable:true})
+    carType: string;
 
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date
+    @ApiProperty()
+    @CreateDateColumn()
+    createdAt: Date
 
 
 
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date
+    @ApiProperty()
+    @UpdateDateColumn()
+    updatedAt: Date
 
 }

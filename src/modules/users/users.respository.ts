@@ -26,11 +26,6 @@ export class UsersRepository {
 
 
 
-
-
-
-
-
           // user update ( otp active status)
           async isOtpActive(email: string, otp_status: string): Promise<User| null>
           {

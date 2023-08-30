@@ -4,24 +4,23 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity({ name: 'driver_option' })
 export class  driverOption {
 
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+      @ApiProperty()
+      @PrimaryGeneratedColumn('uuid')
+      id: string;
 
 
-  @ApiProperty()
-  @Column({nullable:true})
-  driverOption: string;
+      @ApiProperty()
+      @Column({nullable:true})
+      driverOption: string;
 
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date
+      @ApiProperty()
+      @CreateDateColumn()
+      createdAt: Date
 
 
-
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date
+      @ApiProperty()
+      @UpdateDateColumn()
+      updatedAt: Date
 
 }

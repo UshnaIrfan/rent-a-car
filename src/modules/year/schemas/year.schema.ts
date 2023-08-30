@@ -4,24 +4,22 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity({ name: 'year' })
 export class  year {
 
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+      @ApiProperty()
+      @PrimaryGeneratedColumn('uuid')
+      id: string;
 
 
-  @ApiProperty()
-  @Column({nullable:true})
-  year: string;
+      @ApiProperty()
+      @Column({nullable:true})
+      year: string;
+
+      @ApiProperty()
+      @CreateDateColumn()
+      createdAt: Date
 
 
-  @ApiProperty()
-  @CreateDateColumn()
-  createdAt: Date
-
-
-
-  @ApiProperty()
-  @UpdateDateColumn()
-  updatedAt: Date
+      @ApiProperty()
+      @UpdateDateColumn()
+      updatedAt: Date
 
 }

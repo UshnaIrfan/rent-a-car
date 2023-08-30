@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
 import {UserDocuments} from "../../user-documents/schemas/userDocuments.schema";
+import { car } from "../../car/schemas/car.schema";
 
 
 export enum otpStatus {
@@ -68,7 +69,7 @@ export class User {
 
 
      @ApiProperty()
-     @Column({ default: Role.USER})
+     @Column({ default: Role.CUSTOMER})
      roles: string;
 
 
@@ -94,8 +95,15 @@ export class User {
      updatedAt: Date
 
 
+     //relation  btw userDocuments and user
      @ApiProperty({ type: () => [UserDocuments] })
      @OneToMany(() => UserDocuments, UserDocuments => UserDocuments.User)
      UserDocuments: UserDocuments[];
+
+
+     //relation  btw car and user
+     @ApiProperty({ type: () => [car] })
+     @OneToMany(() => car, car => car.User)
+     car: car[];
 
 }

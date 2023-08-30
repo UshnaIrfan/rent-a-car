@@ -3,12 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { brand } from "./schemas/brand.schema";
 import { CreateBrandDto } from "./dto/create-brand.dto";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import * as uuid from "uuid";
-import path from "path";
-import fs from "fs";
-import { UpdateBaggageOptionDto } from "../baggage-option/dto/update-baggage-option.dto";
+
 import { UpdateBrandDto } from "./dto/update-brand.dto";
 
 

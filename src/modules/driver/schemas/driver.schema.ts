@@ -59,7 +59,7 @@ export class driver {
         updatedAt: Date
 
 
-
+        //relation  btw userDocuments and driver
         @ApiProperty({ type: () => [UserDocuments] })
         @OneToMany(() => UserDocuments, UserDocuments => UserDocuments.driver)
         UserDocuments: UserDocuments[];

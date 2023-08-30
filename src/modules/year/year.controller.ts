@@ -4,7 +4,6 @@ import { CreateYearDto } from './dto/create-year.dto';
 import { UpdateYearDto } from './dto/update-year.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { year } from "./schemas/year.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 
 
 @ApiTags('year')
@@ -16,7 +15,7 @@ export class YearController {
           // create
           @ApiBody({ type: CreateYearDto })
           @Post('create')
-          async createYear(@Body() createYearDto: CreateYearDto)
+          async createYear(@Body() createYearDto: CreateYearDto):Promise<year>
           {
               return this.yearService.createYear(createYearDto);
           }

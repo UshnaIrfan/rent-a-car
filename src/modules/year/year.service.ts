@@ -1,19 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { CreateYearDto } from './dto/create-year.dto';
 import { UpdateYearDto } from './dto/update-year.dto';
-import createCarInterface from "../car/interfaces/create-car.interface";
 import createYearInterface from "./interfaces/create-year.interface";
 import { yearRepository } from "./year.repository";
-import { driver } from "../driver/schemas/driver.schema";
 import { year } from "./schemas/year.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 
 @Injectable()
 export class YearService {
   constructor(private readonly yearRepository:yearRepository) {}
 
         // create
-        async createYear(createYearInterface:createYearInterface)
+        async createYear(createYearInterface:createYearInterface):Promise<year>
         {
             return  await this.yearRepository.createYear(createYearInterface);
         }

@@ -3,7 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn, ManyToOne, JoinColumn, OneToOne
+  UpdateDateColumn, ManyToOne, JoinColumn
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "../../users/schemas/user.schema"
@@ -84,7 +84,7 @@ export class UserDocuments {
 
 
 
-
+      //relation  btw userDocuments and user
       @ApiProperty({ type: () => [User] })
       @ManyToOne(() => User, User => User.UserDocuments)
       @JoinColumn({ name: 'userId' })
@@ -92,15 +92,7 @@ export class UserDocuments {
 
 
 
-      // @OneToOne(() => UserVerificationDocuments, UserVerificationDocuments => UserVerificationDocuments.UserDocuments)
-      // @JoinColumn({ name: 'slug' ,referencedColumnName: 'slug'})
-      // UserVerificationDocuments: UserVerificationDocuments[];
-
-
-
-
-
-
+      //relation  btw userDocuments and driver
       @ApiProperty({ type: () => [driver] })
       @ManyToOne(() => driver, driver => driver.UserDocuments)
       @JoinColumn({ name: 'driverId' })

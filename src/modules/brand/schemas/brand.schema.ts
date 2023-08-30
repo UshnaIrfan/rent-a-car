@@ -19,7 +19,6 @@ export class  brand {
         createdAt: Date
 
 
-
         @ApiProperty()
         @UpdateDateColumn()
         updatedAt: Date

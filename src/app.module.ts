@@ -41,6 +41,14 @@ import { carModel } from "./modules/car-model/schemas/car-model.schema";
 import { brand } from "./modules/brand/schemas/brand.schema";
 import { baggageOption } from "./modules/baggage-option/schemas/baggage-option.schema";
 import { transmission } from "./modules/transmission/schemas/transmission.schema";
+import { TimeModule } from './modules/time/time.module';
+import { PricingModule } from './modules/pricing/pricing.module';
+import { time } from "./modules/time/schemas/time.schema";
+import { pricing } from "./modules/pricing/schemas/pricing.schema";
+import { JwtModule } from "@nestjs/jwt";
+import { jwtConstants } from "./modules/auth/constants/constants";
+import { CarImagesModule } from './modules/car-images/car-images.module';
+import { carImage } from "./modules/car-images/schemas/car-image.schema";
 
 
 
@@ -62,6 +70,8 @@ import { transmission } from "./modules/transmission/schemas/transmission.schema
     BaggageOptionModule,
     SeatsCapacityModule,
     DriverOptionModule,
+    TimeModule,
+    PricingModule,
 
 
     TwilioModule.forRoot({
@@ -77,7 +87,6 @@ import { transmission } from "./modules/transmission/schemas/transmission.schema
         envFilePath: [".env"],
         validationSchema: envSchema
       }),
-
 
 
     // mailer module
@@ -120,11 +129,15 @@ import { transmission } from "./modules/transmission/schemas/transmission.schema
         database: configService.get("DATABASE_NAME"),
 
 
-        entities: [transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]
     }),
+
+    CarImagesModule,
+
+
 
 
 

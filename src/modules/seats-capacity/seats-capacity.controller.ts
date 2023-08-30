@@ -4,7 +4,6 @@ import { CreateSeatsCapacityDto } from './dto/create-seats-capacity.dto';
 import { UpdateSeatsCapacityDto } from './dto/update-seats-capacity.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { seatsCapacity } from "./schemas/seats-capacity.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 
 
 @ApiTags('seatsCapacity')
