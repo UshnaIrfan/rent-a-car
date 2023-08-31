@@ -133,4 +133,14 @@ export class CarService {
         }
 
 
+
+      // delete by car id
+      async deleteCarById(carId)
+      {
+          await this.CarRepository.deleteCarById(carId);
+          return { message: "deleted successfully"};
+      }
+
+
+
 }

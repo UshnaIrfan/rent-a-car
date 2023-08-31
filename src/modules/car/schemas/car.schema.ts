@@ -136,7 +136,7 @@ export class car {
 
     //relation  btw pricing and car
     @ApiProperty({ type: () => [pricing] })
-    @OneToMany(() => pricing, pricing => pricing.car)
+    @OneToMany(() => pricing, pricing => pricing.car, { cascade: true })
     pricing: pricing[];
 
 
@@ -150,7 +150,7 @@ export class car {
 
    //relation  btw carImage and car
     @ApiProperty({ type: () => [carImage] })
-    @OneToMany(() => carImage, carImage => carImage.car)
+    @OneToMany(() => carImage, carImage => carImage.car, { cascade: true })
     carImage: carImage[];
 
 }

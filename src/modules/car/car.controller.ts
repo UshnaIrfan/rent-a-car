@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Get, UsePipes, ParseUUIDPipe } from "@nestjs/common";
+import { Controller, Post, Body, Patch, Param, Get, UsePipes, ParseUUIDPipe, Delete } from "@nestjs/common";
 import { CarService } from './car.service';
 import { createCarDto } from './dto/create-car.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
@@ -30,10 +30,17 @@ export class CarController {
 
         // Get by car id
         @Get('/:carId')
-        @UsePipes(ParseUUIDPipe)
         async  getCarById(@Param('carId') carId:string ):Promise<car>
         {
             return this.carService.getCarById(carId);
         }
 
+
+
+        // delete by car id
+        @Delete('/:carId')
+        async  deleteCarById(@Param('carId') carId:string )
+        {
+          return this.carService.deleteCarById(carId);
+        }
 }

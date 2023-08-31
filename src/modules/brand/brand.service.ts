@@ -39,7 +39,7 @@ export class BrandService {
 
 
           // delete  car brands
-          async deleteCarBrands(brandId:string):Promise<{ brand:brand; message: string }>
+          async deleteCarBrands(brandId:string):Promise<{ brand:brand,message: string }>
           {
               const brand= await this.brandRepository.deleteCarBrands(brandId);
               return { message: "deleted successfully", brand};

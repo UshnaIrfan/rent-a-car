@@ -48,7 +48,7 @@ export class  pricing {
 
       //relation  btw pricing and car
       @ApiProperty({ type: () => [car] })
-      @ManyToOne(() => car, car => car.pricing)
+      @ManyToOne(() => car, car => car.pricing, { onDelete: 'CASCADE' })
       @JoinColumn({ name: 'carId' })
       car: car[];
 

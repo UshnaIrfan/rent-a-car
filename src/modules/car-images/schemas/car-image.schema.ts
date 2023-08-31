@@ -41,7 +41,7 @@ export class  carImage {
 
     //relation  btw carImage and car
     @ApiProperty({ type: () => [car] })
-    @ManyToOne(() => car, car => car.carImage)
+    @ManyToOne(() => car, car => car.carImage, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'carId' })
     car: car[];
 
