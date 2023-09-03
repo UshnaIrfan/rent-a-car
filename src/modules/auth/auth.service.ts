@@ -207,9 +207,7 @@ export class AuthService {
             };
 
             const accessTokenRedis = this.jwtService.sign(payload);
-            console.log(accessTokenRedis)
             const expires = this.configService.get("TOKEN_EXPIRY");
-            console.log("expired" ,expires)
             await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
             return {
               id: user.id,

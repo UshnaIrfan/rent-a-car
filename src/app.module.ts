@@ -49,6 +49,9 @@ import { JwtModule } from "@nestjs/jwt";
 import { jwtConstants } from "./modules/auth/constants/constants";
 import { CarImagesModule } from './modules/car-images/car-images.module';
 import { carImage } from "./modules/car-images/schemas/car-image.schema";
+import { LanguagesModule } from './modules/languages/languages.module';
+import { BookingModule } from './modules/booking/booking.module';
+import { booking } from "./modules/booking/schemas/booking.schema";
 
 
 
@@ -72,7 +75,6 @@ import { carImage } from "./modules/car-images/schemas/car-image.schema";
     DriverOptionModule,
     TimeModule,
     PricingModule,
-
 
     TwilioModule.forRoot({
       accountSid: process.env.TWILIO_ACCOUNT_SID,
@@ -129,13 +131,17 @@ import { carImage } from "./modules/car-images/schemas/car-image.schema";
         database: configService.get("DATABASE_NAME"),
 
 
-        entities: [carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]
     }),
 
     CarImagesModule,
+
+    LanguagesModule,
+
+    BookingModule,
 
 
 

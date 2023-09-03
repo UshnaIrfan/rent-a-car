@@ -9,26 +9,22 @@ export class RoleGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean
   {
 
-    const requiredRoles = this.reflector.get<Role[]>('roles', context.getHandler());
-    if (!requiredRoles)
-    {
-      return true;
-    }
+        const requiredRoles = this.reflector.get<Role[]>('roles', context.getHandler());
+        if (!requiredRoles)
+        {
+          return true;
+        }
+        const { user } = context.switchToHttp().getRequest();
+        if (!user)
+        {
+          throw new ForbiddenException('Forbidden resource');
+        }
+        const hasRequiredRole = requiredRoles.some((role) => user.roles.includes(role));
+        if (!hasRequiredRole)
+        {
+          throw new ForbiddenException(`Only users with the role ${requiredRoles.join(' or ')} are allowed to perform this action`);
+        }
 
-
-    const { user } = context.switchToHttp().getRequest();
-    if (!user)
-    {
-      throw new ForbiddenException('Forbidden resource');
-    }
-
-
-    const hasRequiredRole = requiredRoles.some((role) => user.roles.includes(role));
-    if (!hasRequiredRole)
-    {
-      throw new ForbiddenException(`Only users with the role ${requiredRoles.join(' or ')} are allowed to perform this action`);
-    }
-
-    return true;
+          return true;
   }
 }

@@ -8,7 +8,7 @@ import { timeRepository } from "../time/time.repository";
 import { TimeService } from "../time/time.service";
 import { pricingRepository } from "./pricing.repository";
 import { CarService } from "../car/car.service";
-import { carRepository } from "../car/car-repository";
+import { carRepository } from "../car/car.repository";
 import { car } from "../car/schemas/car.schema";
 import { BrandService } from "../brand/brand.service";
 import { brandRepository } from "../brand/brand.repository";

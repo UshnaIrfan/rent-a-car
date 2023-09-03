@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { carImageRepository } from "./car-image.repository";
 import { carImage } from "./schemas/car-image.schema";
 import { CarService } from "../car/car.service";
-import { carRepository } from "../car/car-repository";
+import { carRepository } from "../car/car.repository";
 import { car } from "../car/schemas/car.schema";
 import { BrandService } from "../brand/brand.service";
 import { brandRepository } from "../brand/brand.repository";

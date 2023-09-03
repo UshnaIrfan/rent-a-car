@@ -3,7 +3,7 @@ import { CarService } from './car.service';
 import { CarController } from './car.controller';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { car } from "./schemas/car.schema";
-import { carRepository } from "./car-repository";
+import { carRepository } from "./car.repository";
 import { BrandService } from "../brand/brand.service";
 import { brandRepository } from "../brand/brand.repository";
 import { brand } from "../brand/schemas/brand.schema";

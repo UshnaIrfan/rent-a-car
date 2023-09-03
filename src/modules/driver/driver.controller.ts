@@ -1,12 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, UsePipes, ParseUUIDPipe } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UsePipes,
+  ParseUUIDPipe,
+  Query,
+  UseGuards,
+  Req, Injectable, Scope
+} from "@nestjs/common";
 import { DriverService } from './driver.service';
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { createDriverDto } from "./dto/create-driver.dto";
 import { driver } from "./schemas/driver.schema";
 import { driverDocumentsDto } from "./dto/driver-documents.dto";
 import {updateDriverDocumentsDto} from "./dto/update-driver-documents.dto";
 import { SwaggerUpdateDriverDocumentsDocorator } from "./swagger-decorator/update-driver-douments-decorators";
 import { SwaggerGetDriver } from "./swagger-decorator/get-driver-decorator";
+import { Roles } from "../../decorators/role.decorators";
+import { Role } from "../../enums/role.enum";
+import { getAllDriversRenterDecorators } from "./swagger-decorator/get-all-drivers-renter-decorators";
+import { getDriverHistoryRenterDecorators } from "./swagger-decorator/get-driver-history-renter-decorators";
+import {  UserAuthGuard } from "../../guards/user-auth-guard";
+
 
 @ApiTags('driver')
 @Controller('driver')
@@ -15,13 +33,15 @@ export class DriverController {
 
 
         // create
+        @ApiBearerAuth()
         @ApiBody({type:createDriverDto})
         @Post('create')
-        async create(@Body() CreateDriverDto:createDriverDto):Promise<driver>
+        @Roles(Role.RENTER)
+        @UseGuards(UserAuthGuard)
+        async create(@Body() CreateDriverDto:createDriverDto, @Req() request: any):Promise<driver>
         {
-            return this.driverService.createDriver(CreateDriverDto);
+           return this.driverService.createDriver(CreateDriverDto,request.user.id);
         }
-
 
 
         //  international user document passport
@@ -85,12 +105,13 @@ export class DriverController {
 
 
 
-         // get  driver By  Id
+         // get  driver By   driver Id
         @SwaggerGetDriver()
         @Get('/:driverId')
-        async  findDriverById(@Param('driverId') driverId:string): Promise<driver>
+        async  findDriverByDriverId(@Param('driverId') driverId:string): Promise<driver>
         {
-              return this.driverService.findDriverById(driverId);
+              console.log("hey1")
+              return this.driverService.findDriverByDriverId(driverId);
         }
 
 
@@ -106,4 +127,28 @@ export class DriverController {
         }
 
 
+
+
+      // get  driver By   user Id
+      @getAllDriversRenterDecorators()
+      @Get('user/:userId')
+      async  findDriverByUserId(@Param('userId') userId:string): Promise<driver[]>
+      {
+            console.log("hey")
+            return this.driverService.findDriverByUserId(userId);
+      }
+
+
+
+
+      // get  driver By   user Id
+      @getDriverHistoryRenterDecorators()
+      @ApiQuery({ name: 'userId', required: true })
+      @ApiQuery({ name: 'driverId', required: false })
+      @Get('driver/history')
+      async  getDriverHistory(@Query('userId') userId?: string, @Query('driverId') driverId?: string)
+      {
+        console.log("hey s")
+        return this.driverService.getDriverHistory(userId,driverId);
+      }
 }

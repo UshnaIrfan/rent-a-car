@@ -1,9 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import {
+     Entity,
+     Column,
+     PrimaryGeneratedColumn,
+     CreateDateColumn,
+     UpdateDateColumn,
+     OneToMany,
+     ManyToOne, JoinColumn
+} from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Role } from "../../../enums/role.enum";
 import {UserDocuments} from "../../user-documents/schemas/userDocuments.schema";
 import { car } from "../../car/schemas/car.schema";
-
+import { driver } from "../../driver/schemas/driver.schema";
+import {booking} from "../../booking/schemas/booking.schema";
 
 export enum otpStatus {
      ACTIVE= 'true',
@@ -105,5 +114,18 @@ export class User {
      @ApiProperty({ type: () => [car] })
      @OneToMany(() => car, car => car.User)
      car: car[];
+
+
+
+     //relation  btw driver and user
+     @ApiProperty({ type: () => [driver] })
+     @OneToMany(() => driver, driver => driver.User)
+     driver: driver[];
+
+
+     //relation  btw user and booking
+     @ApiProperty({ type: () => [booking] })
+     @OneToMany(() => booking, booking => booking.User, { cascade: true })
+     booking: booking[];
 
 }

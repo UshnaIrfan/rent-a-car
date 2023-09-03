@@ -7,7 +7,6 @@ import { carModel } from "./schemas/car-model.schema";
 
 
 @ApiTags('carModel')
-
 @Controller('car-model')
 export class CarModelController {
   constructor(private readonly carModelService: CarModelService) {}

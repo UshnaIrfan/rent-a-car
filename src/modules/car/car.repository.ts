@@ -19,9 +19,9 @@ export class carRepository{
         }
 
 
-       // Get by car id
-        async getCarById(carId:string):Promise<car| null>
-        {
+        // Get car by car id
+         async getCarByCarId(carId:string):Promise<car| null>
+         {
             validateUuid(carId);
             return  this.carModel.findOne({  where: { id:carId},
              relations:['pricing','carImage']
@@ -47,5 +47,46 @@ export class carRepository{
       }
 
 
+
+
+        // Get car by user id
+        async getCarByUserId(userId:string):Promise<car[]| null>
+        {
+           validateUuid(userId);
+           return  await this.carModel.find({  where: { userId}, relations:['pricing','carImage'] });
+        }
+
+
+
+
+
+
+      // Get car  history by user id and car id
+      async getCarHistory(userId: string, carId: string):Promise<car[]| null>
+      {
+           validateUuid(userId);
+           validateUuid(carId);
+
+           let whereConditions: any = {};
+            if (userId || carId)
+            {
+              whereConditions = {
+                userId: userId ?? undefined,
+                id: carId ?? undefined,
+              };
+            }
+           const results = await this.carModel.find({
+           where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
+           relations: carId ? ['pricing', 'carImage', 'booking'] : ['pricing', 'carImage'], });
+           return results;
+      }
+
+
 }
+
+
+
+
+
+
 

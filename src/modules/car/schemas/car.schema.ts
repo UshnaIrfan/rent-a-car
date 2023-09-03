@@ -9,6 +9,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { pricing } from "../../pricing/schemas/pricing.schema";
 import { User } from "../../users/schemas/user.schema";
 import { carImage } from "../../car-images/schemas/car-image.schema";
+import { booking } from "../../booking/schemas/booking.schema";
 
 
 @Entity({ name: 'cars' })
@@ -21,7 +22,7 @@ export class car {
 
     @ApiProperty()
     @Column({nullable:true})
-    UserId: string;
+    userId: string;
 
 
 
@@ -144,7 +145,7 @@ export class car {
     //relation  btw car and user
     @ApiProperty({ type: () => [User] })
     @ManyToOne(() => User, User => User.car)
-    @JoinColumn({ name: 'UserId' })
+    @JoinColumn({ name: 'userId' })
     User: User[];
 
 
@@ -152,5 +153,12 @@ export class car {
     @ApiProperty({ type: () => [carImage] })
     @OneToMany(() => carImage, carImage => carImage.car, { cascade: true })
     carImage: carImage[];
+
+
+
+    //relation  btw car and booking
+    @ApiProperty({ type: () => [booking] })
+    @OneToMany(() => booking, booking => booking.car, { cascade: true })
+    booking: booking[];
 
 }

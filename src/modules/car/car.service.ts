@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import createCarInterface from "./interfaces/create-car.interface";
-import { carRepository } from "./car-repository";
+import { carRepository } from "./car.repository";
 import { BrandService } from "../brand/brand.service";
 import { CarModelService } from "../car-model/car-model.service";
 import { YearService } from "../year/year.service";
@@ -42,22 +42,8 @@ export class CarService {
 
 
       // create
-      async createCar(CreateCarInterface:createCarInterface,accessToken: string): Promise<car>
+      async createCar(CreateCarInterface:createCarInterface,userId:string): Promise<car>
       {
-
-          const decoded = await this.jwtService.verify(accessToken, { secret:jwtConstants.secret});
-          const user = await this.usersService.getUserById(decoded.id)
-          if(!user)
-          {
-            throw new  NotFoundException('invalid user')
-          }
-
-          const cachedToken = await this.cacheManager.get(accessToken);
-          if (!cachedToken)
-          {
-            throw new UnauthorizedException('Token expired');
-          }
-
           const carBrand= await this.brandService.getCarBrandById(CreateCarInterface.brandId);
           if(!carBrand)
           {
@@ -109,9 +95,9 @@ export class CarService {
           }
 
 
-          const carData: createCarInterface & { UserId: string } = {
+          const carData: createCarInterface & { userId: string } = {
             ...CreateCarInterface,
-            UserId: decoded.id,
+            userId: userId,
 
           };
 
@@ -121,10 +107,10 @@ export class CarService {
 
 
 
-        // Get by car id
-        async getCarById (carId:string):Promise<car>
+       // Get car by car id
+        async getCarByCarId (carId:string):Promise<car>
         {
-          const result= await this.CarRepository.getCarById(carId);
+          const result= await this.CarRepository.getCarByCarId(carId);
           if (!result)
           {
             throw new NotFoundException('car not exist');
@@ -134,13 +120,41 @@ export class CarService {
 
 
 
-      // delete by car id
-      async deleteCarById(carId)
-      {
-          await this.CarRepository.deleteCarById(carId);
-          return { message: "deleted successfully"};
-      }
+        // delete by car id
+        async deleteCarById(carId)
+        {
+            await this.CarRepository.deleteCarById(carId);
+            return { message: "deleted successfully"};
+        }
 
 
 
+
+
+
+        // Get car by user id
+        async getCarByUserId (userId:string):Promise<car[]>
+        {
+          const result= await this.CarRepository.getCarByUserId(userId);
+          if (!result)
+          {
+            throw new NotFoundException('user not exist');
+          }
+          return  result;
+        }
+
+
+
+
+
+        // Get car  history by user id and car id
+        async getCarHistory (userId:string,carId:string)
+        {
+            const result= await this.CarRepository.getCarHistory(userId,carId);
+            if (result.length==0)
+            {
+              throw new NotFoundException(' not exist');
+            }
+            return  result;
+        }
 }

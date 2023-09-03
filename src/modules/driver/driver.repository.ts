@@ -43,8 +43,8 @@ export class driverRepository{
 
 
 
-        // get  driver By  Id with relations
-        async findDriverById(driverId: string): Promise<driver | null>
+        // get  driver By driver Id with relations
+        async findDriverByDriverId(driverId: string): Promise<driver | null>
         {
               validateUuid(driverId);
               const driver = await this.DriverModel.findOne({ where: { id: driverId }, relations: ['UserDocuments'] });
@@ -94,5 +94,44 @@ export class driverRepository{
         }
 
 
+
+
+
+
+
+
+      // get  driver By   user Id
+      async findDriverByUserId(userId: string): Promise<driver[] | null>
+      {
+            validateUuid(userId);
+            const driver = await this.DriverModel.find({ where: {userId },
+              relations: ['UserDocuments']});
+            return driver;
+
+      }
+
+
+
+
+  // get  driver By   user Id
+  async getDriverHistory(userId:string,driverId:string)
+  {
+    let whereConditions: any = {};
+    if (userId || driverId)
+    {
+      whereConditions = {
+        userId: userId ?? undefined,
+        id: driverId ?? undefined,
+      };
+    }
+    const results = await this.DriverModel.find({
+      where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
+     // relations: ['UserDocuments','booking']});
+     relations: driverId ? ['UserDocuments', 'booking'] : ['UserDocuments'], });
+
+    // relations: driverId ? ['pricing', 'carImage', 'booking'] : ['pricing', 'carImage'], });
+    return results;
+
+  }
 }
 

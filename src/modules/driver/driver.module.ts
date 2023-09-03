@@ -13,10 +13,20 @@ import { userVerifcationDocumentsRepository } from "../user-verifications-docume
 import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
 import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
 import { UsersDocumentRepository } from "../user-documents/user-document.repository";
+import { JwtService } from "@nestjs/jwt";
+import { CacheModule } from "@nestjs/common/cache";
+import * as redisStore from "cache-manager-redis-store";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserDocuments,driver,User,UserVerificationDocuments])],
+  imports: [TypeOrmModule.forFeature([UserDocuments,driver,User,UserVerificationDocuments]),
+    CacheModule.register({
+      store: redisStore,
+      uri: process.env.REDIS_URL,
+    }),
+    ],
   controllers: [DriverController],
-  providers: [UsersRepository,UsersDocumentRepository,UsersService,DriverService,userVerifcationDocumentsRepository,driverRepository,userVerificationsDocumentsService,UserDocumentsService]
+  providers: [JwtService,UsersRepository,UsersDocumentRepository,UsersService,DriverService,userVerifcationDocumentsRepository,driverRepository,userVerificationsDocumentsService,UserDocumentsService],
+  exports: [],
+
 })
 export class DriverModule {}

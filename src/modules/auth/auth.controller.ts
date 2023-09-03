@@ -33,6 +33,7 @@ import { userDocumentActiveDto } from "./dto/user-document-active.dto";
 import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import { SwaggerGetUser } from "./swagger-decorator/get-user-decorator";
 import { SwaggerGetAllUsers } from "./swagger-decorator/get-all-users-decorator";
+import { UserAuthGuard } from "../../guards/user-auth-guard";
 
 
 @ApiTags('Auth')
