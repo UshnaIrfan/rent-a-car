@@ -35,7 +35,7 @@ export class transmissionRepository{
       async updateTransmission(transmissionId: string, body: UpdateTransmissionDto):Promise<transmission|null>
       {
 
-          validateUuid(transmissionId);
+          validateUuid([transmissionId]);
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           if (!result)
           {
@@ -53,7 +53,7 @@ export class transmissionRepository{
       // delete transmission
       async deleteTransmission(transmissionId:string):Promise<transmission|null>
       {
-          validateUuid(transmissionId);
+          validateUuid([transmissionId]);
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           if (!result)
           {
@@ -68,7 +68,7 @@ export class transmissionRepository{
       // get transmission
       async getCarTransmissionById(transmissionId:string):Promise<transmission|null>
       {
-          validateUuid(transmissionId);
+          validateUuid([transmissionId]);
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           return result
       }

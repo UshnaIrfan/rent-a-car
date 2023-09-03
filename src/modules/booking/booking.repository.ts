@@ -24,7 +24,7 @@ export class bookingRepository{
       //get booking data by user id
       async getBookingDataByUserId(userId: string):Promise<booking[] | null>
       {
-          validateUuid(userId);
+          validateUuid([userId]);
           const bookings = await this.bookingModel.find({ where: {userId },
            relations: ['car']
           });
@@ -37,7 +37,7 @@ export class bookingRepository{
   // get booking history by user id
       async getBookingHistory(userId: string):Promise<booking[] | null>
       {
-          validateUuid(userId);
+          validateUuid([userId]);
            let whereConditions: any = {};
             if (userId )
             {

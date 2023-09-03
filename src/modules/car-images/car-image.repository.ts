@@ -34,7 +34,7 @@ export class carImageRepository{
            // update car image
           async updateCarImage(carImageId: string, body: UpdateCarImageDto): Promise<carImage| null>
           {
-            validateUuid(carImageId);
+            validateUuid([carImageId]);
             const result = await this.carImageModel.findOne({ where: { id:carImageId}});
             if (!result)
             {
@@ -52,7 +52,7 @@ export class carImageRepository{
         // delete car image
           async deleteCarImage(carImageId:string): Promise<carImage| null>
           {
-            validateUuid(carImageId);
+            validateUuid([carImageId]);
             const result = await this.carImageModel.findOne({ where: { id:carImageId}});
             if (!result)
             {

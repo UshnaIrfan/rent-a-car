@@ -33,7 +33,7 @@ export class yearRepository{
        // update  car year
         async updateCarYear(yearId: string, body: UpdateYearDto): Promise<year| null>
         {
-              validateUuid(yearId);
+              validateUuid([yearId]);
               const result = await this.yearModel.findOne({ where: {  id:yearId}});
               if (!result)
               {
@@ -49,7 +49,7 @@ export class yearRepository{
         // delete  car year
         async deleteCarYear(yearId:string): Promise<year| null>
         {
-              validateUuid(yearId);
+              validateUuid([yearId]);
               const result = await this.yearModel.findOne({ where: {  id:yearId}});
               if (!result)
               {
@@ -66,7 +66,7 @@ export class yearRepository{
           // get car year
           async getCarYearById(yearId:string):Promise<year| null>
           {
-               validateUuid(yearId);
+               validateUuid([yearId]);
               const result = await this.yearModel.findOne({ where: {  id:yearId}});
               return result
 

@@ -30,7 +30,7 @@ export class baggageOptionRepository{
       // update  Baggage
       async updateBaggageOption(baggageId: string, body: UpdateBaggageOptionDto) :Promise<baggageOption| null>
       {
-              validateUuid(baggageId);
+              validateUuid([baggageId]);
               const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
               if (!result)
               {
@@ -51,7 +51,7 @@ export class baggageOptionRepository{
       // delete Baggage
       async deleteBaggageOption(baggageId:string)
       {
-          validateUuid(baggageId);
+          validateUuid([baggageId]);
           const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
           if (!result)
           {
@@ -66,7 +66,7 @@ export class baggageOptionRepository{
       // get Baggage
       async getCarBaggageOptionById(baggageId:string): Promise<baggageOption| null>
       {
-          validateUuid(baggageId);
+          validateUuid([baggageId]);
           const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
           return result
       }

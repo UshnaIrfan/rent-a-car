@@ -31,7 +31,7 @@ export class driverRepository{
         // get  driver By  Id
         async getDriverById(id:string): Promise<driver| null>
         {
-             validateUuid(id);
+             validateUuid([id]);
              const driver =await this.DriverModel.findOne({ where: { id}  });
              if (!driver)
              {
@@ -46,7 +46,7 @@ export class driverRepository{
         // get  driver By driver Id with relations
         async findDriverByDriverId(driverId: string): Promise<driver | null>
         {
-              validateUuid(driverId);
+              validateUuid([driverId]);
               const driver = await this.DriverModel.findOne({ where: { id: driverId }, relations: ['UserDocuments'] });
               if (!driver)
               {
@@ -62,7 +62,7 @@ export class driverRepository{
         // update driver documents
         async updatedriverById(id: string, body: updateDriverDocumentsDto)
         {
-              validateUuid(id);
+              validateUuid([id]);
               const result = await this.userDocumentsModel.findOne({ where: { driverId: id}});
               if (!result)
               {
@@ -103,7 +103,7 @@ export class driverRepository{
       // get  driver By   user Id
       async findDriverByUserId(userId: string): Promise<driver[] | null>
       {
-            validateUuid(userId);
+            validateUuid([userId]);
             const driver = await this.DriverModel.find({ where: {userId },
               relations: ['UserDocuments']});
             return driver;

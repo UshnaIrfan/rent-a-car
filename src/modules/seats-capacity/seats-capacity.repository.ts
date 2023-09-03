@@ -34,7 +34,7 @@ export class seatsCapacityRepository{
       // update  seats  Capacity
       async updateSeatsCapacity(seatsCapacityId: string, body: UpdateSeatsCapacityDto): Promise<seatsCapacity| null>
       {
-          validateUuid(seatsCapacityId);
+          validateUuid([seatsCapacityId]);
           const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
           if (!result)
           {
@@ -50,7 +50,7 @@ export class seatsCapacityRepository{
      // delete  seats  Capacity
       async deleteSeatsCapacity(seatsCapacityId:string): Promise<seatsCapacity| null>
       {
-            validateUuid(seatsCapacityId);
+            validateUuid([seatsCapacityId]);
             const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
             if (!result)
             {
@@ -65,7 +65,7 @@ export class seatsCapacityRepository{
         // get  seats  Capacity
         async getCarSeatsCapacityById(seatsCapacityId:string): Promise<seatsCapacity| null>
         {
-            validateUuid(seatsCapacityId);
+            validateUuid([seatsCapacityId]);
             const result = await this.seatsCapacityModel.findOne({ where: {  id:seatsCapacityId}});
             return result
         }

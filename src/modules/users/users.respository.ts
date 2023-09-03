@@ -43,7 +43,7 @@ export class UsersRepository {
           // get user by id   ( with relation)
          async findUserById(id: string): Promise<User | null>
          {
-               validateUuid(id);
+               validateUuid([id]);
                const user=  await this.userModel.findOne({ where: { id} , relations: ['UserDocuments']});
                if (!user)
                {

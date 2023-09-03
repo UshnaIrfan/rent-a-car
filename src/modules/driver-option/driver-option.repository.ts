@@ -33,7 +33,7 @@ export class driverOptionRepository{
       // update  driver  Option
         async updateDriverOptionById(driverOptionId: string, body: UpdateDriverOptionDto): Promise<driverOption| null>
         {
-            validateUuid(driverOptionId);
+            validateUuid([driverOptionId]);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             if (!result)
             {
@@ -51,7 +51,7 @@ export class driverOptionRepository{
         // delete  driver  Option
         async deleteDriverOption(driverOptionId:string): Promise<driverOption| null>
         {
-            validateUuid(driverOptionId);
+            validateUuid([driverOptionId]);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             if (!result)
             {
@@ -65,7 +65,7 @@ export class driverOptionRepository{
         //  get driver  Option
         async getCarDriverOptionById(driverOptionId:string): Promise<driverOption| null>
         {
-            validateUuid(driverOptionId);
+            validateUuid([driverOptionId]);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             return result
         }

@@ -34,7 +34,7 @@ export class pricingRepository{
         async updatePricing(pricingId: string, body: UpdatePricingDto): Promise<pricing| null>
         {
 
-            validateUuid(pricingId);
+            validateUuid([pricingId]);
             const result = await this.pricingModel.findOne({ where: { id:pricingId}});
             if (!result)
             {
@@ -52,7 +52,7 @@ export class pricingRepository{
         // delete  pricing
         async deletePricing(pricingId:string): Promise<pricing| null>
         {
-            validateUuid(pricingId);
+            validateUuid([pricingId]);
             const result = await this.pricingModel.findOne({ where: { id:pricingId}});
             if (!result)
             {

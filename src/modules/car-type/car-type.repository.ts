@@ -30,7 +30,7 @@ export class CarTypeRepository{
        // update  car types
         async updateCarTypes(cartypeId: string, body: UpdateCarTypeDto): Promise<carType| null>
         {
-              validateUuid(cartypeId);
+              validateUuid([cartypeId]);
               const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
               if (!result)
               {
@@ -46,7 +46,7 @@ export class CarTypeRepository{
         // delete  car types
         async deleteCarTypes(cartypeId:string): Promise<carType| null>
         {
-            validateUuid(cartypeId);
+            validateUuid([cartypeId]);
             const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
             if (!result)
             {
@@ -61,7 +61,7 @@ export class CarTypeRepository{
         // get  car types
         async getCarTypeById(cartypeId:string): Promise<carType| null>
         {
-            validateUuid(cartypeId);
+            validateUuid([cartypeId]);
             const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
             return result
         }

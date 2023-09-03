@@ -32,7 +32,7 @@ export class ColorRepository{
         async updateCarColor(colorId: string, body: UpdateColorDto):Promise<color| null>
         {
 
-            validateUuid(colorId);
+            validateUuid([colorId]);
             const result = await this.colorModel.findOne({ where: {  id:colorId}});
             if (!result)
             {
@@ -49,7 +49,7 @@ export class ColorRepository{
         // delete  color
         async deleteCarColor(colorId:string):Promise<color| null>
         {
-            validateUuid(colorId);
+            validateUuid([colorId]);
             const result = await this.colorModel.findOne({ where: {  id:colorId}});
             if (!result)
             {
@@ -63,7 +63,7 @@ export class ColorRepository{
         // get color
           async getCarColorById(colorId:string):Promise<color| null>
           {
-              validateUuid(colorId);
+              validateUuid([colorId]);
               const result = await this.colorModel.findOne({ where: {  id:colorId}});
               return result
           }

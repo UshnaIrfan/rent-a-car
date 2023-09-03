@@ -25,7 +25,7 @@ export class timeRepository{
       // get by time id
       async getTimeById(timeId: string):Promise<time| null>
       {
-          validateUuid(timeId);
+          validateUuid([timeId]);
           const result = await this.timeModel.findOne({ where: {  id:timeId}});
           return  result
       }
@@ -45,7 +45,7 @@ export class timeRepository{
         // update  car model
         async updateTime(timeId: string, body: UpdateTimeDto): Promise<time| null>
         {
-            validateUuid(timeId);
+            validateUuid([timeId]);
             const result = await this.timeModel.findOne({ where: { id:timeId}});
             if (!result)
             {
@@ -63,7 +63,7 @@ export class timeRepository{
         // delete  car model
         async deleteTime(timeId:string): Promise<time| null>
         {
-            validateUuid(timeId);
+            validateUuid([timeId]);
             const result = await this.timeModel.findOne({ where: { id:timeId}});
             if (!result)
             {

@@ -32,7 +32,7 @@ export class brandRepository{
        // update   car brands
         async updateCarBrands(brandId: string, body: UpdateBrandDto):Promise<brand| null>
         {
-            validateUuid(brandId);
+            validateUuid([brandId]);
             const result = await this.brandModel.findOne({ where: {  id:brandId}});
             if (!result)
             {
@@ -50,7 +50,7 @@ export class brandRepository{
        // delete  car brands
          async deleteCarBrands(brandId: string):Promise<brand| null>
          {
-                validateUuid(brandId);
+                validateUuid([brandId]);
                 const result = await this.brandModel.findOne({ where: {  id:brandId}});
                 if (!result)
                 {
@@ -66,7 +66,7 @@ export class brandRepository{
         // get  car brand by id
         async getCarBrandById(brandId: string):Promise<brand| null>
         {
-            validateUuid(brandId);
+            validateUuid([brandId]);
             const result = await this.brandModel.findOne({ where: {  id:brandId}});
             return  result
         }
