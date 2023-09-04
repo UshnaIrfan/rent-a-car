@@ -1,26 +1,43 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLanguageDto } from './dto/create-language.dto';
-import { UpdateLanguageDto } from './dto/update-language.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import createLanguagesInterface from "./interfaces/create-languages.interface";
+import { languages } from "./schemas/languages.schema";
+import { languagesRepository } from "./languages.repository";
 
 @Injectable()
 export class LanguagesService {
-  create(createLanguageDto: CreateLanguageDto) {
-    return 'This action adds a new language';
-  }
+  constructor(private readonly LanguagesRepository:languagesRepository) {}
 
-  findAll() {
-    return `This action returns all languages`;
-  }
+        // Create
+        async createLanguages(createLanguagesInterface:createLanguagesInterface):Promise<languages>
+        {
+          return  await this.LanguagesRepository.createLanguages(createLanguagesInterface);
+        }
 
-  findOne(id: number) {
-    return `This action returns a #${id} language`;
-  }
 
-  update(id: number, updateLanguageDto: UpdateLanguageDto) {
-    return `This action updates a #${id} language`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} language`;
-  }
+        // get all  Languages
+        async getLanguages ():Promise<languages[]>
+        {
+            const result= await this.LanguagesRepository.getLanguages();
+            if (result.length==0)
+            {
+              throw new NotFoundException('data not found');
+            }
+            return  result
+        }
+
+
+        //find language by id
+        async getLanguageById (id:string):Promise<languages>
+        {
+            const result= await this.LanguagesRepository.getLanguageById(id);
+            if (!result)
+            {
+              throw new NotFoundException('data not found');
+            }
+            return  result;
+        }
+
+
+
 }

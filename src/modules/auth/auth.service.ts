@@ -28,6 +28,7 @@ import {UserDocumentsService} from "../user-documents/user-documents.service";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
 import { jwtConstants } from "./constants/constants";
 import { JwtService } from '@nestjs/jwt';
+import { MailService } from "../mail/mail.service";
 
 
 @Injectable()
@@ -42,6 +43,7 @@ export class AuthService {
     private readonly UsersDocumentService: UserDocumentsService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly usersRepository: UsersRepository,
+    private readonly mailService: MailService,
     private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
 
   ) {}
@@ -70,7 +72,7 @@ export class AuthService {
                  throw new BadRequestException('Password is too weak');
               }
 
-              const user = await this.usersService.createUser({
+              var user = await this.usersService.createUser({
                    ...Signup,
                   password: await AuthService.hashPassword(Signup.password),
               });
@@ -91,16 +93,21 @@ export class AuthService {
               const OtpValue = JSON.stringify({ token: Otp, active: false, });
               await this.cacheManager.set(OtpKey, OtpValue, { ttl:  Otpexpires});
               console.log(Otp)
-              try
-              {
-                   await  this.sendOtp(user.phoneNo,Otp)
-                   await this.sendAdminEmail(this.configService.get("ADMIN_EMAIL"), user);
-              }
-              catch (e)
-              {
-                    throw new BadRequestException('Failed to send otp');
-              }
-              return { message: 'Please check your number to verify your otp!'};
+              const adminEmail=this.configService.get("ADMIN_EMAIL")
+              const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
+              const emailBody = template({adminEmail , name: user.firstName, userEmail: user.email});
+              const mailData: any = {
+                to: user.email,
+                from: process.env.MAIL_FROM,
+                subject: "New Signup",
+                content: "Process is completed successfully",
+                cc: "",
+                bcc: "",
+                template: emailBody
+              };
+                this.mailService.sendMail(mailData);
+                await  this.sendOtp(user.phoneNo,Otp)
+                return { message: 'Please check your number to verify your otp!'};
         }
 
 
@@ -113,6 +120,9 @@ export class AuthService {
           // user update ( otp active status)
           async isOtpActive(email:string,@Body() reqBody: userOtpActiveInterface)
           {
+            const logo_l2a=process.env.LOGO_L2A
+            const contact_us_url= process.env.CONTACT_US
+            const privacy_policy_url= process.env.PRIVACY_POLICY
             const user = await this.usersService.findUserByEmail(email);
             if (!user)
             {
@@ -136,18 +146,26 @@ export class AuthService {
             {
                 throw new ConflictException('You are already active, Please log in');
             }
+
             try
             {
                 parsedToken.active = true;
                 const updatedTokenValue = JSON.stringify(parsedToken);
                 await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
                 const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
-                const Username = user.firstName;
-                const logo_l2a=process.env.LOGO_L2A
-                const contact_us_url= process.env.CONTACT_US
-                const privacy_policy_url= process.env.PRIVACY_POLICY
-                await this.sendWelcomeEmail(email, Username,contact_us_url,privacy_policy_url,logo_l2a);
-                return { message: 'Your account has been successfully created. Please login here' };
+                const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
+                const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
+                const mailData: any = {
+                  to: user.email,
+                  from: process.env.MAIL_FROM,
+                  subject: "You're In!",
+                  content: "Process is completed successfully",
+                  cc: "",
+                  bcc: "",
+                  template: emailBody
+                };
+                  this.mailService.sendMail(mailData);
+                  return { message: 'Your account has been successfully created. Please login here' };
 
             }
             catch (e)
@@ -422,19 +440,21 @@ export class AuthService {
               const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
               const resetUrl = `${changePasswordUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
-              const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a });
-              try
-              {
-                  await this.sendToken(user.email, emailBody);
-              }
-              catch (e)
-              {
-                  throw new BadRequestException('Failed to send email');
-              }
-              return {
-                message: 'Please check your email to reset your password!',
-                tokenStatus: true,
+              const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a })
+              const mailData: any = {
+                  to: user.email,
+                  from: process.env.MAIL_FROM,
+                  subject: "Need a Reset?",
+                  content: "Process is completed successfully",
+                  cc: "",
+                  bcc: "",
+                  template: emailBody
               };
+                this.mailService.sendMail(mailData);
+                return {
+                    message: 'Please check your email to reset your password!',
+                    tokenStatus: true,
+                };
           }
 
 
@@ -477,7 +497,10 @@ export class AuthService {
              // change password
              async changePassword(email:string,@Body() reqBody: changeUserPasswordInterface)
              {
-                  const user = await this.usersService.findUserByEmail(email);
+                 const logo_l2a=process.env.LOGO_L2A
+                 const contact_us_url= process.env.CONTACT_US
+                 const privacy_policy_url= process.env.PRIVACY_POLICY
+                 const user = await this.usersService.findUserByEmail(email);
                   if (!user)
                   {
                      throw new NotFoundException('Invalid email');
@@ -509,17 +532,24 @@ export class AuthService {
                   }
 
                   const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
-
+                  const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
+                  const emailBody = template({ email, username: user.firstName,contact_us_url,privacy_policy_url,logo_l2a});
+                  const mailData: any = {
+                     to: user.email,
+                     from: process.env.MAIL_FROM,
+                     subject: "Success: Your password has been reset!",
+                     content: "Process is completed successfully",
+                     cc: "",
+                     bcc: "",
+                     template: emailBody
+                 };
                   if (parsedToken.active == true)
                   {
-                      const logo_l2a=process.env.LOGO_L2A
-                      const contact_us_url= process.env.CONTACT_US
-                      const privacy_policy_url= process.env.PRIVACY_POLICY
-                      await this.usersService.updatePassword(email, hashedPassword);
-                      await this.sendPasswordUpdatedEmail(email, user.firstName,contact_us_url,privacy_policy_url,logo_l2a);
-                      const loginResult = this.login(user);
-                      await this.cacheManager.del(tokenKey);
-                      return loginResult;
+                       await this.usersService.updatePassword(email, hashedPassword);
+                       this.mailService.sendMail(mailData);
+                       const loginResult = this.login(user);
+                       await this.cacheManager.del(tokenKey);
+                       return loginResult;
                   }
                   else
                   {
@@ -542,7 +572,6 @@ export class AuthService {
          // send Otp
            async sendOtp(phone_no: any,Otp:any)
            {
-                //  const OTP = otpGenerator.generate(6, { digits: true, alphabets: false, upperCase: false, specialChars: false });
                 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
                 try
                 {
@@ -558,21 +587,6 @@ export class AuthService {
                 }
 
           }
-
-
-
-         // sending email(welcome after registered)
-          async sendWelcomeEmail(email: string, Username: string,contact_us_url:string,privacy_policy_url:string,logo_l2a:String)
-          {
-              const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
-              const html = template({ username: Username,contact_us_url,privacy_policy_url ,logo_l2a});
-              await this.mailerService.sendMail({
-                to: email,
-                subject: `You're In!`,
-                html: html,
-              });
-          }
-
 
 
 
@@ -593,49 +607,6 @@ export class AuthService {
             return user;
         }
 
-
-
-
-
-          // sending admin email
-          async sendAdminEmail(email: string, user: any)
-          {
-
-            const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
-            const html = template({ email, name: user.firstname, userEmail: user.email});
-            await this.mailerService.sendMail({
-              to: email,
-              subject: 'New Signup',
-              html: html,
-            });
-          }
-
-
-          //sending email (updated password)
-          async sendPasswordUpdatedEmail(email: string, name: string,contact_us_url:string,privacy_policy_url:string,logo_l2a:string)
-          {
-            const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
-            const html = template({ email, username: name,contact_us_url,privacy_policy_url,logo_l2a});
-            await this.mailerService.sendMail({
-              to: email,
-              subject: 'Success: Your password has been reset!',
-              html: html,
-            });
-          }
-
-
-
-
-
-          //sending Token(forgotPassword)
-          async sendToken(email: string, emailBody: string)
-          {
-            await this.mailerService.sendMail({
-              to: email,
-              subject: 'Need a Reset?',
-              html: emailBody,
-            });
-          }
 
 
   //apple

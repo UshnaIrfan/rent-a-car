@@ -7,7 +7,7 @@ export class CreateYearDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  year: string;
+  year: Number;
 
 
 }

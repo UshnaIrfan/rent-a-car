@@ -2,12 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Re
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
-import AuthBearer from "../../decorators/auth-bearer.decorators";
 import { getUserBookingDcorator } from "./swagger-decorator/get-user-booking-dcorator";
 import { booking } from "./schemas/booking.schema";
 import { getUserBookingHistoryDecorator } from "./swagger-decorator/get-user-booking-history-decorator";
 import { UserAuthGuard } from "../../guards/user-auth-guard";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 
 
 @ApiTags('booking')
@@ -23,7 +21,7 @@ export class BookingController {
       @Post('create')
       async createBooking(@Body() createBookingDto: CreateBookingDto, @Req() request: any)
       {
-        return this.bookingService.createBooking(createBookingDto,request.user.id);
+          return this.bookingService.createBooking(createBookingDto,request.user.id);
       }
 
 
@@ -38,6 +36,7 @@ export class BookingController {
       }
 
 
+
       //get booking data by user id
       @getUserBookingDcorator()
       @Get('/:userId')
@@ -47,6 +46,24 @@ export class BookingController {
       }
 
 
+
+        // delete booking by driver id
+        @Delete('driver/:driverId')
+        async  deleteBookingByDriverId(@Param('driverId') driverId:string )
+        {
+            console.log(" delete driver id")
+            return this.bookingService.deleteBookingByDriverId(driverId);
+        }
+
+
+
+        // delete booking by car id
+        @Delete('car/:carId')
+        async  deleteBookingByCarId(@Param('carId') carId:string )
+        {
+          console.log(" delete car id")
+          return this.bookingService.deleteBookingByCarId(carId);
+        }
 
 
 

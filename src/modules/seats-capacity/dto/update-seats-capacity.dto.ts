@@ -7,6 +7,6 @@ export class UpdateSeatsCapacityDto extends PartialType(CreateSeatsCapacityDto) 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  seatsCapacity: string;
+  seatsCapacity: Number;
 
 }

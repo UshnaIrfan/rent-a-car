@@ -4,15 +4,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   ManyToOne, JoinColumn
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import {car} from "../../car/schemas/car.schema"
 import {User} from "../../users/schemas/user.schema"
 import { driver } from "../../driver/schemas/driver.schema";
-
-
 
 @Entity({ name: 'booking' })
 export class  booking {
@@ -29,13 +26,33 @@ export class  booking {
 
       @ApiProperty()
       @Column({nullable:true})
+      languageId: string;
+
+
+      @ApiProperty()
+      @Column({nullable:true})
       carId: string;
+
+
+      @ApiProperty()
+      @Column({nullable:true})
+      packagesId: string;
 
 
 
       @ApiProperty()
       @Column({nullable:true})
       driverId: string;
+
+
+      @ApiProperty()
+      @Column({nullable:true})
+      pickupDate: string;
+
+
+      @ApiProperty()
+      @Column({nullable:true})
+      dropoffDate: string;
 
 
       @ApiProperty()
@@ -46,7 +63,6 @@ export class  booking {
       @ApiProperty()
       @UpdateDateColumn()
       updatedAt: Date
-
 
 
 
@@ -71,8 +87,6 @@ export class  booking {
       @ManyToOne(() => driver, driver => driver.booking, { onDelete: 'CASCADE' })
       @JoinColumn({ name: 'driverId' })
       driver: driver[];
-
-
 
 
 }

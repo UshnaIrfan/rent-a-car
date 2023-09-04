@@ -11,7 +11,8 @@ export class  seatsCapacity {
 
     @ApiProperty()
     @Column({nullable:true})
-    seatsCapacity: string;
+    seatsCapacity: Number;
+
 
     @ApiProperty()
     @CreateDateColumn()

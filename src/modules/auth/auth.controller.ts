@@ -1,19 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Request,
-  Get,
-  Delete,
-  Put,
-  Patch,
-  Param,
-  Req,
-  UsePipes,
-  ParseUUIDPipe,
-  UseInterceptors
-} from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Request, Get, Delete, Put, Patch, Param, Req } from "@nestjs/common";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
@@ -33,7 +18,6 @@ import { userDocumentActiveDto } from "./dto/user-document-active.dto";
 import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import { SwaggerGetUser } from "./swagger-decorator/get-user-decorator";
 import { SwaggerGetAllUsers } from "./swagger-decorator/get-all-users-decorator";
-import { UserAuthGuard } from "../../guards/user-auth-guard";
 
 
 @ApiTags('Auth')

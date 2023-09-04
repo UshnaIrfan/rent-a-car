@@ -7,7 +7,7 @@ export class CreateSeatsCapacityDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  seatsCapacity: string;
+  seatsCapacity: Number;
 
 
 

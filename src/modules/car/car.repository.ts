@@ -3,7 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { car } from "./schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
+import { driver } from "../driver/schemas/driver.schema";
 
 
 @Injectable()
@@ -52,7 +52,7 @@ export class carRepository{
         // Get car by user id
         async getCarByUserId(userId:string):Promise<car[]| null>
         {
-           validateUuid([userId]);
+            validateUuid([userId]);
            return  await this.carModel.find({  where: { userId}, relations:['pricing','carImage'] });
         }
 
@@ -64,8 +64,6 @@ export class carRepository{
       // Get car  history by user id and car id
       async getCarHistory(userId: string, carId: string):Promise<car[]| null>
       {
-           // validateUuid(userId);
-           // validateUuid(carId);
            validateUuid([userId,carId]);
            let whereConditions: any = {};
             if (userId || carId)
@@ -81,6 +79,20 @@ export class carRepository{
            return results;
       }
 
+
+
+
+      // delete car history  by user id
+      async deleteCarHistory(userId: string):Promise<car[]| null>
+      {
+            validateUuid([userId]);
+            const result = await this.carModel.find({ where: {  userId:userId}});
+            if (!result)
+            {
+              throw new NotFoundException('data not found');
+            }
+            return await this.carModel.remove(result);
+      }
 
 }
 

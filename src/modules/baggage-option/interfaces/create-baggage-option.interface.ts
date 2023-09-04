@@ -1,3 +1,3 @@
 export default interface createBaggageOptionInterface {
-  readonly baggageOption: string;
+  readonly baggageOption: Number;
 }

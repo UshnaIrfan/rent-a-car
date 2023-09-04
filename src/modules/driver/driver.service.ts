@@ -104,33 +104,45 @@ export class DriverService {
 
 
 
-
-      // get  driver By   user Id
-      async findDriverByUserId (userId:string): Promise<driver[]>
-      {
-         const user= await this.DriverRepository.findDriverByUserId(userId);
-         if (user.length==0)
-         {
-             throw new NotFoundException('user not found');
-         }
-            return  user
-      }
-
+        // get  driver By   user Id
+        async findDriverByUserId (userId:string): Promise<driver[]>
+        {
+           const user= await this.DriverRepository.findDriverByUserId(userId);
+           if (user.length==0)
+           {
+               throw new NotFoundException('user not found');
+           }
+              return  user
+        }
 
 
 
+        // get  driver By   user Id
+        async getDriverHistory (userId:string,driverId:string)
+        {
+          const user= await this.DriverRepository.getDriverHistory(userId,driverId);
+          if (user.length==0)
+          {
+            throw new NotFoundException('user not found');
+          }
+          return  user
+        }
 
 
 
+        // delete driver by driver id
+        async deleteDriverById (driverId):Promise<{ driver:driver; message: string }>
+        {
+             const  driver= await this.DriverRepository.deleteDriverById(driverId);
+             return { message: "deleted successfully",driver:driver};
+        }
 
-  // get  driver By   user Id
-  async getDriverHistory (userId:string,driverId:string)
-  {
-    const user= await this.DriverRepository.getDriverHistory(userId,driverId);
-    if (user.length==0)
-    {
-      throw new NotFoundException('user not found');
-    }
-    return  user
-  }
+
+
+        // delete driver history  by user id
+        async deleteDriverHistory (userId:string):Promise<{ driver:driver[]; message: string }>
+        {
+            const  driver= await this.DriverRepository.deleteDriverHistory(userId);
+            return { message: "deleted successfully",driver:driver};
+        }
 }

@@ -9,8 +9,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { User } from "../../users/schemas/user.schema"
 import { driver } from "../../driver/schemas/driver.schema";
 
-
-
 export enum  documentStatus {
       PENDING = 'pending',
       APPROVED = 'approved',

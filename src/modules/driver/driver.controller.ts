@@ -9,7 +9,7 @@ import {
   ParseUUIDPipe,
   Query,
   UseGuards,
-  Req, Injectable, Scope
+  Req, Injectable, Scope, Delete
 } from "@nestjs/common";
 import { DriverService } from './driver.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -110,10 +110,9 @@ export class DriverController {
         @Get('/:driverId')
         async  findDriverByDriverId(@Param('driverId') driverId:string): Promise<driver>
         {
-              console.log("hey1")
+               console.log("driver id")
               return this.driverService.findDriverByDriverId(driverId);
         }
-
 
 
 
@@ -129,26 +128,49 @@ export class DriverController {
 
 
 
-      // get  driver By   user Id
-      @getAllDriversRenterDecorators()
-      @Get('user/:userId')
-      async  findDriverByUserId(@Param('userId') userId:string): Promise<driver[]>
-      {
-            console.log("hey")
-            return this.driverService.findDriverByUserId(userId);
-      }
+        // get  driver By   user Id
+        @getDriverHistoryRenterDecorators()
+        @ApiQuery({ name: 'userId', required: true })
+        @ApiQuery({ name: 'driverId', required: false })
+        @Get('userId/:history')
+        async  getDriverHistory(@Query('userId') userId?: string, @Query('driverId') driverId?: string)
+        {
+          console.log("driver id and user id")
+          return this.driverService.getDriverHistory(userId,driverId);
+        }
+
+
+
+        // get  driver By   user Id
+        @getAllDriversRenterDecorators()
+        @Get('user/:userId')
+        async  findDriverByUserId(@Param('userId') userId:string): Promise<driver[]>
+        {
+               console.log("user id")
+              return this.driverService.findDriverByUserId(userId);
+        }
+
+
+
+        // delete driver history  by user id
+        @ApiQuery({ name: 'userId', required: true })
+        @Delete('history/:userId')
+        async  deleteDriverHistory(@Query('userId') userId: string )
+        {
+            console.log(" delete history")
+            return this.driverService.deleteDriverHistory(userId);
+        }
+
+
+        // delete driver by driver id
+        @Delete('/:driverId')
+        async  deleteDriverById(@Param('driverId') driverId:string )
+        {
+          console.log(" delete driver id")
+          return this.driverService.deleteDriverById(driverId);
+        }
 
 
 
 
-      // get  driver By   user Id
-      @getDriverHistoryRenterDecorators()
-      @ApiQuery({ name: 'userId', required: true })
-      @ApiQuery({ name: 'driverId', required: false })
-      @Get('driver/history')
-      async  getDriverHistory(@Query('userId') userId?: string, @Query('driverId') driverId?: string)
-      {
-        console.log("hey s")
-        return this.driverService.getDriverHistory(userId,driverId);
-      }
 }

@@ -1,3 +1,3 @@
 export default interface updateSeatsCapacityInterface {
-  readonly seatsCapacity: string;
+  readonly seatsCapacity: Number;
 }

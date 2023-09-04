@@ -1,34 +1,32 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
-import { UpdateLanguageDto } from './dto/update-language.dto';
+import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { languages } from "./schemas/languages.schema";
 
+
+@ApiTags('languages')
 @Controller('languages')
 export class LanguagesController {
   constructor(private readonly languagesService: LanguagesService) {}
 
-  @Post()
-  create(@Body() createLanguageDto: CreateLanguageDto) {
-    return this.languagesService.create(createLanguageDto);
-  }
 
-  @Get()
-  findAll() {
-    return this.languagesService.findAll();
-  }
+     // Create
+      @ApiBody({type:CreateLanguageDto})
+      @Post('create')
+      async createLanguages(@Body() createLanguageDto: CreateLanguageDto):Promise<languages>
+      {
+        return this.languagesService.createLanguages(createLanguageDto);
+      }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.languagesService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLanguageDto: UpdateLanguageDto) {
-    return this.languagesService.update(+id, updateLanguageDto);
-  }
+      // get all  Languages
+      @Get('all')
+      async  getLanguages():Promise<languages[]>
+      {
+        return this.languagesService.getLanguages();
+      }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.languagesService.remove(+id);
-  }
+
+
 }

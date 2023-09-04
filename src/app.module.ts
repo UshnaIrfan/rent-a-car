@@ -52,6 +52,8 @@ import { carImage } from "./modules/car-images/schemas/car-image.schema";
 import { LanguagesModule } from './modules/languages/languages.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { booking } from "./modules/booking/schemas/booking.schema";
+import { MailModule } from './modules/mail/mail.module';
+import { languages } from "./modules/languages/schemas/languages.schema";
 
 
 
@@ -129,9 +131,7 @@ import { booking } from "./modules/booking/schemas/booking.schema";
         username: configService.get("DATABASE_USERNAME"),
         password: configService.get("DATABASE_PASSWORD"),
         database: configService.get("DATABASE_NAME"),
-
-
-        entities: [booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]
@@ -142,6 +142,8 @@ import { booking } from "./modules/booking/schemas/booking.schema";
     LanguagesModule,
 
     BookingModule,
+
+    MailModule,
 
 
 

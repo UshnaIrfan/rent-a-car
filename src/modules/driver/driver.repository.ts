@@ -9,6 +9,7 @@ import { UserVerificationDocuments } from "../user-verifications-documents/schem
 import * as path from 'path';
 import * as fs from "fs";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { car } from "../car/schemas/car.schema";
 
 
 
@@ -96,10 +97,6 @@ export class driverRepository{
 
 
 
-
-
-
-
       // get  driver By   user Id
       async findDriverByUserId(userId: string): Promise<driver[] | null>
       {
@@ -111,27 +108,52 @@ export class driverRepository{
       }
 
 
+        // get  driver By   user Id
+        async getDriverHistory(userId:string,driverId:string)
+        {
+            let whereConditions: any = {};
+            if (userId || driverId)
+            {
+              whereConditions = {
+                userId: userId ?? undefined,
+                id: driverId ?? undefined,
+              };
+            }
+            const results = await this.DriverModel.find({
+            where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
+            relations: driverId ? ['UserDocuments', 'booking'] : ['UserDocuments'], });
+            return results;
+        }
 
 
-  // get  driver By   user Id
-  async getDriverHistory(userId:string,driverId:string)
-  {
-    let whereConditions: any = {};
-    if (userId || driverId)
-    {
-      whereConditions = {
-        userId: userId ?? undefined,
-        id: driverId ?? undefined,
-      };
-    }
-    const results = await this.DriverModel.find({
-      where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
-     // relations: ['UserDocuments','booking']});
-     relations: driverId ? ['UserDocuments', 'booking'] : ['UserDocuments'], });
 
-    // relations: driverId ? ['pricing', 'carImage', 'booking'] : ['pricing', 'carImage'], });
-    return results;
+    // delete driver by driver id
+      async deleteDriverById(driverId: string):Promise<driver| null>
+      {
+            validateUuid([driverId]);
+            const result = await this.DriverModel.findOne({ where: {  id:driverId}});
+            if (!result)
+            {
+              throw new NotFoundException('driver not found');
+            }
 
-  }
+            return await this.DriverModel.remove(result);
+      }
+
+
+
+
+        // delete driver history  by user id
+        async deleteDriverHistory(userId: string):Promise<driver[]| null>
+        {
+            validateUuid([userId]);
+            const result = await this.DriverModel.find({ where: {  userId:userId}});
+            if (!result)
+            {
+              throw new NotFoundException('driver not found');
+            }
+
+            return await this.DriverModel.remove(result);
+        }
 }
 

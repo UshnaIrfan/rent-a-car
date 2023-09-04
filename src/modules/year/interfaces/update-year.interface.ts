@@ -1,3 +1,3 @@
 export default interface updateYearInterface {
-  readonly year: string;
+  readonly year: Number;
 }

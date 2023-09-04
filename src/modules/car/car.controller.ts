@@ -15,14 +15,10 @@ import { CarService } from './car.service';
 import { createCarDto } from './dto/create-car.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { car } from "./schemas/car.schema";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import { UpdateCarModelDto } from "../car-model/dto/update-car-model.dto";
 import { Role } from "../../enums/role.enum";
 import { Roles } from "../../decorators/role.decorators";
-import AuthBearer from "../../decorators/auth-bearer.decorators";
 import { getAllCarsRenterDecorators } from "./swagger-decorator/get-all-cars-renter-decorators";
 import { getCarHistoryRenterDecorators } from "./swagger-decorator/get-car-history-renter-decorators";
-import { JwtAuthGuard } from "../auth/guards/jwt-auth-guard";
 import { UserAuthGuard } from "../../guards/user-auth-guard";
 
 @ApiTags('car')
@@ -83,6 +79,17 @@ export class CarController {
         {
              return this.carService.getCarHistory(userId,carId);
         }
+
+
+
+    // delete car history  by user id
+      @ApiQuery({ name: 'userId', required: true })
+      @Delete('history/:userId')
+      async  deleteCarHistory(@Query('userId') userId: string )
+      {
+            console.log(" delete history")
+            return this.carService.deleteCarHistory(userId);
+      }
 
 
 

@@ -7,6 +7,6 @@ export class UpdateBaggageOptionDto extends PartialType(CreateBaggageOptionDto) 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  baggageOption: string;
+  baggageOption: Number;
 
 }

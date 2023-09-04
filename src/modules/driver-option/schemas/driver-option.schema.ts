@@ -1,6 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 
+export enum  driverOptionStatus {
+       DRIVER= 'withDriver',
+       NOTDRIVER = 'notDriver'
+}
+
 @Entity({ name: 'driver_option' })
 export class  driverOption {
 
@@ -10,7 +15,7 @@ export class  driverOption {
 
 
       @ApiProperty()
-      @Column({nullable:true})
+      @Column({enum: driverOptionStatus , default: driverOptionStatus.DRIVER})
       driverOption: string;
 
 

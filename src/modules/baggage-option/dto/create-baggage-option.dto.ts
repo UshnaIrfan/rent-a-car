@@ -6,7 +6,7 @@ export class CreateBaggageOptionDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  baggageOption: string;
+  baggageOption: Number;
 
 
 }

@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 
-@Entity({ name: 'baggage_option' })
-export class  baggageOption {
+@Entity({ name: 'languages' })
+export class  languages {
 
     @ApiProperty()
     @PrimaryGeneratedColumn('uuid')
@@ -11,12 +11,13 @@ export class  baggageOption {
 
     @ApiProperty()
     @Column({nullable:true})
-    baggageOption: Number;
+    languages: string;
 
 
     @ApiProperty()
     @CreateDateColumn()
     createdAt: Date
+
 
 
     @ApiProperty()

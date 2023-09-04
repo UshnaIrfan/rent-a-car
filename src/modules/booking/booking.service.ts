@@ -13,6 +13,7 @@ import { CarService } from "../car/car.service";
 import { driverRepository } from "../driver/driver.repository";
 import { driver } from "../driver/schemas/driver.schema";
 import { booking } from "./schemas/booking.schema";
+import { LanguagesService } from "../languages/languages.service";
 
 @Injectable()
 export class BookingService {
@@ -22,6 +23,7 @@ export class BookingService {
               @Inject(CACHE_MANAGER) private cacheManager: Cache,
               private usersService: UsersService,
               private readonly carService: CarService,
+              private readonly languagesService: LanguagesService,
               private readonly DriverRepository:driverRepository,
   ) {}
 
@@ -29,11 +31,19 @@ export class BookingService {
     // create
     async createBooking(createBookingInterface:createBookingInterface,userId:string)
     {
+
+          const language= await this.languagesService.getLanguageById(createBookingInterface.languageId);
+          if(!language)
+          {
+            throw new NotFoundException('language not found');
+          }
+
           const car= await this.carService.getCarByCarId(createBookingInterface.carId);
           if(!car)
           {
             throw new NotFoundException('car  not exist');
           }
+
 
           // const driver=await this.DriverRepository.getDriverById(createBookingInterface.driverId)
           // if(!driver)
@@ -72,11 +82,29 @@ export class BookingService {
           const result= await this.bookingRepository.getBookingHistory(userId);
           if (result.length==0)
           {
-            throw new NotFoundException(' not exist');
+            throw new NotFoundException('data not found');
           }
             return  result;
       }
 
+
+
+
+      // delete booking by driver id
+      async deleteBookingByDriverId (driverId:string):Promise<{ booking:booking[]; message: string }>
+      {
+        const  booking= await this.bookingRepository.deleteBookingByDriverId(driverId);
+        return { message: "deleted successfully",booking:booking};
+      }
+
+
+
+      // delete booking by car id
+      async deleteBookingByCarId (carId:string):Promise<{ booking:booking[]; message: string }>
+      {
+        const  booking= await this.bookingRepository.deleteBookingByCarId(carId);
+        return { message: "deleted successfully",booking:booking};
+      }
 
 
 }

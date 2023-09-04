@@ -5,6 +5,7 @@ import { booking } from "./schemas/booking.schema";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { car } from "../car/schemas/car.schema";
+import { driver } from "../driver/schemas/driver.schema";
 
 
 
@@ -21,15 +22,16 @@ export class bookingRepository{
       }
 
 
+
       //get booking data by user id
       async getBookingDataByUserId(userId: string):Promise<booking[] | null>
       {
           validateUuid([userId]);
           const bookings = await this.bookingModel.find({ where: {userId },
-           relations: ['car']
-          });
-          return bookings;
+           relations: ['car'] });
+           return bookings;
       }
+
 
 
 
@@ -51,5 +53,34 @@ export class bookingRepository{
             return results;
       }
 
+
+
+        // delete booking by driver id
+        async deleteBookingByDriverId(driverId: string):Promise<booking[]| null>
+        {
+          validateUuid([driverId]);
+          const result = await this.bookingModel.find({ where: {  driverId:driverId}});
+          if (result.length==0)
+          {
+            throw new NotFoundException('data not found');
+          }
+
+          return await this.bookingModel.remove(result);
+        }
+
+
+
+
+      // delete booking by car id
+      async deleteBookingByCarId(carId: string):Promise<booking[]| null>
+      {
+          validateUuid([carId]);
+          const result = await this.bookingModel.find({ where: { carId:carId}});
+          if (result.length==0)
+          {
+            throw new NotFoundException('data not found');
+          }
+          return await this.bookingModel.remove(result);
+      }
 }
 

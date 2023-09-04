@@ -11,7 +11,9 @@ export class  year {
 
       @ApiProperty()
       @Column({nullable:true})
-      year: string;
+      year: Number;
+
+
 
       @ApiProperty()
       @CreateDateColumn()

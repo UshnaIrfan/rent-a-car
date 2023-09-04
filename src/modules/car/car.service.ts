@@ -11,12 +11,10 @@ import { BaggageOptionService } from "../baggage-option/baggage-option.service";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
-import { jwtConstants } from "../auth/constants/constants";
 import { Cache } from "cache-manager";
 import { CACHE_MANAGER } from "@nestjs/common/cache";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
-
 
 
 @Injectable()
@@ -34,9 +32,6 @@ export class CarService {
               private jwtService: JwtService,
               private usersService: UsersService,
               @Inject(CACHE_MANAGER) private cacheManager: Cache,
-
-
-
   ) {}
 
 
@@ -121,13 +116,11 @@ export class CarService {
 
 
         // delete by car id
-        async deleteCarById(carId)
+        async deleteCarById(carId):Promise<{ car:car; message: string }>
         {
-            await this.CarRepository.deleteCarById(carId);
-            return { message: "deleted successfully"};
+            const car= await this.CarRepository.deleteCarById(carId);
+            return { message: "deleted successfully",car:car};
         }
-
-
 
 
 
@@ -135,12 +128,12 @@ export class CarService {
         // Get car by user id
         async getCarByUserId (userId:string):Promise<car[]>
         {
-          const result= await this.CarRepository.getCarByUserId(userId);
-          if (!result)
-          {
-            throw new NotFoundException('user not exist');
-          }
-          return  result;
+            const result= await this.CarRepository.getCarByUserId(userId);
+            if (result.length==0)
+            {
+              throw new NotFoundException('user not exist');
+            }
+            return  result;
         }
 
 
@@ -148,13 +141,22 @@ export class CarService {
 
 
         // Get car  history by user id and car id
-        async getCarHistory (userId:string,carId:string)
+        async getCarHistory (userId:string,carId:string):Promise<car[]>
         {
             const result= await this.CarRepository.getCarHistory(userId,carId);
             if (result.length==0)
             {
-              throw new NotFoundException(' not exist');
+              throw new NotFoundException(' data not found');
             }
             return  result;
+        }
+
+
+
+        // delete car history  by user id
+        async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
+        {
+            const  car= await this.CarRepository.deleteCarHistory(userId);
+            return { message: "deleted successfully",car:car};
         }
 }
