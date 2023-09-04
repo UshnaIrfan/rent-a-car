@@ -31,10 +31,6 @@ export class LanguagesService {
         async getLanguageById (id:string):Promise<languages>
         {
             const result= await this.LanguagesRepository.getLanguageById(id);
-            if (!result)
-            {
-              throw new NotFoundException('data not found');
-            }
             return  result;
         }
 

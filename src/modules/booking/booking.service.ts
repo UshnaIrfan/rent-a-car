@@ -14,6 +14,7 @@ import { driverRepository } from "../driver/driver.repository";
 import { driver } from "../driver/schemas/driver.schema";
 import { booking } from "./schemas/booking.schema";
 import { LanguagesService } from "../languages/languages.service";
+import { PackagesService } from "../packages/packages.service";
 
 @Injectable()
 export class BookingService {
@@ -24,6 +25,7 @@ export class BookingService {
               private usersService: UsersService,
               private readonly carService: CarService,
               private readonly languagesService: LanguagesService,
+              private readonly packagesService: PackagesService,
               private readonly DriverRepository:driverRepository,
   ) {}
 
@@ -44,6 +46,12 @@ export class BookingService {
             throw new NotFoundException('car  not exist');
           }
 
+
+          const Package = await this.packagesService.getPackagesById(createBookingInterface.packagesId);
+          if(!Package)
+          {
+            throw new NotFoundException('package not found');
+          }
 
           // const driver=await this.DriverRepository.getDriverById(createBookingInterface.driverId)
           // if(!driver)

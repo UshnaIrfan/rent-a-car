@@ -3,7 +3,6 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { languages } from "./schemas/languages.schema";
 import { CreateLanguageDto } from "./dto/create-language.dto";
-import { car } from "../car/schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
 
 
