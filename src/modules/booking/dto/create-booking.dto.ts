@@ -3,11 +3,6 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateBookingDto {
 
-        @ApiProperty()
-        @IsString()
-        @IsNotEmpty()
-        languageId: string;
-
 
         @ApiProperty()
         @IsString()
@@ -21,21 +16,24 @@ export class CreateBookingDto {
         packagesId: string;
 
 
+
         @ApiProperty({default: null })
         @IsString()
         @IsNotEmpty()
         driverId: string;
 
 
-        @ApiProperty()
-        @IsString()
-        @IsNotEmpty()
-        pickupDate: string;
-
 
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        dropoffDate: string;
+        pickupDate: Date;
+
+
+
+        @ApiProperty()
+        @IsString()
+        @IsNotEmpty()
+        dropoffDate: Date;
 
 }

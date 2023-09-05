@@ -9,7 +9,7 @@ import {
   ParseUUIDPipe,
   Query,
   UseGuards,
-  Req, Injectable, Scope, Delete
+  Req, Delete
 } from "@nestjs/common";
 import { DriverService } from './driver.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -24,6 +24,8 @@ import { Role } from "../../enums/role.enum";
 import { getAllDriversRenterDecorators } from "./swagger-decorator/get-all-drivers-renter-decorators";
 import { getDriverHistoryRenterDecorators } from "./swagger-decorator/get-driver-history-renter-decorators";
 import {  UserAuthGuard } from "../../guards/user-auth-guard";
+import { updateDriverDto } from "./dto/update-driver.dto";
+import { updateDriverDecorators } from "./swagger-decorator/update-driver-decorators";
 
 
 @ApiTags('driver')
@@ -119,9 +121,10 @@ export class DriverController {
 
         // update driver documents
         @SwaggerUpdateDriverDocumentsDocorator()
-        @Patch('/:driverId')
+        @Patch('documents/:driverId')
         async  updatedriverById(@Param('driverId') driverId:string, @Body() body:updateDriverDocumentsDto )
         {
+            console.log("  update drive documents")
             return this.driverService.updatedriverById(driverId,body);
         }
 
@@ -152,14 +155,17 @@ export class DriverController {
 
 
 
-        // delete driver history  by user id
-        @ApiQuery({ name: 'userId', required: true })
-        @Delete('history/:userId')
-        async  deleteDriverHistory(@Query('userId') userId: string )
-        {
-            console.log(" delete history")
-            return this.driverService.deleteDriverHistory(userId);
-        }
+
+
+
+        // // delete driver history  by user id
+        // @ApiQuery({ name: 'userId', required: true })
+        // @Delete('history/:userId')
+        // async  deleteDriverHistory(@Query('userId') userId: string )
+        // {
+        //     console.log(" delete history")
+        //     return this.driverService.deleteDriverHistory(userId);
+        // }
 
 
         // delete driver by driver id
@@ -168,6 +174,17 @@ export class DriverController {
         {
           console.log(" delete driver id")
           return this.driverService.deleteDriverById(driverId);
+        }
+
+
+
+        //update driver by  driver id
+        @updateDriverDecorators()
+        @Patch('/:driverId')
+        async  updateDriverByDriverId(@Param('driverId') driverId:string, @Body() body :updateDriverDto)
+        {
+            console.log("  update drive")
+           return this.driverService.updateDriverByDriverId(driverId,body);
         }
 
 

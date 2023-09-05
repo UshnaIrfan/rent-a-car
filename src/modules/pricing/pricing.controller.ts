@@ -4,8 +4,6 @@ import { CreatePricingDto } from './dto/create-pricing.dto';
 import { UpdatePricingDto } from './dto/update-pricing.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { pricing } from "./schemas/pricing.schema";
-import { carType } from "../car-type/schemas/car-type.schema";
-import { UpdateCarTypeDto } from "../car-type/dto/update-car-type.dto";
 
 
 @ApiTags('pricing')

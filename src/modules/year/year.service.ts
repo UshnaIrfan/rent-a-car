@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateYearDto } from './dto/update-year.dto';
 import createYearInterface from "./interfaces/create-year.interface";
 import { yearRepository } from "./year.repository";
@@ -11,6 +11,11 @@ export class YearService {
         // create
         async createYear(createYearInterface:createYearInterface):Promise<year>
         {
+            const result = await this.yearRepository.getYear(createYearInterface.year);
+            if (result)
+            {
+              throw new ConflictException('This year already exists');
+            }
             return  await this.yearRepository.createYear(createYearInterface);
         }
 

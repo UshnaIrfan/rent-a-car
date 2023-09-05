@@ -37,7 +37,6 @@ export class AuthController {
 
 
 
-
        //  international user document passport
         @ApiBody({type:SignupUserDocumentDto})
         @Post('/international/user_document_passport')
@@ -45,6 +44,7 @@ export class AuthController {
         {
             return this.authService.UserDocument(body);
         }
+
 
 
         //  international user document visa

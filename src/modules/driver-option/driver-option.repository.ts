@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateDriverOptionDto } from "./dto/create-driver-option.dto";
 import { driverOption } from "./schemas/driver-option.schema";
 import { UpdateDriverOptionDto } from "./dto/update-driver-option.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { color } from "../color/schemas/color.schema";
 
 
 @Injectable()
@@ -68,6 +69,14 @@ export class driverOptionRepository{
             validateUuid([driverOptionId]);
             const result = await this.driverOptionModel.findOne({ where: {id:driverOptionId}});
             return result
+        }
+
+
+
+        //find driver Option
+        async findBydriverOption(driverOption: string): Promise<driverOption| null>
+        {
+          return  await this.driverOptionModel.findOne({ where: { driverOption}});
         }
 }
 

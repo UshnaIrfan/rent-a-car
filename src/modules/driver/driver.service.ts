@@ -12,6 +12,8 @@ import { updateDriverDocumentsDto } from "./dto/update-driver-documents.dto";
 import { CACHE_MANAGER } from "@nestjs/common/cache";
 import { Cache } from "cache-manager";
 import { JwtService } from "@nestjs/jwt";
+import { updateCarDto } from "../car/dto/update-car.dto";
+import { updateDriverDto } from "./dto/update-driver.dto";
 
 
 @Injectable()
@@ -21,7 +23,7 @@ export class DriverService {
               private usersService: UsersService,
               private readonly UsersDocumentService: UserDocumentsService,
               private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
-              @Inject(CACHE_MANAGER) private cacheManager: Cache,
+            //  @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
 
@@ -110,7 +112,7 @@ export class DriverService {
            const user= await this.DriverRepository.findDriverByUserId(userId);
            if (user.length==0)
            {
-               throw new NotFoundException('user not found');
+               throw new NotFoundException('data not found');
            }
               return  user
         }
@@ -139,10 +141,24 @@ export class DriverService {
 
 
 
-        // delete driver history  by user id
-        async deleteDriverHistory (userId:string):Promise<{ driver:driver[]; message: string }>
+
+
+        //update driver by  driver id
+        async updateDriverByDriverId (driverId:string,body:updateDriverDto)
         {
-            const  driver= await this.DriverRepository.deleteDriverHistory(userId);
-            return { message: "deleted successfully",driver:driver};
+           return  await this.DriverRepository.updateDriverByDriverId(driverId,body);
         }
+
+
+
+
+
+
+
+  // // delete driver history  by user id
+        // async deleteDriverHistory (userId:string):Promise<{ driver:driver[]; message: string }>
+        // {
+        //     const  driver= await this.DriverRepository.deleteDriverHistory(userId);
+        //     return { message: "deleted successfully",driver:driver};
+        // }
 }

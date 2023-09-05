@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createSeatsCapacityInterface from "./interfaces/create-seats-capacity.interface";
 import { seatsCapacityRepository } from "./seats-capacity.repository";
 import { year } from "../year/schemas/year.schema";
@@ -16,7 +16,12 @@ export class SeatsCapacityService {
         // create
         async createSeatsCapacity(createSeatsCapacityInterface:createSeatsCapacityInterface)
         {
-          return  await this.seatsCapacityRepository.createSeatsCapacity(createSeatsCapacityInterface);
+            const result = await this.seatsCapacityRepository.findSeatsCapacity(createSeatsCapacityInterface.seatsCapacity);
+            if (result)
+            {
+              throw new ConflictException('This seats capacity already exists');
+            }
+            return  await this.seatsCapacityRepository.createSeatsCapacity(createSeatsCapacityInterface);
         }
 
 

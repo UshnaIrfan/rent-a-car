@@ -15,6 +15,7 @@ import { UserDocumentsService } from "../user-documents/user-documents.service";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
 import { jwtConstants } from "./constants/constants";
 import { MailService } from "../mail/mail.service";
+import { cacheRepository } from "../../cache/cache.repository";
 
 
 @Module({
@@ -38,7 +39,7 @@ import { MailService } from "../mail/mail.service";
 
   ],
      controllers: [AuthController],
-     providers: [MailService,LocalStrategy,JwtAuthGuard,JwtStrategy,userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
+     providers: [cacheRepository,MailService,LocalStrategy,JwtAuthGuard,JwtStrategy,userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
      exports: [AuthService],
 })
 export class AuthModule {}

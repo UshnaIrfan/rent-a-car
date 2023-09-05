@@ -3,9 +3,6 @@ import { TransmissionService } from './transmission.service';
 import { CreateTransmissionDto } from './dto/create-transmission.dto';
 import { UpdateTransmissionDto } from './dto/update-transmission.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
-import { CreateSeatsCapacityDto } from "../seats-capacity/dto/create-seats-capacity.dto";
-import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-import { UpdateSeatsCapacityDto } from "../seats-capacity/dto/update-seats-capacity.dto";
 import { transmission } from "./schemas/transmission.schema";
 
 

@@ -10,7 +10,7 @@ export class  seatsCapacity {
 
 
     @ApiProperty()
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
     seatsCapacity: Number;
 
 

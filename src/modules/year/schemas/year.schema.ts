@@ -10,7 +10,7 @@ export class  year {
 
 
       @ApiProperty()
-      @Column({nullable:true})
+      @Column({nullable:true,unique:true})
       year: Number;
 
 

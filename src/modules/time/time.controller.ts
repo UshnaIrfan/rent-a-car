@@ -3,7 +3,6 @@ import { TimeService } from './time.service';
 import { CreateTimeDto } from './dto/create-time.dto';
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { time } from "./schemas/time.schema";
-import { UpdateCarTypeDto } from "../car-type/dto/update-car-type.dto";
 import { UpdateTimeDto } from "./dto/update-time.dto";
 
 @ApiTags('time')

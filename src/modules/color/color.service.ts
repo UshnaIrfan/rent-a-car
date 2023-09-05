@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createColorInterface from "./interfaces/create-color.interface";
 import { ColorRepository } from "./color.repository";
 import { color } from "./schemas/color.schema";
@@ -13,6 +13,11 @@ export class ColorService {
           // create
           async createColor(ColorInterface:createColorInterface)
           {
+            const result = await this.ColorRepository.findColornameByName(ColorInterface.colorName);
+            if (result)
+            {
+              throw new ConflictException('This color name already exists');
+            }
             return  await this.ColorRepository.createCar(ColorInterface);
           }
 

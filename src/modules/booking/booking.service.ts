@@ -21,7 +21,7 @@ export class BookingService {
 
   constructor(private readonly bookingRepository:bookingRepository,
               private jwtService: JwtService,
-              @Inject(CACHE_MANAGER) private cacheManager: Cache,
+              //@Inject(CACHE_MANAGER) private cacheManager: Cache,
               private usersService: UsersService,
               private readonly carService: CarService,
               private readonly languagesService: LanguagesService,
@@ -34,11 +34,11 @@ export class BookingService {
     async createBooking(createBookingInterface:createBookingInterface,userId:string)
     {
 
-          const language= await this.languagesService.getLanguageById(createBookingInterface.languageId);
-          if(!language)
-          {
-            throw new NotFoundException('language not found');
-          }
+          // const language= await this.languagesService.getLanguageById(createBookingInterface.languageId);
+          // if(!language)
+          // {
+          //   throw new NotFoundException('language not found');
+          // }
 
           const car= await this.carService.getCarByCarId(createBookingInterface.carId);
           if(!car)
@@ -53,11 +53,15 @@ export class BookingService {
             throw new NotFoundException('package not found');
           }
 
-          // const driver=await this.DriverRepository.getDriverById(createBookingInterface.driverId)
-          // if(!driver)
-          // {
-          //   throw new NotFoundException('driver not exist');
-          // }
+          if(createBookingInterface.driverId !==null)
+          {
+            const driver=await this.DriverRepository.getDriverById(createBookingInterface.driverId)
+            if(!driver)
+            {
+              throw new NotFoundException('driver not exist');
+            }
+          }
+
           const bookingData: createBookingInterface & { userId: string } = {
             ...createBookingInterface,
             userId: userId,

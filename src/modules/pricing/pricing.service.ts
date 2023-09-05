@@ -19,18 +19,17 @@ export class PricingService {
       // create
       async createPricing(createPricingInterface:createPricingInterface):Promise<pricing>
       {
-
-        const carId= await this.carService.getCarByCarId(createPricingInterface.carId);
-        if(!carId)
-        {
-          throw new NotFoundException('invalid car id');
-        }
-        const timeId= await this.timeService.getTimeById(createPricingInterface.timeId);
-        if(!timeId)
-        {
-          throw new NotFoundException('invalid time id');
-        }
-        return  await this.pricingRepository.createPricing(createPricingInterface);
+          const carId= await this.carService.getCarByCarId(createPricingInterface.carId);
+          if(!carId)
+          {
+            throw new NotFoundException('invalid car id');
+          }
+          const timeId= await this.timeService.getTimeById(createPricingInterface.timeId);
+          if(!timeId)
+          {
+            throw new NotFoundException('invalid time id');
+          }
+          return  await this.pricingRepository.createPricing(createPricingInterface);
       }
 
 

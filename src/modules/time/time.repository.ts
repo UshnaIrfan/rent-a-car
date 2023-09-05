@@ -5,6 +5,7 @@ import { time } from "./schemas/time.schema";
 import { CreateTimeDto } from "./dto/create-time.dto";
 import { UpdateTimeDto } from "./dto/update-time.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 
@@ -73,6 +74,14 @@ export class timeRepository{
         }
 
 
+
+
+
+  //find brand by name
+  async findTime(time: string): Promise<time| null>
+  {
+    return  await this.timeModel.findOne({ where: { time}});
+  }
 
 
 

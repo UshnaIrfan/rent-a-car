@@ -10,7 +10,7 @@ export class  baggageOption {
 
 
     @ApiProperty()
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
     baggageOption: Number;
 
 

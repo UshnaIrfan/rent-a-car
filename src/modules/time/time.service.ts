@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { timeRepository } from "./time.repository";
 import createTimeInterface from "./interfaces/create-time.interface";
 import { time } from "./schemas/time.schema";
-import { carModel } from "../car-model/schemas/car-model.schema";
-import { UpdateCarModelDto } from "../car-model/dto/update-car-model.dto";
 import { UpdateTimeDto } from "./dto/update-time.dto";
 
 @Injectable()
@@ -14,6 +12,12 @@ export class TimeService {
       // create
       async createTime(createTimeInterface:createTimeInterface):Promise<time>
       {
+
+          const result= await this.timeRepository.findTime(createTimeInterface.time);
+          if (result)
+          {
+            throw new ConflictException('This time already exists');
+          }
           return  await this.timeRepository.createTime(createTimeInterface);
       }
 

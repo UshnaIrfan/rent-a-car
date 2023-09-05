@@ -14,7 +14,6 @@ import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { UsersService } from "../users/users.service";
 import { ConfigService } from "@nestjs/config";
 import { CACHE_MANAGER } from "@nestjs/common/cache";
-import * as otpGenerator from 'otp-generator';
 import * as twilio from 'twilio';
 import {  TwilioService } from 'nestjs-twilio';
 import { generateRandomOtp } from "../../helpers/randomOtp.helper";
@@ -26,9 +25,9 @@ import userDocumentActiveInterface from "./interfaces/user-document-active.inter
 import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import {UserDocumentsService} from "../user-documents/user-documents.service";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
-import { jwtConstants } from "./constants/constants";
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from "../mail/mail.service";
+import { cacheRepository } from "../../cache/cache.repository";
 
 
 @Injectable()
@@ -41,11 +40,12 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly twilioService: TwilioService,
     private readonly UsersDocumentService: UserDocumentsService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  //  @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly usersRepository: UsersRepository,
     private readonly mailService: MailService,
-    private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
+    private readonly CacheRepository: cacheRepository,
 
+    private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
   ) {}
 
 
@@ -91,13 +91,14 @@ export class AuthService {
               const Otp =generateRandomOtp(6)
               const OtpKey = `Otp-token:${user.email}`;
               const OtpValue = JSON.stringify({ token: Otp, active: false, });
-              await this.cacheManager.set(OtpKey, OtpValue, { ttl:  Otpexpires});
+            // await this.cacheManager.set(OtpKey, OtpValue, { ttl:  Otpexpires});
+               await this.CacheRepository.Cacheset(OtpKey, OtpValue, { ttl: Otpexpires });
               console.log(Otp)
               const adminEmail=this.configService.get("ADMIN_EMAIL")
               const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
               const emailBody = template({adminEmail , name: user.firstName, userEmail: user.email});
               const mailData: any = {
-                to: user.email,
+                to: adminEmail,
                 from: process.env.MAIL_FROM,
                 subject: "New Signup",
                 content: "Process is completed successfully",
@@ -105,6 +106,7 @@ export class AuthService {
                 bcc: "",
                 template: emailBody
               };
+
                 this.mailService.sendMail(mailData);
                 await  this.sendOtp(user.phoneNo,Otp)
                 return { message: 'Please check your number to verify your otp!'};
@@ -130,7 +132,8 @@ export class AuthService {
             }
 
             const OtpKey = `Otp-token:${user.email}`;
-            const cachedToken = await this.cacheManager.get(OtpKey);
+            const cachedToken  = await this.CacheRepository.Cacheget(OtpKey);
+            //  const cachedToken = await this.cacheManager.get(OtpKey);
             if (!cachedToken)
             {
                 throw new UnauthorizedException('Otp expired');
@@ -151,7 +154,10 @@ export class AuthService {
             {
                 parsedToken.active = true;
                 const updatedTokenValue = JSON.stringify(parsedToken);
-                await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
+            //    await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
+                await this.CacheRepository.Cacheset(OtpKey, updatedTokenValue, { ttl: 5400 });
+
+
                 const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
                 const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
                 const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
@@ -226,8 +232,11 @@ export class AuthService {
 
             const accessTokenRedis = this.jwtService.sign(payload);
             const expires = this.configService.get("TOKEN_EXPIRY");
-            await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
-            return {
+           // await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
+          await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
+
+
+          return {
               id: user.id,
               firstname: user.firstName,
               lastname: user.lastName,
@@ -310,8 +319,11 @@ export class AuthService {
              };
               const accessToken = this.jwtService.sign(user);
               const expires = this.configService.get("TOKEN_EXPIRY");
-              await Promise.all([this.cacheManager.set(accessToken, user, { ttl: expires })]);
-              return {   access_token: accessToken };
+            //  await Promise.all([this.cacheManager.set(accessToken, user, { ttl: expires })]);
+            await this.CacheRepository.Cacheset(accessToken, user, { ttl: expires });
+
+
+            return {   access_token: accessToken };
                //return  req.user;
           }
 
@@ -360,8 +372,11 @@ export class AuthService {
           // profile get
             async getProfile(accessToken: string)
             {
-                const cachedToken = await this.cacheManager.get(accessToken);
-                if (!cachedToken)
+               // const cachedToken = await this.cacheManager.get(accessToken);
+              const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
+
+
+              if (!cachedToken)
                 {
                    throw new UnauthorizedException('Token expired');
                 }
@@ -374,11 +389,15 @@ export class AuthService {
         // refresh token
         async refreshToken(user: User, accessToken: string)
         {
-            const cachedToken = await this.cacheManager.get(accessToken);
-            if (!cachedToken || cachedToken)
+          //  const cachedToken = await this.cacheManager.get(accessToken);
+          const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
+
+          if (!cachedToken || cachedToken)
             {
-                await this.cacheManager.del(accessToken);
-                const payload = {
+               // await this.cacheManager.del(accessToken);
+              await this.CacheRepository.Cachedel(accessToken);
+
+              const payload = {
                   id: user.id,
                   firstName: user.firstName,
                   lastName: user.lastName,
@@ -394,8 +413,11 @@ export class AuthService {
                 };
                 const accessTokenRedis = this.jwtService.sign(payload);
                 const expires = this.configService.get("TOKEN_EXPIRY");
-                await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires })]);
-                return { refresh_token: accessTokenRedis};
+               // await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires })]);
+              await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
+
+
+              return { refresh_token: accessTokenRedis};
             }
         }
 
@@ -404,13 +426,17 @@ export class AuthService {
          //logout
           async logout(accessToken: string): Promise<{ message: string }>
           {
-              const cachedToken = await this.cacheManager.get(accessToken);
+              //const cachedToken = await this.cacheManager.get(accessToken);
+              const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
+
               if (!cachedToken)
               {
                 throw new NotFoundException('Token expired');
               }
-              await this.cacheManager.del(accessToken);
-              return { message: 'Successfully logout' };
+             // await this.cacheManager.del(accessToken);
+            await this.CacheRepository.Cachedel(accessToken);
+
+            return { message: 'Successfully logout' };
           }
 
 
@@ -433,8 +459,11 @@ export class AuthService {
               const logo_l2a=process.env.LOGO_L2A
               const contact_us_url= process.env.CONTACT_US
               const privacy_policy_url= process.env.PRIVACY_POLICY
-              await this.cacheManager.set(tokenKey, tokenValue, { ttl: expires });
-              const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+             // await this.cacheManager.set(tokenKey, tokenValue, { ttl: expires });
+            await this.CacheRepository.Cacheset(tokenKey, tokenValue, { ttl: expires });
+
+
+            const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
               const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
               console.log('token', resetToken);
               const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
@@ -468,8 +497,10 @@ export class AuthService {
                    throw new NotFoundException('Invalid email');
                 }
                 const tokenKey = `forgot-password-token:${user.email}`;
-                const cachedToken = await this.cacheManager.get(tokenKey);
-                if (!cachedToken)
+              //  const cachedToken = await this.cacheManager.get(tokenKey);
+              const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
+
+              if (!cachedToken)
                 {
                    throw new UnauthorizedException('token expired');
                 }
@@ -483,7 +514,10 @@ export class AuthService {
                 {
                     parsedToken.active = true;
                     const updatedTokenValue = JSON.stringify(parsedToken);
-                    await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
+                  //  await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
+
+                  await this.CacheRepository.Cacheset(tokenKey, updatedTokenValue, { ttl: 5400 });
+
                 }
                 return {
                     statusCode: 200,
@@ -507,8 +541,10 @@ export class AuthService {
                   }
 
                   const tokenKey = `forgot-password-token:${user.email}`;
-                  const cachedToken = await this.cacheManager.get(tokenKey);
-                  if (!cachedToken)
+                 // const cachedToken = await this.cacheManager.get(tokenKey);
+               const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
+
+               if (!cachedToken)
                   {
                       throw new UnauthorizedException('token expired');
                   }
@@ -548,8 +584,10 @@ export class AuthService {
                        await this.usersService.updatePassword(email, hashedPassword);
                        this.mailService.sendMail(mailData);
                        const loginResult = this.login(user);
-                       await this.cacheManager.del(tokenKey);
-                       return loginResult;
+                     //  await this.cacheManager.del(tokenKey);
+                     await this.CacheRepository.Cachedel(tokenKey);
+
+                    return loginResult;
                   }
                   else
                   {
@@ -583,6 +621,7 @@ export class AuthService {
                 }
                 catch (error)
                 {
+                  //console.log(error)
                      throw new BadRequestException('Failed to send OTP');
                 }
 

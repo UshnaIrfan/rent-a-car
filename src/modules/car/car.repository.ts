@@ -4,6 +4,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { car } from "./schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { driver } from "../driver/schemas/driver.schema";
+import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
+import path from "path";
+import fs from "fs";
+import { updateCarDto } from "./dto/update-car.dto";
 
 
 @Injectable()
@@ -23,7 +27,7 @@ export class carRepository{
          async getCarByCarId(carId:string):Promise<car| null>
          {
             validateUuid([carId]);
-            return  this.carModel.findOne({  where: { id:carId},
+            return   await  this.carModel.findOne({  where: { id:carId},
              relations:['pricing','carImage']
             });
         }
@@ -82,17 +86,40 @@ export class carRepository{
 
 
 
-      // delete car history  by user id
-      async deleteCarHistory(userId: string):Promise<car[]| null>
-      {
-            validateUuid([userId]);
-            const result = await this.carModel.find({ where: {  userId:userId}});
+        //update car by  id
+        async updateCarByCarId(id: string, body: updateCarDto):Promise<car| null>
+        {
+            validateUuid([id]);
+            const result = await this.carModel.findOne({ where: { id } });
             if (!result)
             {
-              throw new NotFoundException('data not found');
+              throw new NotFoundException('car not found');
             }
-            return await this.carModel.remove(result);
-      }
+
+            for (const key in body)
+            {
+              if (body.hasOwnProperty(key))
+              {
+                result[key] = body[key];
+              }
+            }
+            const updatedResult = await this.carModel.save(result);
+            return updatedResult;
+        }
+
+
+
+  // // delete car history  by user id
+      // async deleteCarHistory(userId: string):Promise<car[]| null>
+      // {
+      //       validateUuid([userId]);
+      //       const result = await this.carModel.find({ where: {  userId:userId}});
+      //       if (!result)
+      //       {
+      //         throw new NotFoundException('data not found');
+      //       }
+      //       return await this.carModel.remove(result);
+      // }
 
 }
 

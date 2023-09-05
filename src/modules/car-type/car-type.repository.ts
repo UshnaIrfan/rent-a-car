@@ -5,6 +5,7 @@ import { carType } from "./schemas/car-type.schema";
 import { CreateCarTypeDto } from "./dto/create-car-type.dto";
 import { UpdateCarTypeDto } from "./dto/update-car-type.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()
@@ -65,5 +66,13 @@ export class CarTypeRepository{
             const result = await this.carTypeModel.findOne({ where: {  id:cartypeId}});
             return result
         }
+
+
+
+      //find brand by name
+      async findCarType(carType: string): Promise<carType| null>
+      {
+        return  await this.carTypeModel.findOne({ where: { carType}});
+      }
 }
 

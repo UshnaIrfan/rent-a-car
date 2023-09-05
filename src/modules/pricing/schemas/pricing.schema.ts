@@ -18,7 +18,6 @@ export class  pricing {
       id: string;
 
 
-
       @ApiProperty()
       @Column({nullable:true})
       timeId: string;

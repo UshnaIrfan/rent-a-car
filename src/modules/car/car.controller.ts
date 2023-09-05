@@ -20,6 +20,8 @@ import { Roles } from "../../decorators/role.decorators";
 import { getAllCarsRenterDecorators } from "./swagger-decorator/get-all-cars-renter-decorators";
 import { getCarHistoryRenterDecorators } from "./swagger-decorator/get-car-history-renter-decorators";
 import { UserAuthGuard } from "../../guards/user-auth-guard";
+import { updateCarDto } from "./dto/update-car.dto";
+import { updateCarDecorators } from "./swagger-decorator/update-car-decorators";
 
 @ApiTags('car')
 @Controller('car')
@@ -81,15 +83,34 @@ export class CarController {
         }
 
 
+        //update car by  id
+        @updateCarDecorators()
+        @Patch('/:carId')
+        async  updateCarByCarId(@Param('carId') carId:string, @Body() body :updateCarDto)
+        {
+              return this.carService.updateCarByCarId(carId,body);
+        }
 
-    // delete car history  by user id
-      @ApiQuery({ name: 'userId', required: true })
-      @Delete('history/:userId')
-      async  deleteCarHistory(@Query('userId') userId: string )
-      {
-            console.log(" delete history")
-            return this.carService.deleteCarHistory(userId);
-      }
+
+
+
+
+
+
+
+
+
+
+
+
+    // // delete car history  by user id
+    //   @ApiQuery({ name: 'userId', required: true })
+    //   @Delete('history/:userId')
+    //   async  deleteCarHistory(@Query('userId') userId: string )
+    //   {
+    //         console.log(" delete history")
+    //         return this.carService.deleteCarHistory(userId);
+    //   }
 
 
 

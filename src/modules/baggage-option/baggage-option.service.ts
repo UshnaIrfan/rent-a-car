@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createBaggageOptionInterface from "./interfaces/create-baggage-option.interface";
 import { baggageOptionRepository } from "./baggage-option.repository";
 import { baggageOption } from "./schemas/baggage-option.schema";
@@ -12,6 +12,12 @@ export class BaggageOptionService {
         // create
         async createBaggage(createBaggageOptionInterface:createBaggageOptionInterface)
         {
+
+          const result = await this.baggageOptionRepository.findBaggageOption(createBaggageOptionInterface.baggageOption);
+          if (result)
+          {
+            throw new ConflictException('This BaggageOption already exists');
+          }
           return  await this.baggageOptionRepository.createBaggage(createBaggageOptionInterface);
         }
 

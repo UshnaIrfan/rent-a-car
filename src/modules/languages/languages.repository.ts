@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { languages } from "./schemas/languages.schema";
 import { CreateLanguageDto } from "./dto/create-language.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { color } from "../color/schemas/color.schema";
 
 
 @Injectable()
@@ -36,6 +37,13 @@ export class languagesRepository{
         }
 
 
+
+
+      //find languages by name
+      async findLanguageByName(languages: string): Promise<languages| null>
+      {
+        return  await this.languagesModel.findOne({ where: { languages}});
+      }
 
 
 

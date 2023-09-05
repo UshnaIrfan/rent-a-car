@@ -5,6 +5,7 @@ import { carModel } from "./schemas/car-model.schema";
 import { CreateCarModelDto } from "./dto/create-car-model.dto";
 import { UpdateCarModelDto } from "./dto/update-car-model.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()
@@ -62,13 +63,20 @@ export class CarModelRepository {
 
 
 
-
         // get by car model
         async getCarModelById(modelId:string): Promise<carModel| null>
         {
             validateUuid([modelId]);
             const result = await this.carModel.findOne({ where: { id:modelId}});
             return result
+        }
+
+
+
+        //find  car model by name
+        async findCarModelByName(model: string): Promise<carModel| null>
+        {
+          return  await this.carModel.findOne({ where: { model}});
         }
 }
 

@@ -21,17 +21,17 @@ export class brandRepository{
 
 
 
-      // get all  car brands
-      async getCarBrands():Promise<brand[]| null>
-      {
-        return  this.brandModel.find({ });
-      }
-
-
-
-       // update   car brands
-        async updateCarBrands(brandId: string, body: UpdateBrandDto):Promise<brand| null>
+        // get all   brands of cars
+        async getCarBrands():Promise<brand[]| null>
         {
+          return  this.brandModel.find({ });
+        }
+
+
+
+         // update brands of car
+         async updateCarBrands(brandId: string, body: UpdateBrandDto):Promise<brand| null>
+         {
             validateUuid([brandId]);
             const result = await this.brandModel.findOne({ where: {  id:brandId}});
             if (!result)
@@ -47,7 +47,7 @@ export class brandRepository{
 
 
 
-       // delete  car brands
+         // delete  brand of car
          async deleteCarBrands(brandId: string):Promise<brand| null>
          {
                 validateUuid([brandId]);
@@ -63,12 +63,20 @@ export class brandRepository{
 
 
 
-        // get  car brand by id
+        // get   brand by id
         async getCarBrandById(brandId: string):Promise<brand| null>
         {
             validateUuid([brandId]);
             const result = await this.brandModel.findOne({ where: {  id:brandId}});
             return  result
+        }
+
+
+
+       //find brand by name
+        async findBrandByName(brandName: string): Promise<brand| null>
+        {
+          return  await this.brandModel.findOne({ where: { brandName}});
         }
 }
 

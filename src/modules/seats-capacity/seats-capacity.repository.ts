@@ -5,6 +5,7 @@ import { CreateSeatsCapacityDto } from "./dto/create-seats-capacity.dto";
 import { seatsCapacity } from "./schemas/seats-capacity.schema";
 import { UpdateSeatsCapacityDto } from "./dto/update-seats-capacity.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()
@@ -70,5 +71,12 @@ export class seatsCapacityRepository{
             return result
         }
 
+
+
+      // get  seats  Capacity
+      async findSeatsCapacity(seatsCapacity: any): Promise<seatsCapacity| null>
+      {
+        return  await this.seatsCapacityModel.findOne({ where: { seatsCapacity}});
+      }
 }
 

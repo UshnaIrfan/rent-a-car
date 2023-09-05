@@ -10,6 +10,8 @@ import * as path from 'path';
 import * as fs from "fs";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { car } from "../car/schemas/car.schema";
+import { updateCarDto } from "../car/dto/update-car.dto";
+import { updateDriverDto } from "./dto/update-driver.dto";
 
 
 
@@ -143,17 +145,49 @@ export class driverRepository{
 
 
 
-        // delete driver history  by user id
-        async deleteDriverHistory(userId: string):Promise<driver[]| null>
-        {
-            validateUuid([userId]);
-            const result = await this.DriverModel.find({ where: {  userId:userId}});
-            if (!result)
-            {
-              throw new NotFoundException('driver not found');
-            }
 
-            return await this.DriverModel.remove(result);
+        //update driver by  driver id
+        async updateDriverByDriverId(id: string, body: updateDriverDto):Promise<driver| null>
+        {
+              validateUuid([id]);
+              const result = await this.DriverModel.findOne({ where: { id } });
+              if (!result)
+              {
+                throw new NotFoundException('driver not found');
+              }
+
+              for (const key in body)
+              {
+                if (body.hasOwnProperty(key))
+                {
+                  result[key] = body[key];
+                }
+              }
+              const updatedResult = await this.DriverModel.save(result);
+              return updatedResult;
         }
+
+
+
+
+
+
+
+
+
+
+
+        // // delete driver history  by user id
+        // async deleteDriverHistory(userId: string):Promise<driver[]| null>
+        // {
+        //     validateUuid([userId]);
+        //     const result = await this.DriverModel.find({ where: {  userId:userId}});
+        //     if (!result)
+        //     {
+        //       throw new NotFoundException('driver not found');
+        //     }
+        //
+        //     return await this.DriverModel.remove(result);
+        // }
 }
 

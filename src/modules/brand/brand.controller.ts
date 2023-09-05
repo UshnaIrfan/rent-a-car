@@ -22,7 +22,7 @@ export class BrandController {
         }
 
 
-        // get all  car brands
+        // get all   brands of cars
         @Get('all')
         async  getCarBrands(): Promise<brand[]>
         {
@@ -31,7 +31,7 @@ export class BrandController {
 
 
 
-       // update  car brands
+       // update brands of car
         @Patch('/:brandId')
         async  updateCarBrands(@Param('brandId') brandId:string, @Body() body:UpdateBrandDto )
         {
@@ -40,7 +40,7 @@ export class BrandController {
 
 
 
-        // delete  car brands
+        // delete  brand of car
         @Delete('/:brandId')
         async  deleteCarBrands(@Param('brandId') brandId:string )
         {

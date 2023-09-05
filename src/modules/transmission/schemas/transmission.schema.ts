@@ -17,7 +17,7 @@ export class  transmission {
 
 
     @ApiProperty()
-    @Column({ enum: transmissiontype, default: transmissiontype.MANUAL})
+    @Column({ enum: transmissiontype, default: transmissiontype.MANUAL,unique:true})
     transmission: string;
 
 

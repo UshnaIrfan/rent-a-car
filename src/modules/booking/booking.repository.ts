@@ -5,7 +5,6 @@ import { booking } from "./schemas/booking.schema";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { car } from "../car/schemas/car.schema";
-import { driver } from "../driver/schemas/driver.schema";
 
 
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createLanguagesInterface from "./interfaces/create-languages.interface";
 import { languages } from "./schemas/languages.schema";
 import { languagesRepository } from "./languages.repository";
@@ -10,6 +10,11 @@ export class LanguagesService {
         // Create
         async createLanguages(createLanguagesInterface:createLanguagesInterface):Promise<languages>
         {
+          const result = await this.LanguagesRepository.findLanguageByName(createLanguagesInterface.languages);
+          if (result)
+          {
+            throw new ConflictException('This language already exists');
+          }
           return  await this.LanguagesRepository.createLanguages(createLanguagesInterface);
         }
 

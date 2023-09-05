@@ -5,6 +5,7 @@ import { CreateBaggageOptionDto } from "./dto/create-baggage-option.dto";
 import { baggageOption } from "./schemas/baggage-option.schema";
 import { UpdateBaggageOptionDto } from "./dto/update-baggage-option.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()
@@ -69,6 +70,14 @@ export class baggageOptionRepository{
           validateUuid([baggageId]);
           const result = await this.baggageOptionModel.findOne({ where: {  id:baggageId}});
           return result
+      }
+
+
+
+      //find baggage Option
+      async findBaggageOption(baggageOption: any): Promise<baggageOption| null>
+      {
+        return  await this.baggageOptionModel.findOne({ where: { baggageOption}});
       }
 }
 

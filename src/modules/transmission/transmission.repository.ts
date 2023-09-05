@@ -5,6 +5,7 @@ import { transmission } from "./schemas/transmission.schema";
 import { UpdateTransmissionDto } from "./dto/update-transmission.dto";
 import { CreateTransmissionDto } from "./dto/create-transmission.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { color } from "../color/schemas/color.schema";
 
 
 @Injectable()
@@ -72,5 +73,13 @@ export class transmissionRepository{
           const result = await this.transmissionModel.findOne({ where: {  id:transmissionId}});
           return result
       }
+
+
+
+    //find transmissionModel
+    async findTransmission(transmission: string): Promise<transmission| null>
+    {
+        return  await this.transmissionModel.findOne({ where: { transmission}});
+    }
 }
 

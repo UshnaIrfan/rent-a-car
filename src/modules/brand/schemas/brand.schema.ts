@@ -10,7 +10,7 @@ export class  brand {
 
 
         @ApiProperty()
-        @Column({nullable:true})
+        @Column({nullable:true,unique:true})
         brandName: string;
 
 

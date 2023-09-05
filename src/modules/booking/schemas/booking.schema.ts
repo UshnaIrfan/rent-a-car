@@ -24,10 +24,6 @@ export class  booking {
       userId: string;
 
 
-      @ApiProperty()
-      @Column({nullable:true})
-      languageId: string;
-
 
       @ApiProperty()
       @Column({nullable:true})
@@ -47,12 +43,12 @@ export class  booking {
 
       @ApiProperty()
       @Column({nullable:true})
-      pickupDate: string;
+      pickupDate: Date;
 
 
       @ApiProperty()
       @Column({nullable:true})
-      dropoffDate: string;
+      dropoffDate: Date;
 
 
       @ApiProperty()

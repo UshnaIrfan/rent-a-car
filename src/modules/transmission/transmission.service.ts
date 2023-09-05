@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { UpdateTransmissionDto } from './dto/update-transmission.dto';
 import createTransmissionInterface from "./interfaces/create-transmission.interface";
 import { transmissionRepository } from "./transmission.repository";
@@ -12,7 +12,12 @@ export class TransmissionService {
       // create
       async createTransmission(createTransmissionInterface:createTransmissionInterface):Promise<transmission>
       {
-        return  await this.transmissionRepository.createTransmission(createTransmissionInterface);
+          const result = await this.transmissionRepository.findTransmission(createTransmissionInterface.transmission);
+          if (result)
+          {
+              throw new ConflictException('This transmission already exists');
+          }
+          return  await this.transmissionRepository.createTransmission(createTransmissionInterface);
       }
 
 

@@ -10,7 +10,7 @@ export class  carType {
 
 
     @ApiProperty()
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
     carType: string;
 
 

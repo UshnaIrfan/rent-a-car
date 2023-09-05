@@ -15,6 +15,8 @@ import { Cache } from "cache-manager";
 import { CACHE_MANAGER } from "@nestjs/common/cache";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
+import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
+import { updateCarDto } from "./dto/update-car.dto";
 
 
 @Injectable()
@@ -29,9 +31,9 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverOptionService : DriverOptionService,
-              private jwtService: JwtService,
-              private usersService: UsersService,
-              @Inject(CACHE_MANAGER) private cacheManager: Cache,
+          //    private jwtService: JwtService,
+           //   private usersService: UsersService,
+             // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
 
@@ -106,6 +108,10 @@ export class CarService {
         async getCarByCarId (carId:string):Promise<car>
         {
           const result= await this.CarRepository.getCarByCarId(carId);
+          if(!result)
+          {
+            throw new NotFoundException('data not found');
+          }
           return  result;
         }
 
@@ -149,10 +155,61 @@ export class CarService {
 
 
 
-        // delete car history  by user id
-        async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
-        {
-            const  car= await this.CarRepository.deleteCarHistory(userId);
-            return { message: "deleted successfully",car:car};
+
+        //update car by  id
+          async updateCarByCarId (carId:string,body:updateCarDto):Promise<{ car:car; message: string }> {
+          {
+            const carBrand = await this.brandService.getCarBrandById(body.brandId);
+            if (!carBrand) {
+              throw new NotFoundException('car brand not exist');
+            }
+            const carModel = await this.carModelService.getCarModelById(body.modelId);
+            if (!carModel) {
+              throw new NotFoundException('car model not exist');
+            }
+            const carYear = await this.yearService.getCarYearById(body.yearId);
+            if (!carYear) {
+              throw new NotFoundException('car year not exist');
+            }
+
+            const carColor = await this.colorService.getCarColorById(body.colorId);
+            if (!carColor) {
+              throw new NotFoundException('car color not exist');
+            }
+
+            const carTransmission = await this.transmissionService.getCarTransmissionById(body.transmissionId);
+            if (!carTransmission) {
+              throw new NotFoundException('car Transmission not exist');
+            }
+            const carType = await this.carTypeService.getCarTypeById(body.carTypeId);
+            if (!carType) {
+              throw new NotFoundException('car type not exist');
+            }
+
+            const carBaggageOption = await this.baggageOptionService.getCarBaggageOptionById(body.baggageOptionId);
+            if (!carBaggageOption) {
+              throw new NotFoundException('car baggage option not exist');
+            }
+            const carSeatsCapacity = await this.seatsCapacityService.getCarSeatsCapacityById(body.seatsCapacityId);
+            if (!carSeatsCapacity) {
+              throw new NotFoundException('car seats capacity not exist');
+            }
+
+            const carDriverOption = await this.driverOptionService.getCarDriverOptionById(body.driverOptionId);
+            if (!carDriverOption) {
+              throw new NotFoundException('car driver option not exist');
+            }
+            const car = await this.CarRepository.updateCarByCarId(carId, body);
+            return { message: "updated successfully", car };
+
+          }
+
+
+          // // delete car history  by user id
+          // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
+          // {
+          //     const  car= await this.CarRepository.deleteCarHistory(userId);
+          //     return { message: "deleted successfully",car:car};
+          // }
         }
 }

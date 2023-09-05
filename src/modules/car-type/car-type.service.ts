@@ -1,9 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createCarTypeInterface from "./interfaces/create-car-type.interface";
 import { CarTypeRepository } from "./car-type.repository";
-import { year } from "../year/schemas/year.schema";
 import { carType } from "./schemas/car-type.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import { UpdateCarTypeDto } from "./dto/update-car-type.dto";
 
 @Injectable()
@@ -15,7 +13,13 @@ export class CarTypeService {
       // create
       async createCarType(createCarTypeInterface:createCarTypeInterface)
       {
-        return  await this.carTypeRepository.createCarType(createCarTypeInterface);
+
+          const result = await this.carTypeRepository.findCarType(createCarTypeInterface.carType);
+          if (result)
+          {
+            throw new ConflictException('This car type already exists');
+          }
+          return  await this.carTypeRepository.createCarType(createCarTypeInterface);
       }
 
 

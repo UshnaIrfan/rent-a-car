@@ -15,7 +15,7 @@ export class  driverOption {
 
 
       @ApiProperty()
-      @Column({enum: driverOptionStatus , default: driverOptionStatus.DRIVER})
+      @Column({enum: driverOptionStatus , default: driverOptionStatus.DRIVER,unique:true})
       driverOption: string;
 
 

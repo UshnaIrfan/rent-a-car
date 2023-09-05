@@ -5,6 +5,7 @@ import { year } from "./schemas/year.schema";
 import { CreateYearDto } from "./dto/create-year.dto";
 import { UpdateYearDto } from "./dto/update-year.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()
@@ -61,8 +62,6 @@ export class yearRepository{
 
 
 
-
-
           // get car year
           async getCarYearById(yearId:string):Promise<year| null>
           {
@@ -71,6 +70,14 @@ export class yearRepository{
               return result
 
           }
+
+
+
+        //find year
+        async getYear(year:any): Promise<year| null>
+        {
+            return  await this.yearModel.findOne({ where: { year}});
+        }
 }
 
 

@@ -5,6 +5,7 @@ import { color } from "./schemas/color.schema";
 import { CreateColorDto } from "./dto/create-color.dto";
 import { UpdateColorDto } from "./dto/update-color.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { brand } from "../brand/schemas/brand.schema";
 
 
 
@@ -67,5 +68,13 @@ export class ColorRepository{
               const result = await this.colorModel.findOne({ where: {  id:colorId}});
               return result
           }
+
+
+
+      //find color name by name
+      async findColornameByName(colorName: string): Promise<color| null>
+      {
+        return  await this.colorModel.findOne({ where: { colorName}});
+      }
 }
 

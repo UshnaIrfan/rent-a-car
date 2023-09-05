@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createDriverOptionInterface from "./interfaces/create-driver-option.interface";
 import { driverOptionRepository } from "./driver-option.repository";
 import { driverOption } from "./schemas/driver-option.schema";
@@ -14,7 +14,12 @@ export class DriverOptionService {
         // create
         async createDriverOption(driverOptionInterface:createDriverOptionInterface)
         {
-          return  await this.driverOptionRepository.createDriverOption(driverOptionInterface);
+            const result = await this.driverOptionRepository.findBydriverOption(driverOptionInterface.driverOption);
+            if (result)
+            {
+              throw new ConflictException('This driverOption already exists');
+            }
+            return  await this.driverOptionRepository.createDriverOption(driverOptionInterface);
         }
 
 

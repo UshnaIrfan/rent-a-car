@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createBrandInterface from "./interfaces/create-brand.interface";
 import { brandRepository } from "./brand.repository";
 import { brand } from "./schemas/brand.schema";
@@ -13,11 +13,18 @@ export class BrandService {
           // create
           async createBrand(CreateBrandInterface:createBrandInterface):Promise<brand>
           {
-            return  await this.brandRepository.createBrand(CreateBrandInterface);
+
+            const existingBrand = await this.brandRepository.findBrandByName(CreateBrandInterface.brandName);
+            if (existingBrand)
+            {
+              throw new ConflictException('This brand already exists');
+            }
+             return  await this.brandRepository.createBrand(CreateBrandInterface);
+
           }
 
 
-          // get all  car brands
+           // get all   brands of cars
           async getCarBrands (): Promise<brand[]>
           {
             const  result =await this.brandRepository.getCarBrands();
@@ -30,7 +37,7 @@ export class BrandService {
 
 
 
-          // update   car brands
+       // update brands of car
           async updateCarBrands (brandId:string,body:UpdateBrandDto):Promise<{ brand:brand; message: string }>
           {
             const  brand = await this.brandRepository.updateCarBrands(brandId,body);
@@ -38,7 +45,8 @@ export class BrandService {
           }
 
 
-          // delete  car brands
+
+          // delete  brand of car
           async deleteCarBrands(brandId:string):Promise<{ brand:brand,message: string }>
           {
               const brand= await this.brandRepository.deleteCarBrands(brandId);
