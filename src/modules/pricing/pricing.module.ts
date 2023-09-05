@@ -46,10 +46,11 @@ import * as redisStore from "cache-manager-redis-store";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),
-    CacheModule.register({
-      store: redisStore,
-      uri: process.env.REDIS_URL,
-    })],
+    // CacheModule.register({
+    //   store: redisStore,
+    //   uri: process.env.REDIS_URL,
+    // })
+  ],
   controllers: [PricingController],
   providers: [UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService,PricingService,timeRepository,TimeService,pricingRepository],
 })

@@ -61,7 +61,8 @@ import { packages } from "../packages/schemas/packages.schema";
     CacheModule.register({
     store: redisStore,
     uri: process.env.REDIS_URL,
-  })],
+  })
+  ],
   controllers: [BookingController],
   providers: [packagesRepository,PackagesService,languagesRepository,LanguagesService,userVerificationsDocumentsService,userVerifcationDocumentsRepository,UserDocumentsService,UsersDocumentRepository,DriverService,driverRepository,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,BrandService,brandRepository,carRepository,CarService,UsersRepository,UsersService,JwtService,BookingService,bookingRepository],
 })

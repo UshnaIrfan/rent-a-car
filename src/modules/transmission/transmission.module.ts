@@ -7,7 +7,6 @@ import { transmissionRepository } from "./transmission.repository";
 
 @Module({
   imports: [TypeOrmModule.forFeature([transmission])],
-
   controllers: [TransmissionController],
   providers: [TransmissionService,transmissionRepository],
 })
