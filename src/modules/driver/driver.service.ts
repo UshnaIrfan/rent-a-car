@@ -1,4 +1,4 @@
-import { Body, Inject, Injectable, NotFoundException, Post, UnauthorizedException } from "@nestjs/common";
+import { Body, Injectable, NotFoundException, Post, UnauthorizedException } from "@nestjs/common";
 import createDriverInterface from "./interfaces/create-driver.interface";
 import { driverRepository } from "./driver.repository";
 import { driver } from "./schemas/driver.schema";
@@ -9,10 +9,7 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
 import { UserDocumentsService } from "../user-documents/user-documents.service";
 import driverDocumentsInterface from "./interfaces/driver-documents.interface";
 import { updateDriverDocumentsDto } from "./dto/update-driver-documents.dto";
-import { CACHE_MANAGER } from "@nestjs/common/cache";
-import { Cache } from "cache-manager";
 import { JwtService } from "@nestjs/jwt";
-import { updateCarDto } from "../car/dto/update-car.dto";
 import { updateDriverDto } from "./dto/update-driver.dto";
 
 
@@ -23,7 +20,6 @@ export class DriverService {
               private usersService: UsersService,
               private readonly UsersDocumentService: UserDocumentsService,
               private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
-            //  @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
 

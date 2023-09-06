@@ -10,9 +10,7 @@ import { UpdatePricingDto } from "./dto/update-pricing.dto";
 export class PricingService {
   constructor(private readonly pricingRepository:pricingRepository,
               private  timeService : TimeService,
-              private  carService : CarService,
-
-
+              private  carService : CarService
   ) {}
 
 

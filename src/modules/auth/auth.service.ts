@@ -13,7 +13,6 @@ import signupUserInterface from "./interfaces/signup-user.interface";
 import randomUserTokenInterface from "./interfaces/random-user-token.dto";
 import { UsersService } from "../users/users.service";
 import { ConfigService } from "@nestjs/config";
-import { CACHE_MANAGER } from "@nestjs/common/cache";
 import * as twilio from 'twilio';
 import {  TwilioService } from 'nestjs-twilio';
 import { generateRandomOtp } from "../../helpers/randomOtp.helper";
@@ -40,11 +39,9 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly twilioService: TwilioService,
     private readonly UsersDocumentService: UserDocumentsService,
-  //  @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly usersRepository: UsersRepository,
     private readonly mailService: MailService,
     private readonly CacheRepository: cacheRepository,
-
     private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
   ) {}
 
@@ -91,8 +88,7 @@ export class AuthService {
               const Otp =generateRandomOtp(6)
               const OtpKey = `Otp-token:${user.email}`;
               const OtpValue = JSON.stringify({ token: Otp, active: false, });
-            // await this.cacheManager.set(OtpKey, OtpValue, { ttl:  Otpexpires});
-               await this.CacheRepository.Cacheset(OtpKey, OtpValue, { ttl: Otpexpires });
+              await this.CacheRepository.Cacheset(OtpKey, OtpValue, { ttl: Otpexpires });
               console.log(Otp)
               const adminEmail=this.configService.get("ADMIN_EMAIL")
               const template = handlebars.compile(fs.readFileSync('src/templates/adminEmail.html', 'utf8'),);
@@ -117,67 +113,59 @@ export class AuthService {
 
 
 
-
-
           // user update ( otp active status)
           async isOtpActive(email:string,@Body() reqBody: userOtpActiveInterface)
           {
-            const logo_l2a=process.env.LOGO_L2A
-            const contact_us_url= process.env.CONTACT_US
-            const privacy_policy_url= process.env.PRIVACY_POLICY
-            const user = await this.usersService.findUserByEmail(email);
-            if (!user)
-            {
-                throw new NotFoundException('Invalid email');
-            }
+              const logo_l2a=process.env.LOGO_L2A
+              const contact_us_url= process.env.CONTACT_US
+              const privacy_policy_url= process.env.PRIVACY_POLICY
+              const user = await this.usersService.findUserByEmail(email);
+              if (!user)
+              {
+                  throw new NotFoundException('Invalid email');
+              }
+              const OtpKey = `Otp-token:${user.email}`;
+              const cachedToken  = await this.CacheRepository.Cacheget(OtpKey);
+              if (!cachedToken)
+              {
+                  throw new UnauthorizedException('Otp expired');
+              }
+              const parsedToken = JSON.parse(<string>cachedToken);
+              if (parsedToken.token !== reqBody.Otp)
+              {
+                  throw new UnauthorizedException('Invalid Otp');
+              }
 
-            const OtpKey = `Otp-token:${user.email}`;
-            const cachedToken  = await this.CacheRepository.Cacheget(OtpKey);
-            //  const cachedToken = await this.cacheManager.get(OtpKey);
-            if (!cachedToken)
-            {
-                throw new UnauthorizedException('Otp expired');
-            }
+              if (parsedToken.active === true)
+              {
+                  throw new ConflictException('You are already active, Please log in');
+              }
 
-            const parsedToken = JSON.parse(<string>cachedToken);
-            if (parsedToken.token !== reqBody.Otp)
-            {
-                throw new UnauthorizedException('Invalid Otp');
-            }
+              try
+              {
+                  parsedToken.active = true;
+                  const updatedTokenValue = JSON.stringify(parsedToken);
+                  await this.CacheRepository.Cacheset(OtpKey, updatedTokenValue, { ttl: 5400 });
+                  const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
+                  const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
+                  const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
+                  const mailData: any = {
+                    to: user.email,
+                    from: process.env.MAIL_FROM,
+                    subject: "You're In!",
+                    content: "Process is completed successfully",
+                    cc: "",
+                    bcc: "",
+                    template: emailBody
+                  };
+                    this.mailService.sendMail(mailData);
+                    return { message: 'Your account has been successfully created. Please login here' };
 
-            if (parsedToken.active === true)
-            {
-                throw new ConflictException('You are already active, Please log in');
-            }
-
-            try
-            {
-                parsedToken.active = true;
-                const updatedTokenValue = JSON.stringify(parsedToken);
-            //    await this.cacheManager.set(OtpKey, updatedTokenValue, { ttl: 5400 });
-                await this.CacheRepository.Cacheset(OtpKey, updatedTokenValue, { ttl: 5400 });
-
-
-                const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
-                const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
-                const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
-                const mailData: any = {
-                  to: user.email,
-                  from: process.env.MAIL_FROM,
-                  subject: "You're In!",
-                  content: "Process is completed successfully",
-                  cc: "",
-                  bcc: "",
-                  template: emailBody
-                };
-                  this.mailService.sendMail(mailData);
-                  return { message: 'Your account has been successfully created. Please login here' };
-
-            }
-            catch (e)
-            {
-                 throw new InternalServerErrorException();
-            }
+              }
+              catch (e)
+              {
+                   throw new InternalServerErrorException();
+              }
           }
 
 
@@ -232,23 +220,20 @@ export class AuthService {
 
             const accessTokenRedis = this.jwtService.sign(payload);
             const expires = this.configService.get("TOKEN_EXPIRY");
-           // await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires }),]);
-          await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
-
-
-          return {
-              id: user.id,
-              firstname: user.firstName,
-              lastname: user.lastName,
-              email: user.email,
-              country:user.country,
-              date_of_birth:user.dateOfBirth,
-              phone_no:user.phoneNo,
-              image:user.image,
-              roles: user.roles,
-              otp_status: user.otpStatus,
-              blockStatus: user.blockStatus,
-              access_token: accessTokenRedis,
+            await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
+            return {
+                id: user.id,
+                firstname: user.firstName,
+                lastname: user.lastName,
+                email: user.email,
+                country:user.country,
+                date_of_birth:user.dateOfBirth,
+                phone_no:user.phoneNo,
+                image:user.image,
+                roles: user.roles,
+                otp_status: user.otpStatus,
+                blockStatus: user.blockStatus,
+                access_token: accessTokenRedis,
             };
         }
 
@@ -268,7 +253,6 @@ export class AuthService {
                 ...body,
                 titleName:slug.title,
                 type:slug.type,
-
               };
               const user = await this.UsersDocumentService.UserDocument(userData);
               const base64Data = user.image;
@@ -319,11 +303,8 @@ export class AuthService {
              };
               const accessToken = this.jwtService.sign(user);
               const expires = this.configService.get("TOKEN_EXPIRY");
-            //  await Promise.all([this.cacheManager.set(accessToken, user, { ttl: expires })]);
-            await this.CacheRepository.Cacheset(accessToken, user, { ttl: expires });
-
-
-            return {   access_token: accessToken };
+              await this.CacheRepository.Cacheset(accessToken, user, { ttl: expires });
+              return {   access_token: accessToken };
                //return  req.user;
           }
 
@@ -372,11 +353,8 @@ export class AuthService {
           // profile get
             async getProfile(accessToken: string)
             {
-               // const cachedToken = await this.cacheManager.get(accessToken);
-              const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
-
-
-              if (!cachedToken)
+                const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
+                if (!cachedToken)
                 {
                    throw new UnauthorizedException('Token expired');
                 }
@@ -389,14 +367,10 @@ export class AuthService {
         // refresh token
         async refreshToken(user: User, accessToken: string)
         {
-          //  const cachedToken = await this.cacheManager.get(accessToken);
-          const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
-
-          if (!cachedToken || cachedToken)
+            const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
+            if (!cachedToken || cachedToken)
             {
-               // await this.cacheManager.del(accessToken);
               await this.CacheRepository.Cachedel(accessToken);
-
               const payload = {
                   id: user.id,
                   firstName: user.firstName,
@@ -413,11 +387,8 @@ export class AuthService {
                 };
                 const accessTokenRedis = this.jwtService.sign(payload);
                 const expires = this.configService.get("TOKEN_EXPIRY");
-               // await Promise.all([this.cacheManager.set(accessTokenRedis, user, { ttl: expires })]);
-              await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
-
-
-              return { refresh_token: accessTokenRedis};
+                await this.CacheRepository.Cacheset(accessTokenRedis, user, { ttl: expires });
+                return { refresh_token: accessTokenRedis};
             }
         }
 
@@ -426,17 +397,13 @@ export class AuthService {
          //logout
           async logout(accessToken: string): Promise<{ message: string }>
           {
-              //const cachedToken = await this.cacheManager.get(accessToken);
               const cachedToken  = await this.CacheRepository.Cacheget(accessToken);
-
               if (!cachedToken)
               {
                 throw new NotFoundException('Token expired');
               }
-             // await this.cacheManager.del(accessToken);
-            await this.CacheRepository.Cachedel(accessToken);
-
-            return { message: 'Successfully logout' };
+               await this.CacheRepository.Cachedel(accessToken);
+               return { message: 'Successfully logout' };
           }
 
 
@@ -459,11 +426,8 @@ export class AuthService {
               const logo_l2a=process.env.LOGO_L2A
               const contact_us_url= process.env.CONTACT_US
               const privacy_policy_url= process.env.PRIVACY_POLICY
-             // await this.cacheManager.set(tokenKey, tokenValue, { ttl: expires });
-            await this.CacheRepository.Cacheset(tokenKey, tokenValue, { ttl: expires });
-
-
-            const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
+              await this.CacheRepository.Cacheset(tokenKey, tokenValue, { ttl: expires });
+              const FRONTEND_APP_URL = process.env.FRONTEND_APP_URL;
               const changePasswordUrl = `${FRONTEND_APP_URL}/change-password/#/Auth/AuthController_changePasswordToken`;
               console.log('token', resetToken);
               const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
@@ -497,14 +461,11 @@ export class AuthService {
                    throw new NotFoundException('Invalid email');
                 }
                 const tokenKey = `forgot-password-token:${user.email}`;
-              //  const cachedToken = await this.cacheManager.get(tokenKey);
-              const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
-
-              if (!cachedToken)
+                const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
+                if (!cachedToken)
                 {
                    throw new UnauthorizedException('token expired');
                 }
-
                 const parsedToken = JSON.parse(<string>cachedToken);
                 if (parsedToken.token !== reqBody.token)
                 {
@@ -514,10 +475,7 @@ export class AuthService {
                 {
                     parsedToken.active = true;
                     const updatedTokenValue = JSON.stringify(parsedToken);
-                  //  await this.cacheManager.set(tokenKey, updatedTokenValue, { ttl: 5400 });
-
-                  await this.CacheRepository.Cacheset(tokenKey, updatedTokenValue, { ttl: 5400 });
-
+                    await this.CacheRepository.Cacheset(tokenKey, updatedTokenValue, { ttl: 5400 });
                 }
                 return {
                     statusCode: 200,
@@ -531,20 +489,18 @@ export class AuthService {
              // change password
              async changePassword(email:string,@Body() reqBody: changeUserPasswordInterface)
              {
-                 const logo_l2a=process.env.LOGO_L2A
-                 const contact_us_url= process.env.CONTACT_US
-                 const privacy_policy_url= process.env.PRIVACY_POLICY
-                 const user = await this.usersService.findUserByEmail(email);
-                  if (!user)
-                  {
-                     throw new NotFoundException('Invalid email');
-                  }
+                   const logo_l2a=process.env.LOGO_L2A
+                   const contact_us_url= process.env.CONTACT_US
+                   const privacy_policy_url= process.env.PRIVACY_POLICY
+                   const user = await this.usersService.findUserByEmail(email);
+                   if (!user)
+                   {
+                       throw new NotFoundException('Invalid email');
+                   }
 
                   const tokenKey = `forgot-password-token:${user.email}`;
-                 // const cachedToken = await this.cacheManager.get(tokenKey);
-               const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
-
-               if (!cachedToken)
+                  const cachedToken  = await this.CacheRepository.Cacheget(tokenKey);
+                  if (!cachedToken)
                   {
                       throw new UnauthorizedException('token expired');
                   }
@@ -584,10 +540,8 @@ export class AuthService {
                        await this.usersService.updatePassword(email, hashedPassword);
                        this.mailService.sendMail(mailData);
                        const loginResult = this.login(user);
-                     //  await this.cacheManager.del(tokenKey);
-                     await this.CacheRepository.Cachedel(tokenKey);
-
-                    return loginResult;
+                       await this.CacheRepository.Cachedel(tokenKey);
+                       return loginResult;
                   }
                   else
                   {
@@ -621,7 +575,6 @@ export class AuthService {
                 }
                 catch (error)
                 {
-                  //console.log(error)
                      throw new BadRequestException('Failed to send OTP');
                 }
 

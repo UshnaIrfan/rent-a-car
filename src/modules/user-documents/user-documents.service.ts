@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { createUserDocumentsDto } from "./dto/create-user-document.dto";
 import { UserDocuments } from "./schemas/userDocuments.schema";
 import { UsersDocumentRepository } from "./user-document.repository";
 

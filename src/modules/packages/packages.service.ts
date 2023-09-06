@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { packagesRepository } from "./packages.repository";
 import { packages } from "./schemas/packages.schema";
 import createPackagesInterface from "./interfaces/create-packages.interface";

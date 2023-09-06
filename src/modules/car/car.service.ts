@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {  Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import createCarInterface from "./interfaces/create-car.interface";
 import { carRepository } from "./car.repository";
 import { BrandService } from "../brand/brand.service";
@@ -11,11 +11,6 @@ import { BaggageOptionService } from "../baggage-option/baggage-option.service";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
-import { Cache } from "cache-manager";
-import { CACHE_MANAGER } from "@nestjs/common/cache";
-import { JwtService } from "@nestjs/jwt";
-import { UsersService } from "../users/users.service";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
 import { updateCarDto } from "./dto/update-car.dto";
 
 
@@ -31,9 +26,6 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverOptionService : DriverOptionService,
-          //    private jwtService: JwtService,
-           //   private usersService: UsersService,
-             // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
 

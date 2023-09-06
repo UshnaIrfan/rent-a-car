@@ -1,9 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import createSeatsCapacityInterface from "./interfaces/create-seats-capacity.interface";
-import { seatsCapacityRepository } from "./seats-capacity.repository";
-import { year } from "../year/schemas/year.schema";
-import { seatsCapacity } from "./schemas/seats-capacity.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
+import { seatsCapacityRepository } from "./seats-capacity.repository";import { seatsCapacity } from "./schemas/seats-capacity.schema";
 import { UpdateSeatsCapacityDto } from "./dto/update-seats-capacity.dto";
 
 

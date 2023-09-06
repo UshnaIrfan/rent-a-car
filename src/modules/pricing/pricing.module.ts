@@ -41,16 +41,8 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { UsersRepository } from "../users/users.respository";
 import { User } from "../users/schemas/user.schema";
-import { CacheModule } from "@nestjs/common/cache";
-import * as redisStore from "cache-manager-redis-store";
-
 @Module({
-  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),
-    // CacheModule.register({
-    //   store: redisStore,
-    //   uri: process.env.REDIS_URL,
-    // })
-  ],
+  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),],
   controllers: [PricingController],
   providers: [UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService,PricingService,timeRepository,TimeService,pricingRepository],
 })

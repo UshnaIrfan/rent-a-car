@@ -1,17 +1,11 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { UpdateBookingDto } from './dto/update-booking.dto';
-import createBaggageOptionInterface from "./interfaces/create-booking.interface";
 import createBookingInterface from "./interfaces/create-booking.interface";
 import { bookingRepository } from "./booking.repository";
-import { jwtConstants } from "../auth/constants/constants";
 import { JwtService } from "@nestjs/jwt";
-import { CACHE_MANAGER } from "@nestjs/common/cache";
-import { Cache } from "cache-manager";
 import { UsersService } from "../users/users.service";
 import { CarService } from "../car/car.service";
 import { driverRepository } from "../driver/driver.repository";
-import { driver } from "../driver/schemas/driver.schema";
 import { booking } from "./schemas/booking.schema";
 import { LanguagesService } from "../languages/languages.service";
 import { PackagesService } from "../packages/packages.service";
@@ -21,7 +15,6 @@ export class BookingService {
 
   constructor(private readonly bookingRepository:bookingRepository,
               private jwtService: JwtService,
-              //@Inject(CACHE_MANAGER) private cacheManager: Cache,
               private usersService: UsersService,
               private readonly carService: CarService,
               private readonly languagesService: LanguagesService,
