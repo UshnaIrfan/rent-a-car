@@ -5,6 +5,9 @@ import { booking } from "./schemas/booking.schema";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { car } from "../car/schemas/car.schema";
+import { UpdateCarImageDto } from "../car-images/dto/update-car-image.dto";
+import { carImage } from "../car-images/schemas/car-image.schema";
+import { UpdateBookingDto } from "./dto/update-booking.dto";
 
 
 
@@ -35,7 +38,7 @@ export class bookingRepository{
 
 
 
-  // get booking history by user id
+     // get booking history by user id
       async getBookingHistory(userId: string):Promise<booking[] | null>
       {
           validateUuid([userId]);
@@ -69,7 +72,6 @@ export class bookingRepository{
 
 
 
-
       // delete booking by car id
       async deleteBookingByCarId(carId: string):Promise<booking[]| null>
       {
@@ -80,6 +82,30 @@ export class bookingRepository{
             throw new NotFoundException('data not found');
           }
           return await this.bookingModel.remove(result);
+      }
+
+
+
+
+
+      // update booking
+      async updateBooking(bookingId: string, body: UpdateBookingDto): Promise<booking| null>
+      {
+            validateUuid([bookingId]);
+            const result = await this.bookingModel.findOne({ where: { id:bookingId}});
+            if (!result)
+            {
+              throw new NotFoundException('booking not found');
+            }
+            for (const key in body)
+            {
+                if (body.hasOwnProperty(key))
+                {
+                  result[key] = body[key];
+                }
+            }
+            const updatedResult = await this.bookingModel.save(result);
+            return updatedResult;
       }
 }
 

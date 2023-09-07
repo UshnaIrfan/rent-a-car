@@ -6,6 +6,8 @@ import { getUserBookingDcorator } from "./swagger-decorator/get-user-booking-dco
 import { booking } from "./schemas/booking.schema";
 import { getUserBookingHistoryDecorator } from "./swagger-decorator/get-user-booking-history-decorator";
 import { UserAuthGuard } from "../../guards/user-auth-guard";
+import { UpdateBookingDto } from "./dto/update-booking.dto";
+import { userBookingDocumentsDto } from "./dto/user-booking-documents.dto";
 
 
 @ApiTags('booking')
@@ -64,6 +66,90 @@ export class BookingController {
           console.log(" delete car id")
           return this.bookingService.deleteBookingByCarId(carId);
         }
+
+
+
+
+        // update booking
+        @Patch('/:bookingId')
+        async  updateBooking(@Param('bookingId') bookingId:string, @Body() body:UpdateBookingDto )
+        {
+          return this.bookingService.updateBooking(bookingId,body);
+        }
+
+
+
+
+        //  international user document passport
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/international/user_document_passport')
+        async internationalUserDocumentPassport(@Body() body:userBookingDocumentsDto,@Req() request: any )
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
+
+
+        //  international user document visa
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/international/user_document_visa')
+        async internationalUserDocumentVisa(@Body() body:userBookingDocumentsDto ,@Req() request: any)
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
+
+
+        //  international user driving license
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/international/user_document_driving_license')
+        async internationalUserDocumentDrivingLicense(@Body() body:userBookingDocumentsDto,@Req() request: any )
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
+
+        //  international user driving permit
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/international/user_document_driving_permit')
+        async internationalUserDocumentDrivingPermit(@Body() body:userBookingDocumentsDto,@Req() request: any )
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
+
+
+
+        //  local user document passport
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/local/user_document_passport')
+        async localUserDocumentPassport(@Body() body:userBookingDocumentsDto,@Req() request: any )
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
+
+
+        //  local user driving license
+        @ApiBearerAuth()
+        @ApiBody({type:userBookingDocumentsDto})
+        @UseGuards(UserAuthGuard)
+        @Post('/local/user_document_driving_license')
+        async localUserDocumentDrivingLicense(@Body() body:userBookingDocumentsDto,@Req() request: any )
+        {
+          return this.bookingService.UserDocument(body,request.user.id);
+        }
+
 
 
 

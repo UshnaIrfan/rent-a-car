@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import {  Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { time } from "./schemas/time.schema";
 import { CreateTimeDto } from "./dto/create-time.dto";
@@ -35,7 +35,7 @@ export class timeRepository{
 
 
 
-        // get all  car model
+       // get time
         async getTime():Promise<time[]| null>
         {
           return  this.timeModel.find({ });
@@ -43,7 +43,7 @@ export class timeRepository{
 
 
 
-        // update  car model
+       // update  time
         async updateTime(timeId: string, body: UpdateTimeDto): Promise<time| null>
         {
             validateUuid([timeId]);
@@ -61,7 +61,7 @@ export class timeRepository{
 
 
 
-        // delete  car model
+       // delete  time
         async deleteTime(timeId:string): Promise<time| null>
         {
             validateUuid([timeId]);
@@ -75,13 +75,21 @@ export class timeRepository{
 
 
 
+        //find time by name
+        async findTime(time: string):Promise<time| null>
+        {
+          return  await this.timeModel.findOne({ where: { time}});
+        }
 
 
-  //find brand by name
-  async findTime(time: string): Promise<time| null>
-  {
-    return  await this.timeModel.findOne({ where: { time}});
-  }
+
+      // get by time id
+      async getTimesById(timeIds: string[]):Promise<time[]| null>
+      {
+        validateUuid(timeIds);
+        const result = await this.timeModel.find({ where: {id:In(timeIds)}});
+        return  result
+      }
 
 
 

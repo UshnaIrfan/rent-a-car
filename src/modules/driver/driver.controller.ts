@@ -1,16 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  UsePipes,
-  ParseUUIDPipe,
-  Query,
-  UseGuards,
-  Req, Delete
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch,Param, Query, UseGuards, Req, Delete } from "@nestjs/common";
 import { DriverService } from './driver.service';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { createDriverDto } from "./dto/create-driver.dto";
@@ -38,7 +26,6 @@ export class DriverController {
         @ApiBearerAuth()
         @ApiBody({type:createDriverDto})
         @Post('create')
-        @Roles(Role.RENTER)
         @UseGuards(UserAuthGuard)
         async create(@Body() CreateDriverDto:createDriverDto, @Req() request: any):Promise<driver>
         {

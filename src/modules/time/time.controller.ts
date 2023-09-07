@@ -33,7 +33,7 @@ export class TimeController {
         @Patch('/:timeId')
         async  updateTime(@Param('timeId') timeId:string, @Body() body:UpdateTimeDto )
         {
-          return this.timeService.updateTime(timeId,body);
+           return this.timeService.updateTime(timeId,body);
         }
 
 
@@ -41,6 +41,6 @@ export class TimeController {
         @Delete('/:timeId')
         async  deleteTime(@Param('timeId') timeId:string )
         {
-          return this.timeService.deleteTime(timeId);
+           return this.timeService.deleteTime(timeId);
         }
 }

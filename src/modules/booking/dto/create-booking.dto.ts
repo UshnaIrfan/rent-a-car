@@ -36,4 +36,17 @@ export class CreateBookingDto {
         @IsNotEmpty()
         dropoffDate: Date;
 
+
+        @ApiProperty()
+        @IsString()
+        @IsNotEmpty()
+        pickupTimeId: string;
+
+
+
+        @ApiProperty()
+        @IsString()
+        @IsNotEmpty()
+        dropoffTimeId: string;
+
 }

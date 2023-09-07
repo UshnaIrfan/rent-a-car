@@ -35,8 +35,6 @@ export class UserAuthGuard extends AuthGuard('jwt') {
               throw new UnauthorizedException('Token expired');
           }
           headers.user = user;
-          console.log(headers.user);
-
           return true;
     }
 }

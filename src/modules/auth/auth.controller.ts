@@ -152,7 +152,6 @@ export class AuthController {
          }
 
 
-
            // get data from google ( signup)
          @Get('google/callback')
          @UseGuards(GoogleAuthGuard)

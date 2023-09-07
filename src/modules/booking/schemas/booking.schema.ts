@@ -52,6 +52,15 @@ export class  booking {
 
 
       @ApiProperty()
+      @Column({nullable:true})
+      pickupTimeId: string;
+
+
+      @ApiProperty()
+      @Column({nullable:true})
+      dropoffTimeId: string;
+
+      @ApiProperty()
       @CreateDateColumn()
       createdAt: Date
 

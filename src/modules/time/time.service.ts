@@ -31,7 +31,7 @@ export class TimeService {
 
 
 
-        // get all  car model
+       // get time
         async getTime ():Promise<time[]>
         {
             const result= await this.timeRepository.getTime();
@@ -44,7 +44,7 @@ export class TimeService {
 
 
 
-        // update  car model
+       // update  time
         async updateTime (timeId:string,body:UpdateTimeDto):Promise<{ time:time; message: string }>
         {
             const time = await this.timeRepository.updateTime(timeId,body);
@@ -53,7 +53,7 @@ export class TimeService {
 
 
 
-        // delete  car model
+       // delete  time
         async deleteTime(timeId:string):Promise<{ time:time; message: string }>
         {
             const time= await this.timeRepository.deleteTime(timeId);
@@ -62,5 +62,10 @@ export class TimeService {
 
 
 
+        // get by times by ids
+        async getTimesById(timeIds:string[]):Promise<time[]| null>
+        {
+          return  await this.timeRepository.getTimesById(timeIds);
+        }
 
 }
