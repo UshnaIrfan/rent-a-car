@@ -27,6 +27,7 @@ export class DriverController {
         @ApiBody({type:createDriverDto})
         @Post('create')
         @UseGuards(UserAuthGuard)
+        @Roles(Role.RENTER)
         async create(@Body() CreateDriverDto:createDriverDto, @Req() request: any):Promise<driver>
         {
            return this.driverService.createDriver(CreateDriverDto,request.user.id);

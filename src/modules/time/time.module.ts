@@ -6,8 +6,7 @@ import { time } from "./schemas/time.schema";
 import { timeRepository } from "./time.repository";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    time])],
+  imports: [TypeOrmModule.forFeature([time])],
   controllers: [TimeController],
   providers: [TimeService,timeRepository],
 })

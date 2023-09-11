@@ -1,5 +1,6 @@
 import {IsNotEmpty, IsString } from "class-validator"
 import { ApiProperty } from "@nestjs/swagger";
+import { bookingStatus } from "../schemas/booking.schema";
 
 export class CreateBookingDto {
 
@@ -48,5 +49,11 @@ export class CreateBookingDto {
         @IsString()
         @IsNotEmpty()
         dropoffTimeId: string;
+
+
+        @ApiProperty({ type: String, enum: bookingStatus, default:bookingStatus.PENDING })
+        @IsString()
+        @IsNotEmpty()
+        bookingStatus:string;
 
 }

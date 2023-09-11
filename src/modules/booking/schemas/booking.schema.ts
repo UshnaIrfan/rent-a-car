@@ -11,6 +11,14 @@ import {car} from "../../car/schemas/car.schema"
 import {User} from "../../users/schemas/user.schema"
 import { driver } from "../../driver/schemas/driver.schema";
 
+
+export enum bookingStatus {
+      PENDING= 'pending',
+      COMPLETED= 'completed',
+      CANCELLED = 'cancelled',
+}
+
+
 @Entity({ name: 'booking' })
 export class  booking {
 
@@ -60,6 +68,12 @@ export class  booking {
       @Column({nullable:true})
       dropoffTimeId: string;
 
+
+      @ApiProperty()
+      @Column({  enum: bookingStatus , default: bookingStatus.PENDING  })
+      bookingStatus: string;
+
+
       @ApiProperty()
       @CreateDateColumn()
       createdAt: Date
@@ -68,7 +82,6 @@ export class  booking {
       @ApiProperty()
       @UpdateDateColumn()
       updatedAt: Date
-
 
 
 

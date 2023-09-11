@@ -6,4 +6,8 @@ export default interface createBookingInterface {
   readonly dropoffDate: Date;
   readonly pickupTimeId: string;
   readonly dropoffTimeId: string;
+  readonly bookingStatus: string;
+
+
+
 }
