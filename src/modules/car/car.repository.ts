@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import {  Repository } from "typeorm";
+import { Between, In, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { car } from "./schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
-import { driver } from "../driver/schemas/driver.schema";
-import { updateDriverDocumentsDto } from "../driver/dto/update-driver-documents.dto";
-import path from "path";
-import fs from "fs";
 import { updateCarDto } from "./dto/update-car.dto";
+import { pricing } from "../pricing/schemas/pricing.schema";
+import { pricingService } from "../pricing/pricing.service";
 
 
 @Injectable()
 export class carRepository{
-  constructor(@InjectRepository(car) private carModel: Repository<car>
+  constructor(@InjectRepository(car) private  carModel: Repository<car>,
+              @InjectRepository(pricing) private  priceModel: Repository<pricing>,
+          //  private  readonly price:pricingService
   ) {}
 
 
@@ -28,7 +28,7 @@ export class carRepository{
          {
             validateUuid([carId]);
             return   await  this.carModel.findOne({  where: { id:carId},
-             relations:['pricing','carImage']
+             relations:['carImage']
             });
         }
 
@@ -109,7 +109,7 @@ export class carRepository{
 
 
 
-  // // delete car history  by user id
+      // // delete car history  by user id
       // async deleteCarHistory(userId: string):Promise<car[]| null>
       // {
       //       validateUuid([userId]);
@@ -120,6 +120,56 @@ export class carRepository{
       //       }
       //       return await this.carModel.remove(result);
       // }
+
+
+
+
+
+
+      // search and get  car id for booking purpose
+      async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string)
+      {
+          let matchingCarIds: string[] = [];
+          if (minPrice && maxPrice)
+          {
+              const priceResults = await this.priceModel.find({
+              where: { price: Between(minPrice, maxPrice), }, });
+              matchingCarIds = priceResults.map((priceResult) => priceResult.carId);
+              console.log("price data", matchingCarIds);
+          }
+
+            let whereConditions: any = {};
+            if (carTypes || brands || transmission || color) {
+              whereConditions = {
+                carTypeId: carTypes || undefined,
+                brandId: brands || undefined,
+                transmissionId: transmission || undefined,
+                colorId: color || undefined,
+              };
+            }
+
+          const hasPriceFilter = matchingCarIds.length > 0 || (minPrice && maxPrice);
+          const where = {
+            ...whereConditions,
+            id: hasPriceFilter ? In(matchingCarIds) : undefined,
+          };
+
+          const results = await this.carModel.find({
+            where: Object.keys(where).length !== 0 ? where : undefined,
+            relations: ['carImage'],
+          });
+
+          if (!hasPriceFilter && Object.keys(whereConditions).length === 0) {
+            return null;
+          }
+          return results;
+      }
+
+
+
+
+
+
 
 }
 

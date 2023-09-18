@@ -37,19 +37,24 @@ import {  JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { User } from "../users/schemas/user.schema";
 import { UsersRepository } from "../users/users.respository";
-
+import { pricing } from "../pricing/schemas/pricing.schema";
+import { pricingRepository } from "../pricing/pricing.repository";
+import { timeRepository } from "../time/time.repository";
+import { time } from "../time/schemas/time.schema";
+import {pricingService} from "../pricing/pricing.service";
+import {TimeService} from "../time/time.service";
+import { PricingModule } from "../pricing/pricing.module";
+import { TimeModule } from "../time/time.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,carType,transmission,car,brand,carModel,year,color]),
+  imports: [TypeOrmModule.forFeature([time,pricing,User,driverOption,seatsCapacity,baggageOption,carType,transmission,car,brand,carModel,year,color]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
-    }),
-   ],
+    }),   ],
   controllers: [CarController],
-  providers: [UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,baggageOptionRepository,BaggageOptionService,CarTypeRepository,CarTypeService,TransmissionService,transmissionRepository,ColorService,ColorRepository,yearRepository,YearService,CarModelService,CarService,BrandService,carRepository,brandRepository,CarModelRepository]
-
-
+  providers: [TimeService,timeRepository,pricingRepository,pricingService,UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,baggageOptionRepository,BaggageOptionService,CarTypeRepository,CarTypeService,TransmissionService,transmissionRepository,ColorService,ColorRepository,yearRepository,YearService,CarModelService,CarService,BrandService,carRepository,brandRepository,CarModelRepository],
+  exports: [CarService],
 
 })
 export class CarModule {}

@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from "@nestjs/common";
 import { CarImagesService } from './car-images.service';
 import { CreateCarImageDto } from './dto/create-car-image.dto';
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { UpdateCarImageDto } from "./dto/update-car-image.dto";
 import { carImage } from "./schemas/car-image.schema";
+import { Roles } from "../../decorators/role.decorators";
+import { Role } from "../../enums/role.enum";
+import { UserAuthGuard } from "../../guards/user-auth-guard";
 
 @ApiTags('carImages')
 @Controller('car-images')
@@ -12,11 +15,14 @@ export class CarImagesController {
 
 
         // create
+        @ApiBearerAuth()
+        @Roles(Role.RENTER)
+        @UseGuards(UserAuthGuard)
         @ApiBody({type:CreateCarImageDto})
         @Post('create')
-        async createCarImage(@Body() createCarImageDto: CreateCarImageDto)
+        async createCarImage(@Body() createCarImageDto: CreateCarImageDto,@Req() request: any)
         {
-          return this.carImagesService.createCarImage(createCarImageDto);
+          return this.carImagesService.createCarImage(createCarImageDto,request.user.id);
         }
 
 

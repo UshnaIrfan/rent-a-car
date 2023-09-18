@@ -8,6 +8,7 @@ import { car } from "../car/schemas/car.schema";
 import { UpdateCarImageDto } from "../car-images/dto/update-car-image.dto";
 import { carImage } from "../car-images/schemas/car-image.schema";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
+import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
 
 
 
@@ -107,5 +108,32 @@ export class bookingRepository{
             const updatedResult = await this.bookingModel.save(result);
             return updatedResult;
       }
+
+
+
+
+    // update booking status
+    async updateBookingStatus(bookingId: string, body: updateBookingStatusDto): Promise<booking| null>
+    {
+          validateUuid([bookingId]);
+          const result = await this.bookingModel.findOne({ where: { id:bookingId}});
+          if (!result)
+          {
+            throw new NotFoundException('booking not found');
+          }
+          for (const key in body)
+          {
+            if (body.hasOwnProperty(key))
+            {
+              result[key] = body[key];
+            }
+          }
+          const updatedResult = await this.bookingModel.save(result);
+          return updatedResult;
+    }
+
+
+
+
 }
 

@@ -5,8 +5,6 @@ import { color } from "./schemas/color.schema";
 import { CreateColorDto } from "./dto/create-color.dto";
 import { UpdateColorDto } from "./dto/update-color.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
-
 
 
 @Injectable()

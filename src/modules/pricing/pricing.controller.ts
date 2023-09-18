@@ -1,23 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PricingService } from './pricing.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from "@nestjs/common";
+import { pricingService } from './pricing.service';
 import { CreatePricingDto } from './dto/create-pricing.dto';
 import { UpdatePricingDto } from './dto/update-pricing.dto';
-import { ApiBody, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { pricing } from "./schemas/pricing.schema";
+import { Roles } from "../../decorators/role.decorators";
+import { Role } from "../../enums/role.enum";
+import { UserAuthGuard } from "../../guards/user-auth-guard";
 
 
 @ApiTags('pricing')
 @Controller('pricing')
 export class PricingController {
-  constructor(private readonly pricingService: PricingService) {}
+  constructor(private readonly pricingService: pricingService) {}
 
 
       // create
+      @ApiBearerAuth()
+      @Roles(Role.RENTER)
+      @UseGuards(UserAuthGuard)
       @ApiBody({type:CreatePricingDto})
       @Post('create')
-      async createPricing(@Body() createPricingDto: CreatePricingDto):Promise<pricing>
+      async createPricing(@Body() createPricingDto: CreatePricingDto,@Req() request: any):Promise<pricing>
       {
-        return this.pricingService.createPricing(createPricingDto);
+        return this.pricingService.createPricing(createPricingDto,request.user.id);
       }
 
 

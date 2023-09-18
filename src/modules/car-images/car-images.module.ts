@@ -40,15 +40,21 @@ import { UsersRepository } from "../users/users.respository";
 import { User } from "../users/schemas/user.schema";
 import { CacheModule } from "@nestjs/common/cache";
 import * as redisStore from "cache-manager-redis-store";
+import { pricingRepository } from "../pricing/pricing.repository";
+import { pricingService } from "../pricing/pricing.service";
+import { pricing } from "../pricing/schemas/pricing.schema";
+import { TimeService } from "../time/time.service";
+import { timeRepository } from "../time/time.repository";
+import { time } from "../time/schemas/time.schema";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,car,carImage,brand]),
-    // CacheModule.register({
-    //   store: redisStore,
-    //   uri: process.env.REDIS_URL,
-    // }),
+  imports: [TypeOrmModule.forFeature([time,pricing,User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,car,carImage,brand]),
+    CacheModule.register({
+      store: redisStore,
+      uri: process.env.REDIS_URL,
+    }),
   ],
   controllers: [CarImagesController],
-  providers: [UsersRepository,UsersService ,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,baggageOptionRepository,BaggageOptionService ,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,yearRepository,YearService,CarModelRepository,CarModelService,brandRepository,BrandService,carRepository,CarService,CarImagesService,carImageRepository],
+  providers: [timeRepository,TimeService,pricingService,pricingRepository,UsersRepository,UsersService ,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,baggageOptionRepository,BaggageOptionService ,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,yearRepository,YearService,CarModelRepository,CarModelService,brandRepository,BrandService,carRepository,CarService,CarImagesService,carImageRepository],
 })
 export class CarImagesModule {}

@@ -21,7 +21,7 @@ export class SignUpUserDto {
      @ApiProperty()
      @IsString()
      @IsNotEmpty()
-     country: string;
+     countryId: string;
 
      @ApiProperty()
      @IsString()
@@ -58,7 +58,7 @@ export class SignUpUserDto {
      @ApiProperty({required: true  })
      @IsString()
      @IsNotEmpty()
-     confirm_password: string;
+     confirmPassword: string;
 
 
 

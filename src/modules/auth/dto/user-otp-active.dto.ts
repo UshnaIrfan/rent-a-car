@@ -12,7 +12,7 @@ export class userOtpActiveDto {
 
     @ApiProperty({ type: String, required: true })
     @IsNotEmpty()
-    otp_status: string;
+    otpStatus: string;
 
 
 }

@@ -16,7 +16,10 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
 import { jwtConstants } from "./constants/constants";
 import { MailService } from "../mail/mail.service";
 import { cacheRepository } from "../../cache/cache.repository";
-
+import { CountryService } from "../country/country.service";
+import { countryRepository } from "../country/country.repository";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { country } from "../country/schemas/country.schema";
 
 @Module({
   imports: [
@@ -36,10 +39,11 @@ import { cacheRepository } from "../../cache/cache.repository";
       accountSid: process.env.TWILIO_ACCOUNT_SID,
       authToken: process.env.TWILIO_AUTH_TOKEN,
     }),
+    TypeOrmModule.forFeature([country])
 
   ],
      controllers: [AuthController],
-     providers: [cacheRepository,MailService,LocalStrategy,JwtAuthGuard,JwtStrategy,userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
+     providers: [countryRepository,CountryService,cacheRepository,MailService,LocalStrategy,JwtAuthGuard,JwtStrategy,userVerificationsDocumentsService,UserDocumentsService,AuthService ,UsersService ,LocalStrategy ,JwtAuthGuard ,JwtStrategy ] ,
      exports: [AuthService],
 })
 export class AuthModule {}

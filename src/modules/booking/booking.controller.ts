@@ -8,12 +8,15 @@ import { getUserBookingHistoryDecorator } from "./swagger-decorator/get-user-boo
 import { UserAuthGuard } from "../../guards/user-auth-guard";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
 import { userBookingDocumentsDto } from "./dto/user-booking-documents.dto";
+import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
 
 
 @ApiTags('booking')
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
+
+
 
 
       // create
@@ -74,6 +77,7 @@ export class BookingController {
         @Patch('/:bookingId')
         async  updateBooking(@Param('bookingId') bookingId:string, @Body() body:UpdateBookingDto )
         {
+          console.log("booking id");
           return this.bookingService.updateBooking(bookingId,body);
         }
 
@@ -152,6 +156,16 @@ export class BookingController {
 
 
 
+
+
+      // update booking status
+      @Patch('/bookingId/:status')
+      async  updateBookingStatus(@Param('bookingId') bookingId:string, @Body() body:updateBookingStatusDto )
+      {
+        console.log("booking status");
+
+        return this.bookingService.updateBookingStatus(bookingId,body);
+      }
 
 
 }

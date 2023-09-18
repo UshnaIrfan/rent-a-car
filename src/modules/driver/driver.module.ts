@@ -16,16 +16,19 @@ import { UsersDocumentRepository } from "../user-documents/user-document.reposit
 import { JwtService } from "@nestjs/jwt";
 import { CacheModule } from "@nestjs/common/cache";
 import * as redisStore from "cache-manager-redis-store";
+import { countryRepository } from "../country/country.repository";
+import { CountryService } from "../country/country.service";
+import { country } from "../country/schemas/country.schema";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserDocuments,driver,User,UserVerificationDocuments]),
+  imports: [TypeOrmModule.forFeature([country,UserDocuments,driver,User,UserVerificationDocuments]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     }),
     ],
   controllers: [DriverController],
-  providers: [JwtService,UsersRepository,UsersDocumentRepository,UsersService,DriverService,userVerifcationDocumentsRepository,driverRepository,userVerificationsDocumentsService,UserDocumentsService],
+  providers: [countryRepository,CountryService,JwtService,UsersRepository,UsersDocumentRepository,UsersService,DriverService,userVerifcationDocumentsRepository,driverRepository,userVerificationsDocumentsService,UserDocumentsService],
   exports: [],
 
 })

@@ -9,7 +9,7 @@ import { validateUuid } from "../../decorators/uuid.decorators";
 
 @Injectable()
 export class pricingRepository{
-  constructor(@InjectRepository(pricing) private pricingModel: Repository<pricing>
+  constructor(@InjectRepository(pricing) private   pricingModel: Repository<pricing>
   ) {}
 
 
@@ -62,6 +62,15 @@ export class pricingRepository{
 
         }
 
+
+
+        //todo
+
+  // get all  pricing
+  async pricingByName(price:string)
+  {
+    return  this.pricingModel.find({where:{price} });
+  }
 
 }
 

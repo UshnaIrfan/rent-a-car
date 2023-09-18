@@ -45,8 +45,6 @@ import { TimeModule } from './modules/time/time.module';
 import { PricingModule } from './modules/pricing/pricing.module';
 import { time } from "./modules/time/schemas/time.schema";
 import { pricing } from "./modules/pricing/schemas/pricing.schema";
-import { JwtModule } from "@nestjs/jwt";
-import { jwtConstants } from "./modules/auth/constants/constants";
 import { CarImagesModule } from './modules/car-images/car-images.module';
 import { carImage } from "./modules/car-images/schemas/car-image.schema";
 import { LanguagesModule } from './modules/languages/languages.module';
@@ -56,11 +54,14 @@ import { MailModule } from './modules/mail/mail.module';
 import { languages } from "./modules/languages/schemas/languages.schema";
 import { PackagesModule } from './modules/packages/packages.module';
 import { packages } from "./modules/packages/schemas/packages.schema";
+import { CountryModule } from './modules/country/country.module';
+import { country } from "./modules/country/schemas/country.schema";
 
 
 
 @Module({
   imports: [
+    PricingModule,
     AuthModule,
     UsersModule,
     HubspotModule,
@@ -78,12 +79,13 @@ import { packages } from "./modules/packages/schemas/packages.schema";
     SeatsCapacityModule,
     DriverOptionModule,
     TimeModule,
-    PricingModule,
     CarImagesModule,
     LanguagesModule,
     BookingModule,
     MailModule,
     PackagesModule,
+    CountryModule,
+
 
     TwilioModule.forRoot({
       accountSid: process.env.TWILIO_ACCOUNT_SID,
@@ -138,11 +140,12 @@ import { packages } from "./modules/packages/schemas/packages.schema";
         username: configService.get("DATABASE_USERNAME"),
         password: configService.get("DATABASE_PASSWORD"),
         database: configService.get("DATABASE_NAME"),
-        entities: [packages,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [country,packages,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]
     }),
+
 
   ],
      controllers: [],

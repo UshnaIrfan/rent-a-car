@@ -1,4 +1,4 @@
 export default interface userOtpActiveInterface{
     readonly Otp: string;
-    readonly otp_status: string;
+    readonly otpStatus: string;
 }

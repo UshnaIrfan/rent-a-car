@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PricingService } from './pricing.service';
+import { pricingService } from "./pricing.service";
 import { PricingController } from './pricing.controller';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { time } from "../time/schemas/time.schema";
@@ -41,9 +41,22 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { UsersRepository } from "../users/users.respository";
 import { User } from "../users/schemas/user.schema";
+import { CacheModule } from "@nestjs/common/cache";
+import * as redisStore from "cache-manager-redis-store";
+import { CarModule } from "../car/car.module";
+import { TimeModule } from "../time/time.module";
+
+
 @Module({
-  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),],
+  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),
+    CacheModule.register({
+      store: redisStore,
+      uri: process.env.REDIS_URL,
+    }),
+    ],
   controllers: [PricingController],
-  providers: [UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService,PricingService,timeRepository,TimeService,pricingRepository],
+  providers: [pricingRepository,pricingService,timeRepository,TimeService,UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService],
+  exports: [pricingService,pricingRepository],
+
 })
 export class PricingModule {}

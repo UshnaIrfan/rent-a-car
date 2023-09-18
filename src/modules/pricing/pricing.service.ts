@@ -7,15 +7,16 @@ import { CarService } from "../car/car.service";
 import { UpdatePricingDto } from "./dto/update-pricing.dto";
 
 @Injectable()
-export class PricingService {
-  constructor(private readonly pricingRepository:pricingRepository,
-              private  timeService : TimeService,
-              private  carService : CarService
+export class pricingService {
+  constructor(private  pricingRepository:pricingRepository,
+              private  readonly timeService : TimeService,
+              private   readonly carService : CarService,
+
   ) {}
 
 
       // create
-      async createPricing(createPricingInterface:createPricingInterface):Promise<pricing>
+      async createPricing(createPricingInterface:createPricingInterface,userId:string):Promise<pricing>
       {
           const carId= await this.carService.getCarByCarId(createPricingInterface.carId);
           if(!carId)
@@ -27,7 +28,11 @@ export class PricingService {
           {
             throw new NotFoundException('invalid time id');
           }
-          return  await this.pricingRepository.createPricing(createPricingInterface);
+          const carPricing: createPricingInterface & { userId: string } = {
+            ...createPricingInterface,
+            userId: userId,
+          };
+          return  await this.pricingRepository.createPricing(carPricing);
       }
 
 
@@ -63,6 +68,16 @@ export class PricingService {
             return { message: "deleted successfully", pricing};
         }
 
+
+
+
+        // todo
+  // get all  pricing
+  async pricingByName (price:string)
+  {
+    const result= await this.pricingRepository.pricingByName(price);
+    return  result
+  }
 
 
 }

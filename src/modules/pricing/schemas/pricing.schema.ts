@@ -32,7 +32,9 @@ export class  pricing {
       @Column({nullable:true})
       price: string;
 
-
+      @ApiProperty()
+      @Column({nullable:true})
+      userId: string;
 
       @ApiProperty()
       @CreateDateColumn()

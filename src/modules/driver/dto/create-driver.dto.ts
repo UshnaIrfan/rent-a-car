@@ -27,7 +27,7 @@ export class createDriverDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    country: string;
+    countryId: string;
 
 
 

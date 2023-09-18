@@ -27,6 +27,7 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from "../mail/mail.service";
 import { cacheRepository } from "../../cache/cache.repository";
+import { CountryService } from "../country/country.service";
 
 
 @Injectable()
@@ -39,6 +40,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly twilioService: TwilioService,
     private readonly UsersDocumentService: UserDocumentsService,
+    private readonly countryService: CountryService,
     private readonly usersRepository: UsersRepository,
     private readonly mailService: MailService,
     private readonly CacheRepository: cacheRepository,
@@ -51,6 +53,12 @@ export class AuthService {
          // Sign up
         async signup(@Body() Signup: signupUserInterface)
         {
+
+              const country= await this.countryService.getCountryById(Signup.countryId);
+              if(!country)
+              {
+                throw new NotFoundException('country not found');
+              }
               const Otpexpires = this.configService.get("OTP_EXPIRY");
               const Email = await this.usersService.findUserByEmail(Signup.email);
               if (Email)
@@ -58,7 +66,7 @@ export class AuthService {
                  throw new ConflictException('This email already exists');
               }
 
-              if (Signup.password !== Signup.confirm_password)
+              if (Signup.password !== Signup.confirmPassword)
               {
                  throw new NotAcceptableException('Passwords do not match');
               }
@@ -146,7 +154,7 @@ export class AuthService {
                   parsedToken.active = true;
                   const updatedTokenValue = JSON.stringify(parsedToken);
                   await this.CacheRepository.Cacheset(OtpKey, updatedTokenValue, { ttl: 5400 });
-                  const user = await this.usersService.isOtpActive(email, reqBody.otp_status);
+                  const user = await this.usersService.isOtpActive(email, reqBody.otpStatus);
                   const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
                   const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
                   const mailData: any = {
@@ -209,7 +217,7 @@ export class AuthService {
               lastName: user.lastName,
               email: user.email,
               password: user.password,
-              country:user.country,
+              countryId:user.countryId,
               dateOfBirth:user.dateOfBirth,
               phoneNo:user.phoneNo,
               imag:user.image,
@@ -226,7 +234,7 @@ export class AuthService {
                 firstname: user.firstName,
                 lastname: user.lastName,
                 email: user.email,
-                country:user.country,
+                country:user.countryId,
                 date_of_birth:user.dateOfBirth,
                 phone_no:user.phoneNo,
                 image:user.image,
@@ -293,7 +301,7 @@ export class AuthService {
                 lastName: req.user.lastName,
                 email: req.user.email,
                 password: req.user.password,
-                country:req.user.country,
+                countryId:req.user.countryId,
                 dateOfBirth:req.user.dateOfBirth,
                 phoneNo:req.user.phoneNo,
                 imag:req.user.image,
@@ -322,7 +330,7 @@ export class AuthService {
                 user.firstName = userData.name;
                 user.lastName = userData.username;
                 user.email = userData.email;
-                user.country=userData.country;
+                user.countryId=userData.countryId;
                 user.dateOfBirth=userData.date_of_birth;
                 user.phoneNo=userData.phone_no;
                 user.image=userData.image;
@@ -377,7 +385,7 @@ export class AuthService {
                   lastName: user.lastName,
                   email: user.email,
                   password: user.password,
-                  country:user.country,
+                  countryId:user.countryId,
                   dateOfBirth:user.dateOfBirth,
                   phoneNo:user.phoneNo,
                   imag:user.image,

@@ -11,6 +11,7 @@ import driverDocumentsInterface from "./interfaces/driver-documents.interface";
 import { updateDriverDocumentsDto } from "./dto/update-driver-documents.dto";
 import { JwtService } from "@nestjs/jwt";
 import { updateDriverDto } from "./dto/update-driver.dto";
+import { CountryService } from "../country/country.service";
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class DriverService {
   constructor(private readonly DriverRepository:driverRepository,
               private jwtService: JwtService,
               private usersService: UsersService,
+              private readonly countryService: CountryService,
               private readonly UsersDocumentService: UserDocumentsService,
               private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
   ) {}
@@ -29,23 +31,29 @@ export class DriverService {
         async createDriver(CreateDriverInterface:createDriverInterface,userId:string):Promise<driver>
         {
 
-          const driverData: createDriverInterface & { userId: string } = {
-            ...CreateDriverInterface,
-            userId: userId,
-          };
-          const driver= await this.DriverRepository.createDriver(driverData);
-          const base64Data = driver.image;
-          const base64image = base64Data.split(';base64,').pop();
-          const pdfBuffer = Buffer.from(base64image, 'base64');
 
-          const savePath = path.join(
-            __dirname,
-            '../../../..',
-            '/asset/',
-            `${driver.firstName}-${driver.lastName}.png`
-          );
-          fs.writeFileSync(savePath, pdfBuffer);
-          return  driver
+            const country= await this.countryService.getCountryById(CreateDriverInterface.countryId);
+            if(!country)
+            {
+              throw new NotFoundException('country not found');
+            }
+            const driverData: createDriverInterface & { userId: string } = {
+              ...CreateDriverInterface,
+              userId: userId,
+            };
+            const driver= await this.DriverRepository.createDriver(driverData);
+            const base64Data = driver.image;
+            const base64image = base64Data.split(';base64,').pop();
+            const pdfBuffer = Buffer.from(base64image, 'base64');
+
+            const savePath = path.join(
+              __dirname,
+              '../../../..',
+              '/asset/',
+              `${driver.firstName}-${driver.lastName}.png`
+            );
+            fs.writeFileSync(savePath, pdfBuffer);
+            return  driver
         }
 
 
@@ -151,10 +159,14 @@ export class DriverService {
 
 
 
-  // // delete driver history  by user id
+        // // delete driver history  by user id
         // async deleteDriverHistory (userId:string):Promise<{ driver:driver[]; message: string }>
         // {
         //     const  driver= await this.DriverRepository.deleteDriverHistory(userId);
         //     return { message: "deleted successfully",driver:driver};
         // }
+
+
+
+
 }

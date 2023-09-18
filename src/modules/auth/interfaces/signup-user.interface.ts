@@ -3,8 +3,8 @@ export default interface signupUserInterface {
    readonly lastName: string;
    readonly email: string;
    readonly  password: string;
-   readonly confirm_password: string;
-   readonly country: string;
+   readonly confirmPassword: string;
+   readonly countryId: string;
    readonly  dateOfBirth: Date;
    readonly phoneNo: string;
    readonly  image: string;

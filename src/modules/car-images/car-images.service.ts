@@ -4,6 +4,7 @@ import createCarImageInterface from "./interfaces/create-car-image.interface";
 import { carImageRepository } from "./car-image.repository";
 import { CarService } from "../car/car.service";
 import { carImage } from "./schemas/car-image.schema";
+import createCarInterface from "../car/interfaces/create-car.interface";
 
 @Injectable()
 export class CarImagesService {
@@ -12,14 +13,20 @@ export class CarImagesService {
 
 
       // create
-      async createCarImage(createCarImageInterface:createCarImageInterface)
+      async createCarImage(createCarImageInterface:createCarImageInterface,userId:string)
       {
           const carModel= await this.carService.getCarByCarId(createCarImageInterface.carId);
           if(!carModel)
           {
             throw new NotFoundException('invalid car id');
           }
-          return  await this.carImageRepository.createCarImage(createCarImageInterface);
+         const carImageData: createCarImageInterface & { userId: string } = {
+          ...createCarImageInterface,
+          userId: userId,
+
+        };
+
+        return  await this.carImageRepository.createCarImage(carImageData);
       }
 
 

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class UsersVerificationDocumentsSeeders1692620748823 implements MigrationInterface {
+export class UsersVerificationDocumentsSeeders1694413286153 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query("INSERT INTO users_verification_documents (type,title,priority,slug) VALUES('International','Passport','1','inter_pass')");
@@ -12,6 +12,8 @@ export class UsersVerificationDocumentsSeeders1692620748823 implements Migration
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query("DELETE FROM users_verification_documents WHERE slug IN ('inter_pass', 'inter_visa', 'inter_lice', 'inter_perm', 'loca_pass', 'loca_lice')");
+
     }
 
 }

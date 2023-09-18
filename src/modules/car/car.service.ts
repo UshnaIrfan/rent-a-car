@@ -12,7 +12,10 @@ import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
 import { updateCarDto } from "./dto/update-car.dto";
-
+import { UsersService } from "../users/users.service";
+import {pricingService} from "../pricing/pricing.service";
+import { pricingRepository } from "../pricing/pricing.repository";
+import { TimeService } from "../time/time.service";
 
 @Injectable()
 export class CarService {
@@ -26,6 +29,11 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverOptionService : DriverOptionService,
+
+              // private readonly pricingRepository: pricingRepository,
+              // private readonly timeService: TimeService,
+             //   private  readonly pricingService : pricingService
+
   ) {}
 
 
@@ -196,12 +204,30 @@ export class CarService {
 
           }
 
-
-          // // delete car history  by user id
-          // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
-          // {
-          //     const  car= await this.CarRepository.deleteCarHistory(userId);
-          //     return { message: "deleted successfully",car:car};
-          // }
         }
+
+
+
+      // // delete car history  by user id
+      // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
+      // {
+      //     const  car= await this.CarRepository.deleteCarHistory(userId);
+      //     return { message: "deleted successfully",car:car};
+      // }
+
+
+
+
+
+
+      // search and get  car id for booking purpose
+      async Search (carTypes:string,brands:string,transmission:string,color:string,minPrice:string,maxPrice:string)
+      {
+        const result= await this.CarRepository.Search(carTypes,brands,transmission,color,minPrice,maxPrice);
+        if(result.length==0)
+        {
+           throw new NotFoundException('not any data exit according to  your criteria')
+        }
+        return  result
+      }
 }

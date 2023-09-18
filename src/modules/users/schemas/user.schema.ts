@@ -46,7 +46,7 @@ export class User {
 
      @ApiProperty()
      @Column({nullable:true  })
-     country: string;
+     countryId: string;
 
 
      @ApiProperty()

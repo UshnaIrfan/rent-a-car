@@ -98,11 +98,6 @@ export class CarController {
 
 
 
-
-
-
-
-
     // // delete car history  by user id
     //   @ApiQuery({ name: 'userId', required: true })
     //   @Delete('history/:userId')
@@ -113,5 +108,21 @@ export class CarController {
     //   }
 
 
+
+
+
+     // search and get  car id for booking purpose
+      @ApiQuery({ name: 'carTypes', required: false })
+      @ApiQuery({ name: 'brands', required: false })
+      @ApiQuery({ name: 'transmission', required: false })
+      @ApiQuery({ name: 'color', required: false })
+      @ApiQuery({ name: 'minPrice', required: false })
+      @ApiQuery({ name: 'maxPrice', required: false })
+      @Get('')
+      async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
+        @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string)
+      {
+        return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice);
+      }
 
 }

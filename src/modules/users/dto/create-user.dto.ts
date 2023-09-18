@@ -21,7 +21,7 @@ export class CreateUserDto {
      @ApiProperty()
      @IsString()
      @IsNotEmpty()
-     country: string;
+     countryId: string;
 
 
      @ApiProperty()
@@ -58,7 +58,7 @@ export class CreateUserDto {
      @ApiProperty({required: true})
      @IsString()
      @IsNotEmpty()
-     confirm_password: string;
+     confirmPassword: string;
 
 
      @ApiProperty({ required: false, default: Role.CUSTOMER })

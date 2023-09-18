@@ -38,7 +38,7 @@ export class driver {
 
         @ApiProperty()
         @Column({nullable:true  })
-        country: string;
+        countryId: string;
 
 
 

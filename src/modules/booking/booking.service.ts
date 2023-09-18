@@ -18,6 +18,7 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
 import { UserDocumentsService } from "../user-documents/user-documents.service";
 import {timeRepository} from "../time/time.repository";
 import { TimeService } from "../time/time.service";
+import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
 
 
 @Injectable()
@@ -61,13 +62,13 @@ export class BookingService {
             }
           }
 
-          await this.timeRepository.getTimeById(createBookingInterface.pickupTimeId);
-          const timeIds = [createBookingInterface.pickupTimeId, createBookingInterface.dropoffTimeId];
-          const resultArray = await this.timeService.getTimesById(timeIds);
-          if (resultArray.length==0 || resultArray.length !== 2)
-          {
-               throw new BadRequestException(`invalid  time data`);
-          }
+          // await this.timeRepository.getTimeById(createBookingInterface.pickupTimeId);
+          // const timeIds = [createBookingInterface.pickupTimeId, createBookingInterface.dropoffTimeId];
+          // const resultArray = await this.timeService.getTimesById(timeIds);
+          // if (resultArray.length==0 || resultArray.length !== 2)
+          // {
+          //      throw new BadRequestException(`invalid  time data`);
+          // }
          const bookingData: createBookingInterface & { userId: string } = {
             ...createBookingInterface,
             userId: userId,
@@ -165,6 +166,19 @@ export class BookingService {
               fs.writeFileSync(savePath, pdfBuffer);
               return user;
         }
+
+
+
+
+       // update booking status
+        async updateBookingStatus (bookingId:string,body:updateBookingStatusDto):Promise<{ booking:booking; message: string }>
+        {
+            const booking = await this.bookingRepository.updateBookingStatus(bookingId,body);
+            return { message: " booking status updated successfully", booking};
+        }
+
+
+
 
 
 }
