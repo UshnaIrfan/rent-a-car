@@ -221,9 +221,9 @@ export class CarService {
 
 
       // search and get  car id for booking purpose
-      async Search (carTypes:string,brands:string,transmission:string,color:string,minPrice:string,maxPrice:string)
+      async Search (carTypes:string,brands:string,transmission:string,color:string,minPrice:string,maxPrice:string,area:string)
       {
-        const result= await this.CarRepository.Search(carTypes,brands,transmission,color,minPrice,maxPrice);
+        const result= await this.CarRepository.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
         if(result.length==0)
         {
            throw new NotFoundException('not any data exit according to  your criteria')

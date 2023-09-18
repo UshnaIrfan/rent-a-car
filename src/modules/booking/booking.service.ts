@@ -82,7 +82,7 @@ export class BookingService {
 
 
       // get booking data by user id
-      async getBookingDataByUserId (userId:string):Promise<CreateBookingDto[] >
+      async getBookingDataByUserId (userId:string):Promise<booking[] >
       {
           const user= await this.bookingRepository.getBookingDataByUserId(userId);
           if (user.length==0)
@@ -171,14 +171,24 @@ export class BookingService {
 
 
        // update booking status
-        async updateBookingStatus (bookingId:string,body:updateBookingStatusDto):Promise<{ booking:booking; message: string }>
+        async updateBookingStatus (body:updateBookingStatusDto,bookingId:string):Promise<{ booking:booking; message: string }>
         {
-            const booking = await this.bookingRepository.updateBookingStatus(bookingId,body);
+            const booking = await this.bookingRepository.updateBookingStatus(body,bookingId);
             return { message: " booking status updated successfully", booking};
         }
 
 
 
 
+      //get booking data by booking id
+      async getBookingDataByBookingId (bookingId:string):Promise<booking[] >
+      {
+        const result= await this.bookingRepository.getBookingDataByBookingId(bookingId);
+        if (result.length==0)
+        {
+          throw new NotFoundException('data not found');
+        }
+        return  result
+      }
 
 }

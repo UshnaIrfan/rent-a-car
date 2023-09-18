@@ -113,7 +113,7 @@ export class bookingRepository{
 
 
     // update booking status
-    async updateBookingStatus(bookingId: string, body: updateBookingStatusDto): Promise<booking| null>
+    async updateBookingStatus(body:updateBookingStatusDto,bookingId:string): Promise<booking| null>
     {
           validateUuid([bookingId]);
           const result = await this.bookingModel.findOne({ where: { id:bookingId}});
@@ -134,6 +134,15 @@ export class bookingRepository{
 
 
 
+
+      //get booking data by booking id
+      async getBookingDataByBookingId(bookingId: string):Promise<booking[] | null>
+      {
+        validateUuid([bookingId]);
+        const bookings = await this.bookingModel.find({ where: {id:bookingId },
+        });
+        return bookings;
+      }
 
 }
 

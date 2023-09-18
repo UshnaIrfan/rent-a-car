@@ -37,7 +37,20 @@ export class BookingController {
       @Get('history')
       async  getBookingHistory(@Query('userId') userId?: string):Promise<booking[]>
       {
+           console.log("history");
           return this.bookingService.getBookingHistory(userId);
+      }
+
+
+
+
+      //get booking data by booking id
+      @ApiQuery({ name: 'bookingId', required:true})
+      @Get('/bookingId')
+      async  getBookingDataByBookingId(@Query('bookingId')bookingId?: string )
+      {
+        console.log(" get data bookingId");
+        return this.bookingService.getBookingDataByBookingId(bookingId);
       }
 
 
@@ -45,8 +58,9 @@ export class BookingController {
       //get booking data by user id
       @getUserBookingDcorator()
       @Get('/:userId')
-      async  getBookingDataByUserId(@Param('userId') userId:string ):Promise<CreateBookingDto[] >
+      async  getBookingDataByUserId(@Param('userId') userId:string ):Promise<booking[] >
       {
+        console.log("userId");
         return this.bookingService.getBookingDataByUserId(userId);
       }
 
@@ -77,7 +91,7 @@ export class BookingController {
         @Patch('/:bookingId')
         async  updateBooking(@Param('bookingId') bookingId:string, @Body() body:UpdateBookingDto )
         {
-          console.log("booking id");
+          console.log(" update booking id");
           return this.bookingService.updateBooking(bookingId,body);
         }
 
@@ -159,13 +173,17 @@ export class BookingController {
 
 
       // update booking status
+      @ApiQuery({ name: 'bookingId', required:true})
       @Patch('/bookingId/:status')
-      async  updateBookingStatus(@Param('bookingId') bookingId:string, @Body() body:updateBookingStatusDto )
+      async  updateBookingStatus(@Body() body:updateBookingStatusDto ,@Query('bookingId')bookingId?: string )
       {
-        console.log("booking status");
-
-        return this.bookingService.updateBookingStatus(bookingId,body);
+          console.log("booking status");
+          return this.bookingService.updateBookingStatus(body,bookingId);
       }
+
+
+
+
 
 
 }

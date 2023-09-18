@@ -47,6 +47,7 @@ export class CarController {
         @Get('/user/:userId')
         async  getCarByUserId(@Param('userId') userId:string ):Promise<car[]>
         {
+          console.log("userId");
           return this.carService.getCarByUserId(userId);
         }
 
@@ -56,6 +57,7 @@ export class CarController {
         @Get('/car/:carId')
         async  getCarByCarId(@Param('carId') carId:string ):Promise<car>
         {
+            console.log("carId");
             return this.carService.getCarByCarId(carId);
         }
 
@@ -79,6 +81,7 @@ export class CarController {
         @Get('history')
         async  getCarHistory(@Query('userId') userId?: string, @Query('carId') carId?: string )
         {
+            console.log("history");
              return this.carService.getCarHistory(userId,carId);
         }
 
@@ -90,10 +93,6 @@ export class CarController {
         {
               return this.carService.updateCarByCarId(carId,body);
         }
-
-
-
-
 
 
 
@@ -118,11 +117,14 @@ export class CarController {
       @ApiQuery({ name: 'color', required: false })
       @ApiQuery({ name: 'minPrice', required: false })
       @ApiQuery({ name: 'maxPrice', required: false })
-      @Get('')
+      @ApiQuery({ name: 'area', required: false })
+      @Get('/booking/:CarId')
       async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
-        @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string)
+        @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
       {
-        return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice);
+
+        console.log("search");
+        return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
       }
 
 }

@@ -127,7 +127,7 @@ export class carRepository{
 
 
       // search and get  car id for booking purpose
-      async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string)
+      async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string,area:string)
       {
           let matchingCarIds: string[] = [];
           if (minPrice && maxPrice)
@@ -145,6 +145,7 @@ export class carRepository{
                 brandId: brands || undefined,
                 transmissionId: transmission || undefined,
                 colorId: color || undefined,
+                pickUpLocation: area || undefined,
               };
             }
 
