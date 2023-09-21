@@ -1,4 +1,10 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateCountryDto } from './create-country.dto';
+import { IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class UpdateCountryDto extends PartialType(CreateCountryDto) {}
+export class UpdateCountryDto  {
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    countryName: string;
+}

@@ -12,10 +12,7 @@ import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
 import { updateCarDto } from "./dto/update-car.dto";
-import { UsersService } from "../users/users.service";
-import {pricingService} from "../pricing/pricing.service";
-import { pricingRepository } from "../pricing/pricing.repository";
-import { TimeService } from "../time/time.service";
+
 
 @Injectable()
 export class CarService {
@@ -29,10 +26,6 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverOptionService : DriverOptionService,
-
-              // private readonly pricingRepository: pricingRepository,
-              // private readonly timeService: TimeService,
-             //   private  readonly pricingService : pricingService
 
   ) {}
 
@@ -148,7 +141,7 @@ export class CarService {
             const result= await this.CarRepository.getCarHistory(userId,carId);
             if (result.length==0)
             {
-              throw new NotFoundException(' data not found');
+              throw new NotFoundException('data not found');
             }
             return  result;
         }
@@ -223,11 +216,11 @@ export class CarService {
       // search and get  car id for booking purpose
       async Search (carTypes:string,brands:string,transmission:string,color:string,minPrice:string,maxPrice:string,area:string)
       {
-        const result= await this.CarRepository.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
-        if(result.length==0)
-        {
-           throw new NotFoundException('not any data exit according to  your criteria')
-        }
-        return  result
+          const result= await this.CarRepository.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
+          if(result.length==0)
+          {
+             throw new NotFoundException('not any data exit according to  your criteria')
+          }
+          return  result
       }
 }

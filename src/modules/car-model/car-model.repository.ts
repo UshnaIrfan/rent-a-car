@@ -5,7 +5,6 @@ import { carModel } from "./schemas/car-model.schema";
 import { CreateCarModelDto } from "./dto/create-car-model.dto";
 import { UpdateCarModelDto } from "./dto/update-car-model.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
 
 
 @Injectable()

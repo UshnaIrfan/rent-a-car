@@ -5,8 +5,6 @@ import {
       Patch,
       Param,
       Get,
-      UsePipes,
-      ParseUUIDPipe,
       Delete,
       Query,
       UseGuards, Req
@@ -111,20 +109,34 @@ export class CarController {
 
 
      // search and get  car id for booking purpose
-      @ApiQuery({ name: 'carTypes', required: false })
-      @ApiQuery({ name: 'brands', required: false })
-      @ApiQuery({ name: 'transmission', required: false })
-      @ApiQuery({ name: 'color', required: false })
-      @ApiQuery({ name: 'minPrice', required: false })
-      @ApiQuery({ name: 'maxPrice', required: false })
-      @ApiQuery({ name: 'area', required: false })
-      @Get('/booking/:CarId')
-      async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
-        @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
-      {
+     //  @ApiQuery({ name: 'carTypes', required: false })
+     //  @ApiQuery({ name: 'brands', required: false })
+     //  @ApiQuery({ name: 'transmission', required: false })
+     //  @ApiQuery({ name: 'color', required: false })
+     //  @ApiQuery({ name: 'minPrice', required: false })
+     //  @ApiQuery({ name: 'maxPrice', required: false })
+     //  @ApiQuery({ name: 'area', required: false })
+     //  @Get('/booking/:CarId')
+     //  async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
+     //    @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
+     //  {
+     //
+     //    console.log("search");
+     //    return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
+     //  }
 
-        console.log("search");
-        return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
-      }
 
+        @ApiQuery({ name: 'carTypes', required: false })
+        @ApiQuery({ name: 'brands', required: false })
+        @ApiQuery({ name: 'transmission', required: false })
+        @ApiQuery({ name: 'color', required: false })
+        @ApiQuery({ name: 'minPrice', required: false })
+        @ApiQuery({ name: 'maxPrice', required: false })
+        @ApiQuery({ name: 'area', required: false })
+        @Get('/booking/:CarId')
+        async Search(@Query('carTypes') carTypes?: string,@Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,@Query('minPrice') minPrice?: string,@Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
+        {
+            console.log("search");
+            return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
+        }
 }

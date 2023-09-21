@@ -32,9 +32,9 @@ export class UserDocumentsService {
 
 
           // user  document update
-          async updateDocument (id:string,documentStatus:string):Promise<UserDocuments>
+          async updateDocument (documentId:string,documentStatus:string):Promise<UserDocuments>
           {
-               return await this.usersDocumentRepository.updateDocument(id,documentStatus);
+               return await this.usersDocumentRepository.updateDocument(documentId,documentStatus);
           }
 
 

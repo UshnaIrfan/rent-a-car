@@ -5,14 +5,12 @@ import { car } from "./schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { updateCarDto } from "./dto/update-car.dto";
 import { pricing } from "../pricing/schemas/pricing.schema";
-import { pricingService } from "../pricing/pricing.service";
 
 
 @Injectable()
 export class carRepository{
   constructor(@InjectRepository(car) private  carModel: Repository<car>,
-              @InjectRepository(pricing) private  priceModel: Repository<pricing>,
-          //  private  readonly price:pricingService
+          //    @InjectRepository(pricing) private  priceModel: Repository<pricing>,
   ) {}
 
 
@@ -28,7 +26,7 @@ export class carRepository{
          {
             validateUuid([carId]);
             return   await  this.carModel.findOne({  where: { id:carId},
-             relations:['carImage']
+             relations:['pricing','carImage']
             });
         }
 
@@ -79,7 +77,7 @@ export class carRepository{
             }
            const results = await this.carModel.find({
            where: Object.keys(whereConditions).length !== 0 ? [whereConditions] : [],
-           relations: carId ? ['pricing', 'carImage', 'booking'] : ['pricing', 'carImage'], });
+           relations: carId ? ['User', 'carImage', 'booking'] : ['User', 'carImage'], });
            return results;
       }
 
@@ -127,44 +125,87 @@ export class carRepository{
 
 
       // search and get  car id for booking purpose
-      async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string,area:string)
-      {
-          let matchingCarIds: string[] = [];
-          if (minPrice && maxPrice)
-          {
-              const priceResults = await this.priceModel.find({
-              where: { price: Between(minPrice, maxPrice), }, });
-              matchingCarIds = priceResults.map((priceResult) => priceResult.carId);
-              console.log("price data", matchingCarIds);
-          }
+      // async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string,area:string)
+      // {
+      //     let matchingCarIds: string[] = [];
+      //     if (minPrice && maxPrice)
+      //     {
+      //         const priceResults = await this.priceModel.find({
+      //         where: { price: Between(minPrice, maxPrice), }, });
+      //         matchingCarIds = priceResults.map((priceResult) => priceResult.carId);
+      //         console.log("price data", matchingCarIds);
+      //     }
+      //
+      //       let whereConditions: any = {};
+      //       if (carTypes || brands || transmission || color) {
+      //         whereConditions = {
+      //           carTypeId: carTypes || undefined,
+      //           brandId: brands || undefined,
+      //           transmissionId: transmission || undefined,
+      //           colorId: color || undefined,
+      //           pickUpLocation: area || undefined,
+      //         };
+      //       }
+      //
+      //     const hasPriceFilter = matchingCarIds.length > 0 || (minPrice && maxPrice);
+      //     const where = {
+      //       ...whereConditions,
+      //       id: hasPriceFilter ? In(matchingCarIds) : undefined,
+      //     };
+      //
+      //     const results = await this.carModel.find({
+      //       where: Object.keys(where).length !== 0 ? where : undefined,
+      //       relations: ['carImage'],
+      //     });
+      //
+      //     if (!hasPriceFilter && Object.keys(whereConditions).length === 0) {
+      //       return null;
+      //     }
+      //     return results;
+      // }
+      //
 
-            let whereConditions: any = {};
-            if (carTypes || brands || transmission || color) {
-              whereConditions = {
-                carTypeId: carTypes || undefined,
-                brandId: brands || undefined,
-                transmissionId: transmission || undefined,
-                colorId: color || undefined,
-                pickUpLocation: area || undefined,
-              };
-            }
 
-          const hasPriceFilter = matchingCarIds.length > 0 || (minPrice && maxPrice);
-          const where = {
-            ...whereConditions,
-            id: hasPriceFilter ? In(matchingCarIds) : undefined,
+
+    async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string, area:string)
+    {
+          const query = this.carModel.createQueryBuilder('car')
+          .select(['car'])
+          .leftJoin('car.pricing', 'pricing')
+          .leftJoinAndSelect('car.carImage', 'image');
+
+          const whereConditions: Record<string, any> = {};
+          const filterParams: { [key: string]: string | undefined } = {
+          carTypeId: carTypes ||undefined,
+          brandId: brands || undefined,
+          transmissionId: transmission || undefined,
+          colorId: color || undefined,
+          pickUpLocation :area || undefined
           };
 
-          const results = await this.carModel.find({
-            where: Object.keys(where).length !== 0 ? where : undefined,
-            relations: ['carImage'],
-          });
-
-          if (!hasPriceFilter && Object.keys(whereConditions).length === 0) {
-            return null;
+          for (const [param, value] of Object.entries(filterParams)) {
+            if (value) {
+              whereConditions[param] = value;
+            }
           }
-          return results;
-      }
+
+          if (minPrice && maxPrice) {
+            query.andWhere('pricing.price BETWEEN :minPrice AND :maxPrice', {
+              minPrice: parseFloat(minPrice),
+              maxPrice: parseFloat(maxPrice),
+            });
+          }
+
+          if (Object.keys(whereConditions).length > 0) {
+            query.andWhere(whereConditions);
+          }
+
+          const result = await query.getMany();
+          return result;
+    }
+
+
+
 
 
 

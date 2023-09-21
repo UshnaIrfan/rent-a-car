@@ -95,4 +95,20 @@ export class UsersRepository {
 
 
 
+
+
+      // user roles  updated ( renter ,customer)
+      async rolesActive(userId: string, roles: string): Promise<User| null>
+      {
+          validateUuid([userId]);
+          const user = await this.userModel.findOne({ where: {id: userId } });
+          if (!user)
+          {
+            throw new NotFoundException('user not found');
+          }
+          user.roles = roles;
+          return this.userModel.save(user);
+      }
+
+
 }

@@ -4,7 +4,6 @@ import createCarImageInterface from "./interfaces/create-car-image.interface";
 import { carImageRepository } from "./car-image.repository";
 import { CarService } from "../car/car.service";
 import { carImage } from "./schemas/car-image.schema";
-import createCarInterface from "../car/interfaces/create-car.interface";
 
 @Injectable()
 export class CarImagesService {

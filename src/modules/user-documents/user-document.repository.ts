@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { createUserDocumentsDto } from "./dto/create-user-document.dto";
 import { UserDocuments } from "./schemas/userDocuments.schema";
+import { validateUuid } from "../../decorators/uuid.decorators";
 
 @Injectable()
 export class UsersDocumentRepository {
@@ -35,15 +36,16 @@ export class UsersDocumentRepository {
 
 
            // user  document update
-            async updateDocument(id:string,documentStatus:string):Promise<UserDocuments| null>
+            async updateDocument(documentId:string,documentStatus:string):Promise<UserDocuments| null>
             {
-                const user = await  this.userDocumentModel.findOne({ where: { userId:id}});
-                if (!user)
+                validateUuid([documentId]);
+                const result = await  this.userDocumentModel.findOne({ where: { id:documentId}});
+                if (!result)
                 {
-                  return null
+                  throw new NotFoundException('data not exit');
                 }
-                user.documentstatus = documentStatus;
-                return this.userDocumentModel.save(user);
+                result.documentstatus = documentStatus;
+                return this.userDocumentModel.save(result);
             }
 
 

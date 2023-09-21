@@ -28,6 +28,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MailService } from "../mail/mail.service";
 import { cacheRepository } from "../../cache/cache.repository";
 import { CountryService } from "../country/country.service";
+import userRolesUpdatedInterface from "./interfaces/user-roles-updated.interface";
 
 
 @Injectable()
@@ -179,22 +180,22 @@ export class AuthService {
 
 
            // user  document update
-            async isDocumentActive(userId:string,@Body() reqBody: userDocumentActiveInterface):Promise<{ message: string, updateResult:UserDocuments}>
+            async isDocumentActive(documentId:string,@Body() reqBody: userDocumentActiveInterface):Promise<{ message: string, updateResult:UserDocuments}>
             {
-                  await this.usersService.findUserById(userId);
-                  const updateResult =await this.UsersDocumentService.updateDocument(userId,reqBody.documentStatus);
+                  const updateResult =await this.UsersDocumentService.updateDocument(documentId,reqBody.documentStatus);
                   return { message: "document updated successfully", updateResult };
             }
 
 
 
 
-       //login
+         //login
         async login(user: User):Promise<JwtTokensInterface>
         {
 
             const result= await this.usersService.findUserById(user.id);
             const unapprovedDocuments = result.UserDocuments.filter(doc => doc.documentstatus === 'pending' || doc.documentstatus === 'rejected');
+            console.log("unapprovedDocuments",unapprovedDocuments);
             if (unapprovedDocuments.length > 0)
             {
               const unapprovedDocumentTitles = unapprovedDocuments.map(doc => doc.titleName).join(', ');
@@ -583,6 +584,7 @@ export class AuthService {
                 }
                 catch (error)
                 {
+                  console.log(error);
                      throw new BadRequestException('Failed to send OTP');
                 }
 
@@ -607,6 +609,16 @@ export class AuthService {
             return user;
         }
 
+
+
+
+
+        // user roles  updated ( renter ,customer)
+        async rolesActive(userId:string,@Body() reqBody: userRolesUpdatedInterface):Promise<User>
+        {
+            const result = await this.usersService.rolesActive(userId, reqBody.roles);
+            return result
+        }
 
 
   //apple

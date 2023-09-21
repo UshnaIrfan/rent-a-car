@@ -18,6 +18,7 @@ import { userDocumentActiveDto } from "./dto/user-document-active.dto";
 import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import { SwaggerGetUser } from "./swagger-decorator/get-user-decorator";
 import { SwaggerGetAllUsers } from "./swagger-decorator/get-all-users-decorator";
+import { userRolesUpdatedDto } from "./dto/user-roles-updated.dto";
 
 
 @ApiTags('Auth')
@@ -112,10 +113,10 @@ export class AuthController {
 
         // user  document update
         @ApiBody({type:userDocumentActiveDto})
-        @Patch('document_active/:userId')
-        async isDocumentActive(@Param('userId') userId:string,@Body() UserDocumentActiveDto: userDocumentActiveDto):Promise<{ message: string, updateResult:UserDocuments}>
+        @Patch('document_active/:documentId')
+        async isDocumentActive(@Param('documentId') documentId:string,@Body() UserDocumentActiveDto: userDocumentActiveDto):Promise<{ message: string, updateResult:UserDocuments}>
         {
-             return this.authService.isDocumentActive(userId,UserDocumentActiveDto);
+             return this.authService.isDocumentActive(documentId,UserDocumentActiveDto);
         }
 
 
@@ -240,6 +241,15 @@ export class AuthController {
          }
 
 
+
+
+          // user roles  updated ( renter ,customer)
+          @ApiBody({type:userRolesUpdatedDto})
+          @Patch('user_roles/:userId')
+          async rolesActive(@Param('userId') userId:string,@Body() body: userRolesUpdatedDto):Promise<User>
+          {
+            return this.authService.rolesActive(userId,body);
+          }
 
 
 

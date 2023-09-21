@@ -13,8 +13,7 @@ import { driver } from "../../driver/schemas/driver.schema";
 
 
 export enum bookingStatus {
-      PENDING= 'pending',
-      COMPLETED= 'completed',
+      BOOKED= 'booked',
       CANCELLED = 'cancelled',
 }
 
@@ -61,16 +60,16 @@ export class  booking {
 
       @ApiProperty()
       @Column({nullable:true})
-      pickupTimeId: string;
+      pickupTime: string;
 
 
       @ApiProperty()
       @Column({nullable:true})
-      dropoffTimeId: string;
+      dropoffTime: string;
 
 
       @ApiProperty()
-      @Column({  enum: bookingStatus , default: bookingStatus.PENDING  })
+      @Column({  enum: bookingStatus , default: bookingStatus.BOOKED  })
       bookingStatus: string;
 
 

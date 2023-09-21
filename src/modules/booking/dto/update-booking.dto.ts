@@ -39,11 +39,11 @@ export class UpdateBookingDto {
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        pickupTimeId: string;
+        pickupTime: string;
 
 
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        dropoffTimeId: string;
+        dropoffTime: string;
 }

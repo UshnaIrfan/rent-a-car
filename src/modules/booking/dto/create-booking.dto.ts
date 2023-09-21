@@ -41,17 +41,17 @@ export class CreateBookingDto {
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        pickupTimeId: string;
+        pickupTime: string;
 
 
 
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        dropoffTimeId: string;
+        dropoffTime: string;
 
 
-        @ApiProperty({ type: String, enum: bookingStatus, default:bookingStatus.PENDING })
+        @ApiProperty({ type: String, enum: bookingStatus, default:bookingStatus.BOOKED })
         @IsString()
         @IsNotEmpty()
         bookingStatus:string;

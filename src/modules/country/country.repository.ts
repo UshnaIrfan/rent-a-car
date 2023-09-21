@@ -3,8 +3,8 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { country } from "./schemas/country.schema";
 import { CreateCountryDto } from "./dto/create-country.dto";
-import { carType } from "../car-type/schemas/car-type.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
+import { UpdateCountryDto } from "./dto/update-country.dto";
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class countryRepository{
 
 
         // create
-        async createCountry(createCountryDto: CreateCountryDto): Promise<country| null>
+        async createCountry(createCountryDto: CreateCountryDto):Promise<country| null>
         {
           return this.countryModel.save(createCountryDto);
         }
@@ -36,13 +36,46 @@ export class countryRepository{
 
 
 
-       // get  country  by id
-      async getCountryById(countryId:string): Promise<country| null>
-      {
-          validateUuid([countryId]);
-          const result = await this.countryModel.findOne({ where: {  id:countryId}});
-          return result
-      }
+         // get  country  by id
+        async getCountryById(countryId:string): Promise<country| null>
+        {
+            validateUuid([countryId]);
+            const result = await this.countryModel.findOne({ where: {  id:countryId}});
+            return result
+        }
+
+
+
+
+        // update country
+        async updateCountry(countryId: string, body: UpdateCountryDto): Promise<country| null>
+        {
+            validateUuid([countryId]);
+            const result = await this.countryModel.findOne({ where: { id:countryId}});
+            if (!result)
+            {
+              throw new NotFoundException('country not found');
+            }
+            result.countryName = body.countryName;
+            const updatedResult = await this.countryModel.save(result);
+            return updatedResult;
+        }
+
+
+
+
+
+        // delete  country
+        async deleteCountry(countryId:string): Promise<country| null>
+        {
+            validateUuid([countryId]);
+            const result = await this.countryModel.findOne({ where: { id:countryId}});
+            if (!result)
+            {
+              throw new NotFoundException('car model not found');
+            }
+            return await this.countryModel.remove(result);
+        }
 
 }
 

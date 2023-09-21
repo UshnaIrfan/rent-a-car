@@ -31,7 +31,7 @@ export class bookingRepository{
       {
           validateUuid([userId]);
           const bookings = await this.bookingModel.find({ where: {userId },
-           relations: ['car'] });
+           relations: ['car','driver'] });
            return bookings;
       }
 
@@ -138,10 +138,11 @@ export class bookingRepository{
       //get booking data by booking id
       async getBookingDataByBookingId(bookingId: string):Promise<booking[] | null>
       {
-        validateUuid([bookingId]);
-        const bookings = await this.bookingModel.find({ where: {id:bookingId },
-        });
-        return bookings;
+          validateUuid([bookingId]);
+          const bookings = await this.bookingModel.find({ where: {id:bookingId },
+            relations:['User','car','driver']
+          });
+          return bookings;
       }
 
 }

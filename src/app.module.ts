@@ -52,8 +52,8 @@ import { BookingModule } from './modules/booking/booking.module';
 import { booking } from "./modules/booking/schemas/booking.schema";
 import { MailModule } from './modules/mail/mail.module';
 import { languages } from "./modules/languages/schemas/languages.schema";
-import { PackagesModule } from './modules/packages/packages.module';
-import { packages } from "./modules/packages/schemas/packages.schema";
+// import { PackagesModule } from './modules/packages/packages.module';
+// import { packages } from "./modules/packages/schemas/packages.schema";
 import { CountryModule } from './modules/country/country.module';
 import { country } from "./modules/country/schemas/country.schema";
 
@@ -83,7 +83,7 @@ import { country } from "./modules/country/schemas/country.schema";
     LanguagesModule,
     BookingModule,
     MailModule,
-    PackagesModule,
+  //  PackagesModule,
     CountryModule,
 
 
@@ -140,7 +140,7 @@ import { country } from "./modules/country/schemas/country.schema";
         username: configService.get("DATABASE_USERNAME"),
         password: configService.get("DATABASE_PASSWORD"),
         database: configService.get("DATABASE_NAME"),
-        entities: [country,packages,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [country,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]

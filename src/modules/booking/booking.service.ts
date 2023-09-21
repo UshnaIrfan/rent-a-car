@@ -1,5 +1,4 @@
 import { BadRequestException, Body, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
-import { CreateBookingDto } from './dto/create-booking.dto';
 import createBookingInterface from "./interfaces/create-booking.interface";
 import { bookingRepository } from "./booking.repository";
 import { JwtService } from "@nestjs/jwt";
@@ -8,10 +7,9 @@ import { CarService } from "../car/car.service";
 import { driverRepository } from "../driver/driver.repository";
 import { booking } from "./schemas/booking.schema";
 import { LanguagesService } from "../languages/languages.service";
-import { PackagesService } from "../packages/packages.service";
+//import { PackagesService } from "../packages/packages.service";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
 import * as path from 'path';
-import * as handlebars from "handlebars";
 import * as fs from "fs";
 import { userBookingDocumentsDto } from "./dto/user-booking-documents.dto";
 import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
@@ -29,7 +27,7 @@ export class BookingService {
               private usersService: UsersService,
               private readonly carService: CarService,
               private readonly languagesService: LanguagesService,
-              private readonly packagesService: PackagesService,
+            //  private readonly packagesService: PackagesService,
               private readonly DriverRepository:driverRepository,
               private readonly timeRepository:timeRepository,
               private readonly timeService: TimeService,
@@ -47,11 +45,11 @@ export class BookingService {
             throw new NotFoundException('car  not exist');
           }
 
-          const Package = await this.packagesService.getPackagesById(createBookingInterface.packagesId);
-          if(!Package)
-          {
-            throw new NotFoundException('package not found');
-          }
+          // const Package = await this.packagesService.getPackagesById(createBookingInterface.packagesId);
+          // if(!Package)
+          // {
+          //   throw new NotFoundException('package not found');
+          // }
 
           if(createBookingInterface.driverId !==null)
           {

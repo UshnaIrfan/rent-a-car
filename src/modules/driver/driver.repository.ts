@@ -9,8 +9,6 @@ import { UserVerificationDocuments } from "../user-verifications-documents/schem
 import * as path from 'path';
 import * as fs from "fs";
 import { validateUuid } from "../../decorators/uuid.decorators";
-import { car } from "../car/schemas/car.schema";
-import { updateCarDto } from "../car/dto/update-car.dto";
 import { updateDriverDto } from "./dto/update-driver.dto";
 
 
@@ -113,7 +111,8 @@ export class driverRepository{
         // get  driver By   user Id
         async getDriverHistory(userId:string,driverId:string)
         {
-            let whereConditions: any = {};
+          validateUuid([userId,driverId]);
+          let whereConditions: any = {};
             if (userId || driverId)
             {
               whereConditions = {

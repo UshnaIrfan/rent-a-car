@@ -11,6 +11,7 @@ import { carModel } from "./schemas/car-model.schema";
 export class CarModelController {
   constructor(private readonly carModelService: CarModelService) {}
 
+
         // create
         @ApiBody({type:CreateCarModelDto})
         @Post('create')

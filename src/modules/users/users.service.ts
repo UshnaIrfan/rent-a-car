@@ -52,7 +52,6 @@ export class UsersService {
 
 
 
-
             // get all users
             async getAllUser(): Promise<User[] | null>
             {
@@ -87,6 +86,12 @@ export class UsersService {
             }
 
 
+
+            // user roles  updated ( renter ,customer)
+            async rolesActive(userId: string,roles:string):Promise<User>
+            {
+              return this.usersRepository.rolesActive(userId,roles);
+            }
 
 
 

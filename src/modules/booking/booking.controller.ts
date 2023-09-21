@@ -47,7 +47,7 @@ export class BookingController {
       //get booking data by booking id
       @ApiQuery({ name: 'bookingId', required:true})
       @Get('/bookingId')
-      async  getBookingDataByBookingId(@Query('bookingId')bookingId?: string )
+      async  getDataByBookingId(@Query('bookingId')bookingId?: string )
       {
         console.log(" get data bookingId");
         return this.bookingService.getBookingDataByBookingId(bookingId);

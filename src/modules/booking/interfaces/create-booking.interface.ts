@@ -4,8 +4,8 @@ export default interface createBookingInterface {
   readonly driverId: string;
   readonly pickupDate: Date;
   readonly dropoffDate: Date;
-  readonly pickupTimeId: string;
-  readonly dropoffTimeId: string;
+  readonly pickupTime: string;
+  readonly dropoffTime: string;
   readonly bookingStatus: string;
 
 
