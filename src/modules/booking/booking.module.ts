@@ -37,9 +37,9 @@ import { baggageOption } from "../baggage-option/schemas/baggage-option.schema";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { seatsCapacityRepository } from "../seats-capacity/seats-capacity.repository";
 import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-import { DriverOptionService } from "../driver-option/driver-option.service";
-import { driverOptionRepository } from "../driver-option/driver-option.repository";
-import { driverOption } from "../driver-option/schemas/driver-option.schema";
+// import { DriverOptionService } from "../driver-option/driver-option.service";
+// import { driverOptionRepository } from "../driver-option/driver-option.repository";
+// import { driverOption } from "../driver-option/schemas/driver-option.schema";
 import { driver } from "../driver/schemas/driver.schema";
 import { driverRepository } from "../driver/driver.repository";
 import { DriverService } from "../driver/driver.service";
@@ -65,13 +65,13 @@ import { pricingRepository } from "../pricing/pricing.repository";
 import { pricing } from "../pricing/schemas/pricing.schema";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([pricing,country,time,languages,UserVerificationDocuments,UserDocuments,driver,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,booking,User,car]),
+  imports: [TypeOrmModule.forFeature([pricing,country,time,languages,UserVerificationDocuments,UserDocuments,driver,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,booking,User,car]),
     CacheModule.register({
     store: redisStore,
     uri: process.env.REDIS_URL,
   })
   ],
   controllers: [BookingController],
-  providers: [pricingRepository ,TimeService,timeRepository,countryRepository,CountryService,timeRepository,languagesRepository,LanguagesService,userVerificationsDocumentsService,userVerifcationDocumentsRepository,UserDocumentsService,UsersDocumentRepository,DriverService,driverRepository,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,BrandService,brandRepository,carRepository,CarService,UsersRepository,UsersService,JwtService,BookingService,bookingRepository],
+  providers: [pricingRepository ,TimeService,timeRepository,countryRepository,CountryService,timeRepository,languagesRepository,LanguagesService,userVerificationsDocumentsService,userVerifcationDocumentsRepository,UserDocumentsService,UsersDocumentRepository,DriverService,driverRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,BrandService,brandRepository,carRepository,CarService,UsersRepository,UsersService,JwtService,BookingService,bookingRepository],
 })
 export class BookingModule {}

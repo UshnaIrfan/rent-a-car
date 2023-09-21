@@ -84,10 +84,10 @@ export class updateCarDto {
 
 
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  driverOptionId: string ;
+  // @ApiProperty()
+  // @IsString()
+  // @IsNotEmpty()
+  // driverOptionId: string ;
 
 
   @ApiProperty()

@@ -84,11 +84,13 @@ export class createCarDto {
 
 
 
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    driverOptionId: string ;
+    // @ApiProperty()
+    // @IsString()
+    // @IsNotEmpty()
+    // driverOptionId: string ;
 
+    @ApiProperty({ type: [String]})
+    driverIds: string[];
 
     @ApiProperty()
     @IsString()

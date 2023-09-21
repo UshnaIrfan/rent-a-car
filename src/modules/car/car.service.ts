@@ -9,9 +9,10 @@ import { TransmissionService } from "../transmission/transmission.service";
 import { CarTypeService } from "../car-type/car-type.service";
 import { BaggageOptionService } from "../baggage-option/baggage-option.service";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
-import { DriverOptionService } from "../driver-option/driver-option.service";
+// import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
 import { updateCarDto } from "./dto/update-car.dto";
+import { DriverService } from "../driver/driver.service";
 
 
 @Injectable()
@@ -25,14 +26,16 @@ export class CarService {
               private  transmissionService : TransmissionService,
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
-              private  driverOptionService : DriverOptionService,
+              private  driverService : DriverService,
+
+              //private  driverOptionService : DriverOptionService,
 
   ) {}
 
 
 
       // create
-      async createCar(CreateCarInterface:createCarInterface,userId:string): Promise<car>
+      async createCar(CreateCarInterface:createCarInterface,userId:string)
       {
           const carBrand= await this.brandService.getCarBrandById(CreateCarInterface.brandId);
           if(!carBrand)
@@ -78,11 +81,11 @@ export class CarService {
             throw new NotFoundException('car seats capacity not exist');
           }
 
-          const carDriverOption= await this.driverOptionService.getCarDriverOptionById(CreateCarInterface.driverOptionId);
-          if(!carDriverOption)
-          {
-            throw new NotFoundException('car driver option not exist');
-          }
+          // const carDriverOption= await this.driverOptionService.getCarDriverOptionById(CreateCarInterface.driverOptionId);
+          // if(!carDriverOption)
+          // {
+          //   throw new NotFoundException('car driver option not exist');
+          // }
 
 
           const carData: createCarInterface & { userId: string } = {
@@ -91,7 +94,24 @@ export class CarService {
 
           };
 
-          return  await this.CarRepository.createCar(carData);
+         // return  await this.CarRepository.createCar(carData);
+       const  result = await this.CarRepository.createCar(carData);
+
+        console.log(result);
+        result.driverIds = [];
+        const driverIDs = CreateCarInterface.driverIds;
+        for (const driverID of driverIDs)
+        {
+          const car = await this.driverService.findDriverByDriverId(driverID);
+          if (!car)
+          {
+            throw new NotFoundException('does not exist');
+          }
+          result.driverIds.push(car);
+        }
+
+        await this.CarRepository.driverCars(result);
+        return { record: result };
       }
 
 
@@ -188,26 +208,16 @@ export class CarService {
               throw new NotFoundException('car seats capacity not exist');
             }
 
-            const carDriverOption = await this.driverOptionService.getCarDriverOptionById(body.driverOptionId);
-            if (!carDriverOption) {
-              throw new NotFoundException('car driver option not exist');
-            }
+            // const carDriverOption = await this.driverOptionService.getCarDriverOptionById(body.driverOptionId);
+            // if (!carDriverOption) {
+            //   throw new NotFoundException('car driver option not exist');
+            // }
             const car = await this.CarRepository.updateCarByCarId(carId, body);
             return { message: "updated successfully", car };
 
           }
 
         }
-
-
-
-      // // delete car history  by user id
-      // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
-      // {
-      //     const  car= await this.CarRepository.deleteCarHistory(userId);
-      //     return { message: "deleted successfully",car:car};
-      // }
-
 
 
 
@@ -223,4 +233,35 @@ export class CarService {
           }
           return  result
       }
+
+
+
+
+  // Get package  detail by car id
+  async getPackageByCarId (carId:string):Promise<car>
+  {
+    const result= await this.CarRepository.getPackageByCarId(carId);
+    if(!result)
+    {
+      throw new NotFoundException('data not found');
+    }
+    return  result;
+  }
+
+
+
+
+
+
+
+  // // delete car history  by user id
+  // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
+  // {
+  //     const  car= await this.CarRepository.deleteCarHistory(userId);
+  //     return { message: "deleted successfully",car:car};
+  // }
+
+
+
+
 }

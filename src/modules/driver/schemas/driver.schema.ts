@@ -5,12 +5,13 @@ import {
         CreateDateColumn,
         UpdateDateColumn,
         OneToMany,
-        ManyToOne, JoinColumn
+        ManyToOne, JoinColumn, ManyToMany, JoinTable
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import {UserDocuments} from "../../user-documents/schemas/userDocuments.schema";
 import {User} from "../../users/schemas/user.schema"
 import { booking } from "../../booking/schemas/booking.schema";
+import { car } from "../../car/schemas/car.schema";
 
 @Entity({ name: 'drivers' })
 export class driver {
@@ -97,6 +98,14 @@ export class driver {
 
 
 
+        //todo
+        // @ApiProperty({ type: () => [car] })
+        // @ManyToOne(() => car, car => car.driver)
+        // car: car[];
+        @ApiProperty({ type: () => [car] })
+        @ManyToMany(() => car, seller => seller.driverIds)
+        @JoinTable()
+        car: car[];
 
 
 }

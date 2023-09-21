@@ -34,9 +34,9 @@ import { baggageOptionRepository } from "../baggage-option/baggage-option.reposi
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { seatsCapacityRepository } from "../seats-capacity/seats-capacity.repository";
 import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-import { DriverOptionService } from "../driver-option/driver-option.service";
-import { driverOptionRepository } from "../driver-option/driver-option.repository";
-import { driverOption } from "../driver-option/schemas/driver-option.schema";
+// import { DriverOptionService } from "../driver-option/driver-option.service";
+// import { driverOptionRepository } from "../driver-option/driver-option.repository";
+// import { driverOption } from "../driver-option/schemas/driver-option.schema";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { UsersRepository } from "../users/users.respository";
@@ -45,17 +45,33 @@ import { CacheModule } from "@nestjs/common/cache";
 import * as redisStore from "cache-manager-redis-store";
 import { CarModule } from "../car/car.module";
 import { TimeModule } from "../time/time.module";
+import { DriverService } from "../driver/driver.service";
+import { driverRepository } from "../driver/driver.repository";
+import { driver } from "../driver/schemas/driver.schema";
+import { UsersDocumentRepository } from "../user-documents/user-document.repository";
+import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
+import {
+  userVerifcationDocumentsRepository
+} from "../user-verifications-documents/user-verification-documents.repository";
+import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
+import { countryRepository } from "../country/country.repository";
+import { country } from "../country/schemas/country.schema";
+import { CountryService } from "../country/country.service";
+import { UserDocumentsService } from "../user-documents/user-documents.service";
+import {
+  userVerificationsDocumentsService
+} from "../user-verifications-documents/user-verifications-documents.service";
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User,driverOption,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),
+  imports: [TypeOrmModule.forFeature([country,UserVerificationDocuments,UserDocuments,driver,User,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,time,pricing,car]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,
     }),
     ],
   controllers: [PricingController],
-  providers: [pricingRepository,pricingService,timeRepository,TimeService,UsersRepository,UsersService,JwtService,DriverOptionService,driverOptionRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService],
+  providers: [userVerificationsDocumentsService,UserDocumentsService,CountryService,countryRepository,userVerifcationDocumentsRepository,UsersDocumentRepository,driverRepository,DriverService,pricingRepository,pricingService,timeRepository,TimeService,UsersRepository,UsersService,JwtService,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,brandRepository,BrandService,carRepository,CarService],
   exports: [pricingService,pricingRepository],
 
 })

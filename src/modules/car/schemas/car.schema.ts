@@ -3,13 +3,14 @@ import {
     Column,
     PrimaryGeneratedColumn,
     CreateDateColumn,
-    UpdateDateColumn, OneToMany, ManyToOne, JoinColumn
+    UpdateDateColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { pricing } from "../../pricing/schemas/pricing.schema";
 import { User } from "../../users/schemas/user.schema";
 import { carImage } from "../../car-images/schemas/car-image.schema";
 import { booking } from "../../booking/schemas/booking.schema";
+import { driver } from "../../driver/schemas/driver.schema";
 
 
 @Entity({ name: 'cars' })
@@ -92,9 +93,15 @@ export class car {
 
 
 
-    @ApiProperty()
-    @Column({nullable:true})
-    driverOptionId: string;
+    // @ApiProperty()
+    // @Column({nullable:true})
+    // driverOptionId: string;
+
+
+
+    @ApiProperty({ type: () => [driver] })
+    @ManyToMany(() => driver, driver => driver.car)
+    driverIds: any[];
 
 
 

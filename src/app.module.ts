@@ -31,10 +31,10 @@ import { TransmissionModule } from './modules/transmission/transmission.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { BaggageOptionModule } from './modules/baggage-option/baggage-option.module';
 import { SeatsCapacityModule } from './modules/seats-capacity/seats-capacity.module';
-import { DriverOptionModule } from './modules/driver-option/driver-option.module';
+//import { DriverOptionModule } from './modules/driver-option/driver-option.module';
 import { year } from "./modules/year/schemas/year.schema";
 import { seatsCapacity } from "./modules/seats-capacity/schemas/seats-capacity.schema";
-import { driverOption } from "./modules/driver-option/schemas/driver-option.schema";
+//import { driverOption } from "./modules/driver-option/schemas/driver-option.schema";
 import { color } from "./modules/color/schemas/color.schema";
 import { carType } from "./modules/car-type/schemas/car-type.schema";
 import { carModel } from "./modules/car-model/schemas/car-model.schema";
@@ -52,8 +52,6 @@ import { BookingModule } from './modules/booking/booking.module';
 import { booking } from "./modules/booking/schemas/booking.schema";
 import { MailModule } from './modules/mail/mail.module';
 import { languages } from "./modules/languages/schemas/languages.schema";
-// import { PackagesModule } from './modules/packages/packages.module';
-// import { packages } from "./modules/packages/schemas/packages.schema";
 import { CountryModule } from './modules/country/country.module';
 import { country } from "./modules/country/schemas/country.schema";
 
@@ -77,7 +75,6 @@ import { country } from "./modules/country/schemas/country.schema";
     CarTypeModule,
     BaggageOptionModule,
     SeatsCapacityModule,
-    DriverOptionModule,
     TimeModule,
     CarImagesModule,
     LanguagesModule,
@@ -140,7 +137,7 @@ import { country } from "./modules/country/schemas/country.schema";
         username: configService.get("DATABASE_USERNAME"),
         password: configService.get("DATABASE_PASSWORD"),
         database: configService.get("DATABASE_NAME"),
-        entities: [country,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,driverOption,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
+        entities: [country,languages,booking,carImage,pricing,time,transmission,baggageOption,brand,carModel,carType,color,seatsCapacity,year,User,UserDocuments,UserVerificationDocuments,car,driver],
         synchronize: true,
       }),
       inject: [ConfigService]

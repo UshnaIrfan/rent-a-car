@@ -33,8 +33,7 @@ export class CarController {
         @Post('create')
         @Roles(Role.RENTER)
         @UseGuards(UserAuthGuard)
-        async create(@Body() CreateCarDto: createCarDto,@Req() request: any): Promise<car>
-        {
+        async create(@Body() CreateCarDto: createCarDto,@Req() request: any){
             return this.carService.createCar(CreateCarDto,request.user.id);
         }
 
@@ -50,9 +49,20 @@ export class CarController {
         }
 
 
+        // Get car  history by user id and car id
+        @getCarHistoryRenterDecorators()
+        @ApiQuery({ name: 'userId', required: true })
+        @ApiQuery({ name: 'carId', required: false })
+        @Get('/:history')
+        async  getCarHistory(@Query('userId') userId?: string, @Query('carId') carId?: string )
+        {
+          console.log("history");
+          return this.carService.getCarHistory(userId,carId);
+        }
+
 
         // Get car by car id
-        @Get('/car/:carId')
+        @Get('detail/:carId')
         async  getCarByCarId(@Param('carId') carId:string ):Promise<car>
         {
             console.log("carId");
@@ -65,6 +75,7 @@ export class CarController {
         @Delete('/:carId')
         async  deleteCarById(@Param('carId') carId:string )
         {
+          console.log("delete car id");
           return this.carService.deleteCarById(carId);
         }
 
@@ -72,16 +83,6 @@ export class CarController {
 
 
 
-        // Get car  history by user id and car id
-        @getCarHistoryRenterDecorators()
-        @ApiQuery({ name: 'userId', required: true })
-        @ApiQuery({ name: 'carId', required: false })
-        @Get('history')
-        async  getCarHistory(@Query('userId') userId?: string, @Query('carId') carId?: string )
-        {
-            console.log("history");
-             return this.carService.getCarHistory(userId,carId);
-        }
 
 
         //update car by  id
@@ -89,43 +90,14 @@ export class CarController {
         @Patch('/:carId')
         async  updateCarByCarId(@Param('carId') carId:string, @Body() body :updateCarDto)
         {
+              console.log("updated car id");
               return this.carService.updateCarByCarId(carId,body);
         }
 
 
 
 
-    // // delete car history  by user id
-    //   @ApiQuery({ name: 'userId', required: true })
-    //   @Delete('history/:userId')
-    //   async  deleteCarHistory(@Query('userId') userId: string )
-    //   {
-    //         console.log(" delete history")
-    //         return this.carService.deleteCarHistory(userId);
-    //   }
-
-
-
-
-
-     // search and get  car id for booking purpose
-     //  @ApiQuery({ name: 'carTypes', required: false })
-     //  @ApiQuery({ name: 'brands', required: false })
-     //  @ApiQuery({ name: 'transmission', required: false })
-     //  @ApiQuery({ name: 'color', required: false })
-     //  @ApiQuery({ name: 'minPrice', required: false })
-     //  @ApiQuery({ name: 'maxPrice', required: false })
-     //  @ApiQuery({ name: 'area', required: false })
-     //  @Get('/booking/:CarId')
-     //  async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
-     //    @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
-     //  {
-     //
-     //    console.log("search");
-     //    return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
-     //  }
-
-
+        // search and get  car id for booking purpose
         @ApiQuery({ name: 'carTypes', required: false })
         @ApiQuery({ name: 'brands', required: false })
         @ApiQuery({ name: 'transmission', required: false })
@@ -139,4 +111,53 @@ export class CarController {
             console.log("search");
             return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
         }
+
+
+
+
+      // Get package  detail by car id
+      @Get('/package/:carId')
+      async  getPackageByCarId(@Param('carId') carId:string )
+      {
+            console.log("package detail");
+            return this.carService.getPackageByCarId(carId);
+      }
+
+
+
+
+
+
+
+
+      // // delete car history  by user id
+      //   @ApiQuery({ name: 'userId', required: true })
+      //   @Delete('history/:userId')
+      //   async  deleteCarHistory(@Query('userId') userId: string )
+      //   {
+      //         console.log(" delete history")
+      //         return this.carService.deleteCarHistory(userId);
+      //   }
+
+
+
+
+
+      //  @ApiQuery({ name: 'carTypes', required: false })
+      //  @ApiQuery({ name: 'brands', required: false })
+      //  @ApiQuery({ name: 'transmission', required: false })
+      //  @ApiQuery({ name: 'color', required: false })
+      //  @ApiQuery({ name: 'minPrice', required: false })
+      //  @ApiQuery({ name: 'maxPrice', required: false })
+      //  @ApiQuery({ name: 'area', required: false })
+      //  @Get('/booking/:CarId')
+      //  async Search(@Query('carTypes') carTypes?: string, @Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,
+      //    @Query('minPrice') minPrice?: string, @Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
+      //  {
+      //
+      //    console.log("search");
+      //    return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
+      //  }
+
+
 }

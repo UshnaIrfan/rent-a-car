@@ -21,7 +21,7 @@ import { CountryService } from "../country/country.service";
 import { country } from "../country/schemas/country.schema";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([country,UserDocuments,driver,User,UserVerificationDocuments]),
+  imports: [TypeOrmModule.forFeature([country,country,UserDocuments,driver,User,UserVerificationDocuments]),
     CacheModule.register({
       store: redisStore,
       uri: process.env.REDIS_URL,

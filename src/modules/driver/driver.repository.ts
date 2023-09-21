@@ -48,7 +48,7 @@ export class driverRepository{
         async findDriverByDriverId(driverId: string): Promise<driver | null>
         {
               validateUuid([driverId]);
-              const driver = await this.DriverModel.findOne({ where: { id: driverId }, relations: ['UserDocuments'] });
+              const driver = await this.DriverModel.findOne({ where: { id: driverId } });
               if (!driver)
               {
                 throw new NotFoundException('Driver not found');
@@ -165,7 +165,6 @@ export class driverRepository{
               const updatedResult = await this.DriverModel.save(result);
               return updatedResult;
         }
-
 
 
 

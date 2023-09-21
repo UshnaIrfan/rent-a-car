@@ -11,7 +11,9 @@ export default interface createCarInterface {
   readonly  chassyNo: string;
   readonly numberPlate: string;
   readonly  securityAmount: string;
-  readonly driverOptionId: string;
+  readonly  driverIds: string[];
+
+  //readonly driverOptionId: string;
   readonly  description: string;
   readonly latitude: string;
   readonly  longitude: string;

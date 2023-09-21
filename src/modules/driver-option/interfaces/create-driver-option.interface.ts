@@ -1,3 +1,3 @@
-export default interface createDriverOptionInterface {
-  readonly driverOption: string;
-}
+// export default interface createDriverOptionInterface {
+//   readonly driverOption: string;
+// }

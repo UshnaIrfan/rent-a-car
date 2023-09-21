@@ -16,6 +16,7 @@ export default  new DataSource({
      database: configService.get('DATABASE_NAME'),
      entities: ['./src/**/schemas/*.schema{.ts,.js}'],
      migrations: ['./src/database/migrations/*{.ts,.js}'],
+    // seeds:['./src/database/seeders/*{.ts,.js}'],
      migrationsTableName: 'migrations_table',
 
 
