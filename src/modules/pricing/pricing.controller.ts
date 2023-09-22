@@ -36,12 +36,20 @@ export class PricingController {
       }
 
 
+      // get  pricing by id
+      @Get('/:pricingId')
+      async  getPricingById(@Param('pricingId') pricingId:string):Promise<pricing>
+      {
+        return this.pricingService.getPricingById(pricingId);
+      }
+
+
 
       // update  pricing
       @Patch('/:pricingId')
       async  updatePricing(@Param('pricingId') pricingId:string, @Body() body:UpdatePricingDto )
       {
-        return this.pricingService.updatePricing(pricingId,body);
+          return this.pricingService.updatePricing(pricingId,body);
       }
 
 

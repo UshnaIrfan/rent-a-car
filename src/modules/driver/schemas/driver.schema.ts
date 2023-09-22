@@ -13,6 +13,12 @@ import {User} from "../../users/schemas/user.schema"
 import { booking } from "../../booking/schemas/booking.schema";
 import { car } from "../../car/schemas/car.schema";
 
+
+export enum bookedStatus {
+        BOOKED= 'true',
+        UNBOOKED = 'false',
+}
+
 @Entity({ name: 'drivers' })
 export class driver {
 
@@ -64,6 +70,11 @@ export class driver {
         userId: string;
 
 
+
+        @ApiProperty()
+        @Column({  enum: bookedStatus , default: bookedStatus.UNBOOKED  })
+        bookedStatus: string;
+
         @ApiProperty()
         @CreateDateColumn()
         createdAt: Date
@@ -97,13 +108,9 @@ export class driver {
         booking: booking[];
 
 
-
-        //todo
-        // @ApiProperty({ type: () => [car] })
-        // @ManyToOne(() => car, car => car.driver)
-        // car: car[];
+        //relation  btw car and driver
         @ApiProperty({ type: () => [car] })
-        @ManyToMany(() => car, seller => seller.driverIds)
+        @ManyToMany(() => car, car => car.driverIds)
         @JoinTable()
         car: car[];
 

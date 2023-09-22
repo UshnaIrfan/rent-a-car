@@ -3,6 +3,7 @@ import {
   IsString,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import {bookedStatus} from "../schemas/driver.schema";
 
 export class createDriverDto {
 
@@ -47,6 +48,12 @@ export class createDriverDto {
     @IsString()
     @IsNotEmpty()
     hourlyRate : string;
+
+
+    @ApiProperty({ type: String, enum: bookedStatus, default: bookedStatus.UNBOOKED })
+    @IsString()
+    @IsNotEmpty()
+    bookedStatus:string;
 
 
 }

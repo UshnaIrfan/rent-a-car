@@ -93,17 +93,6 @@ export class car {
 
 
 
-    // @ApiProperty()
-    // @Column({nullable:true})
-    // driverOptionId: string;
-
-
-
-    @ApiProperty({ type: () => [driver] })
-    @ManyToMany(() => driver, driver => driver.car)
-    driverIds: any[];
-
-
 
     @ApiProperty()
     @Column({nullable:true})
@@ -167,5 +156,12 @@ export class car {
     @ApiProperty({ type: () => [booking] })
     @OneToMany(() => booking, booking => booking.car, { cascade: true })
     booking: booking[];
+
+
+    //relation  btw car and driver
+    @ApiProperty({ type: () => [driver] })
+    @ManyToMany(() => driver, driver => driver.car)
+    driverIds: any[];
+
 
 }

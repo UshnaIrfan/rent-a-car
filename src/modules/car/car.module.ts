@@ -28,9 +28,6 @@ import { baggageOption } from "../baggage-option/schemas/baggage-option.schema";
 import { seatsCapacityRepository } from "../seats-capacity/seats-capacity.repository";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-// import { driverOptionRepository } from "../driver-option/driver-option.repository";
-// import { driverOption } from "../driver-option/schemas/driver-option.schema";
-// import { DriverOptionService } from "../driver-option/driver-option.service";
 import { CacheModule } from "@nestjs/common/cache";
 import * as redisStore from "cache-manager-redis-store";
 import {  JwtService } from "@nestjs/jwt";
@@ -46,15 +43,11 @@ import {TimeService} from "../time/time.service";
 import { DriverService } from "../driver/driver.service";
 import { driverRepository } from "../driver/driver.repository";
 import { driver } from "../driver/schemas/driver.schema";
-import {
-  userVerificationsDocumentsService
-} from "../user-verifications-documents/user-verifications-documents.service";
+import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
 import { UserDocumentsService } from "../user-documents/user-documents.service";
 import { CountryService } from "../country/country.service";
 import { countryRepository } from "../country/country.repository";
-import {
-  userVerifcationDocumentsRepository
-} from "../user-verifications-documents/user-verification-documents.repository";
+import { userVerifcationDocumentsRepository } from "../user-verifications-documents/user-verification-documents.repository";
 import { UsersDocumentRepository } from "../user-documents/user-document.repository";
 import { country } from "../country/schemas/country.schema";
 import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";

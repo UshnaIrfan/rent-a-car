@@ -84,10 +84,8 @@ export class updateCarDto {
 
 
 
-  // @ApiProperty()
-  // @IsString()
-  // @IsNotEmpty()
-  // driverOptionId: string ;
+  @ApiProperty({ type: [String]})
+  driverIds: string[];
 
 
   @ApiProperty()

@@ -52,9 +52,6 @@ import { userVerificationsDocumentsService } from "../user-verifications-documen
 import { LanguagesService } from "../languages/languages.service";
 import { languagesRepository } from "../languages/languages.repository";
 import { languages } from "../languages/schemas/languages.schema";
-// import { PackagesService } from "../packages/packages.service";
-// import { packagesRepository } from "../packages/packages.repository";
-// import { packages } from "../packages/schemas/packages.schema";
 import { timeRepository } from "../time/time.repository";
 import { time } from "../time/schemas/time.schema";
 import { CountryService } from "../country/country.service";
@@ -63,6 +60,7 @@ import { country } from "../country/schemas/country.schema";
 import { TimeService } from "../time/time.service";
 import { pricingRepository } from "../pricing/pricing.repository";
 import { pricing } from "../pricing/schemas/pricing.schema";
+import { pricingService } from "../pricing/pricing.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([pricing,country,time,languages,UserVerificationDocuments,UserDocuments,driver,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,brand,booking,User,car]),
@@ -72,6 +70,6 @@ import { pricing } from "../pricing/schemas/pricing.schema";
   })
   ],
   controllers: [BookingController],
-  providers: [pricingRepository ,TimeService,timeRepository,countryRepository,CountryService,timeRepository,languagesRepository,LanguagesService,userVerificationsDocumentsService,userVerifcationDocumentsRepository,UserDocumentsService,UsersDocumentRepository,DriverService,driverRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,BrandService,brandRepository,carRepository,CarService,UsersRepository,UsersService,JwtService,BookingService,bookingRepository],
+  providers: [pricingRepository ,pricingService,TimeService,timeRepository,countryRepository,CountryService,timeRepository,languagesRepository,LanguagesService,userVerificationsDocumentsService,userVerifcationDocumentsRepository,UserDocumentsService,UsersDocumentRepository,DriverService,driverRepository,SeatsCapacityService,seatsCapacityRepository,BaggageOptionService,baggageOptionRepository,TransmissionService,transmissionRepository,CarTypeService,CarTypeRepository,ColorService,ColorRepository,YearService,yearRepository,CarModelService,CarModelRepository,BrandService,brandRepository,carRepository,CarService,UsersRepository,UsersService,JwtService,BookingService,bookingRepository],
 })
 export class BookingModule {}

@@ -9,7 +9,6 @@ import { TransmissionService } from "../transmission/transmission.service";
 import { CarTypeService } from "../car-type/car-type.service";
 import { BaggageOptionService } from "../baggage-option/baggage-option.service";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
-// import { DriverOptionService } from "../driver-option/driver-option.service";
 import { car } from "./schemas/car.schema";
 import { updateCarDto } from "./dto/update-car.dto";
 import { DriverService } from "../driver/driver.service";
@@ -27,8 +26,6 @@ export class CarService {
               private  baggageOptionService : BaggageOptionService,
               private  seatsCapacityService : SeatsCapacityService,
               private  driverService : DriverService,
-
-              //private  driverOptionService : DriverOptionService,
 
   ) {}
 
@@ -81,37 +78,26 @@ export class CarService {
             throw new NotFoundException('car seats capacity not exist');
           }
 
-          // const carDriverOption= await this.driverOptionService.getCarDriverOptionById(CreateCarInterface.driverOptionId);
-          // if(!carDriverOption)
-          // {
-          //   throw new NotFoundException('car driver option not exist');
-          // }
-
-
           const carData: createCarInterface & { userId: string } = {
             ...CreateCarInterface,
             userId: userId,
 
           };
 
-         // return  await this.CarRepository.createCar(carData);
-       const  result = await this.CarRepository.createCar(carData);
-
-        console.log(result);
-        result.driverIds = [];
-        const driverIDs = CreateCarInterface.driverIds;
-        for (const driverID of driverIDs)
-        {
-          const car = await this.driverService.findDriverByDriverId(driverID);
-          if (!car)
+          const  result = await this.CarRepository.createCar(carData);
+          result.driverIds = [];
+          const driverIDs = CreateCarInterface.driverIds;
+          for (const driverID of driverIDs)
           {
-            throw new NotFoundException('does not exist');
+            const car = await this.driverService.findDriverByDriverId(driverID);
+            if (!car)
+            {
+              throw new NotFoundException('does not exist');
+            }
+            result.driverIds.push(car);
           }
-          result.driverIds.push(car);
-        }
-
-        await this.CarRepository.driverCars(result);
-        return { record: result };
+          await this.CarRepository.driverCars(result);
+          return { record: result };
       }
 
 
@@ -207,11 +193,6 @@ export class CarService {
             if (!carSeatsCapacity) {
               throw new NotFoundException('car seats capacity not exist');
             }
-
-            // const carDriverOption = await this.driverOptionService.getCarDriverOptionById(body.driverOptionId);
-            // if (!carDriverOption) {
-            //   throw new NotFoundException('car driver option not exist');
-            // }
             const car = await this.CarRepository.updateCarByCarId(carId, body);
             return { message: "updated successfully", car };
 
@@ -237,19 +218,30 @@ export class CarService {
 
 
 
-  // Get package  detail by car id
-  async getPackageByCarId (carId:string):Promise<car>
-  {
-    const result= await this.CarRepository.getPackageByCarId(carId);
-    if(!result)
-    {
-      throw new NotFoundException('data not found');
-    }
-    return  result;
-  }
+      // Get package  detail by car id
+      async getPackageByCarId (carId:string):Promise<car>
+      {
+          const result= await this.CarRepository.getPackageByCarId(carId);
+          if(!result)
+          {
+            throw new NotFoundException('data not found');
+          }
+          return  result;
+      }
 
 
 
+
+      // Get  driver  detail by car id
+      async getDriverByCarId (carId:string):Promise<car>
+      {
+          const result= await this.CarRepository.getDriverByCarId(carId);
+          if(!result)
+          {
+            throw new NotFoundException('data not found');
+          }
+          return  result;
+      }
 
 
 

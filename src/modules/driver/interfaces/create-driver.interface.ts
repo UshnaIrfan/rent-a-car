@@ -6,4 +6,6 @@ export default interface createDriverInterface {
     readonly phoneNo: string;
     readonly  image: string;
     readonly hourlyRate: string;
+    readonly bookedStatus: string;
+
 }

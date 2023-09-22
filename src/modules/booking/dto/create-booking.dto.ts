@@ -14,7 +14,7 @@ export class CreateBookingDto {
         @ApiProperty()
         @IsString()
         @IsNotEmpty()
-        packagesId: string;
+        priceId: string;
 
 
 

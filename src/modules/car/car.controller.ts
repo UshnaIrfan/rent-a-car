@@ -33,7 +33,8 @@ export class CarController {
         @Post('create')
         @Roles(Role.RENTER)
         @UseGuards(UserAuthGuard)
-        async create(@Body() CreateCarDto: createCarDto,@Req() request: any){
+        async create(@Body() CreateCarDto: createCarDto,@Req() request: any)
+        {
             return this.carService.createCar(CreateCarDto,request.user.id);
         }
 
@@ -98,15 +99,15 @@ export class CarController {
 
 
         // search and get  car id for booking purpose
-        @ApiQuery({ name: 'carTypes', required: false })
-        @ApiQuery({ name: 'brands', required: false })
-        @ApiQuery({ name: 'transmission', required: false })
-        @ApiQuery({ name: 'color', required: false })
-        @ApiQuery({ name: 'minPrice', required: false })
-        @ApiQuery({ name: 'maxPrice', required: false })
-        @ApiQuery({ name: 'area', required: false })
+        @ApiQuery({ name: 'carTypes', required: true })
+        @ApiQuery({ name: 'brands', required: true })
+        @ApiQuery({ name: 'transmission', required: true })
+        @ApiQuery({ name: 'color', required: true })
+        @ApiQuery({ name: 'minPrice', required: true })
+        @ApiQuery({ name: 'maxPrice', required: true })
+        @ApiQuery({ name: 'area', required: true })
         @Get('/booking/:CarId')
-        async Search(@Query('carTypes') carTypes?: string,@Query('brands') brands?: string,@Query('transmission') transmission?: string,@Query('color') color?: string,@Query('minPrice') minPrice?: string,@Query('maxPrice') maxPrice?: string,@Query('area') area?: string)
+        async Search(@Query('carTypes') carTypes: string,@Query('brands') brands: string,@Query('transmission') transmission: string,@Query('color') color: string,@Query('minPrice') minPrice: string,@Query('maxPrice') maxPrice: string,@Query('area') area: string)
         {
             console.log("search");
             return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
@@ -117,14 +118,20 @@ export class CarController {
 
       // Get package  detail by car id
       @Get('/package/:carId')
-      async  getPackageByCarId(@Param('carId') carId:string )
+      async  getPackageByCarId(@Param('carId') carId:string ):Promise<car>
       {
             console.log("package detail");
             return this.carService.getPackageByCarId(carId);
       }
 
 
-
+      // Get  driver  detail by car id
+      @Get('/driver/:carId')
+      async  getDriverByCarId(@Param('carId') carId:string ):Promise<car>
+      {
+          console.log("driver detail");
+          return this.carService.getDriverByCarId(carId);
+      }
 
 
 

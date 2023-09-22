@@ -7,7 +7,6 @@ import { CarService } from "../car/car.service";
 import { driverRepository } from "../driver/driver.repository";
 import { booking } from "./schemas/booking.schema";
 import { LanguagesService } from "../languages/languages.service";
-//import { PackagesService } from "../packages/packages.service";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
 import * as path from 'path';
 import * as fs from "fs";
@@ -17,6 +16,7 @@ import { UserDocumentsService } from "../user-documents/user-documents.service";
 import {timeRepository} from "../time/time.repository";
 import { TimeService } from "../time/time.service";
 import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
+import { pricingService } from "../pricing/pricing.service";
 
 
 @Injectable()
@@ -27,10 +27,10 @@ export class BookingService {
               private usersService: UsersService,
               private readonly carService: CarService,
               private readonly languagesService: LanguagesService,
-            //  private readonly packagesService: PackagesService,
               private readonly DriverRepository:driverRepository,
               private readonly timeRepository:timeRepository,
               private readonly timeService: TimeService,
+              private readonly pricingService: pricingService,
               private readonly UsersDocumentService: UserDocumentsService,
               private readonly UserVerificationsDocumentsService: userVerificationsDocumentsService,
   ) {}
@@ -45,35 +45,23 @@ export class BookingService {
             throw new NotFoundException('car  not exist');
           }
 
-          // const Package = await this.packagesService.getPackagesById(createBookingInterface.packagesId);
-          // if(!Package)
-          // {
-          //   throw new NotFoundException('package not found');
-          // }
+          const price = await this.pricingService.getPricingById(createBookingInterface.priceId);
+          if(!price)
+          {
+            throw new NotFoundException('package not found');
+          }
 
           if(createBookingInterface.driverId !==null)
           {
-            const driver=await this.DriverRepository.getDriverById(createBookingInterface.driverId)
+            const driver=await this.DriverRepository.getDriverByIdAndSet(createBookingInterface.driverId)
             if(!driver)
             {
               throw new NotFoundException('driver not exist');
             }
           }
 
-          // await this.timeRepository.getTimeById(createBookingInterface.pickupTimeId);
-          // const timeIds = [createBookingInterface.pickupTimeId, createBookingInterface.dropoffTimeId];
-          // const resultArray = await this.timeService.getTimesById(timeIds);
-          // if (resultArray.length==0 || resultArray.length !== 2)
-          // {
-          //      throw new BadRequestException(`invalid  time data`);
-          // }
-         const bookingData: createBookingInterface & { userId: string } = {
-            ...createBookingInterface,
-            userId: userId,
-
-          };
-
-          return  await this.bookingRepository.createBooking(bookingData);
+         const bookingData: createBookingInterface & { userId: string } = { ...createBookingInterface, userId: userId };
+         return  await this.bookingRepository.createBooking(bookingData);
     }
 
 

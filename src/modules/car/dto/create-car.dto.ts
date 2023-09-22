@@ -83,12 +83,6 @@ export class createCarDto {
     securityAmount: string ;
 
 
-
-    // @ApiProperty()
-    // @IsString()
-    // @IsNotEmpty()
-    // driverOptionId: string ;
-
     @ApiProperty({ type: [String]})
     driverIds: string[];
 

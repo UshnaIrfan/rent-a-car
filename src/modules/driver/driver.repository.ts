@@ -128,7 +128,7 @@ export class driverRepository{
 
 
 
-    // delete driver by driver id
+      // delete driver by driver id
       async deleteDriverById(driverId: string):Promise<driver| null>
       {
             validateUuid([driverId]);
@@ -145,32 +145,61 @@ export class driverRepository{
 
 
 
-        //update driver by  driver id
-        async updateDriverByDriverId(id: string, body: updateDriverDto):Promise<driver| null>
-        {
-              validateUuid([id]);
-              const result = await this.DriverModel.findOne({ where: { id } });
-              if (!result)
-              {
+      //update driver by  driver id
+      async updateDriverByDriverId(id: string, body: updateDriverDto):Promise<driver| null>
+      {
+            validateUuid([id]);
+            const result = await this.DriverModel.findOne({ where: { id } });
+            if (!result)
+            {
                 throw new NotFoundException('driver not found');
-              }
+            }
 
-              for (const key in body)
-              {
+            for (const key in body)
+            {
                 if (body.hasOwnProperty(key))
                 {
                   result[key] = body[key];
                 }
-              }
-              const updatedResult = await this.DriverModel.save(result);
-              return updatedResult;
+            }
+            const updatedResult = await this.DriverModel.save(result);
+            return updatedResult;
         }
 
 
 
 
 
+      // get  driver By  Id and set booked status true
+      async getDriverByIdAndSet(id:string): Promise<driver| null>
+      {
+          validateUuid([id]);
+          const driver = await this.DriverModel.findOne({ where: { id } });
+          if (!driver)
+          {
+            throw new NotFoundException('Driver not found');
+          }
+          driver.bookedStatus = 'true';
+          await this.DriverModel.save(driver);
+          return driver;
+      }
 
+
+
+
+      // get  driver By  Id and set booked status false
+      async getdriverByIdAndSet(id:string): Promise<driver| null>
+      {
+          validateUuid([id]);
+          const driver = await this.DriverModel.findOne({ where: { id } });
+          if (!driver)
+          {
+            throw new NotFoundException('Driver not found');
+          }
+          driver.bookedStatus = 'false';
+          await this.DriverModel.save(driver);
+          return driver;
+      }
 
 
 

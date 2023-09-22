@@ -71,13 +71,26 @@ export class pricingService {
 
 
 
-        // todo
-  // get all  pricing
-  async pricingByName (price:string)
-  {
-    const result= await this.pricingRepository.pricingByName(price);
-    return  result
-  }
+      // get  pricing by name
+      async pricingByName (price:string)
+      {
+        const result= await this.pricingRepository.pricingByName(price);
+        return  result
+      }
+
+
+      // get  pricing by id
+      async getPricingById (pricingId:string):Promise<pricing>
+      {
+        const pricing = await this.pricingRepository.getPricingById(pricingId);
+        if (!pricing) {
+          throw new NotFoundException('pricing not found');
+        }
+        return pricing
+      }
+
+
+
 
 
 }

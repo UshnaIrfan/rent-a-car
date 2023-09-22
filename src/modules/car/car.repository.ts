@@ -5,7 +5,7 @@ import { car } from "./schemas/car.schema";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { updateCarDto } from "./dto/update-car.dto";
 import { pricing } from "../pricing/schemas/pricing.schema";
-import { driver } from "../driver/schemas/driver.schema";
+import { bookedStatus, driver } from "../driver/schemas/driver.schema";
 
 
 @Injectable()
@@ -49,7 +49,7 @@ export class carRepository{
          {
             validateUuid([carId]);
             return   await  this.carModel.findOne({  where: { id:carId},
-             relations:['pricing','carImage']
+             relations:['pricing','carImage','driverIds']
             });
         }
 
@@ -149,10 +149,9 @@ export class carRepository{
           pickUpLocation :area || undefined
           };
 
-          for (const [param, value] of Object.entries(filterParams)) {
-            if (value) {
-              whereConditions[param] = value;
-            }
+          for (const [param, value] of Object.entries(filterParams))
+          {
+            if (value) {whereConditions[param] = value;}
           }
 
           if (minPrice && maxPrice) {
@@ -174,20 +173,43 @@ export class carRepository{
 
 
 
-
-
-  // Get package  detail by car id
-  async getPackageByCarId(carId:string)
-  {
-    validateUuid([carId]);
-    return   await  this.carModel.findOne({  where: { id:carId},
-      relations:['pricing']
-    });
-  }
+      // Get package  detail by car id
+      async getPackageByCarId(carId:string):Promise<car>
+      {
+          validateUuid([carId]);
+          return   await  this.carModel.findOne({  where: { id:carId}, relations:['pricing'] });
+      }
 
 
 
-// // delete car history  by user id
+
+
+      // Get  driver  detail by car id
+      async getDriverByCarId(carId:string):Promise<car>
+      {
+          validateUuid([carId]);
+          const car= await  this.carModel.findOne({  where: { id:carId}, relations:['driverIds'], });
+          const bookedDrivers = car.driverIds.filter(driver => driver.bookedStatus === 'false');
+          car.driverIds = bookedDrivers;
+          return car
+
+      }
+
+
+
+      // relation between car and driver
+      async driverCars(body:car)
+      {
+         return this.carModel.save(body);
+      }
+
+
+
+
+
+
+
+  // // delete car history  by user id
   // async deleteCarHistory(userId: string):Promise<car[]| null>
   // {
   //       validateUuid([userId]);
@@ -241,11 +263,7 @@ export class carRepository{
   //
 
 
-  //todo
-  async driverCars(body:car)
-  {
-    return this.carModel.save(body);
-  }
+
 
 
 }

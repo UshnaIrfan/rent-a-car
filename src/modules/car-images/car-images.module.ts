@@ -31,9 +31,6 @@ import { baggageOption } from "../baggage-option/schemas/baggage-option.schema";
 import { SeatsCapacityService } from "../seats-capacity/seats-capacity.service";
 import { seatsCapacityRepository } from "../seats-capacity/seats-capacity.repository";
 import { seatsCapacity } from "../seats-capacity/schemas/seats-capacity.schema";
-// import { DriverOptionService } from "../driver-option/driver-option.service";
-// import { driverOptionRepository } from "../driver-option/driver-option.repository";
-// import { driverOption } from "../driver-option/schemas/driver-option.schema";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "../users/users.service";
 import { UsersRepository } from "../users/users.respository";
@@ -56,12 +53,8 @@ import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
 import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
 import { UsersDocumentRepository } from "../user-documents/user-document.repository";
 import { UserDocumentsService } from "../user-documents/user-documents.service";
-import {
-  userVerificationsDocumentsService
-} from "../user-verifications-documents/user-verifications-documents.service";
-import {
-  userVerifcationDocumentsRepository
-} from "../user-verifications-documents/user-verification-documents.repository";
+import { userVerificationsDocumentsService } from "../user-verifications-documents/user-verifications-documents.service";
+import { userVerifcationDocumentsRepository } from "../user-verifications-documents/user-verification-documents.repository";
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserVerificationDocuments,UserDocuments,country,driver,time,pricing,User,seatsCapacity,baggageOption,transmission,carType,color,year,carModel,car,carImage,brand]),

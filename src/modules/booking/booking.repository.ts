@@ -5,16 +5,17 @@ import { booking } from "./schemas/booking.schema";
 import { CreateBookingDto } from "./dto/create-booking.dto";
 import { validateUuid } from "../../decorators/uuid.decorators";
 import { car } from "../car/schemas/car.schema";
-import { UpdateCarImageDto } from "../car-images/dto/update-car-image.dto";
-import { carImage } from "../car-images/schemas/car-image.schema";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
 import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
+import { driverRepository } from "../driver/driver.repository";
 
 
 
 @Injectable()
 export class bookingRepository{
-  constructor(@InjectRepository(booking) private bookingModel: Repository<booking>
+  constructor(@InjectRepository(booking) private bookingModel: Repository<booking>,
+              private readonly DriverRepository:driverRepository,
+
   ) {}
 
 
@@ -121,13 +122,8 @@ export class bookingRepository{
           {
             throw new NotFoundException('booking not found');
           }
-          for (const key in body)
-          {
-            if (body.hasOwnProperty(key))
-            {
-              result[key] = body[key];
-            }
-          }
+          result.bookingStatus=body.bookingStatus;
+          await this.DriverRepository.getdriverByIdAndSet(result.driverId)
           const updatedResult = await this.bookingModel.save(result);
           return updatedResult;
     }

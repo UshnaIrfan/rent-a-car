@@ -64,13 +64,21 @@ export class pricingRepository{
 
 
 
-        //todo
+        // get  pricing by name
+        async pricingByName(price:string)
+        {
+          return  this.pricingModel.find({where:{price} });
+        }
 
-  // get all  pricing
-  async pricingByName(price:string)
-  {
-    return  this.pricingModel.find({where:{price} });
-  }
+
+
+      // get  pricing by id
+      async getPricingById(pricingId: string): Promise<pricing| null>
+      {
+          validateUuid([pricingId]);
+         return  await this.pricingModel.findOne({ where: { id:pricingId}});
+      }
+
 
 }
 
