@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { brand } from "./schemas/brand.schema";
 import { CreateBrandDto } from "./dto/create-brand.dto";
 import { UpdateBrandDto } from "./dto/update-brand.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 @Injectable()

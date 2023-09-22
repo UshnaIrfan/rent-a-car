@@ -1,17 +1,15 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { Between, In, Repository } from "typeorm";
+import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { car } from "./schemas/car.schema";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { updateCarDto } from "./dto/update-car.dto";
 import { pricing } from "../pricing/schemas/pricing.schema";
-import { bookedStatus, driver } from "../driver/schemas/driver.schema";
 
 
 @Injectable()
 export class carRepository{
   constructor(@InjectRepository(car) private  carModel: Repository<car>,
-          //    @InjectRepository(pricing) private  priceModel: Repository<pricing>,
   ) {}
 
 
@@ -39,8 +37,6 @@ export class carRepository{
           car.dropOffLocation=CreateCarDto.dropOffLocation;
           await this.carModel.save(car);
           return car
-
-          //return this.carModel.save(CreateCarDto);
         }
 
 
@@ -78,7 +74,7 @@ export class carRepository{
         async getCarByUserId(userId:string):Promise<car[]| null>
         {
             validateUuid([userId]);
-           return  await this.carModel.find({  where: { userId}, relations:['pricing','carImage'] });
+           return  await this.carModel.find({  where: { userId}, relations:['pricing','carImage','driverIds'] });
         }
 
 
@@ -207,19 +203,40 @@ export class carRepository{
 
 
 
+      // Get car by car id and set car booking status true
+      async getCarByIdAndSet(carId:string): Promise<car| null>
+      {
+            validateUuid([carId]);
+            const result=  await  this.carModel.findOne({  where: { id:carId}});
+
+            if(!result)
+            {
+              throw new NotFoundException('data not found');
+            }
+            result.carBookedStatus = 'true';
+            await this.carModel.save(result);
+            return result
+      }
 
 
-  // // delete car history  by user id
-  // async deleteCarHistory(userId: string):Promise<car[]| null>
-  // {
-  //       validateUuid([userId]);
-  //       const result = await this.carModel.find({ where: {  userId:userId}});
-  //       if (!result)
-  //       {
-  //         throw new NotFoundException('data not found');
-  //       }
-  //       return await this.carModel.remove(result);
-  // }
+
+
+      // Get car by car id and set car booking status true
+      async getcarByIdAndSet(id:string): Promise<car| null>
+      {
+          validateUuid([id]);
+          const result=  await  this.carModel.findOne({  where: { id}});
+
+          if(!result)
+          {
+            throw new NotFoundException('data not found');
+          }
+          result.carBookedStatus = 'false';
+          await this.carModel.save(result);
+          return result
+      }
+
+
 
 
   // async Search(carTypes: string, brands: string, transmission: string, color: string, minPrice: string, maxPrice: string,area:string)

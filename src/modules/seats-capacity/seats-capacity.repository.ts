@@ -4,8 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CreateSeatsCapacityDto } from "./dto/create-seats-capacity.dto";
 import { seatsCapacity } from "./schemas/seats-capacity.schema";
 import { UpdateSeatsCapacityDto } from "./dto/update-seats-capacity.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 @Injectable()

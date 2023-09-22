@@ -3,11 +3,12 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { booking } from "./schemas/booking.schema";
 import { CreateBookingDto } from "./dto/create-booking.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { car } from "../car/schemas/car.schema";
 import { UpdateBookingDto } from "./dto/update-booking.dto";
 import { updateBookingStatusDto } from "./dto/update-booking-status.dto";
 import { driverRepository } from "../driver/driver.repository";
+import { carRepository } from "../car/car.repository";
 
 
 
@@ -15,6 +16,8 @@ import { driverRepository } from "../driver/driver.repository";
 export class bookingRepository{
   constructor(@InjectRepository(booking) private bookingModel: Repository<booking>,
               private readonly DriverRepository:driverRepository,
+              private readonly carRepository:carRepository,
+
 
   ) {}
 
@@ -124,6 +127,8 @@ export class bookingRepository{
           }
           result.bookingStatus=body.bookingStatus;
           await this.DriverRepository.getdriverByIdAndSet(result.driverId)
+          await this.carRepository.getcarByIdAndSet(result.carId)
+
           const updatedResult = await this.bookingModel.save(result);
           return updatedResult;
     }

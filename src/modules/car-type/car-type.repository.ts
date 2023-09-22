@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { carType } from "./schemas/car-type.schema";
 import { CreateCarTypeDto } from "./dto/create-car-type.dto";
 import { UpdateCarTypeDto } from "./dto/update-car-type.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { brand } from "../brand/schemas/brand.schema";
 
 

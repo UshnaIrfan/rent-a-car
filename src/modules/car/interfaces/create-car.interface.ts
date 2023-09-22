@@ -17,4 +17,6 @@ export default interface createCarInterface {
   readonly  longitude: string;
   readonly pickUpLocation: string;
   readonly  dropOffLocation: string;
+  readonly carBookedStatus: string;
+
 }

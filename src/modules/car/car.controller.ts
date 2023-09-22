@@ -1,14 +1,4 @@
-import {
-      Controller,
-      Post,
-      Body,
-      Patch,
-      Param,
-      Get,
-      Delete,
-      Query,
-      UseGuards, Req
-} from "@nestjs/common";
+import { Controller, Post, Body, Patch, Param, Get, Delete, Query, UseGuards, Req } from "@nestjs/common";
 import { CarService } from './car.service';
 import { createCarDto } from './dto/create-car.dto';
 import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
@@ -134,17 +124,6 @@ export class CarController {
       }
 
 
-
-
-
-      // // delete car history  by user id
-      //   @ApiQuery({ name: 'userId', required: true })
-      //   @Delete('history/:userId')
-      //   async  deleteCarHistory(@Query('userId') userId: string )
-      //   {
-      //         console.log(" delete history")
-      //         return this.carService.deleteCarHistory(userId);
-      //   }
 
 
 

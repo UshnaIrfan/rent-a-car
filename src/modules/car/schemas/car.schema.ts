@@ -13,6 +13,12 @@ import { booking } from "../../booking/schemas/booking.schema";
 import { driver } from "../../driver/schemas/driver.schema";
 
 
+export enum carBookedStatus {
+    BOOKED= 'true',
+    UNBOOKED = 'false',
+}
+
+
 @Entity({ name: 'cars' })
 export class car {
 
@@ -119,6 +125,11 @@ export class car {
     @ApiProperty()
     @Column({ nullable: true })
     dropOffLocation: string;
+
+
+    @ApiProperty()
+    @Column({  enum: carBookedStatus , default: carBookedStatus.UNBOOKED  })
+    carBookedStatus: string;
 
 
     @ApiProperty()

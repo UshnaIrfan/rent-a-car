@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CreatePricingDto } from "./dto/create-pricing.dto";
 import { pricing } from "./schemas/pricing.schema";
 import { UpdatePricingDto } from "./dto/update-pricing.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 @Injectable()

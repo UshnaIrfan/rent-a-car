@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { year } from "./schemas/year.schema";
 import { CreateYearDto } from "./dto/create-year.dto";
 import { UpdateYearDto } from "./dto/update-year.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { brand } from "../brand/schemas/brand.schema";
 
 

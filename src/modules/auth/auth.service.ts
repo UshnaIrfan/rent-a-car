@@ -1,7 +1,6 @@
 import { BadRequestException, Body, ConflictException, Inject, Injectable, InternalServerErrorException, NotAcceptableException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { User } from "../users/schemas/user.schema";
-import { Cache } from "cache-manager";
 import { MailerService } from "@nestjs-modules/mailer";
 import JwtTokensInterface from "./interfaces/jwt-token.interface";
 import * as handlebars from "handlebars";

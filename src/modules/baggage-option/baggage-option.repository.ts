@@ -4,8 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CreateBaggageOptionDto } from "./dto/create-baggage-option.dto";
 import { baggageOption } from "./schemas/baggage-option.schema";
 import { UpdateBaggageOptionDto } from "./dto/update-baggage-option.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 @Injectable()

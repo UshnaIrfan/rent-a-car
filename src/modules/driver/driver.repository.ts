@@ -8,7 +8,7 @@ import { UserDocuments } from "../user-documents/schemas/userDocuments.schema";
 import { UserVerificationDocuments } from "../user-verifications-documents/schemas/userVerificationDocumets.schema";
 import * as path from 'path';
 import * as fs from "fs";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { updateDriverDto } from "./dto/update-driver.dto";
 
 
@@ -201,21 +201,6 @@ export class driverRepository{
           return driver;
       }
 
-
-
-
-        // // delete driver history  by user id
-        // async deleteDriverHistory(userId: string):Promise<driver[]| null>
-        // {
-        //     validateUuid([userId]);
-        //     const result = await this.DriverModel.find({ where: {  userId:userId}});
-        //     if (!result)
-        //     {
-        //       throw new NotFoundException('driver not found');
-        //     }
-        //
-        //     return await this.DriverModel.remove(result);
-        // }
 
 
 

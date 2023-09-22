@@ -145,17 +145,6 @@ export class DriverController {
 
 
 
-
-        // // delete driver history  by user id
-        // @ApiQuery({ name: 'userId', required: true })
-        // @Delete('history/:userId')
-        // async  deleteDriverHistory(@Query('userId') userId: string )
-        // {
-        //     console.log(" delete history")
-        //     return this.driverService.deleteDriverHistory(userId);
-        // }
-
-
         // delete driver by driver id
         @Delete('/:driverId')
         async  deleteDriverById(@Param('driverId') driverId:string )

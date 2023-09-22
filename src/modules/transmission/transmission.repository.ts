@@ -4,8 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { transmission } from "./schemas/transmission.schema";
 import { UpdateTransmissionDto } from "./dto/update-transmission.dto";
 import { CreateTransmissionDto } from "./dto/create-transmission.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
-import { color } from "../color/schemas/color.schema";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 @Injectable()

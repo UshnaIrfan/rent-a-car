@@ -1,4 +1,4 @@
-import { Body, Injectable, NotFoundException, Post, UnauthorizedException } from "@nestjs/common";
+import { Body, Injectable, NotFoundException } from "@nestjs/common";
 import createDriverInterface from "./interfaces/create-driver.interface";
 import { driverRepository } from "./driver.repository";
 import { driver } from "./schemas/driver.schema";
@@ -155,16 +155,6 @@ export class DriverService {
 
 
 
-
-
-
-
-        // // delete driver history  by user id
-        // async deleteDriverHistory (userId:string):Promise<{ driver:driver[]; message: string }>
-        // {
-        //     const  driver= await this.DriverRepository.deleteDriverHistory(userId);
-        //     return { message: "deleted successfully",driver:driver};
-        // }
 
 
 

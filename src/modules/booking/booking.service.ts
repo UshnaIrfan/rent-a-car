@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {  Body, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import createBookingInterface from "./interfaces/create-booking.interface";
 import { bookingRepository } from "./booking.repository";
 import { JwtService } from "@nestjs/jwt";
@@ -39,7 +39,7 @@ export class BookingService {
     // create
     async createBooking(createBookingInterface:createBookingInterface,userId:string)
     {
-          const car= await this.carService.getCarByCarId(createBookingInterface.carId);
+          const car= await this.carService.getCarByIdAndSet(createBookingInterface.carId);
           if(!car)
           {
             throw new NotFoundException('car  not exist');

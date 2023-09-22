@@ -3,7 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { createUserDocumentsDto } from "./dto/create-user-document.dto";
 import { UserDocuments } from "./schemas/userDocuments.schema";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 @Injectable()
 export class UsersDocumentRepository {

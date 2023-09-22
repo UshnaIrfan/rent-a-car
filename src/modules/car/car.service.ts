@@ -1,4 +1,4 @@
-import {  Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {  Injectable, NotFoundException } from "@nestjs/common";
 import createCarInterface from "./interfaces/create-car.interface";
 import { carRepository } from "./car.repository";
 import { BrandService } from "../brand/brand.service";
@@ -246,12 +246,17 @@ export class CarService {
 
 
 
-  // // delete car history  by user id
-  // async deleteCarHistory (userId:string):Promise<{ car:car[]; message: string }>
-  // {
-  //     const  car= await this.CarRepository.deleteCarHistory(userId);
-  //     return { message: "deleted successfully",car:car};
-  // }
+      // Get car by car id and set car booking status true
+      async getCarByIdAndSet (carId:string):Promise<car>
+      {
+         return  await this.CarRepository.getCarByIdAndSet(carId);
+      }
+
+
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@ import * as redisStore from "cache-manager-redis-store";
 import {UsersService} from "../users/users.service";
 import { UsersModule } from "../users/users.module";
 import { PassportModule } from "@nestjs/passport";
-import { JwtModule, JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import {LocalStrategy} from "../../strategies/local.strategy";
 import {JwtAuthGuard} from "./guards/jwt-auth-guard";
 import {JwtStrategy} from "../../strategies/jwt.strategy";

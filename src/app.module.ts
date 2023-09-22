@@ -20,9 +20,7 @@ import { UserDocuments } from "./modules/user-documents/schemas/userDocuments.sc
 import { User } from "./modules/users/schemas/user.schema";
 import { driver } from "./modules/driver/schemas/driver.schema";
 import { car } from "./modules/car/schemas/car.schema";
-import {
-  UserVerificationDocuments
-} from "./modules/user-verifications-documents/schemas/userVerificationDocumets.schema";
+import { UserVerificationDocuments } from "./modules/user-verifications-documents/schemas/userVerificationDocumets.schema";
 import { BrandModule } from './modules/brand/brand.module';
 import { CarModelModule } from './modules/car-model/car-model.module';
 import { YearModule } from './modules/year/year.module';
@@ -30,11 +28,8 @@ import { ColorModule } from './modules/color/color.module';
 import { TransmissionModule } from './modules/transmission/transmission.module';
 import { CarTypeModule } from './modules/car-type/car-type.module';
 import { BaggageOptionModule } from './modules/baggage-option/baggage-option.module';
-import { SeatsCapacityModule } from './modules/seats-capacity/seats-capacity.module';
-//import { DriverOptionModule } from './modules/driver-option/driver-option.module';
-import { year } from "./modules/year/schemas/year.schema";
+import { SeatsCapacityModule } from './modules/seats-capacity/seats-capacity.module';import { year } from "./modules/year/schemas/year.schema";
 import { seatsCapacity } from "./modules/seats-capacity/schemas/seats-capacity.schema";
-//import { driverOption } from "./modules/driver-option/schemas/driver-option.schema";
 import { color } from "./modules/color/schemas/color.schema";
 import { carType } from "./modules/car-type/schemas/car-type.schema";
 import { carModel } from "./modules/car-model/schemas/car-model.schema";
@@ -80,9 +75,13 @@ import { country } from "./modules/country/schemas/country.schema";
     LanguagesModule,
     BookingModule,
     MailModule,
-  //  PackagesModule,
     CountryModule,
 
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../'),
+      renderPath: '/asset',
+    }),
 
     TwilioModule.forRoot({
       accountSid: process.env.TWILIO_ACCOUNT_SID,

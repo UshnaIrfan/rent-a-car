@@ -4,8 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { time } from "./schemas/time.schema";
 import { CreateTimeDto } from "./dto/create-time.dto";
 import { UpdateTimeDto } from "./dto/update-time.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
-import { brand } from "../brand/schemas/brand.schema";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 
 
 

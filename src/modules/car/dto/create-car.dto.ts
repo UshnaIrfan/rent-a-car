@@ -3,6 +3,7 @@ import {
   IsString,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { carBookedStatus } from "../schemas/car.schema";
 
 export class createCarDto {
 
@@ -115,5 +116,11 @@ export class createCarDto {
     @IsString()
     @IsNotEmpty()
     dropOffLocation : string ;
+
+
+    @ApiProperty({ type: String, enum: carBookedStatus, default: carBookedStatus.UNBOOKED })
+    @IsString()
+    @IsNotEmpty()
+    carBookedStatus:string;
 
 }

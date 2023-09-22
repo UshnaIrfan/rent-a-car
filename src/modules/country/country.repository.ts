@@ -3,7 +3,7 @@ import {  Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { country } from "./schemas/country.schema";
 import { CreateCountryDto } from "./dto/create-country.dto";
-import { validateUuid } from "../../decorators/uuid.decorators";
+import { validateUuid } from "../../pipes/uuid.validator.pipe";
 import { UpdateCountryDto } from "./dto/update-country.dto";
 
 
