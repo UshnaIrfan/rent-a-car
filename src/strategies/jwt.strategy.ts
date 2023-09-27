@@ -22,8 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
       async validate(payload: any): Promise<User>
       {
-
-
           const user = await this.userService.findUserByFirstName(payload.firstName);
           if (!user)
           {
@@ -33,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           {
               throw new UnauthorizedException("Invalid email");
           }
-           return user;
+              return user;
       }
 
 }

@@ -5,6 +5,6 @@ import { RoleGuard } from "../guards/role.gurad";
 export const ROLES_KEY = 'roles';
 
 export const Roles = (...roles: Role[]) => applyDecorators(
-  SetMetadata(ROLES_KEY, roles),
-  UseGuards( JwtAuthGuard,RoleGuard)
+    SetMetadata(ROLES_KEY, roles),
+    UseGuards( JwtAuthGuard,RoleGuard)
 );

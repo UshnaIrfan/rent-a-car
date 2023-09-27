@@ -32,7 +32,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             };
             const  result =  await this.authService.saveUserToDatabase(user);
             done(null, result);
-
       }
 
 
