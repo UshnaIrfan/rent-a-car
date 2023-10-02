@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateLanguageDto } from './create-language.dto';
+import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
 
-export class UpdateLanguageDto extends PartialType(CreateLanguageDto) {}
+export class UpdateLanguageDto {
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  languages: string;
+
+}

@@ -84,8 +84,7 @@ export class CarService {
 
           };
 
-          const  result = await this.CarRepository.createCar(carData);
-          result.driverIds = [];
+          const  result = await this.CarRepository.createCar(carData);result.driverIds = [];
           const driverIDs = CreateCarInterface.driverIds;
           for (const driverID of driverIDs)
           {

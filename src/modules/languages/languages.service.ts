@@ -2,6 +2,8 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import createLanguagesInterface from "./interfaces/create-languages.interface";
 import { languages } from "./schemas/languages.schema";
 import { languagesRepository } from "./languages.repository";
+import { UpdateCountryDto } from "../country/dto/update-country.dto";
+import { UpdateLanguageDto } from "./dto/update-language.dto";
 
 @Injectable()
 export class LanguagesService {
@@ -40,5 +42,22 @@ export class LanguagesService {
         }
 
 
+
+
+        // delete  language
+        async deleteLanguage(languageId:string):Promise<{ languages:languages; message: string }>
+        {
+          const languages= await this.LanguagesRepository.deleteLanguage(languageId);
+          return { message: "deleted successfully", languages};
+        }
+
+
+
+        // update language
+        async updateLanguage (languageId:string,body:UpdateLanguageDto):Promise<{ languages:languages; message: string }>
+        {
+          const languages = await this.LanguagesRepository.updateLanguage(languageId,body);
+          return { message: "updated successfully", languages};
+        }
 
 }

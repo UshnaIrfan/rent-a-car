@@ -194,7 +194,6 @@ export class AuthService {
 
             const result= await this.usersService.findUserById(user.id);
             const unapprovedDocuments = result.UserDocuments.filter(doc => doc.documentstatus === 'pending' || doc.documentstatus === 'rejected');
-            console.log("unapprovedDocuments",unapprovedDocuments);
             if (unapprovedDocuments.length > 0)
             {
               const unapprovedDocumentTitles = unapprovedDocuments.map(doc => doc.titleName).join(', ');
