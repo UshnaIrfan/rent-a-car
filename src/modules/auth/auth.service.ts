@@ -124,7 +124,7 @@ export class AuthService {
           // user update ( otp active status)
           async isOtpActive(email:string,@Body() reqBody: userOtpActiveInterface)
           {
-              const logo_l2a=process.env.LOGO_L2A
+              const logo_rentACar=process.env.LOGO_rentACar
               const contact_us_url= process.env.CONTACT_US
               const privacy_policy_url= process.env.PRIVACY_POLICY
               const user = await this.usersService.findUserByEmail(email);
@@ -156,7 +156,7 @@ export class AuthService {
                   await this.CacheRepository.Cacheset(OtpKey, updatedTokenValue, { ttl: 5400 });
                   const user = await this.usersService.isOtpActive(email, reqBody.otpStatus);
                   const template = handlebars.compile(fs.readFileSync('src/templates/welcomeEmail.html', 'utf8'),);
-                  const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_l2a});
+                  const emailBody = template({ username: user.firstName,contact_us_url,privacy_policy_url ,logo_rentACar});
                   const mailData: any = {
                     to: user.email,
                     from: process.env.MAIL_FROM,
@@ -191,7 +191,6 @@ export class AuthService {
          //login
         async login(user: User):Promise<JwtTokensInterface>
         {
-
             const result= await this.usersService.findUserById(user.id);
             const unapprovedDocuments = result.UserDocuments.filter(doc => doc.documentstatus === 'pending' || doc.documentstatus === 'rejected');
             if (unapprovedDocuments.length > 0)
@@ -199,7 +198,6 @@ export class AuthService {
               const unapprovedDocumentTitles = unapprovedDocuments.map(doc => doc.titleName).join(', ');
               throw new BadRequestException(`User documents (${unapprovedDocumentTitles}) have not been approved`);
             }
-
 
             if (user.otpStatus == 'false'   )
             {
@@ -243,7 +241,6 @@ export class AuthService {
                 access_token: accessTokenRedis,
             };
         }
-
 
 
 
@@ -430,7 +427,7 @@ export class AuthService {
               const expires = this.configService.get("TOKEN_EXPIRY");
               const tokenKey = `forgot-password-token:${user.email}`;
               const tokenValue = JSON.stringify({token: resetToken,active: false, });
-              const logo_l2a=process.env.LOGO_L2A
+              const logo_rentACar=process.env.LOGO_rentACar
               const contact_us_url= process.env.CONTACT_US
               const privacy_policy_url= process.env.PRIVACY_POLICY
               await this.CacheRepository.Cacheset(tokenKey, tokenValue, { ttl: expires });
@@ -440,7 +437,7 @@ export class AuthService {
               const queryParams = `?resetToken=${resetToken}&email=${user.email}`;
               const resetUrl = `${changePasswordUrl}${queryParams}`;
               const template = handlebars.compile(fs.readFileSync('src/templates/resetPassword.html', 'utf8'),);
-              const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_l2a })
+              const emailBody = template({ resetUrl, username: Username,contact_us_url,privacy_policy_url,logo_rentACar })
               const mailData: any = {
                   to: user.email,
                   from: process.env.MAIL_FROM,
@@ -496,7 +493,7 @@ export class AuthService {
              // change password
              async changePassword(email:string,@Body() reqBody: changeUserPasswordInterface)
              {
-                   const logo_l2a=process.env.LOGO_L2A
+                   const logo_rentACar=process.env.LOGO_rentACar
                    const contact_us_url= process.env.CONTACT_US
                    const privacy_policy_url= process.env.PRIVACY_POLICY
                    const user = await this.usersService.findUserByEmail(email);
@@ -532,7 +529,7 @@ export class AuthService {
 
                   const hashedPassword = await AuthService.hashPassword(reqBody.newPassword);
                   const template = handlebars.compile(fs.readFileSync('src/templates/updatePassword.html', 'utf8'),);
-                  const emailBody = template({ email, username: user.firstName,contact_us_url,privacy_policy_url,logo_l2a});
+                  const emailBody = template({ email, username: user.firstName,contact_us_url,privacy_policy_url,logo_rentACar});
                   const mailData: any = {
                      to: user.email,
                      from: process.env.MAIL_FROM,

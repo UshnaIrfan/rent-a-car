@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request, Get, Delete, Put, Patch, Param, Req } from "@nestjs/common";
+import { Controller, Post, Body, UseGuards, Request, Get, Delete, Put, Patch, Param, Req, Res } from "@nestjs/common";
 import { SignUpUserDto } from "./dto/signup-user.dto";
 import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import {LoginUserDto} from "./dto/login-user.dto";
@@ -19,6 +19,8 @@ import {UserDocuments} from "../user-documents/schemas/userDocuments.schema";
 import { SwaggerGetUser } from "./swagger-decorator/get-user-decorator";
 import { SwaggerGetAllUsers } from "./swagger-decorator/get-all-users-decorator";
 import { userRolesUpdatedDto } from "./dto/user-roles-updated.dto";
+import { SwaggerLogin } from "./swagger-decorator/login-decorator";
+import { SwaggerSignUp } from "./swagger-decorator/signup-decorator";
 
 
 @ApiTags('Auth')
@@ -29,7 +31,7 @@ export class AuthController {
 
 
         // Sign up
-        @ApiBody({type:SignUpUserDto})
+        @SwaggerSignUp()
         @Post('signup')
         async signup(@Body() signUpUserDto: SignUpUserDto)
         {
@@ -122,14 +124,15 @@ export class AuthController {
 
 
 
-        // login
-        @ApiBody({ type: LoginUserDto })
+       // login
+        @SwaggerLogin()
         @UseGuards(LocalAuthGuard)
         @Post('login')
         async login(@Request() req):Promise<JwtTokensInterface>
         {
            return this.authService.login(req.user);
         }
+
 
 
 
