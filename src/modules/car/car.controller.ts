@@ -100,6 +100,8 @@ export class CarController {
         async Search(@Query('carTypes') carTypes: string,@Query('brands') brands: string,@Query('transmission') transmission: string,@Query('color') color: string,@Query('minPrice') minPrice: string,@Query('maxPrice') maxPrice: string,@Query('area') area: string)
         {
             console.log("search");
+
+
             return this.carService.Search(carTypes,brands,transmission,color,minPrice,maxPrice,area);
         }
 
